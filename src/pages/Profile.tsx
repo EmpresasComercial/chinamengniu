@@ -1,0 +1,174 @@
+import { useState } from 'react';
+import { Rocket, Users, BarChart3, CircleDollarSign, ShieldCheck, HelpCircle, ChevronRight } from 'lucide-react';
+import { useNavigate } from 'react-router-dom';
+import { useLoading } from '../contexts/LoadingContext';
+
+export default function Profile() {
+  const navigate = useNavigate();
+  const { showLoading, hideLoading } = useLoading();
+  const [copied, setCopied] = useState(false);
+
+  const handleCopyUID = () => {
+    navigator.clipboard.writeText('22164');
+    setCopied(true);
+    setTimeout(() => setCopied(false), 2000);
+  };
+
+  const menuItems = [
+    { name: 'convidar amigos', icon: Rocket, path: '/convidar' },
+    { name: 'minha equipe', icon: Users, path: '/equipe' },
+    { name: 'registros de conta', icon: BarChart3, path: '/detalhes' },
+    { name: 'trocar saldo', icon: CircleDollarSign, path: '/transferencia-de-fundos' },
+    { name: 'centro de segurança', icon: ShieldCheck, path: '/centro-de-seguranca' },
+    { name: 'perguntas frequentes', icon: HelpCircle, path: '/central-de-ajuda' },
+  ];
+
+  return (
+    <div className="flex flex-col min-h-screen bg-[#EAEBED]">
+      {/* Header Section */}
+      <header className="bg-[#0000AA] p-4 text-white pb-8 relative overflow-hidden">
+        {/* Decorative circle */}
+        <div className="absolute -right-10 top-10 w-32 h-32 rounded-full bg-white/10 border-4 border-white/20"></div>
+
+        <div className="flex items-center space-x-3 mb-2">
+          <div className="w-12 h-12 rounded-full bg-white flex items-center justify-center overflow-hidden">
+            <img
+              alt="mengniu company logo"
+              className="w-full h-full object-contain p-1"
+              src="https://s3-symbol-logo.tradingview.com/mengniu-dairy--600.png"
+            />
+          </div>
+          <div>
+            <div className="flex items-center space-x-2">
+              <span className="font-bold text-[15px] truncate max-w-[150px]">+244 920110222</span>
+              <span className="bg-yellow-500 text-[10px] px-2 rounded-full text-black font-bold">VIP0</span>
+            </div>
+            <div className="flex items-center mt-1">
+              <span className="text-[12.5px] text-yellow-400 font-bold tracking-wider">ID: 22164</span>
+              <button
+                onClick={handleCopyUID}
+                className="ml-2 text-[10px] bg-white/20 px-1 rounded flex items-center gap-1 btn-small"
+              >
+                {copied ? 'copiado!' : '📋'}
+              </button>
+            </div>
+          </div>
+        </div>
+
+        {/* Financial Statistics */}
+        <div className="grid grid-cols-2 gap-4 mt-6">
+          <div>
+            <p className="text-[10px] opacity-80">ativos totais</p>
+            <p className="text-[15px] font-bold">0 KZs</p>
+          </div>
+          <div className="text-right">
+            <p className="text-[10px] opacity-80">receita total</p>
+            <p className="text-[15px] font-bold">0.00 KZs</p>
+          </div>
+        </div>
+
+        <div className="grid grid-cols-3 gap-2 mt-4 text-center">
+          <div>
+            <p className="text-[10px] opacity-80 leading-tight">conta de reprodução</p>
+            <p className="font-bold text-[12.5px]">0.00 KZs</p>
+          </div>
+          <div>
+            <p className="text-[10px] opacity-80 leading-tight">ativos de lucro</p>
+            <p className="font-bold text-[12.5px]">0.00 KZs</p>
+          </div>
+          <div>
+            <p className="text-[10px] opacity-80 leading-tight">comissão total</p>
+            <p className="font-bold text-[12.5px]">0 KZs</p>
+          </div>
+        </div>
+
+        {/* Action Buttons */}
+        <div className="flex space-x-3 mt-6">
+          <button
+            onClick={() => navigate('/recarregar')}
+            className="flex-1 bg-[#D6F174] text-black font-bold h-[45px] rounded-md flex items-center justify-center space-x-2"
+          >
+            <span className="text-[15px]">recarregar</span>
+            <img alt="Icon" className="w-5 h-5" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDXfFICSPao72fyr1R3NNpce6RXBWLpx7Yq5UQhCzH-rVhTN7UsXUpreWsO0jY7UZKp3SbQNOuMHtfUqDjjdYMPN4w65GEalCYt8E-C-yIcefxXdOi10NSHLp1dXSmA1L_J2r44byE6YiPDq_LguoYFX8w0pzImQaUOS04b44vq-t_cQCzQbBBCtfzLzCBDnAzugqdoBH_cS9JksbkPEqRiL0fjFF0rcPnEGkWqUyzLNwcKGbTjZq5tGFKp4ENb2dOM8w4Np617fQ" referrerPolicy="no-referrer" />
+          </button>
+          <button
+            onClick={() => navigate('/retirar')}
+            className="flex-1 bg-[#D6F174] text-black font-bold h-[45px] rounded-md flex items-center justify-center space-x-2"
+          >
+            <span className="text-[15px]">extrair</span>
+            <img alt="Icon" className="w-5 h-5" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAzIrIj1Byzu7dS5SONmeyMkrt4GFFxt6V43TU3IKquViipqtxH9axLFcoYHT4hA74IOIJtZgTkciLLhCugCgQjIXDNx4AowRkirADPcRABVNEAvJnzdNZce1xYQIAnsmSG7IScwIxkWrZC7Zf4_j1-BuRkkqbcboJCFx6OVIjShC3JnNQpPL9UMM0OfeYodWW-UEfS9R2L57ln3dU1iukhDFiZUnr1fjs-KtcZ2WNzTH5HZAFig7WEcKMwUjCJwzJYcyfu8Yw8_A" referrerPolicy="no-referrer" />
+          </button>
+        </div>
+      </header>
+
+      {/* Stats Section */}
+      <section className="bg-[#0000AA] px-4 pb-6 text-white relative">
+        <div className="absolute right-[-20px] top-4 w-24 h-24 rounded-full bg-white/5 border-2 border-white/10"></div>
+        <div className="grid grid-cols-3 gap-2 text-center py-4 border-t border-white/10">
+          <div>
+            <p className="text-[10px] opacity-80">Lucros de ontem</p>
+            <p className="font-bold text-[12.5px]">0 KZs</p>
+          </div>
+          <div>
+            <p className="text-[10px] opacity-80">Ganhos de hoje</p>
+            <p className="font-bold text-[12.5px]">0 KZs</p>
+          </div>
+          <div>
+            <p className="text-[10px] opacity-80">Comissão de hoje</p>
+            <p className="font-bold text-[12.5px] text-blue-300">0 KZs</p>
+          </div>
+        </div>
+
+        <div className="mt-4">
+          <h3 className="text-center font-bold text-[15px] mb-4">Convite subordinado</h3>
+          <div className="space-y-4">
+            {[1, 2, 3].map((num) => (
+              <div key={num} className="grid grid-cols-2 text-[12.5px] border-b border-white/5 pb-2">
+                <div>
+                  <p className="font-bold mb-1">nota {num} <span className="ml-1">›</span></p>
+                  <p className="opacity-70">Incluir/Vinculado</p>
+                  <p className="font-bold">0/0</p>
+                </div>
+                <div className="text-right">
+                  <p className="opacity-70 mt-4">Ganhos acumulados</p>
+                  <p className="font-bold">0</p>
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* Action List Section */}
+      <section className="bg-[#EAEBED] rounded-t-3xl -mt-4 relative z-10 px-4 pt-6 flex-grow">
+        <div className="space-y-1">
+          {menuItems.map((item, idx) => (
+            <div
+              key={idx}
+              onClick={() => item.path !== '#' && navigate(item.path)}
+              className="flex items-center justify-between py-3 border-b border-gray-200 cursor-pointer"
+            >
+              <div className="flex items-center space-x-3">
+                <item.icon className="w-5 h-5 text-blue-900" />
+                <span className="text-blue-900 text-[12.5px] font-medium">{item.name}</span>
+              </div>
+              <ChevronRight className="w-4 h-4 text-gray-400" />
+            </div>
+          ))}
+        </div>
+        <button
+          onClick={() => {
+            showLoading();
+            setTimeout(() => {
+              hideLoading();
+              navigate('/login');
+            }, 1000);
+          }}
+          className="w-full bg-[#0000B8] text-white font-bold h-[45px] mt-8 mb-20 rounded-full text-[15px]"
+        >
+          sair
+        </button>
+      </section>
+    </div>
+  );
+}

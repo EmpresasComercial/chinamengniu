@@ -1,0 +1,63 @@
+@import "tailwindcss";
+
+@theme {
+  --font-serif: "Times New Roman", Times, serif;
+  --font-sans: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+}
+
+@layer base {
+  body {
+    @apply font-serif text-[12.5px] leading-relaxed;
+  }
+
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6 {
+    @apply text-[15px] font-bold;
+  }
+
+  button {
+    @apply h-[45px] flex items-center justify-center transition-all active:scale-95;
+  }
+
+  /* Reset for small icon buttons or specific cases */
+  header button,
+  .icon-btn,
+  .btn-small,
+  nav button {
+    @apply h-auto;
+  }
+
+  .bg-main-gradient {
+    background: linear-gradient(180deg, #000080 0%, #0000a0 40%, #f3f4f6 40%, #f3f4f6 100%);
+    min-height: 100vh;
+  }
+
+  .card-shadow {
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
+  }
+
+  .header-pattern {
+    background-image: radial-gradient(rgba(255, 255, 255, 0.1) 1px, transparent 1px);
+    background-size: 20px 20px;
+  }
+
+  @keyframes marquee {
+    0% {
+      transform: translateX(100%);
+    }
+
+    100% {
+      transform: translateX(-100%);
+    }
+  }
+
+  .animate-marquee {
+    display: inline-block;
+    white-space: nowrap;
+    animation: marquee 15s linear infinite;
+  }
+}

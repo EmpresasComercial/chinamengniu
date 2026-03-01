@@ -1,0 +1,148 @@
+import { ChevronLeft } from 'lucide-react';
+import { useNavigate } from 'react-router-dom';
+import { useState } from 'react';
+import { motion, AnimatePresence } from 'motion/react';
+import { useLoading } from '../contexts/LoadingContext';
+
+export default function Invite() {
+  const navigate = useNavigate();
+  const { setIsLoading } = useLoading();
+  const [toastMessage, setToastMessage] = useState<string | null>(null);
+
+  const showToast = (message: string) => {
+    setToastMessage(message);
+    setTimeout(() => setToastMessage(null), 3000);
+  };
+
+  const handleCopy = (text: string) => {
+    setIsLoading(true);
+    setTimeout(() => {
+      setIsLoading(false);
+      navigator.clipboard.writeText(text);
+      showToast('Copiado com sucesso!');
+    }, 500);
+  };
+
+  return (
+    <div className="min-h-screen bg-[#E8EBF2]">
+      {/* Header and Main Blue Card */}
+      <section className="bg-[#0000CC] pb-12 rounded-b-[40px] shadow-lg relative">
+        {/* Header Navigation */}
+        <header className="flex items-center px-4 h-14 text-white">
+          <button onClick={() => navigate(-1)} className="p-2 -ml-2">
+            <ChevronLeft className="w-6 h-6" />
+          </button>
+          <h1 className="flex-grow text-center text-[15px] font-bold pr-8">convidar amigos</h1>
+        </header>
+
+        {/* Invite Codes Section */}
+        <div className="px-6 mt-8 text-white space-y-6">
+          <div>
+            <p className="text-[12.5px] mb-2 font-bold">meu código de convite</p>
+            <button
+              onClick={() => handleCopy('123456')}
+              className="bg-gradient-to-r from-[#7367f0] to-[#a067f0] px-5 py-1 rounded-full text-[12.5px] text-white font-medium"
+            >
+              cópia
+            </button>
+          </div>
+
+          <div>
+            <p className="text-[12.5px] mb-2 font-bold">link de convite</p>
+            <div className="flex items-center justify-between">
+              <span className="text-[12.5px] opacity-90 truncate mr-4">
+                https://www.mengniu.wang/#/register?r...
+              </span>
+              <button
+                onClick={() => handleCopy('https://www.mengniu.wang/#/register?r=123456')}
+                className="bg-gradient-to-r from-[#7367f0] to-[#a067f0] px-5 py-1 rounded-full text-[12.5px] text-white font-medium shrink-0"
+              >
+                cópia
+              </button>
+            </div>
+          </div>
+        </div>
+
+        {/* Horizontal Divider */}
+        <div className="mx-6 border-t border-white/20 mt-8 pt-6">
+          <p className="text-white text-center text-[12.5px] font-semibold mb-4 opacity-90 leading-tight">
+            para partilhar com whatsap ou telegram clique no icone em seguida abrirá automaticamente e selecione o destinatário de whatsap ou telegram.
+          </p>
+          <p className="text-white text-center text-[12.5px] font-bold mb-6">
+            compartilhe com
+          </p>
+
+          {/* Social Media Icons Row */}
+          <div className="flex items-center justify-center gap-6">
+            {/* Telegram */}
+            <button className="w-10 h-10 bg-white rounded-full flex items-center justify-center shadow-md">
+              <img
+                alt="Telegram"
+                className="w-6 h-6 object-contain"
+                src="https://upload.wikimedia.org/wikipedia/commons/thumb/8/82/Telegram_logo.svg/512px-Telegram_logo.svg.png"
+              />
+            </button>
+            {/* WhatsApp */}
+            <button className="w-10 h-10 bg-white rounded-full flex items-center justify-center shadow-md">
+              <img
+                alt="WhatsApp"
+                className="w-7 h-7 object-contain"
+                src="https://upload.wikimedia.org/wikipedia/commons/thumb/6/6b/WhatsApp.svg/512px-WhatsApp.svg.png"
+              />
+            </button>
+          </div>
+        </div>
+      </section>
+
+      {/* Bottom Interaction Section */}
+      <main className="px-6 -mt-4 relative z-10 pb-10">
+        {/* Team Button */}
+        <button
+          onClick={() => navigate('/equipe')}
+          className="w-full h-[45px] bg-[#000099] text-white rounded-full text-[15px] font-medium shadow-lg mb-6"
+        >
+          minha equipe
+        </button>
+
+        {/* Bottom Info Card */}
+        <div className="bg-white rounded-3xl p-6 shadow-sm text-center">
+          <p className="text-gray-800 text-[12.5px] leading-relaxed mb-6">
+            receba um desconto quando seu amigo recarregar o celular.
+          </p>
+
+          <div className="grid grid-cols-2 gap-4 text-[12.5px] font-semibold text-[#333]">
+            <div className="flex flex-col items-center">
+              <span className="mb-2">nota</span>
+              <div className="text-[12.5px] font-normal text-gray-600 leading-tight text-center">
+                após seus subordinados fazer a adoção ser bem-sucedida, receber automaticamente a recompensa de investimento. a operação é simples e não leva muito tempo; basta copiar e partilhar.
+              </div>
+            </div>
+            <div className="flex flex-col items-center">
+              <span className="mb-2">reembolso de recarga</span>
+              <div className="text-[12.5px] font-normal text-gray-600 leading-tight text-center space-y-1">
+                <div>recarga nível 1: 10%</div>
+                <div>recarga nível 2: 6%</div>
+                <div>recarga nível 3: 1%</div>
+                <div className="pt-1">valido pela primeira recarga para todos níveis, da criação: 365 dias</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </main>
+
+      {/* Toast Notification */}
+      <AnimatePresence>
+        {toastMessage && (
+          <motion.div
+            initial={{ opacity: 0, scale: 0.9, x: '-50%', y: '-50%' }}
+            animate={{ opacity: 1, scale: 1, x: '-50%', y: '-50%' }}
+            exit={{ opacity: 0, scale: 0.9, x: '-50%', y: '-50%' }}
+            className="fixed top-1/2 left-1/2 bg-black/80 text-white px-6 py-3 rounded-xl text-[12.5px] font-medium shadow-2xl z-[100] text-center min-w-[200px]"
+          >
+            {toastMessage}
+          </motion.div>
+        )}
+      </AnimatePresence>
+    </div>
+  );
+}
