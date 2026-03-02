@@ -3,6 +3,7 @@ import { ChevronLeft, ChevronDown } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import { useLoading } from '../contexts/LoadingContext';
 import { motion, AnimatePresence } from 'motion/react';
+import { supabase } from '../lib/supabase';
 
 export default function AddBank() {
   const navigate = useNavigate();
@@ -15,7 +16,7 @@ export default function AddBank() {
 
   const banks = ['BAI', 'BIC', 'BFA', 'SOL', 'ATL'];
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
     if (!fullName.trim()) {
@@ -37,10 +38,25 @@ export default function AddBank() {
     }
 
     showLoading();
-    setTimeout(() => {
+    try {
+      const { error } = await supabase.rpc('add_bank_account', {
+        p_bank_name: selectedBank,
+        p_holder_name: fullName,
+        p_iban: iban
+      });
+
+      if (error) {
+        setValidationError(error.message);
+        setTimeout(() => setValidationError(null), 3000);
+      } else {
+        navigate(-1);
+      }
+    } catch (err: any) {
+      setValidationError('Erro inesperado ao salvar banco.');
+      setTimeout(() => setValidationError(null), 3000);
+    } finally {
       hideLoading();
-      navigate(-1);
-    }, 1500);
+    }
   };
 
   return (

@@ -3,10 +3,13 @@ import { ChevronLeft, Eye, EyeOff } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import { useLoading } from '../contexts/LoadingContext';
 import { motion, AnimatePresence } from 'motion/react';
+import { supabase } from '../lib/supabase';
+import { useAuth } from '../contexts/AuthContext';
 
 export default function ChangePassword() {
   const navigate = useNavigate();
   const { showLoading, hideLoading } = useLoading();
+  const { profile } = useAuth();
 
   const [oldPassword, setOldPassword] = useState('');
   const [newPassword, setNewPassword] = useState('');
@@ -18,7 +21,7 @@ export default function ChangePassword() {
 
   const [validationError, setValidationError] = useState<string | null>(null);
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
     if (!oldPassword) {
@@ -46,10 +49,44 @@ export default function ChangePassword() {
     }
 
     showLoading();
-    setTimeout(() => {
+    try {
+      // 1. Verify old password by attempting a sign in
+      if (profile?.phone) {
+        const email = `${profile.phone}@user.com`;
+        const { error: signInError } = await supabase.auth.signInWithPassword({
+          email,
+          password: oldPassword,
+        });
+
+        if (signInError) {
+          setValidationError('A senha antiga está incorreta.');
+          setTimeout(() => setValidationError(null), 3000);
+          hideLoading();
+          return;
+        }
+      }
+
+      // 2. Update to new password
+      const { error: updateError } = await supabase.auth.updateUser({
+        password: newPassword
+      });
+
+      if (updateError) {
+        setValidationError(updateError.message);
+        setTimeout(() => setValidationError(null), 3000);
+      } else {
+        setValidationError('Senha alterada com sucesso!');
+        setTimeout(() => {
+          setValidationError(null);
+          navigate(-1);
+        }, 2000);
+      }
+    } catch (err: any) {
+      setValidationError('Erro inesperado ao alterar senha.');
+      setTimeout(() => setValidationError(null), 3000);
+    } finally {
       hideLoading();
-      navigate(-1);
-    }, 1500);
+    }
   };
 
   return (

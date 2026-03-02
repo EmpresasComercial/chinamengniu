@@ -69,26 +69,26 @@ export default function Profile() {
         <div className="grid grid-cols-2 gap-4 mt-6">
           <div>
             <p className="text-[10px] opacity-80 uppercase tracking-wider">Ativos totais</p>
-            <p className="text-[20px] font-bold">${profile?.balance || '0'}</p>
+            <p className="text-[20px] font-bold">{profile?.balance || '0'} Kz</p>
           </div>
           <div className="text-right">
             <p className="text-[10px] opacity-80 uppercase tracking-wider">Receita total</p>
-            <p className="text-[20px] font-bold">${profile?.income || '0.00'}</p>
+            <p className="text-[20px] font-bold">{profile?.income || '0.00'} Kz</p>
           </div>
         </div>
 
         <div className="grid grid-cols-3 gap-2 mt-4 text-center">
           <div>
             <p className="text-[10px] opacity-80 leading-tight">conta de<br />reprodução</p>
-            <p className="font-bold text-[14px] mt-1">$0.00</p>
+            <p className="font-bold text-[14px] mt-1">0.00 Kz</p>
           </div>
           <div>
             <p className="text-[10px] opacity-80 leading-tight">Ativos de<br />Lucro</p>
-            <p className="font-bold text-[14px] mt-1">${profile?.balance || '0.00'}</p>
+            <p className="font-bold text-[14px] mt-1">{profile?.balance || '0.00'} Kz</p>
           </div>
           <div>
             <p className="text-[10px] opacity-80 leading-tight">Comissão<br />total</p>
-            <p className="font-bold text-[14px] mt-1">$0</p>
+            <p className="font-bold text-[14px] mt-1">0 Kz</p>
           </div>
         </div>
 
@@ -127,15 +127,15 @@ export default function Profile() {
         <div className="grid grid-cols-3 gap-2 text-center py-4 border-t border-white/10">
           <div>
             <p className="text-[10px] opacity-70">Lucros de ontem</p>
-            <p className="font-bold text-[14px]">$0</p>
+            <p className="font-bold text-[14px]">0 Kz</p>
           </div>
           <div>
             <p className="text-[10px] opacity-70">Ganhos de hoje</p>
-            <p className="font-bold text-[14px]">$0</p>
+            <p className="font-bold text-[14px]">0 Kz</p>
           </div>
           <div>
             <p className="text-[10px] opacity-70">Comissão de hoje</p>
-            <p className="font-bold text-[14px]">$0</p>
+            <p className="font-bold text-[14px]">0 Kz</p>
           </div>
         </div>
 

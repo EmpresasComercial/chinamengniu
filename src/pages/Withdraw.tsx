@@ -1,19 +1,51 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { ChevronLeft, Eye, EyeOff, CreditCard } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import { motion, AnimatePresence } from 'motion/react';
 import { useLoading } from '../contexts/LoadingContext';
+import { useAuth } from '../contexts/AuthContext';
+import { supabase } from '../lib/supabase';
+
+interface BankAccount {
+  id: string;
+  nome_banco: string;
+  iban: string;
+  nome_completo: string;
+}
 
 export default function Withdraw() {
   const navigate = useNavigate();
   const { showLoading, hideLoading } = useLoading();
+  const { profile, refreshProfile } = useAuth();
   const [amount, setAmount] = useState('');
-  const [address, setAddress] = useState('');
   const [password, setPassword] = useState('');
   const [showPassword, setShowPassword] = useState(false);
   const [feedback, setFeedback] = useState<string | null>(null);
+  const [banks, setBanks] = useState<BankAccount[]>([]);
+  const [selectedBankId, setSelectedBankId] = useState<string | null>(null);
 
-  const handleConfirm = () => {
+  useEffect(() => {
+    async function fetchBanks() {
+      const { data, error } = await supabase
+        .from('bancos_clientes')
+        .select('*');
+
+      if (!error && data) {
+        setBanks(data);
+        if (data.length > 0) {
+          setSelectedBankId(data[0].id);
+        }
+      }
+    }
+    fetchBanks();
+  }, []);
+
+  const showToast = (message: string) => {
+    setFeedback(message);
+    setTimeout(() => setFeedback(null), 3000);
+  };
+
+  const handleConfirm = async () => {
     const numAmount = parseFloat(amount);
 
     if (!amount) {
@@ -24,8 +56,8 @@ export default function Withdraw() {
       showToast('o valor deve estar entre $1000 e $1.000.000,00');
       return;
     }
-    if (!address) {
-      showToast('por favor, insira o endereço para retirada (iban)');
+    if (!selectedBankId) {
+      showToast('por favor, adicione uma conta bancária primeiro');
       return;
     }
     if (!password) {
@@ -34,20 +66,32 @@ export default function Withdraw() {
     }
 
     showLoading();
-    setTimeout(() => {
+    try {
+      // Call the withdrawal RPC function
+      const { data, error } = await supabase.rpc('request_withdrawal', {
+        p_amount: numAmount,
+        p_bank_id: selectedBankId,
+        p_pin: password
+      });
+
+      if (error) {
+        showToast(error.message);
+      } else if (data && data.success) {
+        showToast(data.message || 'solicitação de saque enviada com sucesso!');
+        setAmount('');
+        setPassword('');
+        refreshProfile(); // Refresh balance
+      } else {
+        showToast('erro ao processar solicitação.');
+      }
+    } catch (err: any) {
+      showToast('Erro inesperado ao processar saque.');
+    } finally {
       hideLoading();
-      // success simulation
-      showToast('solicitação de saque enviada com sucesso!');
-      setAmount('');
-      setAddress('');
-      setPassword('');
-    }, 1500);
+    }
   };
 
-  const showToast = (message: string) => {
-    setFeedback(message);
-    setTimeout(() => setFeedback(null), 3000);
-  };
+  const selectedBank = banks.find(b => b.id === selectedBankId);
 
   return (
     <div className="min-h-screen bg-[#d1d5db]">
@@ -60,9 +104,7 @@ export default function Withdraw() {
       </header>
 
       <main className="p-4 space-y-4 max-w-md mx-auto">
-        {/* main content card */}
         <div className="bg-white rounded-2xl p-4 shadow-sm">
-          {/* alert text */}
           <div className="flex justify-between items-start mb-4">
             <p className="text-[12.5px] text-red-500 italic">abrir limite em até 24 horas.</p>
             <div className="text-blue-800">
@@ -70,73 +112,71 @@ export default function Withdraw() {
             </div>
           </div>
 
-          {/* balance display card */}
           <div className="bg-[#e9ecef] rounded-xl p-4 mb-6">
             <p className="text-[12.5px] text-gray-500 font-medium">guacador</p>
             <div className="flex items-baseline space-x-1 my-1">
-              <span className="text-[24px] font-bold text-[#0000cc]">$0.000</span>
+              <span className="text-[24px] font-bold text-[#0000cc]">{profile?.balance || '0.00'} Kz</span>
             </div>
-            <p className="text-[12.5px] text-gray-500">valor pendente: <span className="text-[#f97316] font-bold">$0,00</span></p>
+            <p className="text-[12.5px] text-gray-500">valor pendente: <span className="text-[#f97316] font-bold">0,00 Kz</span></p>
           </div>
 
-          {/* payment methods section */}
           <div className="mb-6">
-            <h3 className="text-[12.5px] font-bold text-gray-700 mb-3">métodos de pagamento</h3>
+            <div className="flex justify-between items-center mb-3">
+              <h3 className="text-[12.5px] font-bold text-gray-700">métodos de pagamento</h3>
+              <button
+                onClick={() => navigate('/adicionar-banco')}
+                className="text-[11px] text-[#0000cc] font-bold"
+              >
+                + adicionar banco
+              </button>
+            </div>
             <div className="flex flex-wrap gap-2">
-              {/* active bank BAI */}
-              <button className="flex items-center space-x-1 border-2 border-[#0000cc] bg-[#0000cc] text-white px-3 py-1.5 rounded-md text-[12.5px] font-bold">
-                <img
-                  alt="bank-icon"
-                  className="w-4 h-4 rounded-full"
-                  src="https://lh3.googleusercontent.com/aida-public/AB6AXuDT2yWRZiDDPR5KiIQW8QDBXwkC0iP95o8cd6hfBPNiGUcfIzWQkM22m4yRfn9HqeE_-3jx44Nl14opzkdZKiwgGHgAu8hVYKR_A3RBfQZvG3qQks2McrRuqMX8Vh6XcjcVjRKFrAl9Jguc2UH212ysmPU2rvGEo_9HaEJI4ZqTCXF11MAHfdcGnenjb8i7AADJGG93ib1raPBJypbGJHwJTow803OQT0gEBJkzW69nPdDq3dbj-JRtq0pT5EeKz35-vkWZlUxp6g"
-                  referrerPolicy="no-referrer"
-                />
-                <span>bank bai</span>
-              </button>
-              {/* angola */}
-              <button className="flex items-center space-x-1 border border-gray-300 bg-white text-gray-500 px-3 py-1.5 rounded-md text-[12.5px] font-bold">
-                <img
-                  alt="angola-icon"
-                  className="w-4 h-4 rounded-full"
-                  src="https://lh3.googleusercontent.com/aida-public/AB6AXuAIIrIpIy7O9QhQzc9I73Rauw8CA6XeqPLIiI2TMPgn4tW3aQpHXVg7PyB00nTxHsRfuMe-YTFblWIq1KGIz4TAud7xX7SgLNPpe_LkhUyKb08N3IVFyIGUBgH4AcxuL9jf8edRdQi0Z7Z7y-UD2i_Fs__BCIxogbxvXMMQYEhLvpMyRTHS02QXf3A5nncLsrHtRDQ1-4fHUf3UXXyB_pwK8kz7H3AIUWG51ZcJF3x5lL6NuDJz6OPaZzElu-HItGu1MURd54-U5Q"
-                  referrerPolicy="no-referrer"
-                />
-                <span>angola</span>
-              </button>
+              {banks.length > 0 ? (
+                banks.map((bank) => (
+                  <button
+                    key={bank.id}
+                    onClick={() => setSelectedBankId(bank.id)}
+                    className={`flex items-center space-x-1 px-3 py-1.5 rounded-md text-[12.5px] font-bold border-2 transition-all ${selectedBankId === bank.id
+                      ? 'border-[#0000cc] bg-[#0000cc] text-white'
+                      : 'border-gray-200 bg-white text-gray-500'}`}
+                  >
+                    <span>{bank.nome_banco}</span>
+                  </button>
+                ))
+              ) : (
+                <p className="text-[11px] text-gray-400">nenhuma conta bancária vinculada.</p>
+              )}
             </div>
           </div>
 
-          {/* withdrawal limit info */}
           <div className="mb-6">
-            <label className="block text-[12.5px] font-bold text-gray-700 mb-1">faixa de limite de saque $1000 - $1.000.000,00</label>
+            <label className="block text-[12.5px] font-bold text-gray-700 mb-1">faixa de limite de saque 1.000 Kz - 1.000.000,00 Kz</label>
             <input
               value={amount}
-              onChange={(e) => setAmount(e.target.value.replace(/[^\p{L}\p{N}]/gu, ''))}
+              onChange={(e) => setAmount(e.target.value.replace(/[^\d.]/g, ''))}
               className="w-full border-b border-gray-200 focus:border-[#0000cc] focus:ring-0 text-[12.5px] py-2 px-0 text-gray-700 outline-none"
-              placeholder="faixa de limite de saque 1000 - 1.000.000,00"
-              type="number"
-            />
-          </div>
-
-          {/* withdrawal address input */}
-          <div className="mb-6">
-            <label className="block text-[12.5px] font-bold text-gray-700 mb-1">endereço para retirada</label>
-            <input
-              value={address}
-              onChange={(e) => setAddress(e.target.value.replace(/[^\p{L}\p{N}]/gu, ''))}
-              className="w-full border-b border-gray-200 focus:border-[#0000cc] focus:ring-0 text-[12.5px] py-2 px-0 text-gray-700 outline-none"
-              placeholder="endereço para retirada (iban)"
+              placeholder="faixa de limite de saque 1.000 - 1.000.000,00 Kz"
               type="text"
             />
           </div>
 
-          {/* security password input */}
+          <div className="mb-6">
+            <label className="block text-[12.5px] font-bold text-gray-700 mb-1">endereço para retirada</label>
+            <input
+              value={selectedBank ? selectedBank.iban : ''}
+              readOnly
+              className="w-full border-b border-gray-200 focus:border-[#0000cc] focus:ring-0 text-[12.5px] py-2 px-0 text-gray-400 outline-none bg-gray-50"
+              placeholder="vincule um banco para ver o iban"
+              type="text"
+            />
+          </div>
+
           <div className="mb-6 relative">
             <label className="block text-[12.5px] font-bold text-gray-700 mb-1">senha segura</label>
             <div className="relative">
               <input
                 value={password}
-                onChange={(e) => setPassword(e.target.value.replace(/[^\p{L}\p{N}]/gu, ''))}
+                onChange={(e) => setPassword(e.target.value)}
                 className="w-full border-b border-gray-200 focus:border-[#0000cc] focus:ring-0 text-[12.5px] py-2 px-0 text-gray-700 outline-none"
                 placeholder="senha segura"
                 type={showPassword ? "text" : "password"}
@@ -150,7 +190,6 @@ export default function Withdraw() {
             </div>
           </div>
 
-          {/* summary section */}
           <div className="flex flex-col space-y-2 mb-6">
             <div className="flex justify-between items-center text-[12.5px]">
               <span className="text-gray-500">taxa de manuseio</span>
@@ -160,11 +199,12 @@ export default function Withdraw() {
             </div>
             <div className="flex justify-between items-center text-[12.5px]">
               <span className="text-gray-500">fundos recebidos</span>
-              <span className="text-teal-500 font-bold">$0,00</span>
+              <span className="text-teal-500 font-bold">
+                {amount ? (parseFloat(amount) * 0.86).toFixed(2) : '0,00'} Kz
+              </span>
             </div>
           </div>
 
-          {/* confirm button */}
           <button
             onClick={handleConfirm}
             className="w-full h-[45px] bg-[#0000cc] text-white rounded-full text-[15px] font-bold tracking-wide hover:bg-blue-800 transition-colors"
@@ -186,13 +226,12 @@ export default function Withdraw() {
           )}
         </AnimatePresence>
 
-        {/* instructions section */}
         <div>
           <h4 className="text-[15px] font-bold text-gray-700 mb-3">instruções para retirada</h4>
           <div className="bg-white rounded-2xl p-4 text-[12.5px] leading-relaxed text-gray-600 space-y-3 shadow-sm">
             <p>suporte para retiradas usando transferência bancária (iban).</p>
             <p>as retiradas geralmente levam de 24 a 48 minutos para chegar.</p>
-            <p>o valor mínimo de saque é $1000, limite máximo $1.000.000,00.</p>
+            <p>o valor mínimo de saque é 1.000 Kz, limite máximo 1.000.000,00 Kz.</p>
             <p>a taxa de retirada é 14%.</p>
           </div>
         </div>

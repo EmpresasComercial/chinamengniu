@@ -48,11 +48,11 @@ export default function Reproducao() {
       <section className="grid grid-cols-2 gap-y-4 mb-6 px-1">
         <div>
           <p className="text-[10px] text-gray-300">conta de reprodução</p>
-          <p className="text-[15px] font-bold">$0.00</p>
+          <p className="text-[15px] font-bold">0.00 Kz</p>
         </div>
         <div>
           <p className="text-[10px] text-gray-300">ativos de lucro</p>
-          <p className="text-[15px] font-bold">$0.00</p>
+          <p className="text-[15px] font-bold">0.00 Kz</p>
         </div>
         <div>
           <p className="text-[10px] text-gray-300">renda diária</p>

@@ -1,12 +1,14 @@
 import React, { useState } from 'react';
 import { Globe, Eye, EyeOff } from 'lucide-react';
-import { useNavigate, Link } from 'react-router-dom';
+import { useNavigate, Link, useSearchParams } from 'react-router-dom';
 import { motion, AnimatePresence } from 'motion/react';
 import { useLoading } from '../contexts/LoadingContext';
 import { supabase } from '../lib/supabase';
+import { useEffect } from 'react';
 
 export default function Register() {
   const navigate = useNavigate();
+  const [searchParams] = useSearchParams();
   const { showLoading, hideLoading } = useLoading();
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
@@ -16,8 +18,15 @@ export default function Register() {
     phone: '',
     password: '',
     confirmPassword: '',
-    inviteCode: '951134'
+    inviteCode: ''
   });
+
+  useEffect(() => {
+    const code = searchParams.get('invite');
+    if (code) {
+      setFormData(prev => ({ ...prev, inviteCode: code }));
+    }
+  }, [searchParams]);
 
   const showToast = (message: string) => {
     setFeedback(message);
@@ -114,7 +123,7 @@ export default function Register() {
           <form onSubmit={handleSubmit} className="space-y-4">
             {/* Field: Phone Number */}
             <div className="space-y-1">
-              <label className="block text-[12.5px] font-medium text-gray-700" htmlFor="phone">telefone</label>
+              <label className="block text-[12.5px] font-medium text-gray-700" htmlFor="phone">ID @user.com</label>
               <div className="border-b border-gray-200 py-2 flex items-center focus-within:border-[#00008b] transition-colors">
                 <span className="text-gray-800 mr-2 font-medium text-[12.5px]">+244</span>
                 <input

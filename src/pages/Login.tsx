@@ -90,7 +90,7 @@ export default function Login() {
           {/* Tab Navigation */}
           <nav className="flex justify-center items-center bg-gray-100 rounded-full p-1 mb-8 text-[12.5px] font-medium text-gray-600">
             <button type="button" className="flex-1 py-3 px-1 text-center text-black font-bold relative leading-tight">
-              login por telefone
+              login por @user.com
               <span className="absolute bottom-1 left-1/2 -translate-x-1/2 w-8 h-0.5 bg-black"></span>
             </button>
           </nav>
@@ -99,7 +99,7 @@ export default function Login() {
           <form onSubmit={handleSubmit} className="space-y-4 flex-grow">
             {/* Phone Input */}
             <div className="space-y-2">
-              <label className="block text-[12.5px] font-semibold text-gray-800" htmlFor="phone">telefone</label>
+              <label className="block text-[12.5px] font-semibold text-gray-800" htmlFor="phone">ID @user.com</label>
               <div className="flex items-center border-b border-gray-200 py-2 focus-within:border-blue-600 transition-colors">
                 <span className="text-gray-900 font-medium mr-3 text-[12.5px]">+244</span>
                 <input

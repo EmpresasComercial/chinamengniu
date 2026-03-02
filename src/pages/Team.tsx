@@ -32,11 +32,11 @@ export default function Team() {
         <section className="bg-white rounded-[1.5rem] p-5 shadow-sm">
           <div className="grid grid-cols-2 gap-y-6 text-center">
             <div className="flex flex-col">
-              <span className="text-[10px] text-[#4A5568] font-medium mb-1">Receita total($)</span>
+              <span className="text-[10px] text-[#4A5568] font-medium mb-1">Receita total(Kz)</span>
               <span className="text-[15px] font-bold text-[#0000A0]">0</span>
             </div>
             <div className="flex flex-col">
-              <span className="text-[10px] text-[#4A5568] font-medium mb-1">Ganhos de hoje($)</span>
+              <span className="text-[10px] text-[#4A5568] font-medium mb-1">Ganhos de hoje(Kz)</span>
               <span className="text-[15px] font-bold text-[#0000A0]">0</span>
             </div>
             <div className="flex flex-col">
