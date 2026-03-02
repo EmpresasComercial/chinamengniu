@@ -40,9 +40,9 @@ export default function FinancialRecords() {
               onClick={() => handleTabSwitch('reproducao')}
             >
               <span className={`text-[12.5px] font-medium block transition-colors ${activeTab === 'reproducao' ? 'text-[#0000A5]' : 'text-gray-400'}`}>
-                conta de reprodução
+                conta de retiradas
               </span>
-              {activeTab === 'reproducao' && (
+              {activeTab === 'retiradas' && (
                 <div className="w-[30px] h-[2px] bg-[#0000A5] mx-auto mt-[2px] rounded-full"></div>
               )}
             </div>
@@ -54,9 +54,9 @@ export default function FinancialRecords() {
               onClick={() => handleTabSwitch('lucro')}
             >
               <span className={`text-[12.5px] font-medium block transition-colors ${activeTab === 'lucro' ? 'text-[#0000A5]' : 'text-gray-400'}`}>
-                ativos de lucro
+                recarregamentos feitos
               </span>
-              {activeTab === 'lucro' && (
+              {activeTab === 'recarregamentos' && (
                 <div className="w-[30px] h-[2px] bg-[#0000A5] mx-auto mt-[2px] rounded-full"></div>
               )}
             </div>

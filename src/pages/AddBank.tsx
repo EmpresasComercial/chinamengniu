@@ -1,9 +1,16 @@
-import React, { useState } from 'react';
-import { ChevronLeft, ChevronDown } from 'lucide-react';
+import React, { useState, useEffect } from 'react';
+import { ChevronLeft, ChevronDown, Trash2, CreditCard } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import { useLoading } from '../contexts/LoadingContext';
 import { motion, AnimatePresence } from 'motion/react';
 import { supabase } from '../lib/supabase';
+
+interface BankAccount {
+  id: string;
+  nome_banco: string;
+  nome_completo: string;
+  iban: string;
+}
 
 export default function AddBank() {
   const navigate = useNavigate();
@@ -13,8 +20,27 @@ export default function AddBank() {
   const [fullName, setFullName] = useState('');
   const [iban, setIban] = useState('');
   const [validationError, setValidationError] = useState<string | null>(null);
+  const [existingAccount, setExistingAccount] = useState<BankAccount | null>(null);
+  const [loading, setLoading] = useState(true);
+  const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
 
   const banks = ['BAI', 'BIC', 'BFA', 'SOL', 'ATL'];
+
+  const maskIban = (raw: string) => {
+    if (!raw || raw.length <= 8) return raw;
+    return `${raw.slice(0, 4)}${'*'.repeat(raw.length - 8)}${raw.slice(-4)}`;
+  };
+
+  useEffect(() => {
+    async function fetchAccount() {
+      const { data, error } = await supabase.rpc('get_my_bank_accounts');
+      if (!error && data && data.length > 0) {
+        setExistingAccount(data[0]);
+      }
+      setLoading(false);
+    }
+    fetchAccount();
+  }, []);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -59,6 +85,30 @@ export default function AddBank() {
     }
   };
 
+  const handleDelete = async () => {
+    if (!existingAccount) return;
+    showLoading();
+    try {
+      const { error } = await supabase
+        .from('bancos_clientes')
+        .delete()
+        .eq('id', existingAccount.id);
+
+      if (error) {
+        setValidationError(error.message);
+        setTimeout(() => setValidationError(null), 3000);
+      } else {
+        navigate(-1);
+      }
+    } catch {
+      setValidationError('Erro ao apagar conta.');
+      setTimeout(() => setValidationError(null), 3000);
+    } finally {
+      hideLoading();
+      setShowDeleteConfirm(false);
+    }
+  };
+
   return (
     <div className="min-h-screen bg-[#E8EBF2] flex flex-col">
       {/* Header */}
@@ -66,58 +116,103 @@ export default function AddBank() {
         <button onClick={() => navigate(-1)} className="p-2 -ml-2">
           <ChevronLeft className="w-6 h-6" />
         </button>
-        <h1 className="flex-1 text-center text-[15px] font-bold pr-8">adicionar banco</h1>
+        <h1 className="flex-1 text-center text-[15px] font-bold pr-8">
+          {existingAccount ? 'conta bancária' : 'adicionar banco'}
+        </h1>
       </header>
 
       {/* Main Content */}
       <main className="flex-1 p-4">
-        <div className="bg-white rounded-3xl shadow-sm p-6 mt-4">
-          <form onSubmit={handleSubmit} className="space-y-6">
-            <div className="relative border-b border-gray-200 py-2">
-              <input
-                type="text"
-                placeholder="nome completo"
-                value={fullName}
-                onChange={(e) => setFullName(e.target.value)}
-                className="w-full border-none focus:ring-0 p-0 text-gray-700 placeholder-gray-400 text-[15px] bg-transparent"
-              />
+        {loading ? (
+          <div className="flex justify-center items-center mt-20">
+            <div className="w-8 h-8 border-4 border-[#000080] border-t-transparent rounded-full animate-spin" />
+          </div>
+        ) : existingAccount ? (
+          /* — Conta já vinculada — */
+          <div className="bg-white rounded-3xl shadow-sm p-6 mt-4 space-y-6">
+            <div className="flex items-center gap-3 mb-2">
+              <div className="w-12 h-12 bg-[#000080]/10 rounded-full flex items-center justify-center">
+                <CreditCard className="w-6 h-6 text-[#000080]" />
+              </div>
+              <div>
+                <p className="text-[11px] text-gray-400 uppercase tracking-wider">banco vinculado</p>
+                <p className="text-[17px] font-black text-gray-800">{existingAccount.nome_banco}</p>
+              </div>
             </div>
 
-            <div className="relative border-b border-gray-200 py-2">
-              <input
-                type="text"
-                placeholder="endereço bancário (iban)"
-                value={iban}
-                onChange={(e) => setIban(e.target.value)}
-                className="w-full border-none focus:ring-0 p-0 text-gray-700 placeholder-gray-400 text-[15px] bg-transparent"
-              />
+            <div className="border-t border-gray-100 pt-4 space-y-3">
+              <div>
+                <p className="text-[11px] text-gray-400 uppercase tracking-wider mb-1">titular</p>
+                <p className="text-[15px] font-semibold text-gray-700">{existingAccount.nome_completo}</p>
+              </div>
+              <div>
+                <p className="text-[11px] text-gray-400 uppercase tracking-wider mb-1">iban</p>
+                <p className="text-[15px] font-mono font-semibold text-gray-700 tracking-widest break-all">
+                  {maskIban(existingAccount.iban)}
+                </p>
+              </div>
             </div>
 
-            <div
-              className="relative border-b border-gray-200 py-2 cursor-pointer flex justify-between items-center"
-              onClick={() => setIsBankPopupOpen(true)}
+            <button
+              onClick={() => setShowDeleteConfirm(true)}
+              className="w-full h-[45px] bg-red-500 hover:bg-red-600 text-white font-bold rounded-full text-[15px] flex items-center justify-center gap-2 transition-colors"
             >
-              <input
-                type="text"
-                placeholder="nome do banco"
-                value={selectedBank}
-                readOnly
-                className="w-full border-none focus:ring-0 p-0 text-gray-700 placeholder-gray-400 text-[15px] bg-transparent cursor-pointer"
-              />
-              <ChevronDown className="w-5 h-5 text-gray-400" />
-            </div>
+              <Trash2 className="w-4 h-4" />
+              apagar conta
+            </button>
+          </div>
+        ) : (
+          /* — Formulário de adição — */
+          <div className="bg-white rounded-3xl shadow-sm p-6 mt-4">
+            <form onSubmit={handleSubmit} className="space-y-6">
+              <div className="relative border-b border-gray-200 py-2">
+                <input
+                  type="text"
+                  placeholder="nome completo"
+                  value={fullName}
+                  onChange={(e) => setFullName(e.target.value)}
+                  className="w-full border-none focus:ring-0 p-0 text-gray-700 placeholder-gray-400 text-[15px] bg-transparent"
+                />
+              </div>
 
-            <div className="pt-8 pb-2">
-              <button
-                type="submit"
-                className="w-full h-[45px] bg-[#000080] text-white font-medium rounded-full text-[15px] hover:opacity-90 transition-opacity"
+              <div className="relative border-b border-gray-200 py-2">
+                <input
+                  type="text"
+                  placeholder="endereço bancário (iban)"
+                  value={iban}
+                  onChange={(e) => setIban(e.target.value)}
+                  className="w-full border-none focus:ring-0 p-0 text-gray-700 placeholder-gray-400 text-[15px] bg-transparent"
+                />
+              </div>
+
+              <div
+                className="relative border-b border-gray-200 py-2 cursor-pointer flex justify-between items-center"
+                onClick={() => setIsBankPopupOpen(true)}
               >
-                salvar
-              </button>
-            </div>
-          </form>
-        </div>
+                <input
+                  type="text"
+                  placeholder="nome do banco"
+                  value={selectedBank}
+                  readOnly
+                  className="w-full border-none focus:ring-0 p-0 text-gray-700 placeholder-gray-400 text-[15px] bg-transparent cursor-pointer"
+                />
+                <ChevronDown className="w-5 h-5 text-gray-400" />
+              </div>
+
+              <div className="pt-8 pb-2">
+                <button
+                  type="submit"
+                  className="w-full h-[45px] bg-[#000080] text-white font-medium rounded-full text-[15px] hover:opacity-90 transition-opacity"
+                >
+                  salvar
+                </button>
+              </div>
+            </form>
+          </div>
+        )}
       </main>
+
+      {/* Toast */}
       <AnimatePresence>
         {validationError && (
           <motion.div
@@ -128,6 +223,52 @@ export default function AddBank() {
           >
             {validationError}
           </motion.div>
+        )}
+      </AnimatePresence>
+
+      {/* Delete Confirmation Popup */}
+      <AnimatePresence>
+        {showDeleteConfirm && (
+          <>
+            <motion.div
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              onClick={() => setShowDeleteConfirm(false)}
+              className="fixed inset-0 bg-black/50 z-[60]"
+            />
+            <motion.div
+              initial={{ y: '100%' }}
+              animate={{ y: 0 }}
+              exit={{ y: '100%' }}
+              transition={{ type: 'spring', damping: 25, stiffness: 200 }}
+              className="fixed bottom-0 left-0 right-0 bg-white rounded-t-3xl z-[70] p-6"
+            >
+              <div className="flex flex-col items-center text-center space-y-4">
+                <div className="w-14 h-14 bg-red-100 rounded-full flex items-center justify-center">
+                  <Trash2 className="w-7 h-7 text-red-500" />
+                </div>
+                <h3 className="text-[17px] font-black text-gray-800">apagar conta bancária?</h3>
+                <p className="text-[12.5px] text-gray-500">
+                  esta ação é permanente. a conta vinculada será removida e não poderá ser recuperada.
+                </p>
+                <div className="w-full grid grid-cols-2 gap-3 pt-2">
+                  <button
+                    onClick={() => setShowDeleteConfirm(false)}
+                    className="h-[45px] border-2 border-gray-200 text-gray-700 font-bold rounded-full text-[14px] hover:bg-gray-50 transition-colors"
+                  >
+                    cancelar
+                  </button>
+                  <button
+                    onClick={handleDelete}
+                    className="h-[45px] bg-red-500 hover:bg-red-600 text-white font-bold rounded-full text-[14px] transition-colors"
+                  >
+                    confirmar
+                  </button>
+                </div>
+              </div>
+            </motion.div>
+          </>
         )}
       </AnimatePresence>
 
@@ -151,22 +292,14 @@ export default function AddBank() {
             >
               <div className="p-4 border-b border-gray-100 flex justify-between items-center">
                 <h3 className="font-bold text-gray-800 text-lg">selecione o banco</h3>
-                <button
-                  onClick={() => setIsBankPopupOpen(false)}
-                  className="text-gray-500 p-2"
-                >
-                  ✕
-                </button>
+                <button onClick={() => setIsBankPopupOpen(false)} className="text-gray-500 p-2">✕</button>
               </div>
               <div className="max-h-[50vh] overflow-y-auto">
                 {banks.map((bank) => (
                   <button
                     key={bank}
                     type="button"
-                    onClick={() => {
-                      setSelectedBank(bank);
-                      setIsBankPopupOpen(false);
-                    }}
+                    onClick={() => { setSelectedBank(bank); setIsBankPopupOpen(false); }}
                     className="w-full text-left px-6 py-4 border-b border-gray-50 hover:bg-gray-50 active:bg-gray-100 transition-colors text-gray-700 font-medium"
                   >
                     {bank}

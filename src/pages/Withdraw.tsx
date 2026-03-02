@@ -26,9 +26,8 @@ export default function Withdraw() {
 
   useEffect(() => {
     async function fetchBanks() {
-      const { data, error } = await supabase
-        .from('bancos_clientes')
-        .select('*');
+      // Use the RPC function that decrypts the IBAN server-side
+      const { data, error } = await supabase.rpc('get_my_bank_accounts');
 
       if (!error && data) {
         setBanks(data);
@@ -93,6 +92,14 @@ export default function Withdraw() {
 
   const selectedBank = banks.find(b => b.id === selectedBankId);
 
+  const maskIban = (iban: string) => {
+    if (!iban || iban.length <= 8) return iban;
+    const first4 = iban.slice(0, 4);
+    const last4 = iban.slice(-4);
+    const masked = '*'.repeat(iban.length - 8);
+    return `${first4}${masked}${last4}`;
+  };
+
   return (
     <div className="min-h-screen bg-[#d1d5db]">
       {/* header */}
@@ -123,12 +130,14 @@ export default function Withdraw() {
           <div className="mb-6">
             <div className="flex justify-between items-center mb-3">
               <h3 className="text-[12.5px] font-bold text-gray-700">métodos de pagamento</h3>
-              <button
-                onClick={() => navigate('/adicionar-banco')}
-                className="text-[11px] text-[#0000cc] font-bold"
-              >
-                + adicionar banco
-              </button>
+              {banks.length === 0 && (
+                <button
+                  onClick={() => navigate('/adicionar-banco')}
+                  className="text-[11px] text-[#0000cc] font-bold"
+                >
+                  + adicionar banco
+                </button>
+              )}
             </div>
             <div className="flex flex-wrap gap-2">
               {banks.length > 0 ? (
@@ -163,7 +172,7 @@ export default function Withdraw() {
           <div className="mb-6">
             <label className="block text-[12.5px] font-bold text-gray-700 mb-1">endereço para retirada</label>
             <input
-              value={selectedBank ? selectedBank.iban : ''}
+              value={selectedBank ? maskIban(selectedBank.iban) : ''}
               readOnly
               className="w-full border-b border-gray-200 focus:border-[#0000cc] focus:ring-0 text-[12.5px] py-2 px-0 text-gray-400 outline-none bg-gray-50"
               placeholder="vincule um banco para ver o iban"
