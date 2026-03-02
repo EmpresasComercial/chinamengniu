@@ -18,12 +18,17 @@ export default function Reproducao() {
 
       const { data, error } = await supabase
         .from('historico_compras')
-        .select('*')
+        .select('*, products(image_url)')
         .eq('user_id', user.id)
         .order('data_compra', { ascending: false });
 
       if (!error && data) {
-        setPurchases(data);
+        // Map the data to include the image_url if it exists in the joined products table
+        const formattedData = data.map((item: any) => ({
+          ...item,
+          image_url: item.image_url || (item.products ? item.products.image_url : null)
+        }));
+        setPurchases(formattedData);
       }
     }
 
@@ -136,25 +141,41 @@ export default function Reproducao() {
         </div>
         <div className="flex flex-col pt-4 space-y-3">
           {purchases.length > 0 ? (
-            purchases.map((item) => (
-              <div key={item.id} className="bg-white p-4 rounded-xl shadow-sm border border-gray-100 flex justify-between items-center">
-                <div className="flex flex-col">
-                  <h4 className="font-bold text-[14px] text-gray-800 capitalize">{item.nome_produto}</h4>
-                  <p className="text-[11px] text-gray-500 mt-1">
-                    adquirido em: {new Date(item.data_compra).toLocaleDateString()}
+            <div className="grid grid-cols-1 gap-4">
+              {purchases.map((item) => (
+                <div key={item.id} className="bg-white p-4 rounded-xl shadow-md border border-gray-100 flex flex-col items-center text-center transition-all active:scale-[0.98]">
+                  {/* Imagem do Produto no Topo */}
+                  <div className="w-32 h-32 mb-3 rounded-lg overflow-hidden bg-slate-50 flex items-center justify-center p-2 border border-slate-100">
+                    <img
+                      alt={item.nome_produto}
+                      className="w-full h-full object-contain"
+                      src={item.image_url || 'https://png.pngtree.com/png-clipart/20240615/original/pngtree-a-black-and-white-cow-with-tranparent-background-png-image_15340862.png'}
+                      referrerPolicy="no-referrer"
+                    />
+                  </div>
+
+                  {/* Nome do Produto */}
+                  <h4 className="font-black text-[15px] text-[#000080] capitalize mb-1">
+                    {item.nome_produto}
+                  </h4>
+
+                  {/* Duração em Dias */}
+                  <p className="text-[12.5px] font-bold text-slate-500">
+                    {item.duracao_dias} dias
                   </p>
-                  <p className="text-[11px] text-gray-500">
-                    duração: {item.duracao_dias} dias
-                  </p>
+
+                  {/* Informação adicional discreta */}
+                  <div className="mt-3 pt-2 border-t border-slate-50 w-full flex justify-between items-center opacity-60">
+                    <span className="text-[10px] text-slate-400">
+                      Adquirido: {new Date(item.data_compra).toLocaleDateString()}
+                    </span>
+                    <span className="text-[10px] font-bold text-[#0000AA]">
+                      {item.preco} Kz
+                    </span>
+                  </div>
                 </div>
-                <div className="text-right flex flex-col justify-between items-end gap-2">
-                  <p className="text-[14px] font-bold text-[#0000AA]">{item.preco} Kz</p>
-                  <span className="bg-[#D4ED71]/20 text-[#0000AA] text-[10px] px-2 py-0.5 rounded-md font-semibold">
-                    {item.status}
-                  </span>
-                </div>
-              </div>
-            ))
+              ))}
+            </div>
           ) : (
             <div className="flex flex-col items-center justify-center pt-6">
               <div className="relative w-24 h-24 mb-2">

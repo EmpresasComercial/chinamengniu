@@ -15,6 +15,31 @@ export default function Home() {
     manager: 'https://wa.me/1234567890',
     group: 'https://wa.me/1234567890'
   });
+  const [deferredPrompt, setDeferredPrompt] = useState<any>(null);
+
+  useEffect(() => {
+    const handler = (e: Event) => {
+      e.preventDefault();
+      setDeferredPrompt(e);
+    };
+
+    window.addEventListener('beforeinstallprompt', handler);
+    return () => window.removeEventListener('beforeinstallprompt', handler);
+  }, []);
+
+  const handleInstallApp = async (e: React.MouseEvent) => {
+    e.stopPropagation();
+    if (deferredPrompt) {
+      deferredPrompt.prompt();
+      const { outcome } = await deferredPrompt.userChoice;
+      if (outcome === 'accepted') {
+        setDeferredPrompt(null);
+      }
+    } else {
+      setNotification('Instalação já disponível no seu navegador ou já instalada.');
+      setTimeout(() => setNotification(null), 3000);
+    }
+  };
 
   useEffect(() => {
     async function fetchLinks() {
@@ -139,21 +164,38 @@ export default function Home() {
         </div>
 
         {/* App Banner */}
-        <div className="bg-[#EBF1FF] rounded-[2rem] p-6 flex justify-between items-center relative overflow-hidden h-28 group cursor-pointer transition-transform active:scale-[0.98]">
-          <div className="z-10 flex flex-col justify-center">
-            <h3 className="text-[#0000AA] font-black text-[22px] mb-3">Baixe o aplicativo</h3>
-            <div className="bg-[#0000AA] rounded-full w-10 h-6 flex items-center justify-center">
-              <svg className="w-4 h-4 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth="4">
-                <path d="M13 5l7 7-7 7M5 5l7 7-7 7" strokeLinecap="round" strokeLinejoin="round" />
-              </svg>
-            </div>
+        <div className="bg-[#EBF1FF] rounded-[2rem] p-4 flex flex-col justify-between relative overflow-hidden min-h-[140px] group cursor-pointer transition-all active:scale-[0.98]">
+          <div className="z-10">
+            <h3
+              onClick={handleInstallApp}
+              className="text-[#0000AA] font-black text-[22px] mb-1 underline decoration-2 underline-offset-4 cursor-pointer active:opacity-70 transition-opacity"
+            >
+              Baixe o aplicativo
+            </h3>
+            <p className="text-[#0000AA]/60 text-[11px] font-bold uppercase tracking-tight">mengniu company premium</p>
           </div>
-          <div className="absolute right-0 top-0 bottom-0 w-36 py-2 px-2 flex items-center justify-center">
+
+          {/* Nova Row de Botões Esticados */}
+          <div className="flex gap-2 w-full z-10 mt-4">
+            <button
+              onClick={(e) => { e.stopPropagation(); navigate('/recarregar'); }}
+              className="flex-1 bg-[#0000AA] text-white px-4 rounded-2xl text-[12.5px] font-black shadow-lg shadow-blue-900/10 h-[44px] flex items-center justify-center active:scale-[0.96] transition-all whitespace-nowrap"
+            >
+              Recarregar
+            </button>
+            <button
+              onClick={(e) => { e.stopPropagation(); navigate('/retirar'); }}
+              className="flex-1 bg-white text-[#0000AA] border border-blue-100 px-4 rounded-2xl text-[12.5px] font-black shadow-lg shadow-blue-900/5 h-[44px] flex items-center justify-center active:scale-[0.96] transition-all whitespace-nowrap"
+            >
+              Extrair
+            </button>
+          </div>
+
+          <div className="absolute right-[-10px] top-[-10px] w-32 h-32 opacity-20 pointer-events-none">
             <img
-              alt="App gift promo"
-              className="w-full h-full object-contain drop-shadow-lg"
+              alt="Decoration"
+              className="w-full h-full object-contain"
               src="https://www.mengniu.wang/assets/empty-image-CHCN_UjN.png"
-              referrerPolicy="no-referrer"
             />
           </div>
         </div>
