@@ -81,7 +81,7 @@ export default function Reproducao() {
           loading="lazy"
         />
         <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/60 to-transparent p-4">
-          <h2 className="text-[15px] font-bold uppercase tracking-tight">alimentação inteligente</h2>
+          <h2 className="text-[15px] font-bold lowercase tracking-tight">alimentação inteligente</h2>
           <p className="text-[10px] text-gray-200">criação inteligente, segura e robusta</p>
         </div>
 
@@ -117,12 +117,12 @@ export default function Reproducao() {
           <p className="text-[12.5px] font-semibold">0.00%</p>
         </div>
         <div>
-          <p className="text-[10px] text-gray-300">Usado / Número total de vezes</p>
+          <p className="text-[10px] text-gray-300">usado / número total de vezes</p>
           <p className="text-[12.5px] font-semibold">0/0</p>
         </div>
         <div className="col-span-2 mt-2">
-          <p className="text-[10px] text-gray-300">Horário de reinicialização da alimentação</p>
-          <p className="text-[15px] font-bold uppercase">Reinicialização concluída</p>
+          <p className="text-[10px] text-gray-300">horário de reinicialização da alimentação</p>
+          <p className="text-[15px] font-bold lowercase">reinicialização concluída</p>
         </div>
       </section>
 
@@ -130,16 +130,16 @@ export default function Reproducao() {
       <section className="grid grid-cols-2 gap-3 mb-8">
         <button
           onClick={() => navigate('/transferencia-de-fundos')}
-          className="bg-[#D2F076] text-black rounded-lg p-4 flex items-center justify-between text-left font-black uppercase leading-[1] h-[45px] shadow-lg shadow-black/20"
+          className="bg-[#D2F076] text-black rounded-lg p-4 flex items-center justify-between text-left font-black lowercase leading-[1] h-[45px] shadow-lg shadow-black/20"
         >
           <span className="text-[12px]">trocar saldo</span>
           <ArrowLeftRight className="w-5 h-5" />
         </button>
         <button
           onClick={handleStart}
-          className="bg-[#D2F076] text-black rounded-lg p-4 flex items-center justify-between text-left font-black uppercase leading-[1] h-[45px] shadow-lg shadow-black/20"
+          className="bg-[#D2F076] text-black rounded-lg p-4 flex items-center justify-between text-left font-black lowercase leading-[1] h-[45px] shadow-lg shadow-black/20"
         >
-          <span className="text-[12px]">Comece agora</span>
+          <span className="text-[12px]">comece agora</span>
           <Play className="w-5 h-5 fill-current" />
         </button>
       </section>
@@ -148,8 +148,8 @@ export default function Reproducao() {
       {/* History Section */}
       <section className="bg-[#EBF1FF] rounded-t-[2.5rem] p-8 -mx-4 flex-grow min-h-[400px]">
         <div className="flex justify-between items-center mb-6">
-          <h3 className="text-[#000080] font-black text-[15px] uppercase tracking-wider">Registros históricos</h3>
-          <button className="text-blue-600 text-[11px] font-bold uppercase underline">Veja mais</button>
+          <h3 className="text-[#000080] font-black text-[15px] lowercase tracking-wider">registros históricos</h3>
+          <button className="text-blue-600 text-[11px] font-bold lowercase underline">veja mais</button>
         </div>
 
         <div className="flex flex-col">
@@ -161,20 +161,20 @@ export default function Reproducao() {
                   <div className="w-[50px] h-[50px] mb-2 flex items-center justify-center relative">
                     <img
                       alt={item.nome_produto}
-                      className="w-full h-full object-contain drop-shadow-sm animate-walk"
+                      className="w-full h-full object-contain drop-shadow-sm animate-walk mix-blend-multiply"
                       src={item.image_url}
                       referrerPolicy="no-referrer"
                     />
                   </div>
 
-                  {/* Nome do Animal - Uppercase conforme exemplo */}
-                  <h4 className="font-bold text-[18px] text-black uppercase leading-tight tracking-tight">
+                  {/* Nome do Animal - Lowercase conforme regra */}
+                  <h4 className="font-bold text-[18px] text-black lowercase leading-tight tracking-tight">
                     {item.nome_produto}
                   </h4>
 
-                  {/* Duração - Formato Dias/X conforme exemplo */}
+                  {/* Duração - Formato dias/X conforme regra */}
                   <p className="text-[15px] text-black font-medium">
-                    Dias/{item.duracao_dias}
+                    dias/{item.duracao_dias}
                   </p>
                 </div>
               ))}
@@ -188,7 +188,7 @@ export default function Reproducao() {
                   src="https://www.mengniu.wang/assets/empty-image-CHCN_UjN.png"
                 />
               </div>
-              <p className="text-gray-400 text-[12px] font-bold uppercase tracking-widest">nenhum registro</p>
+              <p className="text-gray-400 text-[12px] font-bold lowercase tracking-widest">nenhum registro</p>
             </div>
           )}
         </div>
