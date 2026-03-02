@@ -1,10 +1,49 @@
+import { useState, useEffect } from 'react';
 import { ArrowLeftRight, Play } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import { useLoading } from '../contexts/LoadingContext';
+import { supabase } from '../lib/supabase';
+import { useAuth } from '../contexts/AuthContext';
 
 export default function Reproducao() {
   const navigate = useNavigate();
   const { setIsLoading } = useLoading();
+  const { user } = useAuth();
+  const [purchases, setPurchases] = useState<any[]>([]);
+
+  useEffect(() => {
+    async function fetchPurchases() {
+      if (!user) return;
+
+      const { data, error } = await supabase
+        .from('historico_compras')
+        .select('*')
+        .eq('user_id', user.id)
+        .order('data_compra', { ascending: false });
+
+      if (!error && data) {
+        setPurchases(data);
+      }
+    }
+
+    fetchPurchases();
+
+    // Set up realtime channel for updates
+    const channel = supabase.channel('realtime_purchases')
+      .on('postgres_changes', {
+        event: '*',
+        schema: 'public',
+        table: 'historico_compras',
+        filter: `user_id=eq.${user?.id}`
+      }, () => {
+        fetchPurchases();
+      })
+      .subscribe();
+
+    return () => {
+      supabase.removeChannel(channel);
+    };
+  }, [user]);
 
   const handleStart = () => {
     setIsLoading(true);
@@ -92,8 +131,39 @@ export default function Reproducao() {
           <h3 className="text-[#00008B] font-bold text-[15px]">Registros históricos</h3>
           <button className="text-blue-600 text-[12.5px]">Veja mais</button>
         </div>
-        <div className="flex flex-col items-center justify-center pt-10">
-          {/* Content area */}
+        <div className="flex flex-col pt-4 space-y-3">
+          {purchases.length > 0 ? (
+            purchases.map((item) => (
+              <div key={item.id} className="bg-white p-4 rounded-xl shadow-sm border border-gray-100 flex justify-between items-center">
+                <div className="flex flex-col">
+                  <h4 className="font-bold text-[14px] text-gray-800 capitalize">{item.nome_produto}</h4>
+                  <p className="text-[11px] text-gray-500 mt-1">
+                    adquirido em: {new Date(item.data_compra).toLocaleDateString()}
+                  </p>
+                  <p className="text-[11px] text-gray-500">
+                    duração: {item.duracao_dias} dias
+                  </p>
+                </div>
+                <div className="text-right flex flex-col justify-between items-end gap-2">
+                  <p className="text-[14px] font-bold text-[#0000AA]">{item.preco} Kz</p>
+                  <span className="bg-[#D4ED71]/20 text-[#0000AA] text-[10px] px-2 py-0.5 rounded-md font-semibold">
+                    {item.status}
+                  </span>
+                </div>
+              </div>
+            ))
+          ) : (
+            <div className="flex flex-col items-center justify-center pt-6">
+              <div className="relative w-24 h-24 mb-2">
+                <img
+                  alt="vazio"
+                  className="w-full h-full object-contain opacity-50"
+                  src="https://www.mengniu.wang/assets/empty-image-CHCN_UjN.png"
+                />
+              </div>
+              <p className="text-gray-400 text-[12.5px]">nenhum registro encontrado</p>
+            </div>
+          )}
         </div>
       </section>
     </div>
