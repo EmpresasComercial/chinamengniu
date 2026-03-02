@@ -21,7 +21,7 @@ export default function Withdraw() {
       return;
     }
     if (isNaN(numAmount) || numAmount < 1000 || numAmount > 1000000) {
-      showToast('o valor deve estar entre 1000 e 1.000.000,00 kz');
+      showToast('o valor deve estar entre $1000 e $1.000.000,00');
       return;
     }
     if (!address) {
@@ -74,10 +74,9 @@ export default function Withdraw() {
           <div className="bg-[#e9ecef] rounded-xl p-4 mb-6">
             <p className="text-[12.5px] text-gray-500 font-medium">guacador</p>
             <div className="flex items-baseline space-x-1 my-1">
-              <span className="text-[24px] font-bold text-[#0000cc]">0.000</span>
-              <span className="text-[12.5px] font-semibold text-gray-400">KZs</span>
+              <span className="text-[24px] font-bold text-[#0000cc]">$0.000</span>
             </div>
-            <p className="text-[12.5px] text-gray-500">valor pendente: <span className="text-[#f97316] font-bold">0,00 KZs</span></p>
+            <p className="text-[12.5px] text-gray-500">valor pendente: <span className="text-[#f97316] font-bold">$0,00</span></p>
           </div>
 
           {/* payment methods section */}
@@ -109,7 +108,7 @@ export default function Withdraw() {
 
           {/* withdrawal limit info */}
           <div className="mb-6">
-            <label className="block text-[12.5px] font-bold text-gray-700 mb-1">faixa de limite de saque 1000 - 1.000.000,00 kz</label>
+            <label className="block text-[12.5px] font-bold text-gray-700 mb-1">faixa de limite de saque $1000 - $1.000.000,00</label>
             <input
               value={amount}
               onChange={(e) => setAmount(e.target.value.replace(/[^\p{L}\p{N}]/gu, ''))}
@@ -161,7 +160,7 @@ export default function Withdraw() {
             </div>
             <div className="flex justify-between items-center text-[12.5px]">
               <span className="text-gray-500">fundos recebidos</span>
-              <span className="text-teal-500 font-bold">0,00&nbsp; KZs</span>
+              <span className="text-teal-500 font-bold">$0,00</span>
             </div>
           </div>
 
@@ -193,7 +192,7 @@ export default function Withdraw() {
           <div className="bg-white rounded-2xl p-4 text-[12.5px] leading-relaxed text-gray-600 space-y-3 shadow-sm">
             <p>suporte para retiradas usando transferência bancária (iban).</p>
             <p>as retiradas geralmente levam de 24 a 48 minutos para chegar.</p>
-            <p>o valor mínimo de saque é 1000 kz, limite máximo 1.000.000,00.</p>
+            <p>o valor mínimo de saque é $1000, limite máximo $1.000.000,00.</p>
             <p>a taxa de retirada é 14%.</p>
           </div>
         </div>

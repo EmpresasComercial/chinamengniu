@@ -58,27 +58,27 @@ export default function Profile() {
         {/* Financial Statistics */}
         <div className="grid grid-cols-2 gap-4 mt-6">
           <div>
-            <p className="text-[10px] opacity-80">ativos totais</p>
-            <p className="text-[15px] font-bold">0 KZs</p>
+            <p className="text-[10px] opacity-80 uppercase tracking-wider">Ativos totais</p>
+            <p className="text-[20px] font-bold">$0</p>
           </div>
           <div className="text-right">
-            <p className="text-[10px] opacity-80">receita total</p>
-            <p className="text-[15px] font-bold">0.00 KZs</p>
+            <p className="text-[10px] opacity-80 uppercase tracking-wider">Receita total</p>
+            <p className="text-[20px] font-bold">$0.00</p>
           </div>
         </div>
 
         <div className="grid grid-cols-3 gap-2 mt-4 text-center">
           <div>
-            <p className="text-[10px] opacity-80 leading-tight">conta de reprodução</p>
-            <p className="font-bold text-[12.5px]">0.00 KZs</p>
+            <p className="text-[10px] opacity-80 leading-tight">conta de<br />reprodução</p>
+            <p className="font-bold text-[14px] mt-1">$0.00</p>
           </div>
           <div>
-            <p className="text-[10px] opacity-80 leading-tight">ativos de lucro</p>
-            <p className="font-bold text-[12.5px]">0.00 KZs</p>
+            <p className="text-[10px] opacity-80 leading-tight">Ativos de<br />Lucro</p>
+            <p className="font-bold text-[14px] mt-1">$0.00</p>
           </div>
           <div>
-            <p className="text-[10px] opacity-80 leading-tight">comissão total</p>
-            <p className="font-bold text-[12.5px]">0 KZs</p>
+            <p className="text-[10px] opacity-80 leading-tight">Comissão<br />total</p>
+            <p className="font-bold text-[14px] mt-1">$0</p>
           </div>
         </div>
 
@@ -86,17 +86,27 @@ export default function Profile() {
         <div className="flex space-x-3 mt-6">
           <button
             onClick={() => navigate('/recarregar')}
-            className="flex-1 bg-[#D6F174] text-black font-bold h-[45px] rounded-md flex items-center justify-center space-x-2"
+            className="flex-1 bg-[#D6F174] text-black font-bold h-[50px] rounded-lg flex items-center justify-between px-4 group active:scale-95 transition-transform"
           >
             <span className="text-[15px]">recarregar</span>
-            <img alt="Icon" className="w-5 h-5" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDXfFICSPao72fyr1R3NNpce6RXBWLpx7Yq5UQhCzH-rVhTN7UsXUpreWsO0jY7UZKp3SbQNOuMHtfUqDjjdYMPN4w65GEalCYt8E-C-yIcefxXdOi10NSHLp1dXSmA1L_J2r44byE6YiPDq_LguoYFX8w0pzImQaUOS04b44vq-t_cQCzQbBBCtfzLzCBDnAzugqdoBH_cS9JksbkPEqRiL0fjFF0rcPnEGkWqUyzLNwcKGbTjZq5tGFKp4ENb2dOM8w4Np617fQ" referrerPolicy="no-referrer" />
+            <img
+              alt="recharge icon"
+              className="w-10 h-8 object-contain"
+              src="https://www.mengniu.wang/assets/deposit1-Dk3ugVyJ.png"
+              referrerPolicy="no-referrer"
+            />
           </button>
           <button
             onClick={() => navigate('/retirar')}
-            className="flex-1 bg-[#D6F174] text-black font-bold h-[45px] rounded-md flex items-center justify-center space-x-2"
+            className="flex-1 bg-[#D6F174] text-black font-bold h-[50px] rounded-lg flex items-center justify-between px-4 group active:scale-95 transition-transform"
           >
             <span className="text-[15px]">extrair</span>
-            <img alt="Icon" className="w-5 h-5" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAzIrIj1Byzu7dS5SONmeyMkrt4GFFxt6V43TU3IKquViipqtxH9axLFcoYHT4hA74IOIJtZgTkciLLhCugCgQjIXDNx4AowRkirADPcRABVNEAvJnzdNZce1xYQIAnsmSG7IScwIxkWrZC7Zf4_j1-BuRkkqbcboJCFx6OVIjShC3JnNQpPL9UMM0OfeYodWW-UEfS9R2L57ln3dU1iukhDFiZUnr1fjs-KtcZ2WNzTH5HZAFig7WEcKMwUjCJwzJYcyfu8Yw8_A" referrerPolicy="no-referrer" />
+            <img
+              alt="withdraw icon"
+              className="w-8 h-8 object-contain"
+              src="https://www.mengniu.wang/assets/withdraw1-pLMbG-t2.png"
+              referrerPolicy="no-referrer"
+            />
           </button>
         </div>
       </header>
@@ -106,16 +116,16 @@ export default function Profile() {
         <div className="absolute right-[-20px] top-4 w-24 h-24 rounded-full bg-white/5 border-2 border-white/10"></div>
         <div className="grid grid-cols-3 gap-2 text-center py-4 border-t border-white/10">
           <div>
-            <p className="text-[10px] opacity-80">Lucros de ontem</p>
-            <p className="font-bold text-[12.5px]">0 KZs</p>
+            <p className="text-[10px] opacity-70">Lucros de ontem</p>
+            <p className="font-bold text-[14px]">$0</p>
           </div>
           <div>
-            <p className="text-[10px] opacity-80">Ganhos de hoje</p>
-            <p className="font-bold text-[12.5px]">0 KZs</p>
+            <p className="text-[10px] opacity-70">Ganhos de hoje</p>
+            <p className="font-bold text-[14px]">$0</p>
           </div>
           <div>
-            <p className="text-[10px] opacity-80">Comissão de hoje</p>
-            <p className="font-bold text-[12.5px] text-blue-300">0 KZs</p>
+            <p className="text-[10px] opacity-70">Comissão de hoje</p>
+            <p className="font-bold text-[14px]">$0</p>
           </div>
         </div>
 

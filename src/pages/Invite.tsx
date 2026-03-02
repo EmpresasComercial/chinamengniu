@@ -105,25 +105,26 @@ export default function Invite() {
         </button>
 
         {/* Bottom Info Card */}
-        <div className="bg-white rounded-3xl p-6 shadow-sm text-center">
-          <p className="text-gray-800 text-[12.5px] leading-relaxed mb-6">
-            receba um desconto quando seu amigo recarregar o celular.
-          </p>
+        <div className="bg-white rounded-3xl p-8 shadow-sm">
+          <div className="space-y-6 text-[13px] text-gray-800">
+            <p className="text-center font-bold text-[#000099]">
+              receba um desconto quando seu amigo recarregar o celular.
+            </p>
 
-          <div className="grid grid-cols-2 gap-4 text-[12.5px] font-semibold text-[#333]">
-            <div className="flex flex-col items-center">
-              <span className="mb-2">nota</span>
-              <div className="text-[12.5px] font-normal text-gray-600 leading-tight text-center">
+            <div className="space-y-2">
+              <p className="font-bold text-[#333]">nota</p>
+              <p className="leading-relaxed text-gray-600">
                 após seus subordinados fazer a adoção ser bem-sucedida, receber automaticamente a recompensa de investimento. a operação é simples e não leva muito tempo; basta copiar e partilhar.
-              </div>
+              </p>
             </div>
-            <div className="flex flex-col items-center">
-              <span className="mb-2">reembolso de recarga</span>
-              <div className="text-[12.5px] font-normal text-gray-600 leading-tight text-center space-y-1">
-                <div>recarga nível 1: 10%</div>
-                <div>recarga nível 2: 6%</div>
-                <div>recarga nível 3: 1%</div>
-                <div className="pt-1">valido pela primeira recarga para todos níveis, da criação: 365 dias</div>
+
+            <div className="space-y-2 pt-2">
+              <p className="font-bold text-[#333]">reembolso de recarga</p>
+              <div className="text-gray-600 space-y-1">
+                <p>recarga nível 1: 10%</p>
+                <p>recarga nível 2: 6%</p>
+                <p>recarga nível 3: 1%</p>
+                <p className="pt-2 text-[12px] opacity-80">valido pela primeira recarga para todos níveis, da criação: 365 dias</p>
               </div>
             </div>
           </div>

@@ -56,7 +56,7 @@ export default function VIP() {
           <div className="flex justify-between mb-4">
             <div>
               <p className="text-[10px] opacity-80">receita total</p>
-              <p className="text-[15px] font-bold">0.00 KZs</p>
+              <p className="text-[15px] font-bold">$0.00</p>
             </div>
             <div className="text-right">
               <p className="text-[10px] opacity-80">renda diária</p>

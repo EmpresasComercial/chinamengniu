@@ -52,7 +52,7 @@ export default function VIPDetails() {
             </div>
             <div className="flex justify-between items-center border-b border-slate-100 pb-3">
               <span className="text-slate-500 text-[12.5px] font-medium">preço de adoção</span>
-              <span className="text-slate-900 font-bold text-[15px]">≥10.00 KZs</span>
+              <span className="text-slate-900 font-bold text-[15px]">≥$10.00</span>
             </div>
             <div className="flex justify-between items-center pb-3">
               <span className="text-slate-500 text-[12.5px] font-medium">número de dias que podem ser mantidos</span>

@@ -57,54 +57,63 @@ export default function Home() {
       </header>
 
       {/* Quick Actions Card */}
-      <section className="mx-4 -mt-12 z-10 bg-white rounded-[1.5rem] p-4 shadow-sm">
-        <div className="grid grid-cols-3 gap-2 text-center mb-6">
+      <section className="mx-4 -mt-12 z-10 bg-white rounded-[2rem] p-6 shadow-sm border border-slate-100">
+        <div className="grid grid-cols-3 gap-2 text-center mb-8">
           <div
             onClick={() => navigate('/apresentacao-da-empresa')}
             className="flex flex-col items-center cursor-pointer"
           >
-            <div className="w-14 h-14 bg-gradient-to-b from-blue-700 to-blue-900 rounded-full flex items-center justify-center mb-2 overflow-hidden">
+            <div className="w-16 h-16 bg-[#00008B] rounded-full flex items-center justify-center mb-2 overflow-hidden shadow-md">
               <img
-                alt="Coins"
-                className="w-10 h-10 object-contain"
+                alt="Moedas corporativas"
+                className="w-12 h-12 object-contain"
                 src="https://www.mengniu.wang/assets/coin-DnOWIML3.png"
               />
             </div>
-            <span className="text-[12.5px] font-bold text-gray-800 leading-tight">apresentação da<br />empresa</span>
+            <span className="text-[14px] font-black text-slate-900 leading-[1.1]">
+              Apresentação da<br />Empresa
+            </span>
           </div>
           <div
             onClick={() => navigate('/equipe')}
             className="flex flex-col items-center cursor-pointer"
           >
-            <div className="w-14 h-14 bg-blue-800 rounded-full flex items-center justify-center mb-2">
-              <svg className="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M11 16l-4-4m0 0l4-4m-4 4h14m-5 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h7a3 3 0 013 3v1" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2"></path></svg>
+            <div className="w-16 h-16 bg-[#0000AA] rounded-[1.5rem] flex items-center justify-center mb-2 shadow-md">
+              {/* Custom SVG reflecting the 'Logout/Action' icon in image */}
+              <svg className="w-7 h-7 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth="3">
+                <path d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h7a3 3 0 013 3v1" strokeLinecap="round" strokeLinejoin="round" />
+              </svg>
             </div>
-            <span className="text-[12.5px] font-bold text-gray-800">minha equipe</span>
+            <span className="text-[14px] font-black text-slate-900">equipe</span>
           </div>
           <div
-            onClick={() => navigate('/convidar')}
+            onClick={() => navigate('/ajuda')}
             className="flex flex-col items-center cursor-pointer"
           >
-            <div className="w-14 h-14 bg-blue-800 rounded-full flex items-center justify-center mb-2">
-              <svg className="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M15.5 3H5a2 2 0 00-2 2v14a2 2 0 002 2h14a2 2 0 002-2V8.5L15.5 3z" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2"></path><path d="M15 3v6h6" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2"></path></svg>
+            <div className="w-16 h-16 bg-[#00008B] rounded-[1.5rem] flex items-center justify-center mb-2 shadow-md">
+              <svg className="w-7 h-7 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth="2.5">
+                <path d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4" strokeLinecap="round" strokeLinejoin="round" />
+              </svg>
             </div>
-            <span className="text-[12.5px] font-bold text-gray-800">convidar amigos</span>
+            <span className="text-[14px] font-black text-slate-900">ajuda</span>
           </div>
         </div>
 
         {/* App Banner */}
-        <div className="bg-blue-50 rounded-2xl p-4 flex justify-between items-center relative overflow-hidden h-24">
-          <div className="z-10">
-            <h3 className="text-blue-900 font-bold text-[15px] mb-2">baixe o aplicativo</h3>
-            <div className="bg-blue-800 rounded-md w-12 h-6 flex items-center justify-center">
-              {/* Simple blue button as seen in image */}
+        <div className="bg-[#EBF1FF] rounded-[2rem] p-6 flex justify-between items-center relative overflow-hidden h-28 group cursor-pointer transition-transform active:scale-[0.98]">
+          <div className="z-10 flex flex-col justify-center">
+            <h3 className="text-[#0000AA] font-black text-[22px] mb-3">Baixe o aplicativo</h3>
+            <div className="bg-[#0000AA] rounded-full w-10 h-6 flex items-center justify-center">
+              <svg className="w-4 h-4 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth="4">
+                <path d="M13 5l7 7-7 7M5 5l7 7-7 7" strokeLinecap="round" strokeLinejoin="round" />
+              </svg>
             </div>
           </div>
-          <div className="absolute right-0 top-0 bottom-0 w-32 bg-orange-200/50 flex items-center justify-center">
+          <div className="absolute right-0 top-0 bottom-0 w-36 py-2 px-2 flex items-center justify-center">
             <img
-              alt="App promo"
-              className="w-16 h-20 object-contain"
-              src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTX_v5WJp8wxkMeScmrKicJQkr-g1hK8G0OQQ&s"
+              alt="App gift promo"
+              className="w-full h-full object-contain drop-shadow-lg"
+              src="https://www.mengniu.wang/assets/empty-image-CHCN_UjN.png"
               referrerPolicy="no-referrer"
             />
           </div>
