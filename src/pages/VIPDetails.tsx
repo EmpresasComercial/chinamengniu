@@ -61,15 +61,15 @@ export default function VIPDetails() {
         >
           <ChevronLeft className="text-2xl" />
         </button>
-        <h1 className="flex-1 text-center text-[15px] font-bold pr-8">detalhes do plano</h1>
+        <h1 className="flex-1 text-center text-[15px] font-bold pr-8">detalhe de animal</h1>
       </header>
 
       {/* Main Content Area */}
-      <main className="p-4 max-w-md mx-auto">
+      <main className="p-3 max-w-md mx-auto">
         {/* VIP Card Container */}
-        <div className="bg-white rounded-xl shadow-lg overflow-hidden p-4 border border-slate-200">
+        <div className="bg-white rounded-xl shadow-lg border border-slate-200 overflow-hidden p-3.5">
           {/* VIP Header Row (Image + Title/Stars) */}
-          <div className="flex gap-4 items-center mb-6">
+          <div className="flex gap-3 items-center mb-4">
             <div
               className="w-24 h-24 rounded-lg bg-cover bg-center shrink-0 border border-slate-100"
               style={{ backgroundImage: `url(${product?.image_url || 'https://png.pngtree.com/png-clipart/20240615/original/pngtree-a-black-and-white-cow-with-tranparent-background-png-image_15340862.png'})` }}
@@ -86,22 +86,22 @@ export default function VIPDetails() {
           </div>
 
           {/* Data Rows Section */}
-          <div className="space-y-4 mb-8">
-            <div className="flex justify-between items-center border-b border-slate-100 pb-3">
-              <span className="text-slate-500 text-[12.5px] font-medium">frequência diária de alimentação</span>
-              <span className="text-slate-900 font-bold text-[15px]">1</span>
+          <div className="space-y-2.5 mb-6">
+            <div className="flex justify-between items-center border-b border-slate-100 pb-2">
+              <span className="text-slate-500 text-[12px] font-medium">frequência diária de alimentação</span>
+              <span className="text-slate-900 font-bold text-[14px]">1</span>
             </div>
-            <div className="flex justify-between items-center border-b border-slate-100 pb-3">
-              <span className="text-slate-500 text-[12.5px] font-medium"> rendimentos/diários</span>
-              <span className="text-slate-900 font-bold text-[15px]">4.00%</span>
+            <div className="flex justify-between items-center border-b border-slate-100 pb-2">
+              <span className="text-slate-500 text-[12px] font-medium"> rendimentos/diários</span>
+              <span className="text-slate-900 font-bold text-[14px]">4%</span>
             </div>
-            <div className="flex justify-between items-center border-b border-slate-100 pb-3">
-              <span className="text-slate-500 text-[12.5px] font-medium">preço de adoção</span>
-              <span className="text-slate-900 font-bold text-[15px]">≥{product?.price || '0.00'} Kz</span>
+            <div className="flex justify-between items-center border-b border-slate-100 pb-2">
+              <span className="text-slate-500 text-[12px] font-medium">preço de adoção</span>
+              <span className="text-slate-900 font-bold text-[14px]">{product?.price || '0.00'} Kz</span>
             </div>
-            <div className="flex justify-between items-center pb-3">
-              <span className="text-slate-500 text-[12.5px] font-medium">número de dias que podem ser mantidos</span>
-              <span className="text-slate-900 font-bold text-[15px]">{product?.duration_days || '365'}</span>
+            <div className="flex justify-between items-center pb-1">
+              <span className="text-slate-500 text-[12px] font-medium">número de dias que podem ser mantidos</span>
+              <span className="text-slate-900 font-bold text-[14px]">{product?.duration_days || '365'}</span>
             </div>
           </div>
 
@@ -115,8 +115,8 @@ export default function VIPDetails() {
         </div>
 
         {/* Footer Spacing */}
-        <div className="py-10 text-center text-slate-400 text-[12.5px]">
-          "certifique que possui saldo suficiente para comprar esse animal, caso contrário, por favor entre em contacto com o seu gestor para fazer depósito/transferência para recarregar a sua conta Mengniu Company!"
+        <div className="py-6 px-4 text-center text-slate-400 text-[11px] leading-relaxed">
+          certifique que possui saldo suficiente para comprar esse animal, caso contrário, por favor entre em contacto com o seu gestor para fazer depósito/transferência para recarregar a sua conta Mengniu Company!
         </div>
       </main>
 

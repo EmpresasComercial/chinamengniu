@@ -3,29 +3,37 @@ import { Bell, MessageSquare, Globe } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import { motion, AnimatePresence } from 'motion/react';
 import { useLoading } from '../contexts/LoadingContext';
+import { useAuth } from '../contexts/AuthContext';
 import { supabase } from '../lib/supabase';
 
 export default function Home() {
   const navigate = useNavigate();
   const { showLoading, hideLoading } = useLoading();
   const [notification, setNotification] = useState<string | null>(null);
-  const [whatsappUrl, setWhatsappUrl] = useState('https://wa.me/1234567890');
+  const { profile } = useAuth();
+  const [links, setLinks] = useState({
+    manager: 'https://wa.me/1234567890',
+    group: 'https://wa.me/1234567890'
+  });
 
   useEffect(() => {
     async function fetchLinks() {
       const { data, error } = await supabase
         .from('atendimento_links')
-        .select('whatsapp_gerente_url')
+        .select('whatsapp_gerente_url, whatsapp_grupo_vendas_url')
         .single();
 
-      if (!error && data?.whatsapp_gerente_url) {
-        setWhatsappUrl(data.whatsapp_gerente_url);
+      if (!error && data) {
+        setLinks({
+          manager: data.whatsapp_gerente_url || 'https://wa.me/1234567890',
+          group: data.whatsapp_grupo_vendas_url || 'https://wa.me/1234567890'
+        });
       }
     }
     fetchLinks();
   }, []);
 
-  const handleWhatsAppClick = (e: React.MouseEvent) => {
+  const handleLinkClick = (url: string, e: React.MouseEvent) => {
     e.preventDefault();
     showLoading();
     setTimeout(() => {
@@ -33,9 +41,24 @@ export default function Home() {
       setNotification('Redirecionando para o WhatsApp...');
       setTimeout(() => {
         setNotification(null);
-        window.open(whatsappUrl, '_blank');
+        window.open(url, '_blank');
       }, 2000);
     }, 500);
+  };
+
+  const handleCopyInvite = (e: React.MouseEvent) => {
+    e.preventDefault();
+    const inviteCode = profile?.invite_code || '';
+    const inviteLink = `https://www.mengniu.wang/#/register?invite=${inviteCode}`;
+
+    if (inviteCode) {
+      navigator.clipboard.writeText(inviteLink);
+      setNotification('Link de convite copiado!');
+      setTimeout(() => setNotification(null), 2500);
+    } else {
+      setNotification('Erro ao gerar link. Tente novamente.');
+      setTimeout(() => setNotification(null), 2500);
+    }
   };
 
   return (
@@ -79,14 +102,14 @@ export default function Home() {
             onClick={() => navigate('/apresentacao-da-empresa')}
             className="flex flex-col items-center cursor-pointer"
           >
-            <div className="w-16 h-16 bg-[#00008B] rounded-full flex items-center justify-center mb-2 overflow-hidden shadow-md">
+            <div className="w-[52px] h-[52px] bg-[#00008B] rounded-full flex items-center justify-center mb-2 overflow-hidden shadow-md">
               <img
                 alt="Moedas corporativas"
-                className="w-12 h-12 object-contain"
+                className="w-9 h-9 object-contain"
                 src="https://www.mengniu.wang/assets/coin-DnOWIML3.png"
               />
             </div>
-            <span className="text-[14px] font-black text-slate-900 leading-[1.1]">
+            <span className="text-[12.5px] font-black text-slate-900 leading-[1.1]">
               Apresentação da<br />Empresa
             </span>
           </div>
@@ -94,24 +117,24 @@ export default function Home() {
             onClick={() => navigate('/equipe')}
             className="flex flex-col items-center cursor-pointer"
           >
-            <div className="w-16 h-16 bg-[#0000AA] rounded-[1.5rem] flex items-center justify-center mb-2 shadow-md">
+            <div className="w-[52px] h-[52px] bg-[#0000AA] rounded-2xl flex items-center justify-center mb-2 shadow-md">
               {/* Custom SVG reflecting the 'Logout/Action' icon in image */}
-              <svg className="w-7 h-7 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth="3">
+              <svg className="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth="3">
                 <path d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h7a3 3 0 013 3v1" strokeLinecap="round" strokeLinejoin="round" />
               </svg>
             </div>
-            <span className="text-[14px] font-black text-slate-900">equipe</span>
+            <span className="text-[12.5px] font-black text-slate-900">equipe</span>
           </div>
           <div
             onClick={() => navigate('/ajuda')}
             className="flex flex-col items-center cursor-pointer"
           >
-            <div className="w-16 h-16 bg-[#00008B] rounded-[1.5rem] flex items-center justify-center mb-2 shadow-md">
-              <svg className="w-7 h-7 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth="2.5">
+            <div className="w-[52px] h-[52px] bg-[#00008B] rounded-2xl flex items-center justify-center mb-2 shadow-md">
+              <svg className="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth="2.5">
                 <path d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4" strokeLinecap="round" strokeLinejoin="round" />
               </svg>
             </div>
-            <span className="text-[14px] font-black text-slate-900">ajuda</span>
+            <span className="text-[12.5px] font-black text-slate-900">ajuda</span>
           </div>
         </div>
 
@@ -148,19 +171,75 @@ export default function Home() {
         </div>
       </section>
 
-      {/* WhatsApp Support Section */}
-      <section className="mt-6 px-4 mb-8 flex justify-center">
-        <button
-          onClick={handleWhatsAppClick}
-          className="block rounded-full overflow-hidden shadow-sm hover:opacity-80 hover:scale-105 transition-all duration-300 w-16 h-16 bg-white p-2"
-        >
-          <img
-            alt="suporte whatsapp"
-            className="w-full h-full object-contain"
-            src="https://upload.wikimedia.org/wikipedia/commons/thumb/6/6b/WhatsApp.svg/512px-WhatsApp.svg.png"
-            referrerPolicy="no-referrer"
-          />
-        </button>
+      {/* Customer Service Section */}
+      <section className="mt-6 px-4 mb-20">
+        <div className="flex items-center gap-2 mb-4 px-2">
+          <div className="w-1 h-4 bg-[#0000AA] rounded-full"></div>
+          <h3 className="text-slate-800 font-bold text-[15px]">Atendimento ao cliente</h3>
+        </div>
+
+        <div className="flex flex-col gap-2">
+          {/* WhatsApp Group - Flat */}
+          <button
+            onClick={(e) => handleLinkClick(links.group, e)}
+            className="w-full h-14 bg-white rounded-2xl border border-slate-100 flex items-center px-4 active:bg-slate-50 transition-colors"
+          >
+            <div className="w-10 h-10 bg-[#25D366]/10 rounded-full flex items-center justify-center mr-3">
+              <img
+                src="https://upload.wikimedia.org/wikipedia/commons/thumb/6/6b/WhatsApp.svg/512px-WhatsApp.svg.png"
+                alt="WhatsApp Group"
+                className="w-6 h-6 object-contain"
+              />
+            </div>
+            <div className="flex-1 text-left">
+              <p className="text-slate-900 font-bold text-[13px]">Entra grupo whatsapp</p>
+              <p className="text-slate-500 text-[10px]">Junte-se à nossa comunidade</p>
+            </div>
+            <svg className="w-4 h-4 text-slate-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path d="M9 5l7 7-7 7" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.5" />
+            </svg>
+          </button>
+
+          {/* WhatsApp Manager - Flat */}
+          <button
+            onClick={(e) => handleLinkClick(links.manager, e)}
+            className="w-full h-14 bg-white rounded-2xl border border-slate-100 flex items-center px-4 active:bg-slate-50 transition-colors"
+          >
+            <div className="w-10 h-10 bg-[#0000AA]/10 rounded-full flex items-center justify-center mr-3">
+              <img
+                src="https://upload.wikimedia.org/wikipedia/commons/thumb/6/6b/WhatsApp.svg/512px-WhatsApp.svg.png"
+                alt="WhatsApp Manager"
+                className="w-6 h-6 object-contain"
+              />
+            </div>
+            <div className="flex-1 text-left">
+              <p className="text-slate-900 font-bold text-[13px]">Whatsapp Gestor</p>
+              <p className="text-slate-500 text-[10px]">Fale diretamente com o suporte</p>
+            </div>
+            <svg className="w-4 h-4 text-slate-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path d="M9 5l7 7-7 7" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.5" />
+            </svg>
+          </button>
+
+          {/* Invite Button - Flat */}
+          <button
+            onClick={handleCopyInvite}
+            className="w-full h-14 bg-white rounded-2xl border border-slate-100 flex items-center px-4 active:bg-slate-50 transition-colors"
+          >
+            <div className="w-10 h-10 bg-blue-50 rounded-full flex items-center justify-center mr-3">
+              <svg className="w-5 h-5 text-[#0000AA]" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth="2">
+                <path d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" strokeLinecap="round" strokeLinejoin="round" />
+              </svg>
+            </div>
+            <div className="flex-1 text-left">
+              <p className="text-slate-900 font-bold text-[13px]">Convidar amigos</p>
+              <p className="text-slate-500 text-[10px]">Copiar meu link de convite</p>
+            </div>
+            <div className="bg-blue-600 px-2.5 py-1 rounded-lg text-white text-[10px] font-bold">
+              COPIAR
+            </div>
+          </button>
+        </div>
       </section>
 
       {/* Notification Toast */}

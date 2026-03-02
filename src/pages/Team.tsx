@@ -7,7 +7,7 @@ import { useAuth } from '../contexts/AuthContext';
 
 export default function Team() {
   const navigate = useNavigate();
-  const { setIsLoading } = useLoading();
+  const { showLoading, hideLoading } = useLoading();
   const { user } = useAuth();
   const [activeTab, setActiveTab] = useState<'members' | 'contribution'>('members');
   const [selectedLevel, setSelectedLevel] = useState(1);
@@ -28,6 +28,7 @@ export default function Team() {
       const today = new Date().toISOString().split('T')[0];
 
       if (!teamError && teamData) {
+        console.log('Team data structure check:', teamData[0]); // Debug log to see field names
         const team = teamData as any[];
 
         // Total People
@@ -63,27 +64,37 @@ export default function Team() {
 
   const isContributionTab = activeTab === 'contribution';
   const filteredMembers = members.filter(m => {
-    const isCorrectLevel = m.level === selectedLevel;
+    // Check both 'level' and 'sub_level' for robustness
+    const mLevel = Number(m.level || m.sub_level || 0);
+    const isCorrectLevel = mLevel === selectedLevel;
     if (!isCorrectLevel) return false;
 
     if (isContributionTab) {
-      return Number(m.reloaded_amount) >= 9000;
+      // Robust check for various possible field names from the RPC
+      const investment = Number(
+        m.reloaded_amount ??
+        m.total_recharge ??
+        m.recharge_amount ??
+        0
+      );
+      return investment >= 9000;
     }
-    return true; // Show all for 'members' tab
+    return true; // Members tab: Show everyone
   });
 
   const todayRegsInLevel = members.filter(m => {
-    const isCorrectLevel = m.level === selectedLevel;
+    const mLevel = Number(m.level || m.sub_level || 0);
+    const isCorrectLevel = mLevel === selectedLevel;
     const regDate = m.created_at || m.registration_date;
     const isToday = regDate && regDate.startsWith(new Date().toISOString().split('T')[0]);
     return isCorrectLevel && isToday;
   }).length;
 
   const handleTabChange = (tab: 'members' | 'contribution') => {
-    setIsLoading(true);
+    showLoading();
     setTimeout(() => {
       setActiveTab(tab);
-      setIsLoading(false);
+      hideLoading();
     }, 500);
   };
 
@@ -198,8 +209,8 @@ export default function Team() {
                   </div>
                   <div className={activeTab === 'members' ? "text-[10px]" : "text-[10px] font-bold text-blue-700"}>
                     {activeTab === 'members'
-                      ? new Date(member.created_at || member.registration_date).toLocaleDateString()
-                      : `${Number(member.reloaded_amount).toLocaleString('pt-AO')} Kz`
+                      ? new Date(member.created_at || member.registration_date || new Date()).toLocaleDateString()
+                      : `${Number(member.reloaded_amount || member.total_recharge || member.recharge_amount || 0).toLocaleString('pt-AO')} Kz`
                     }
                   </div>
                 </div>

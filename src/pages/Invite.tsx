@@ -114,7 +114,7 @@ export default function Invite() {
       </section>
 
       {/* Bottom Interaction Section */}
-      <main className="px-6 -mt-4 relative z-10 pb-10">
+      <main className="px-6 mt-6 relative z-10 pb-10">
         {/* Team Button */}
         <button
           onClick={() => navigate('/equipe')}

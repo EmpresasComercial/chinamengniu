@@ -17,23 +17,47 @@ interface Product {
 export default function VIP() {
   const navigate = useNavigate();
   const { showLoading, hideLoading } = useLoading();
-  const { profile } = useAuth();
+  const { profile, user } = useAuth();
   const [products, setProducts] = useState<Product[]>([]);
+  const [stats, setStats] = useState({
+    totalRevenue: 0,
+    dailyIncome: 0
+  });
 
   useEffect(() => {
-    async function loadProducts() {
-      const { data, error } = await supabase
+    async function loadData() {
+      // 1. Load Products
+      const { data: productsData } = await supabase
         .from('products')
         .select('*')
         .eq('status', 'active')
         .order('price', { ascending: true });
 
-      if (!error && data) {
-        setProducts(data);
+      if (productsData) setProducts(productsData);
+
+      // 2. Load Revenue Stats
+      if (user) {
+        const today = new Date().toISOString().split('T')[0];
+        const { data: bonusData } = await supabase
+          .from('bonus_transacoes')
+          .select('valor_recebido, data_transacao')
+          .eq('user_id', user.id);
+
+        if (bonusData) {
+          const total = bonusData.reduce((sum, b) => sum + Number(b.valor_recebido), 0);
+          const todayTotal = bonusData
+            .filter(b => b.data_transacao && b.data_transacao.startsWith(today))
+            .reduce((sum, b) => sum + Number(b.valor_recebido), 0);
+
+          setStats({
+            totalRevenue: total,
+            dailyIncome: todayTotal > 0 ? (todayTotal / (total || 1)) * 100 : 0
+          });
+        }
       }
     }
-    loadProducts();
-  }, []);
+    loadData();
+  }, [user]);
 
   return (
     <div className="flex flex-col min-h-screen bg-[#0000A5]">
@@ -50,9 +74,16 @@ export default function VIP() {
               />
             </div>
             <div>
-              <h1 className="text-[15px] font-bold uppercase">VIP0</h1>
-              <div className="flex text-[10px] text-gray-400">
-                <span>☆</span><span>☆</span><span>☆</span><span>☆</span><span>☆</span>
+              <h1 className="text-[15px] font-bold uppercase">{profile?.state || 'VIP0'}</h1>
+              <div className="flex text-[11px] gap-0.5 mt-0.5">
+                {[1, 2, 3, 4, 5].map((star) => {
+                  const currentLevel = parseInt((profile?.state || 'VIP0').replace(/\D/g, '')) || 0;
+                  return (
+                    <span key={star} className={star <= currentLevel ? "text-yellow-400" : "text-gray-400"}>
+                      {star <= currentLevel ? '★' : '☆'}
+                    </span>
+                  );
+                })}
               </div>
             </div>
           </div>
@@ -77,11 +108,11 @@ export default function VIP() {
           <div className="flex justify-between mb-4">
             <div>
               <p className="text-[10px] opacity-80">receita total</p>
-              <p className="text-[15px] font-bold">0.00 Kz</p>
+              <p className="text-[15px] font-bold">{stats.totalRevenue.toLocaleString('pt-AO', { minimumFractionDigits: 2 })} Kz</p>
             </div>
             <div className="text-right">
               <p className="text-[10px] opacity-80">renda diária</p>
-              <p className="text-[15px] font-bold">0.00%</p>
+              <p className="text-[15px] font-bold">{stats.dailyIncome.toFixed(2)}%</p>
             </div>
           </div>
           <div className="text-center pt-2 border-t border-white/10">
