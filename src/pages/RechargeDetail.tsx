@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { ChevronLeft, Check } from 'lucide-react';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { useLoading } from '../contexts/LoadingContext';
@@ -10,10 +10,19 @@ export default function RechargeDetail() {
   const location = useLocation();
   const { user } = useAuth();
   const { showLoading, hideLoading } = useLoading();
-  const { amount, bank } = location.state || {
-    amount: '0',
-    bank: { nome_do_banco: 'BAI', iban: '---', nome_favorecido: '---' }
-  };
+
+  // Defensive state handling
+  const state = location.state || {};
+  const amount = state.amount || '0';
+  const bank = state.bank || { nome_do_banco: 'BAI', iban: '---', nome_favorecido: '---' };
+
+  useEffect(() => {
+    // If no bank name (invalid state from refresh or direct access), redirect back
+    if (!state.bank) {
+      navigate('/recarregar');
+    }
+  }, [state, navigate]);
+
   const [copiedField, setCopiedField] = useState<string | null>(null);
   const [confirmed, setConfirmed] = useState(false);
 
