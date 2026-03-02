@@ -3,24 +3,45 @@ import { useLocation } from 'react-router-dom';
 
 interface LoadingContextType {
   isLoading: boolean;
-  showLoading: () => void;
+  showLoading: (slow?: boolean) => void;
   hideLoading: () => void;
+  setIsLoading: (v: boolean) => void;
 }
 
 const LoadingContext = createContext<LoadingContextType | undefined>(undefined);
 
+// Páginas que carregam dados mais pesados – avisa o utilizador
+const HEAVY_ROUTES = ['/equipe', '/detalhes', '/recarregar', '/retirar', '/reproducao'];
+
 export const LoadingProvider = ({ children }: { children: ReactNode }) => {
   const [isLoading, setIsLoading] = useState(false);
+  const [isSlow, setIsSlow] = useState(false);
 
-  const showLoading = () => setIsLoading(true);
-  const hideLoading = () => setIsLoading(false);
+  const showLoading = (slow = false) => {
+    setIsSlow(slow);
+    setIsLoading(true);
+  };
+  const hideLoading = () => {
+    setIsLoading(false);
+    setIsSlow(false);
+  };
 
   return (
-    <LoadingContext.Provider value={{ isLoading, showLoading, hideLoading }}>
+    <LoadingContext.Provider value={{ isLoading, showLoading, hideLoading, setIsLoading }}>
       {children}
       {isLoading && (
-        <div className="fixed inset-0 z-[9999] flex items-center justify-center bg-transparent">
-          <div className="w-8 h-8 border-[2px] border-gray-300 border-t-[#0000cc] rounded-full animate-spin"></div>
+        <div className="fixed inset-0 z-[9999] flex flex-col items-center justify-center bg-black/20 backdrop-blur-[2px]">
+          <div className="bg-white rounded-2xl px-8 py-5 flex flex-col items-center gap-3 shadow-xl">
+            <div className="spinner spinner-dark"></div>
+            <p className="text-[12.5px] text-gray-600 font-medium">
+              {isSlow ? 'Aguarde, carregando dados...' : 'A carregar...'}
+            </p>
+            {isSlow && (
+              <p className="text-[11px] text-gray-400 text-center max-w-[200px]">
+                Este conteúdo pode demorar alguns segundos.
+              </p>
+            )}
+          </div>
         </div>
       )}
     </LoadingContext.Provider>
@@ -40,10 +61,11 @@ export const RouteTransitionLoader = () => {
   const { showLoading, hideLoading } = useLoading();
 
   useEffect(() => {
-    showLoading();
+    const isHeavy = HEAVY_ROUTES.includes(location.pathname);
+    showLoading(isHeavy);
     const timer = setTimeout(() => {
       hideLoading();
-    }, 400); // Mostra o loader por 400ms na transição de página
+    }, isHeavy ? 600 : 350);
 
     return () => {
       clearTimeout(timer);

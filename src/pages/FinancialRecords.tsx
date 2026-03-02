@@ -153,7 +153,7 @@ export default function FinancialRecords() {
   };
 
   return (
-    <div className="flex flex-col min-h-screen bg-[#E2E4EB]">
+    <div className="flex flex-col min-h-screen bg-[#E2E4EB] page-content">
       {/* Header */}
       <header className="bg-[#0000A5] text-white flex items-center justify-between px-4 py-3 sticky top-0 z-50">
         <button onClick={() => navigate(-1)} className="w-10">

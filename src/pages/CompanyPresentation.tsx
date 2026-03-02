@@ -5,7 +5,7 @@ export default function CompanyPresentation() {
   const navigate = useNavigate();
 
   return (
-    <div className="flex flex-col min-h-screen bg-[#E2E4EB] antialiased">
+    <div className="flex flex-col min-h-screen bg-[#E2E4EB] antialiased page-content">
       {/* Header */}
       <header className="bg-[#0000B3] h-14 flex items-center px-4 sticky top-0 z-10 shadow-md">
         <div className="flex items-center w-full relative justify-center">

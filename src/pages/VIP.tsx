@@ -60,7 +60,7 @@ export default function VIP() {
   }, [user]);
 
   return (
-    <div className="flex flex-col min-h-screen bg-[#0000A5]">
+    <div className="flex flex-col min-h-screen bg-[#0000A5] page-content">
       {/* Header Section */}
       <header className="p-4 text-white">
         <div className="flex items-center justify-between mb-4">

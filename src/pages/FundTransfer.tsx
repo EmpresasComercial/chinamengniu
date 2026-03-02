@@ -40,7 +40,7 @@ export default function FundTransfer() {
   };
 
   return (
-    <div className="flex flex-col min-h-screen bg-[#e9ecf3] antialiased">
+    <div className="flex flex-col min-h-screen bg-[#e9ecf3] antialiased page-content">
       {/* Header */}
       <header className="flex items-center px-4 h-12 bg-[#000080] sticky top-0 z-50">
         <button onClick={() => navigate(-1)} className="flex-none">

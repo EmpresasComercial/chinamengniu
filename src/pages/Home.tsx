@@ -62,7 +62,7 @@ export default function Home() {
   };
 
   return (
-    <div className="flex flex-col min-h-screen bg-[#f0f2f5]">
+    <div className="flex flex-col min-h-screen bg-[#f0f2f5] page-content">
       {/* Header */}
       <header className="bg-gradient-to-b from-[#001f8d] to-[#001561] pt-4 pb-16 px-4 relative">
         <div className="flex justify-between items-center mb-4">
@@ -159,14 +159,15 @@ export default function Home() {
         </div>
       </section>
 
-      {/* Hero Image */}
+      {/* Hero Image – lazy loaded para não bloquear o render */}
       <section className="mt-4 px-4">
-        <div className="rounded-2xl overflow-hidden shadow-sm">
+        <div className="rounded-2xl overflow-hidden shadow-sm bg-gray-100 min-h-[120px]">
           <img
             alt="Industrial building"
             className="w-full h-auto object-cover"
             src="https://api.mengniu.wang/upload/img/6993c3911410.webp"
             referrerPolicy="no-referrer"
+            loading="lazy"
           />
         </div>
       </section>
@@ -179,10 +180,10 @@ export default function Home() {
         </div>
 
         <div className="flex flex-col gap-2">
-          {/* WhatsApp Group - Flat */}
+          {/* WhatsApp Group */}
           <button
             onClick={(e) => handleLinkClick(links.group, e)}
-            className="w-full h-14 bg-white rounded-2xl border border-slate-100 flex items-center px-4 active:bg-slate-50 transition-colors"
+            className="w-full h-[45px] bg-white rounded-2xl border border-slate-100 flex items-center px-4 active:bg-slate-50 transition-colors"
           >
             <div className="w-10 h-10 bg-[#25D366]/10 rounded-full flex items-center justify-center mr-3">
               <img
@@ -200,10 +201,10 @@ export default function Home() {
             </svg>
           </button>
 
-          {/* WhatsApp Manager - Flat */}
+          {/* WhatsApp Manager */}
           <button
             onClick={(e) => handleLinkClick(links.manager, e)}
-            className="w-full h-14 bg-white rounded-2xl border border-slate-100 flex items-center px-4 active:bg-slate-50 transition-colors"
+            className="w-full h-[45px] bg-white rounded-2xl border border-slate-100 flex items-center px-4 active:bg-slate-50 transition-colors"
           >
             <div className="w-10 h-10 bg-[#0000AA]/10 rounded-full flex items-center justify-center mr-3">
               <img
@@ -221,10 +222,10 @@ export default function Home() {
             </svg>
           </button>
 
-          {/* Invite Button - Flat */}
+          {/* Invite Button */}
           <button
             onClick={handleCopyInvite}
-            className="w-full h-14 bg-white rounded-2xl border border-slate-100 flex items-center px-4 active:bg-slate-50 transition-colors"
+            className="w-full h-[45px] bg-white rounded-2xl border border-slate-100 flex items-center px-4 active:bg-slate-50 transition-colors"
           >
             <div className="w-10 h-10 bg-blue-50 rounded-full flex items-center justify-center mr-3">
               <svg className="w-5 h-5 text-[#0000AA]" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth="2">

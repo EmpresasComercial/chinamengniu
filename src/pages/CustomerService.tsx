@@ -38,7 +38,7 @@ export default function CustomerService() {
   };
 
   return (
-    <div className="bg-[#f3f4f6] dark:bg-[#221610] min-h-screen">
+    <div className="bg-[#f3f4f6] min-h-screen page-content">
       {/* Header Section */}
       <header className="bg-[#0000AA] text-white flex items-center p-4 sticky top-0 z-10 shadow-md">
         <button
@@ -87,7 +87,7 @@ export default function CustomerService() {
           {/* Action Button */}
           <button
             onClick={handleWhatsAppClick}
-            className="w-full bg-[#0000AA] hover:bg-blue-800 text-white font-bold rounded-xl shadow-lg shadow-blue-200 dark:shadow-none transition-all active:scale-[0.98] py-4"
+            className="w-full h-[45px] bg-[#0000AA] hover:bg-blue-800 text-white font-bold rounded-xl shadow-lg shadow-blue-200 transition-all active:scale-[0.98]"
           >
             entrar no whatsapp de vendas
           </button>

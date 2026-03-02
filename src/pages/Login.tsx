@@ -61,7 +61,7 @@ export default function Login() {
   };
 
   return (
-    <div className="bg-main-gradient flex justify-center items-start p-0 m-0 min-h-screen w-full">
+    <div className="bg-main-gradient flex justify-center items-start p-0 m-0 min-h-screen w-full page-content">
       {/* BEGIN: MainContainer */}
       <main className="w-full max-w-[430px] min-h-screen flex flex-col relative overflow-hidden">
         {/* BEGIN: TopHeader */}

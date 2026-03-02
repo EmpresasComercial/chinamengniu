@@ -95,7 +95,7 @@ export default function Register() {
   };
 
   return (
-    <div className="min-h-screen flex flex-col bg-[#f3f4f6]">
+    <div className="min-h-screen flex flex-col bg-[#f3f4f6] page-content">
       {/* BEGIN: Header */}
       <header className="bg-[#00008b] h-64 relative flex flex-col items-center pt-8 overflow-hidden header-pattern">
         {/* Language/Globe Icon */}

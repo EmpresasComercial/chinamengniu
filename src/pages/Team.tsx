@@ -99,7 +99,7 @@ export default function Team() {
   };
 
   return (
-    <div className="flex flex-col min-h-screen bg-[#E5E9F2]">
+    <div className="flex flex-col min-h-screen bg-[#E5E9F2] page-content">
       {/* Header */}
       <header className="sticky top-0 z-50 bg-[#0000A0] text-white flex items-center h-12 px-4">
         <button onClick={() => navigate(-1)} className="w-8 h-8 flex items-center justify-start">

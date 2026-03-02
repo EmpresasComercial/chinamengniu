@@ -52,7 +52,7 @@ export default function VIPDetails() {
   };
 
   return (
-    <div className="min-h-screen bg-[#f3f4f6]">
+    <div className="min-h-screen bg-[#f3f4f6] page-content">
       {/* Header Section */}
       <header className="bg-[#0000AA] text-white flex items-center p-4 sticky top-0 z-10 shadow-md">
         <button

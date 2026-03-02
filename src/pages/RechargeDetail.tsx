@@ -90,7 +90,7 @@ export default function RechargeDetail() {
   };
 
   return (
-    <div className="flex flex-col min-h-screen bg-[#E6E8F0] antialiased">
+    <div className="flex flex-col min-h-screen bg-[#E6E8F0] antialiased page-content">
       {/* Header */}
       <header className="bg-[#0000AA] flex items-center h-12 px-4 sticky top-0 z-50">
         <button onClick={() => navigate(-1)} className="text-white">

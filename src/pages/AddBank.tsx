@@ -110,7 +110,7 @@ export default function AddBank() {
   };
 
   return (
-    <div className="min-h-screen bg-[#E8EBF2] flex flex-col">
+    <div className="min-h-screen bg-[#E8EBF2] flex flex-col page-content">
       {/* Header */}
       <header className="bg-[#000080] text-white h-14 flex items-center px-4 sticky top-0 z-50">
         <button onClick={() => navigate(-1)} className="p-2 -ml-2">

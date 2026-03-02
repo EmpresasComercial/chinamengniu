@@ -38,7 +38,7 @@ export default function Invite() {
   };
 
   return (
-    <div className="min-h-screen bg-[#E8EBF2]">
+    <div className="min-h-screen bg-[#E8EBF2] page-content">
       {/* Header and Main Blue Card */}
       <section className="bg-[#0000CC] pb-12 rounded-b-[40px] shadow-lg relative">
         {/* Header Navigation */}

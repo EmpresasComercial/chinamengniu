@@ -101,7 +101,7 @@ export default function Withdraw() {
   };
 
   return (
-    <div className="min-h-screen bg-[#d1d5db]">
+    <div className="min-h-screen bg-[#d1d5db] page-content">
       {/* header */}
       <header className="bg-[#0000cc] text-white px-4 py-3 flex items-center sticky top-0 z-50">
         <button onClick={() => navigate(-1)} className="flex-none cursor-pointer">

@@ -90,7 +90,7 @@ export default function ChangePassword() {
   };
 
   return (
-    <div className="flex flex-col min-h-screen bg-[#E9EAEF]">
+    <div className="flex flex-col min-h-screen bg-[#E9EAEF] page-content">
       {/* Header */}
       <header className="bg-[#0000A5] h-12 flex items-center px-4 shrink-0">
         <div className="flex items-center w-full">

@@ -34,7 +34,7 @@ export default function Profile() {
   ];
 
   return (
-    <div className="flex flex-col min-h-screen bg-[#EAEBED]">
+    <div className="flex flex-col min-h-screen bg-[#EAEBED] page-content">
       {/* Header Section */}
       <header className="bg-[#0000AA] p-4 text-white pb-8 relative overflow-hidden">
         {/* Decorative circle */}
@@ -102,24 +102,24 @@ export default function Profile() {
         <div className="flex space-x-3 mt-6">
           <button
             onClick={() => navigate('/recarregar')}
-            className="flex-1 bg-[#D6F174] text-black font-bold h-[50px] rounded-lg flex items-center justify-between px-4 group active:scale-95 transition-transform"
+            className="flex-1 bg-[#D6F174] text-black font-bold h-[45px] rounded-lg px-4"
           >
-            <span className="text-[15px]">recarregar</span>
+            <span className="text-[15px] flex-1 text-left">recarregar</span>
             <img
               alt="recharge icon"
-              className="w-10 h-8 object-contain"
+              className="w-8 h-7 object-contain ml-2"
               src="https://www.mengniu.wang/assets/deposit1-Dk3ugVyJ.png"
               referrerPolicy="no-referrer"
             />
           </button>
           <button
             onClick={() => navigate('/retirar')}
-            className="flex-1 bg-[#D6F174] text-black font-bold h-[50px] rounded-lg flex items-center justify-between px-4 group active:scale-95 transition-transform"
+            className="flex-1 bg-[#D6F174] text-black font-bold h-[45px] rounded-lg px-4"
           >
-            <span className="text-[15px]">extrair</span>
+            <span className="text-[15px] flex-1 text-left">extrair</span>
             <img
               alt="withdraw icon"
-              className="w-8 h-8 object-contain"
+              className="w-7 h-7 object-contain ml-2"
               src="https://www.mengniu.wang/assets/withdraw1-pLMbG-t2.png"
               referrerPolicy="no-referrer"
             />

@@ -5,7 +5,7 @@ export default function WithdrawHelp() {
   const navigate = useNavigate();
 
   return (
-    <div className="min-h-screen flex flex-col bg-[#e5e9f2] antialiased">
+    <div className="min-h-screen flex flex-col bg-[#e5e9f2] antialiased page-content">
       {/* Header */}
       <header className="bg-[#000080] h-14 flex items-center px-4 sticky top-0 z-50">
         <button onClick={() => navigate(-1)} className="text-white">
@@ -17,12 +17,12 @@ export default function WithdrawHelp() {
       <main className="p-4 flex-grow">
         <article className="bg-white rounded-[2rem] p-6 shadow-sm min-h-[400px]">
           {/* Card Title */}
-          <h1 className="text-[22px] font-bold text-[#001f3f] mb-6">
+          <h1 className="text-[15px] font-bold text-[#001f3f] mb-6">
             como retirar ganhos
           </h1>
 
           {/* Card Body Text */}
-          <div className="text-[#1a202c] leading-relaxed space-y-5 text-[14px]">
+          <div className="text-[#1a202c] leading-relaxed space-y-5 text-[12.5px]">
             <p className="font-medium">
               como retirar os ganhos do dia:
             </p>
