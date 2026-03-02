@@ -3,6 +3,7 @@ import { Globe, Eye, EyeOff } from 'lucide-react';
 import { useNavigate, Link } from 'react-router-dom';
 import { motion, AnimatePresence } from 'motion/react';
 import { useLoading } from '../contexts/LoadingContext';
+import { supabase } from '../lib/supabase';
 
 export default function Register() {
   const navigate = useNavigate();
@@ -23,7 +24,7 @@ export default function Register() {
     setTimeout(() => setFeedback(null), 3000);
   };
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
     if (!formData.phone) {
@@ -53,11 +54,30 @@ export default function Register() {
     }
 
     showLoading();
-    setTimeout(() => {
-      hideLoading();
+    try {
+      const { error } = await supabase.auth.signUp({
+        email: `${formData.phone}@user.com`,
+        password: formData.password,
+        options: {
+          data: {
+            phone: formData.phone,
+            referred_by: formData.inviteCode
+          }
+        }
+      });
+
+      if (error) {
+        showToast(`erro no registro: ${error.message}`);
+        return;
+      }
+
       showToast('Registro realizado com sucesso!');
-      setTimeout(() => navigate('/login'), 1000);
-    }, 1500);
+      setTimeout(() => navigate('/login'), 1500);
+    } catch (err: any) {
+      showToast('Erro inesperado ao registrar');
+    } finally {
+      hideLoading();
+    }
   };
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {

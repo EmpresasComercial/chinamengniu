@@ -2,16 +2,20 @@ import { useState } from 'react';
 import { Rocket, Users, BarChart3, CircleDollarSign, ShieldCheck, HelpCircle, ChevronRight } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import { useLoading } from '../contexts/LoadingContext';
+import { useAuth } from '../contexts/AuthContext';
 
 export default function Profile() {
   const navigate = useNavigate();
   const { showLoading, hideLoading } = useLoading();
+  const { profile, signOut } = useAuth();
   const [copied, setCopied] = useState(false);
 
   const handleCopyUID = () => {
-    navigator.clipboard.writeText('22164');
-    setCopied(true);
-    setTimeout(() => setCopied(false), 2000);
+    if (profile?.invite_code) {
+      navigator.clipboard.writeText(profile.invite_code);
+      setCopied(true);
+      setTimeout(() => setCopied(false), 2000);
+    }
   };
 
   const menuItems = [
@@ -40,11 +44,17 @@ export default function Profile() {
           </div>
           <div>
             <div className="flex items-center space-x-2">
-              <span className="font-bold text-[15px] truncate max-w-[150px]">+244 920110222</span>
-              <span className="bg-yellow-500 text-[10px] px-2 rounded-full text-black font-bold">VIP0</span>
+              <span className="font-bold text-[15px] truncate max-w-[150px]">
+                {profile?.phone ? `+244 ${profile.phone}` : 'Carregando...'}
+              </span>
+              <span className="bg-yellow-500 text-[10px] px-2 rounded-full text-black font-bold">
+                {profile?.state || 'VIP0'}
+              </span>
             </div>
             <div className="flex items-center mt-1">
-              <span className="text-[12.5px] text-yellow-400 font-bold tracking-wider">ID: 22164</span>
+              <span className="text-[12.5px] text-yellow-400 font-bold tracking-wider">
+                ID: {profile?.invite_code || '---'}
+              </span>
               <button
                 onClick={handleCopyUID}
                 className="ml-2 text-[10px] bg-white/20 px-1 rounded flex items-center gap-1 btn-small"
@@ -59,11 +69,11 @@ export default function Profile() {
         <div className="grid grid-cols-2 gap-4 mt-6">
           <div>
             <p className="text-[10px] opacity-80 uppercase tracking-wider">Ativos totais</p>
-            <p className="text-[20px] font-bold">$0</p>
+            <p className="text-[20px] font-bold">${profile?.balance || '0'}</p>
           </div>
           <div className="text-right">
             <p className="text-[10px] opacity-80 uppercase tracking-wider">Receita total</p>
-            <p className="text-[20px] font-bold">$0.00</p>
+            <p className="text-[20px] font-bold">${profile?.income || '0.00'}</p>
           </div>
         </div>
 
@@ -74,7 +84,7 @@ export default function Profile() {
           </div>
           <div>
             <p className="text-[10px] opacity-80 leading-tight">Ativos de<br />Lucro</p>
-            <p className="font-bold text-[14px] mt-1">$0.00</p>
+            <p className="font-bold text-[14px] mt-1">${profile?.balance || '0.00'}</p>
           </div>
           <div>
             <p className="text-[10px] opacity-80 leading-tight">Comissão<br />total</p>
@@ -167,12 +177,11 @@ export default function Profile() {
           ))}
         </div>
         <button
-          onClick={() => {
+          onClick={async () => {
             showLoading();
-            setTimeout(() => {
-              hideLoading();
-              navigate('/login');
-            }, 1000);
+            await signOut();
+            hideLoading();
+            navigate('/login');
           }}
           className="w-full bg-[#0000B8] text-white font-bold h-[45px] mt-8 mb-20 rounded-full text-[15px]"
         >

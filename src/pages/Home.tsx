@@ -1,23 +1,39 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Bell, MessageSquare, Globe } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import { motion, AnimatePresence } from 'motion/react';
 import { useLoading } from '../contexts/LoadingContext';
+import { supabase } from '../lib/supabase';
 
 export default function Home() {
   const navigate = useNavigate();
-  const { setIsLoading } = useLoading();
+  const { showLoading, hideLoading } = useLoading();
   const [notification, setNotification] = useState<string | null>(null);
+  const [whatsappUrl, setWhatsappUrl] = useState('https://wa.me/1234567890');
+
+  useEffect(() => {
+    async function fetchLinks() {
+      const { data, error } = await supabase
+        .from('atendimento_links')
+        .select('whatsapp_gerente_url')
+        .single();
+
+      if (!error && data?.whatsapp_gerente_url) {
+        setWhatsappUrl(data.whatsapp_gerente_url);
+      }
+    }
+    fetchLinks();
+  }, []);
 
   const handleWhatsAppClick = (e: React.MouseEvent) => {
     e.preventDefault();
-    setIsLoading(true);
+    showLoading();
     setTimeout(() => {
-      setIsLoading(false);
+      hideLoading();
       setNotification('Redirecionando para o WhatsApp...');
       setTimeout(() => {
         setNotification(null);
-        window.open('https://wa.me/1234567890', '_blank');
+        window.open(whatsappUrl, '_blank');
       }, 2000);
     }, 500);
   };

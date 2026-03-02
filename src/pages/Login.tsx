@@ -3,6 +3,7 @@ import { Globe, Eye, EyeOff } from 'lucide-react';
 import { useNavigate, Link } from 'react-router-dom';
 import { motion, AnimatePresence } from 'motion/react';
 import { useLoading } from '../contexts/LoadingContext';
+import { supabase } from '../lib/supabase';
 
 export default function Login() {
   const navigate = useNavigate();
@@ -17,7 +18,7 @@ export default function Login() {
     setTimeout(() => setFeedback(null), 3000);
   };
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
     // Validation Logic
@@ -39,12 +40,24 @@ export default function Login() {
     }
 
     showLoading();
-    setTimeout(() => {
-      hideLoading();
-      // Success simulation
+    try {
+      const { error } = await supabase.auth.signInWithPassword({
+        email: `${phone}@user.com`,
+        password: password
+      });
+
+      if (error) {
+        showToast(`erro no login: ${error.message}`);
+        return;
+      }
+
       showToast('login realizado com sucesso!');
       setTimeout(() => navigate('/'), 1000);
-    }, 1500);
+    } catch (err: any) {
+      showToast('Erro inesperado no login');
+    } finally {
+      hideLoading();
+    }
   };
 
   return (

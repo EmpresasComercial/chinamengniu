@@ -1,18 +1,39 @@
+import { useState, useEffect } from 'react';
 import { Send, ChevronRight } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import { useLoading } from '../contexts/LoadingContext';
+import { useAuth } from '../contexts/AuthContext';
+import { supabase } from '../lib/supabase';
+
+interface Product {
+  id: string;
+  name: string;
+  price: number;
+  daily_income: number;
+  duration_days: number;
+  image_url: string;
+}
 
 export default function VIP() {
   const navigate = useNavigate();
   const { showLoading, hideLoading } = useLoading();
-  const vipLevels = [
-    { id: 'VIP0', icon: 'https://api.mengniu.wang/upload/img/6978d793f60d.webp', current: true },
-    { id: 'VIP1', icon: 'https://api.mengniu.wang/upload/img/6978d793f60d.webp' },
-    { id: 'VIP2', icon: 'https://api.mengniu.wang/upload/img/6978d793f60d.webp' },
-    { id: 'VIP3', icon: 'https://api.mengniu.wang/upload/img/6978d793f60d.webp' },
-    { id: 'VIP4', icon: 'https://api.mengniu.wang/upload/img/6978d793f60d.webp' },
-    { id: 'VIP5', icon: 'https://api.mengniu.wang/upload/img/6978d793f60d.webp' },
-  ];
+  const { profile } = useAuth();
+  const [products, setProducts] = useState<Product[]>([]);
+
+  useEffect(() => {
+    async function loadProducts() {
+      const { data, error } = await supabase
+        .from('products')
+        .select('*')
+        .eq('status', 'active')
+        .order('price', { ascending: true });
+
+      if (!error && data) {
+        setProducts(data);
+      }
+    }
+    loadProducts();
+  }, []);
 
   return (
     <div className="flex flex-col min-h-screen bg-[#0000A5]">
@@ -83,27 +104,27 @@ export default function VIP() {
       <main className="bg-[#EBF1FF] rounded-t-[1.5rem] flex-grow text-black p-6">
         <h2 className="text-[15px] font-bold text-[#000080] mb-4">sistema de empregos</h2>
         <div className="space-y-3">
-          {vipLevels.map((vip) => (
+          {products.map((vip) => (
             <div
               key={vip.id}
               onClick={() => {
                 showLoading();
                 setTimeout(() => {
                   hideLoading();
-                  navigate('/vip-detalhes');
+                  navigate('/vip-detalhes', { state: { product: vip } });
                 }, 500);
               }}
               className="flex items-center justify-between bg-white p-3 rounded-xl shadow-sm border border-gray-100 cursor-pointer"
             >
               <div className="flex items-center gap-4">
-                <img alt={vip.id} className="w-12 h-12 object-contain" src={vip.icon} referrerPolicy="no-referrer" />
+                <img alt={vip.name} className="w-12 h-12 object-contain" src={vip.image_url} referrerPolicy="no-referrer" />
                 <div>
-                  <p className="font-bold text-[12.5px] text-[#000080]">{vip.id}</p>
-                  <div className={`flex text-[10px] gap-1 ${vip.current ? 'text-gray-300' : 'text-[#FFD700]'}`}>
+                  <p className="font-bold text-[12.5px] text-[#000080]">{vip.name}</p>
+                  <div className={`flex text-[10px] gap-1 ${profile?.state === vip.name ? 'text-gray-300' : 'text-[#FFD700]'}`}>
                     {Array.from({ length: 5 }).map((_, i) => (
-                      <span key={i}>{vip.current ? '☆' : '★'}</span>
+                      <span key={i}>{profile?.state === vip.name ? '☆' : '★'}</span>
                     ))}
-                    {vip.current && <span className="ml-2 text-gray-400">posição atual</span>}
+                    {profile?.state === vip.name && <span className="ml-2 text-gray-400">posição atual</span>}
                   </div>
                 </div>
               </div>
