@@ -1,37 +1,42 @@
 import { useState } from 'react';
-import { ChevronLeft, Eye, MoveRight, EyeOff } from 'lucide-react';
+import { ChevronLeft, Gift } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import { motion, AnimatePresence } from 'motion/react';
 import { useLoading } from '../contexts/LoadingContext';
+import { supabase } from '../lib/supabase';
 
 export default function FundTransfer() {
   const navigate = useNavigate();
   const { showLoading, hideLoading } = useLoading();
-  const [showPassword, setShowPassword] = useState(false);
-  const [amount, setAmount] = useState('');
-  const [password, setPassword] = useState('');
+  const [code, setCode] = useState('');
   const [feedback, setFeedback] = useState<{ message: string; type: 'error' | 'success' } | null>(null);
 
-  const handleConfirm = () => {
-    if (!amount) {
-      showFeedback('a quantidade de troca não pode ser zero', 'error');
-      return;
-    }
-    if (!password) {
-      showFeedback('por favor, digite sua senha segura', 'error');
+  const handleConfirm = async () => {
+    if (!code) {
+      showFeedback('por favor, insira o seu código', 'error');
       return;
     }
 
     showLoading();
-    setTimeout(() => {
-      hideLoading();
-      // Simulate successful transfer
-      showFeedback('bem-sucedido!', 'success');
+    try {
+      const { data, error } = await supabase.rpc('redeem_gift_code', {
+        p_code: code
+      });
 
-      // Clear form after success
-      setAmount('');
-      setPassword('');
-    }, 1500);
+      if (error) throw error;
+
+      if (data.success) {
+        showFeedback(data.message.toLowerCase(), 'success');
+        setCode('');
+      } else {
+        showFeedback(data.message.toLowerCase(), 'error');
+      }
+    } catch (err: any) {
+      console.error('Error redeeming code:', err);
+      showFeedback('erro ao processar o código. tente novamente.', 'error');
+    } finally {
+      hideLoading();
+    }
   };
 
   const showFeedback = (message: string, type: 'error' | 'success') => {
@@ -52,73 +57,33 @@ export default function FundTransfer() {
       </header>
 
       <main className="flex-grow p-4">
-        {/* Account Status Card */}
+        {/* Banner Section */}
         <section className="mb-4">
-          <div className="bg-[#f5d7a1] rounded-[24px] border border-[#cfb586] p-5 flex items-center justify-between relative shadow-sm">
-            {/* Left side: ativos de lucro */}
-            <div className="text-center flex-1">
-              <p className="text-[12.5px] text-gray-800 font-semibold mb-1">ativos de lucro</p>
-              <p className="text-[15px] font-bold text-black leading-none">0</p>
+          <div className="bg-[#f5d7a1] rounded-[24px] border border-[#cfb586] p-8 flex flex-col items-center justify-center relative shadow-sm text-center">
+            <div className="bg-black w-12 h-12 rounded-full flex items-center justify-center shadow-lg mb-3">
+              <Gift className="h-6 w-6 text-white" />
             </div>
-
-            {/* Center Arrow Button */}
-            <div className="flex-none mx-2">
-              <div className="bg-black w-10 h-10 rounded-full flex items-center justify-center shadow-md">
-                <MoveRight className="h-5 w-5 text-white stroke-[3]" />
-              </div>
-            </div>
-
-            {/* Right side: conta de reprodução */}
-            <div className="text-center flex-1">
-              <p className="text-[12.5px] text-gray-800 font-semibold mb-1">conta de reprodução</p>
-              <p className="text-[15px] font-bold text-black leading-none">0</p>
-            </div>
+            <h2 className="text-[18px] font-black text-black lowercase leading-tight mb-1">resgate de recompensas</h2>
+            <p className="text-[11px] text-gray-700 font-medium lowercase">insira o seu código de convite ou código de presente abaixo</p>
           </div>
         </section>
 
         {/* Transfer Form Card */}
         <section>
-          <div className="bg-white rounded-[24px] shadow-[0_4px_15px_rgba(0,0,0,0.05)] p-8 mt-2">
-            {/* Transfer Amount Input */}
-            <div className="mb-4">
-              <label className="block text-gray-400 text-[12.5px] mb-2" htmlFor="transfer-amount">
-                transferir valor
+          <div className="bg-white rounded-[24px] shadow-[0_4px_25px_rgba(0,0,0,0.06)] p-8 mt-2">
+            {/* Gift Code Input */}
+            <div className="mb-8">
+              <label className="block text-gray-400 text-[12.5px] mb-3 lowercase font-bold" htmlFor="gift-code">
+                informe o seu código
               </label>
-              <div className="border-b border-[#e2e8f0] py-2">
+              <div className="border-b-2 border-[#e2e8f0] py-3 focus-within:border-[#000080] transition-colors">
                 <input
-                  className="w-full border-none focus:ring-0 p-0 text-gray-700 bg-transparent text-[12.5px] outline-none"
-                  id="transfer-amount"
-                  placeholder=""
-                  type="number"
-                  value={amount}
-                  onChange={(e) => setAmount(e.target.value.replace(/[^\p{L}\p{N}]/gu, ''))}
-                />
-              </div>
-            </div>
-
-            {/* Secure Password Input */}
-            <div className="mb-6">
-              <div className="flex justify-between items-end mb-2">
-                <label className="block text-gray-400 text-[12.5px]" htmlFor="secure-password">
-                  senha segura
-                </label>
-                {/* Eye Icon */}
-                <button
-                  className="text-gray-400"
-                  type="button"
-                  onClick={() => setShowPassword(!showPassword)}
-                >
-                  {showPassword ? <EyeOff className="h-5 w-5" /> : <Eye className="h-5 w-5" />}
-                </button>
-              </div>
-              <div className="border-b border-[#e2e8f0] py-2">
-                <input
-                  className="w-full border-none focus:ring-0 p-0 text-gray-700 bg-transparent text-[12.5px] outline-none"
-                  id="secure-password"
-                  placeholder=""
-                  type={showPassword ? "text" : "password"}
-                  value={password}
-                  onChange={(e) => setPassword(e.target.value.replace(/[^\p{L}\p{N}]/gu, ''))}
+                  className="w-full border-none focus:ring-0 p-0 text-gray-800 bg-transparent text-[16px] font-bold outline-none placeholder:text-gray-300 placeholder:font-normal"
+                  id="gift-code"
+                  placeholder="insira o código aqui"
+                  type="text"
+                  value={code}
+                  onChange={(e) => setCode(e.target.value.toUpperCase())}
                 />
               </div>
             </div>
@@ -127,9 +92,9 @@ export default function FundTransfer() {
             <div className="mt-2">
               <button
                 onClick={handleConfirm}
-                className="w-full h-[45px] bg-[#000080] text-white rounded-full text-[15px] font-medium shadow-lg active:opacity-90 transition-opacity tracking-wide"
+                className="w-full h-[45px] bg-[#000080] text-white rounded-full text-[15px] font-black shadow-lg active:scale-[0.98] transition-all tracking-wide lowercase"
               >
-                converter
+                resgatar código
               </button>
             </div>
           </div>
@@ -140,10 +105,10 @@ export default function FundTransfer() {
       <AnimatePresence>
         {feedback && (
           <motion.div
-            initial={{ opacity: 0, scale: 0.9, x: '-50%', y: '-50%' }}
+            initial={{ opacity: 0, scale: 0.9, x: '-50%', y: '-10%' }}
             animate={{ opacity: 1, scale: 1, x: '-50%', y: '-50%' }}
-            exit={{ opacity: 0, scale: 0.9, x: '-50%', y: '-50%' }}
-            className="fixed top-1/2 left-1/2 bg-black/80 text-white px-6 py-3 rounded-xl text-[12.5px] font-medium shadow-2xl z-[100] text-center min-w-[280px]"
+            exit={{ opacity: 0, scale: 0.9, x: '-50%', y: '-10%' }}
+            className={`fixed top-1/2 left-1/2 ${feedback.type === 'error' ? 'bg-red-600' : 'bg-black/90'} text-white px-6 py-4 rounded-2xl text-[12.5px] font-bold shadow-2xl z-[100] text-center min-w-[280px]`}
           >
             {feedback.message}
           </motion.div>
