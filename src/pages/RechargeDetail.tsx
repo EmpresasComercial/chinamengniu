@@ -49,24 +49,24 @@ export default function RechargeDetail() {
     if (!user) return;
     showLoading();
 
-    const { error } = await supabase
-      .from('depositos_clientes')
-      .insert({
-        user_id: user.id,
-        valor_deposito: parseFloat(amount),
-        estado_de_pagamento: 'pendente',
-        banco_utilizado: bank.nome_do_banco
-      });
+    // Call the RPC function as shown in the user's database settings
+    const { data: rpcData, error: rpcError } = await supabase.rpc('create_deposit_request', {
+      p_amount: parseFloat(amount),
+      p_bank_name: bank.nome_do_banco
+    });
 
     hideLoading();
-    if (!error) {
+
+    // Handle the RPC response (typically returns JSON with success/message)
+    if (!rpcError && (rpcData?.success || rpcData)) {
       setConfirmed(true);
       setTimeout(() => {
         setConfirmed(false);
-        navigate('/records'); // Optionally navigate back or to records
+        navigate('/detalhes');
       }, 3000);
     } else {
-      alert('Erro ao processar depósito. Tente novamente.');
+      const errorMsg = rpcError?.message || rpcData?.message || 'Erro ao processar depósito. Tente novamente.';
+      alert(errorMsg);
     }
   };
 
