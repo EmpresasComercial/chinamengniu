@@ -18,15 +18,17 @@ export default function Reproducao() {
 
       const { data, error } = await supabase
         .from('historico_compras')
-        .select('*, products(image_url)')
+        .select(`
+          *,
+          product:products(image_url)
+        `)
         .eq('user_id', user.id)
         .order('data_compra', { ascending: false });
 
       if (!error && data) {
-        // Map the data to include the image_url if it exists in the joined products table
         const formattedData = data.map((item: any) => ({
           ...item,
-          image_url: item.image_url || (item.products ? item.products.image_url : null)
+          image_url: item.image_url || (item.product ? item.product.image_url : null)
         }));
         setPurchases(formattedData);
       }
