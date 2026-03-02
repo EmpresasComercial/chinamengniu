@@ -1,19 +1,35 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { ChevronLeft } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import { motion, AnimatePresence } from 'motion/react';
 import { useLoading } from '../contexts/LoadingContext';
+import { supabase } from '../lib/supabase';
 
 export default function RechargeList() {
   const navigate = useNavigate();
   const { showLoading, hideLoading } = useLoading();
   const [amount, setAmount] = useState('');
-  const [bank, setBank] = useState('');
+  const [selectedBankId, setSelectedBankId] = useState('');
+  const [banks, setBanks] = useState<any[]>([]);
   const [validationError, setValidationError] = useState<string | null>(null);
+
+  useEffect(() => {
+    async function fetchBanks() {
+      const { data, error } = await supabase
+        .from('bancos_empresa')
+        .select('*')
+        .eq('ativo', true);
+
+      if (!error && data) {
+        setBanks(data);
+      }
+    }
+    fetchBanks();
+  }, []);
 
   const numericAmount = parseFloat(amount);
   const isAmountInRange = numericAmount >= 9000 && numericAmount <= 7000000;
-  const isFormValid = amount !== '' && isAmountInRange && bank !== '';
+  const isFormValid = amount !== '' && isAmountInRange && selectedBankId !== '';
 
   const bankIcons: Record<string, string> = {
     'BAI': 'https://upload.wikimedia.org/wikipedia/commons/4/4f/BAI_-_.jpg',
@@ -27,13 +43,14 @@ export default function RechargeList() {
       setValidationError('por favor, digite o valor');
     } else if (!isAmountInRange) {
       setValidationError('o valor deve ser entre 9.000 kzs e 7.000.000 kzs');
-    } else if (!bank) {
+    } else if (!selectedBankId) {
       setValidationError('por favor, selecione um banco');
     } else {
       showLoading();
+      const bankData = banks.find(b => b.id === selectedBankId);
       setTimeout(() => {
         hideLoading();
-        navigate('/detalhes-pagamento', { state: { amount, bank } });
+        navigate('/detalhes-pagamento', { state: { amount, bank: bankData } });
       }, 1000);
       return;
     }
@@ -93,29 +110,24 @@ export default function RechargeList() {
           <div className="w-full mb-8">
             <p className="text-[12.5px] font-bold text-gray-700 mb-4">selecione abaixo um dos bancos a usar no pagamento</p>
             <div className="grid grid-cols-2 gap-y-4 gap-x-2">
-              {[
-                { id: 'BAI', color: 'bg-blue-900' },
-                { id: 'BIC', color: 'bg-red-600' },
-                { id: 'BFA', color: 'bg-orange-500' },
-                { id: 'SOL', color: 'bg-yellow-500' }
-              ].map((b) => (
+              {banks.map((b) => (
                 <label key={b.id} className="flex items-center space-x-2 cursor-pointer">
                   <input
                     className="text-[#0000AA] focus:ring-[#0000AA] h-4 w-4"
                     name="bank"
                     type="radio"
-                    checked={bank === b.id}
-                    onChange={() => setBank(b.id)}
+                    checked={selectedBankId === b.id}
+                    onChange={() => setSelectedBankId(b.id)}
                   />
                   <div className={`w-6 h-6 rounded-full overflow-hidden border border-gray-100 flex items-center justify-center`}>
                     <img
-                      src={bankIcons[b.id]}
-                      alt={b.id}
+                      src={bankIcons[b.nome_do_banco] || bankIcons['BAI']}
+                      alt={b.nome_do_banco}
                       className="w-full h-full object-cover"
                       referrerPolicy="no-referrer"
                     />
                   </div>
-                  <span className="text-[12.5px] font-medium">{b.id}</span>
+                  <span className="text-[12.5px] font-medium">{b.nome_do_banco}</span>
                 </label>
               ))}
             </div>

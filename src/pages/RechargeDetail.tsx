@@ -2,13 +2,20 @@ import { useState } from 'react';
 import { ChevronLeft, Check } from 'lucide-react';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { useLoading } from '../contexts/LoadingContext';
+import { supabase } from '../lib/supabase';
+import { useAuth } from '../contexts/AuthContext';
 
 export default function RechargeDetail() {
   const navigate = useNavigate();
   const location = useLocation();
+  const { user } = useAuth();
   const { showLoading, hideLoading } = useLoading();
-  const { amount, bank } = location.state || { amount: '50000', bank: 'BAI' };
+  const { amount, bank } = location.state || {
+    amount: '0',
+    bank: { nome_do_banco: 'BAI', iban: '---', nome_favorecido: '---' }
+  };
   const [copiedField, setCopiedField] = useState<string | null>(null);
+  const [confirmed, setConfirmed] = useState(false);
 
   const handleCopy = (text: string, field: string) => {
     navigator.clipboard.writeText(text);
@@ -17,9 +24,9 @@ export default function RechargeDetail() {
   };
 
   const formatAmount = (val: string) => {
-    const num = parseFloat(val.replace(/[^\d.-]/g, ''));
+    const num = parseFloat(val);
     if (isNaN(num)) return val;
-    return new Intl.NumberFormat('pt-BR', { minimumFractionDigits: 2, maximumFractionDigits: 2 }).format(num);
+    return new Intl.NumberFormat('pt-AO', { minimumFractionDigits: 2 }).format(num);
   };
 
   const bankIcons: Record<string, string> = {
@@ -29,15 +36,29 @@ export default function RechargeDetail() {
     'SOL': 'https://lh3.googleusercontent.com/aida-public/AB6AXuAh4IDqjP7awRJlrCiIH2U6Op0XXDR7HQvp685HIhMQqzxKwmNnTdPmepV7hiYSciNg2qZOr0OjrxWqa5jH3_0_NiEKG8E6z_EayZ0XUSWO3c_5gdeXamKGDWJesgoLl1-0lD3uU5944iH-WjjUtuVN5AZnp-ALoYNrrTLZXvjwLrf8X1nCjyHcwcIQkpkHM-Jx1GDPl8Btv_NLsBsZIwTIVcdJJ0ME2fipRyKmbKbk4S4S37at4MnhZxqNr9ANK3z2rC4YcXxqhw'
   };
 
-  const [confirmed, setConfirmed] = useState(false);
-
-  const handleConfirm = () => {
+  const handleConfirm = async () => {
+    if (!user) return;
     showLoading();
-    setTimeout(() => {
-      hideLoading();
+
+    const { error } = await supabase
+      .from('depositos_clientes')
+      .insert({
+        user_id: user.id,
+        valor_deposito: parseFloat(amount),
+        estado_de_pagamento: 'pendente',
+        banco_utilizado: bank.nome_do_banco
+      });
+
+    hideLoading();
+    if (!error) {
       setConfirmed(true);
-      setTimeout(() => setConfirmed(false), 3000);
-    }, 1500);
+      setTimeout(() => {
+        setConfirmed(false);
+        navigate('/records'); // Optionally navigate back or to records
+      }, 3000);
+    } else {
+      alert('Erro ao processar depósito. Tente novamente.');
+    }
   };
 
   return (
@@ -56,12 +77,12 @@ export default function RechargeDetail() {
           {/* Bank Logo and Label */}
           <div className="flex items-center space-x-2 mb-6">
             <img
-              alt={`${bank} Icon`}
+              alt={`${bank.nome_do_banco} Icon`}
               className="rounded-full w-8 h-8 object-cover"
-              src={bankIcons[bank] || bankIcons['BAI']}
+              src={bankIcons[bank.nome_do_banco] || bankIcons['BAI']}
               referrerPolicy="no-referrer"
             />
-            <span className="font-bold text-[15px] text-gray-800">selecionado/{bank}</span>
+            <span className="font-bold text-[15px] text-gray-800">selecionado/{bank.nome_do_banco}</span>
           </div>
 
           {/* Payment Details */}
@@ -80,13 +101,13 @@ export default function RechargeDetail() {
             </div>
 
             <div className="flex justify-between items-center bg-gray-50 rounded-xl p-3 border border-gray-100">
-              <div className="flex flex-col overflow-hidden">
+              <div className="flex flex-col overflow-hidden mr-2">
                 <span className="text-[12.5px] text-gray-500 font-semibold uppercase tracking-wider"> iban</span>
-                <span className="text-[15px] font-bold text-gray-900 truncate"> 0000 0000 0000 0000 0000 0</span>
+                <span className="text-[14px] font-bold text-gray-900 break-all">{bank.iban}</span>
               </div>
               <button
-                onClick={() => handleCopy('000000000000000000000', 'iban')}
-                className="bg-black text-white text-[12.5px] px-3 py-1 rounded-full font-medium ml-2 btn-small"
+                onClick={() => handleCopy(bank.iban, 'iban')}
+                className="bg-black text-white text-[12.5px] px-3 py-1 rounded-full font-medium flex-shrink-0 btn-small"
               >
                 {copiedField === 'iban' ? 'copiado!' : 'copiar'}
               </button>
@@ -94,7 +115,7 @@ export default function RechargeDetail() {
 
             <div className="flex flex-col bg-gray-50 rounded-xl p-3 border border-gray-100">
               <span className="text-[12.5px] text-gray-500 font-semibold uppercase tracking-wider">nome</span>
-              <span className="text-[15px] font-bold text-gray-900">joão silva pinto</span>
+              <span className="text-[15px] font-bold text-gray-900">{bank.nome_favorecido || 'DEEPBANK LDA'}</span>
             </div>
           </div>
 
