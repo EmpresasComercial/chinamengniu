@@ -38,6 +38,15 @@ export default function RechargeList() {
     'SOL': 'https://lh3.googleusercontent.com/aida-public/AB6AXuAh4IDqjP7awRJlrCiIH2U6Op0XXDR7HQvp685HIhMQqzxKwmNnTdPmepV7hiYSciNg2qZOr0OjrxWqa5jH3_0_NiEKG8E6z_EayZ0XUSWO3c_5gdeXamKGDWJesgoLl1-0lD3uU5944iH-WjjUtuVN5AZnp-ALoYNrrTLZXvjwLrf8X1nCjyHcwcIQkpkHM-Jx1GDPl8Btv_NLsBsZIwTIVcdJJ0ME2fipRyKmbKbk4S4S37at4MnhZxqNr9ANK3z2rC4YcXxqhw'
   };
 
+  const getBankLogo = (name: string) => {
+    const uppercaseName = name.toUpperCase();
+    if (uppercaseName.includes('BAI')) return bankIcons['BAI'];
+    if (uppercaseName.includes('BIC')) return bankIcons['BIC'];
+    if (uppercaseName.includes('BFA')) return bankIcons['BFA'];
+    if (uppercaseName.includes('SOL')) return bankIcons['SOL'];
+    return bankIcons['BAI']; // Fallback
+  };
+
   const handleAdvance = () => {
     if (!amount) {
       setValidationError('por favor, digite o valor');
@@ -121,7 +130,7 @@ export default function RechargeList() {
                   />
                   <div className={`w-6 h-6 rounded-full overflow-hidden border border-gray-100 flex items-center justify-center`}>
                     <img
-                      src={bankIcons[b.nome_do_banco] || bankIcons['BAI']}
+                      src={getBankLogo(b.nome_do_banco)}
                       alt={b.nome_do_banco}
                       className="w-full h-full object-cover"
                       referrerPolicy="no-referrer"
@@ -147,10 +156,10 @@ export default function RechargeList() {
           <AnimatePresence>
             {validationError && (
               <motion.div
-                initial={{ opacity: 0, scale: 0.9, x: '-50%', y: '-50%' }}
+                initial={{ opacity: 0, scale: 0.8, x: '-50%', y: '-50%' }}
                 animate={{ opacity: 1, scale: 1, x: '-50%', y: '-50%' }}
-                exit={{ opacity: 0, scale: 0.9, x: '-50%', y: '-50%' }}
-                className="fixed top-1/2 left-1/2 bg-black/80 text-white px-6 py-3 rounded-xl text-[12.5px] font-medium shadow-2xl z-[100] text-center min-w-[280px]"
+                exit={{ opacity: 0, scale: 0.8, x: '-50%', y: '-50%' }}
+                className="fixed top-1/2 left-1/2 bg-black/80 backdrop-blur-md text-white px-8 py-4 rounded-2xl text-[14px] font-bold shadow-2xl z-[100] text-center min-w-[280px] border border-white/10"
               >
                 {validationError}
               </motion.div>

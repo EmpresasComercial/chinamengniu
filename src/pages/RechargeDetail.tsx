@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import { ChevronLeft, Check } from 'lucide-react';
 import { useNavigate, useLocation } from 'react-router-dom';
+import { motion, AnimatePresence } from 'motion/react';
 import { useLoading } from '../contexts/LoadingContext';
 import { supabase } from '../lib/supabase';
 import { useAuth } from '../contexts/AuthContext';
@@ -25,10 +26,17 @@ export default function RechargeDetail() {
 
   const [copiedField, setCopiedField] = useState<string | null>(null);
   const [confirmed, setConfirmed] = useState(false);
+  const [notification, setNotification] = useState<string | null>(null);
+
+  const showNotification = (msg: string) => {
+    setNotification(msg);
+    setTimeout(() => setNotification(null), 3000);
+  };
 
   const handleCopy = (text: string, field: string) => {
     navigator.clipboard.writeText(text);
     setCopiedField(field);
+    showNotification(`Copiado: ${field === 'amount' ? 'Valor' : 'IBAN'}`);
     setTimeout(() => setCopiedField(null), 2000);
   };
 
@@ -43,6 +51,15 @@ export default function RechargeDetail() {
     'BIC': 'https://lh3.googleusercontent.com/aida-public/AB6AXuAIIrIpIy7O9QhQzc9I73Rauw8CA6XeqPLIiI2TMPgn4tW3aQpHXVg7PyB00nTxHsRfuMe-YTFblWIq1KGIz4TAud7xX7SgLNPpe_LkhUyKb08N3IVFyIGUBgH4AcxuL9jf8edRdQi0Z7Z7y-UD2i_Fs__BCIxogbxvXMMQYEhLvpMyRTHS02QXf3A5nncLsrHtRDQ1-4fHUf3UXXyB_pwK8kz7H3AIUWG51ZcJF3x5lL6NuDJz6OPaZzElu-HItGu1MURd54-U5Q',
     'BFA': 'https://lh3.googleusercontent.com/aida-public/AB6AXuBGhX8jKBfzNurF3wgrLdxOQDTwjGBAFwOg2-VwZmnttyd3yaHRRSrJkKJrRFRA1wz2LgpyvME6WpHqjCxA9TK8y-8DBE3I72y1w0a4wtY8mvggDLn4tKJhDGjCkDz44eF0-ZiY2zsGUqVkqGR9tvLfQ_JEWE0cgMZySLweK0VqNxGlymFwA3oweY9s88J6lDjL8iJMR1OFdVrDAaCvcTXQSV0y9kB848CPMk_0wpMiuL63Potit2yXy_3F50qQcb-Tyam9oY4NvQ',
     'SOL': 'https://lh3.googleusercontent.com/aida-public/AB6AXuAh4IDqjP7awRJlrCiIH2U6Op0XXDR7HQvp685HIhMQqzxKwmNnTdPmepV7hiYSciNg2qZOr0OjrxWqa5jH3_0_NiEKG8E6z_EayZ0XUSWO3c_5gdeXamKGDWJesgoLl1-0lD3uU5944iH-WjjUtuVN5AZnp-ALoYNrrTLZXvjwLrf8X1nCjyHcwcIQkpkHM-Jx1GDPl8Btv_NLsBsZIwTIVcdJJ0ME2fipRyKmbKbk4S4S37at4MnhZxqNr9ANK3z2rC4YcXxqhw'
+  };
+
+  const getBankLogo = (name: string) => {
+    const uppercaseName = name.toUpperCase();
+    if (uppercaseName.includes('BAI')) return bankIcons['BAI'];
+    if (uppercaseName.includes('BIC')) return bankIcons['BIC'];
+    if (uppercaseName.includes('BFA')) return bankIcons['BFA'];
+    if (uppercaseName.includes('SOL')) return bankIcons['SOL'];
+    return bankIcons['BAI']; // Fallback
   };
 
   const handleConfirm = async () => {
@@ -61,13 +78,14 @@ export default function RechargeDetail() {
     // Handle the RPC response (typically returns JSON with success/message)
     if (!rpcError && (rpcData?.success || rpcData)) {
       setConfirmed(true);
+      showNotification('Depósito solicitado com sucesso!');
       setTimeout(() => {
         setConfirmed(false);
         navigate('/detalhes');
       }, 3000);
     } else {
       const errorMsg = rpcError?.message || rpcData?.message || 'Erro ao processar depósito. Tente novamente.';
-      alert(errorMsg);
+      showNotification(errorMsg);
     }
   };
 
@@ -89,7 +107,7 @@ export default function RechargeDetail() {
             <img
               alt={`${bank.nome_do_banco} Icon`}
               className="rounded-full w-8 h-8 object-cover"
-              src={bankIcons[bank.nome_do_banco] || bankIcons['BAI']}
+              src={getBankLogo(bank.nome_do_banco)}
               referrerPolicy="no-referrer"
             />
             <span className="font-bold text-[15px] text-gray-800">selecionado/{bank.nome_do_banco}</span>
@@ -150,6 +168,20 @@ export default function RechargeDetail() {
           </div>
         </section>
       </main>
+
+      {/* Centralized Notification */}
+      <AnimatePresence>
+        {notification && (
+          <motion.div
+            initial={{ opacity: 0, scale: 0.8, x: '-50%', y: '-50%' }}
+            animate={{ opacity: 1, scale: 1, x: '-50%', y: '-50%' }}
+            exit={{ opacity: 0, scale: 0.8, x: '-50%', y: '-50%' }}
+            className="fixed top-1/2 left-1/2 bg-black/80 backdrop-blur-md text-white px-8 py-4 rounded-2xl text-[14px] font-bold shadow-2xl z-[100] text-center min-w-[280px] border border-white/10"
+          >
+            {notification}
+          </motion.div>
+        )}
+      </AnimatePresence>
     </div>
   );
 }
