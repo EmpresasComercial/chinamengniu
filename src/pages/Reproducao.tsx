@@ -16,27 +16,37 @@ export default function Reproducao() {
     async function fetchPurchases() {
       if (!user) return;
 
-      const { data, error } = await supabase
+      // Primeiro buscamos todos os produtos para ter as imagens corretas
+      const { data: productsData } = await supabase
+        .from('products')
+        .select('name, image_url');
+
+      const { data: historyData, error } = await supabase
         .from('historico_compras')
-        .select(`
-          *,
-          product:products(image_url)
-        `)
+        .select('*')
         .eq('user_id', user.id)
         .order('data_compra', { ascending: false });
 
-      if (!error && data) {
-        const formattedData = data.map((item: any) => ({
-          ...item,
-          image_url: item.image_url || (item.product ? item.product.image_url : null)
-        }));
+      if (error) {
+        console.error('Error fetching history:', error);
+        return;
+      }
+
+      if (historyData) {
+        const formattedData = historyData.map((item: any) => {
+          // Tenta encontrar a imagem do produto correspondente pelo nome
+          const product = productsData?.find(p => p.name === item.nome_produto);
+          return {
+            ...item,
+            image_url: product?.image_url || 'https://png.pngtree.com/png-clipart/20240615/original/pngtree-a-black-and-white-cow-with-tranparent-background-png-image_15340862.png'
+          };
+        });
         setPurchases(formattedData);
       }
     }
 
     fetchPurchases();
 
-    // Set up realtime channel for updates
     const channel = supabase.channel('realtime_purchases')
       .on('postgres_changes', {
         event: '*',
@@ -71,7 +81,7 @@ export default function Reproducao() {
           loading="lazy"
         />
         <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/60 to-transparent p-4">
-          <h2 className="text-[15px] font-bold">alimentação inteligente</h2>
+          <h2 className="text-[15px] font-bold uppercase tracking-tight">alimentação inteligente</h2>
           <p className="text-[10px] text-gray-200">criação inteligente, segura e robusta</p>
         </div>
 
@@ -112,7 +122,7 @@ export default function Reproducao() {
         </div>
         <div className="col-span-2 mt-2">
           <p className="text-[10px] text-gray-300">Horário de reinicialização da alimentação</p>
-          <p className="text-[15px] font-bold">Reinicialização concluída</p>
+          <p className="text-[15px] font-bold uppercase">Reinicialização concluída</p>
         </div>
       </section>
 
@@ -120,64 +130,65 @@ export default function Reproducao() {
       <section className="grid grid-cols-2 gap-3 mb-8">
         <button
           onClick={() => navigate('/transferencia-de-fundos')}
-          className="bg-[#D2F076] text-black rounded-lg p-4 flex items-center justify-between text-left font-medium leading-tight h-[45px]"
+          className="bg-[#D2F076] text-black rounded-lg p-4 flex items-center justify-between text-left font-black uppercase leading-[1] h-[45px] shadow-lg shadow-black/20"
         >
-          <span className="text-[12.5px]">trocar saldo</span>
+          <span className="text-[12px]">trocar saldo</span>
           <ArrowLeftRight className="w-5 h-5" />
         </button>
         <button
           onClick={handleStart}
-          className="bg-[#D2F076] text-black rounded-lg p-4 flex items-center justify-between text-left font-medium leading-tight h-[45px]"
+          className="bg-[#D2F076] text-black rounded-lg p-4 flex items-center justify-between text-left font-black uppercase leading-[1] h-[45px] shadow-lg shadow-black/20"
         >
-          <span className="text-[12.5px]">Comece agora</span>
+          <span className="text-[12px]">Comece agora</span>
           <Play className="w-5 h-5 fill-current" />
         </button>
       </section>
 
 
       {/* History Section */}
-      <section className="bg-[#E5E7EB] rounded-t-[2.5rem] p-6 -mx-4 flex-grow min-h-[300px]">
-        <div className="flex justify-between items-center mb-4">
-          <h3 className="text-[#00008B] font-bold text-[15px]">Registros históricos</h3>
-          <button className="text-blue-600 text-[12.5px]">Veja mais</button>
+      <section className="bg-[#EBF1FF] rounded-t-[2.5rem] p-8 -mx-4 flex-grow min-h-[400px]">
+        <div className="flex justify-between items-center mb-6">
+          <h3 className="text-[#000080] font-black text-[15px] uppercase tracking-wider">Registros históricos</h3>
+          <button className="text-blue-600 text-[11px] font-bold uppercase underline">Veja mais</button>
         </div>
-        <div className="flex flex-col pt-4 space-y-3">
+
+        <div className="flex flex-col">
           {purchases.length > 0 ? (
-            <div className="grid grid-cols-2 sm:grid-cols-3 gap-6 pt-4">
+            <div className="grid grid-cols-3 gap-x-2 gap-y-8 pt-2">
               {purchases.map((item) => (
                 <div key={item.id} className="flex flex-col items-center text-center font-serif">
-                  {/* Imagem do Produto no Topo */}
-                  <div className="w-24 h-24 mb-3 flex items-center justify-center">
+                  {/* Imagem do Animal - Tamanho reduzido para 50px conforme solicitado */}
+                  <div className="w-[50px] h-[50px] mb-2 flex items-center justify-center relative">
                     <img
                       alt={item.nome_produto}
-                      className="w-full h-full object-contain drop-shadow-sm"
-                      src={item.image_url || 'https://png.pngtree.com/png-clipart/20240615/original/pngtree-a-black-and-white-cow-with-tranparent-background-png-image_15340862.png'}
+                      className="w-full h-full object-contain drop-shadow-sm animate-walk"
+                      src={item.image_url}
                       referrerPolicy="no-referrer"
                     />
                   </div>
 
-                  {/* Nome do Produto (Uppercase) */}
-                  <h4 className="font-bold text-[18px] text-black uppercase leading-tight">
+                  {/* Nome do Animal - Uppercase conforme exemplo */}
+                  <h4 className="font-bold text-[18px] text-black uppercase leading-tight tracking-tight">
                     {item.nome_produto}
                   </h4>
 
-                  {/* Duração (Dias/X) */}
-                  <p className="text-[15px] text-black">
+                  {/* Duração - Formato Dias/X conforme exemplo */}
+                  <p className="text-[15px] text-black font-medium">
                     Dias/{item.duracao_dias}
                   </p>
                 </div>
               ))}
             </div>
           ) : (
-            <div className="flex flex-col items-center justify-center pt-6">
-              <div className="relative w-24 h-24 mb-2">
+            <div className="flex flex-col items-center justify-center pt-10">
+              <div className="w-20 h-20 mb-4 opacity-30">
                 <img
                   alt="vazio"
-                  className="w-full h-full object-contain opacity-50"
+                  className="w-full h-full object-contain"
                   src="https://www.mengniu.wang/assets/empty-image-CHCN_UjN.png"
                 />
               </div>
-              <p className="text-gray-400 text-[12.5px]">nenhum registro encontrado</p>
+              <p className="text-gray-400 text-[12px] font-bold uppercase tracking-widest">nenhum registro</p>
             </div>
           )}
         </div>
