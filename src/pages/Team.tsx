@@ -61,6 +61,24 @@ export default function Team() {
     fetchTeamData();
   }, [user]);
 
+  const isContributionTab = activeTab === 'contribution';
+  const filteredMembers = members.filter(m => {
+    const isCorrectLevel = m.level === selectedLevel;
+    if (!isCorrectLevel) return false;
+
+    if (isContributionTab) {
+      return Number(m.reloaded_amount) >= 9000;
+    }
+    return true; // Show all for 'members' tab
+  });
+
+  const todayRegsInLevel = members.filter(m => {
+    const isCorrectLevel = m.level === selectedLevel;
+    const regDate = m.created_at || m.registration_date;
+    const isToday = regDate && regDate.startsWith(new Date().toISOString().split('T')[0]);
+    return isCorrectLevel && isToday;
+  }).length;
+
   const handleTabChange = (tab: 'members' | 'contribution') => {
     setIsLoading(true);
     setTimeout(() => {
@@ -68,12 +86,6 @@ export default function Team() {
       setIsLoading(false);
     }, 500);
   };
-
-  const filteredMembers = members.filter(m => m.level === selectedLevel);
-  const todayRegsInLevel = filteredMembers.filter(m => {
-    const regDate = m.created_at || m.registration_date;
-    return regDate && regDate.startsWith(new Date().toISOString().split('T')[0]);
-  }).length;
 
   return (
     <div className="flex flex-col min-h-screen bg-[#E5E9F2]">
@@ -128,94 +140,85 @@ export default function Team() {
           </button>
         </nav>
 
-        {activeTab === 'members' ? (
-          <>
-            {/* Filters */}
-            <div className="flex justify-between items-center px-1 text-[12.5px]">
-              <div className="text-[#4A5568]">
-                novos cadastros hoje <span className="text-[#4A5568] ml-1">{todayRegsInLevel}</span>
-              </div>
-              <div
-                className="flex items-center text-[#4A5568] cursor-pointer relative"
-                onClick={() => setShowLevelPicker(!showLevelPicker)}
-              >
-                nível {selectedLevel}
-                <ChevronDown className="h-3 w-3 ml-1" />
-
-                {showLevelPicker && (
-                  <div className="absolute top-full right-0 mt-2 bg-white shadow-xl rounded-lg py-2 w-24 z-[100] border border-gray-100">
-                    {[1, 2, 3].map(lvl => (
-                      <div
-                        key={lvl}
-                        className={`px-4 py-2 hover:bg-gray-50 ${selectedLevel === lvl ? 'text-blue-600 font-bold' : ''}`}
-                        onClick={(e) => {
-                          e.stopPropagation();
-                          setSelectedLevel(lvl);
-                          setShowLevelPicker(false);
-                        }}
-                      >
-                        Nível {lvl}
-                      </div>
-                    ))}
-                  </div>
-                )}
-              </div>
+        {/* List Section (Used by both tabs) */}
+        <div className="space-y-4">
+          {/* Filters */}
+          <div className="flex justify-between items-center px-1 text-[12.5px]">
+            <div className="text-[#4A5568]">
+              {activeTab === 'members' ? 'novos cadastros hoje' : 'contribuidores qualificados'}
+              <span className="text-[#4A5568] ml-1">
+                {activeTab === 'members' ? todayRegsInLevel : filteredMembers.length}
+              </span>
             </div>
+            <div
+              className="flex items-center text-[#4A5568] cursor-pointer relative"
+              onClick={() => setShowLevelPicker(!showLevelPicker)}
+            >
+              nível {selectedLevel}
+              <ChevronDown className="h-3 w-3 ml-1" />
 
-            {/* List Container */}
-            <div className="space-y-2">
-              {/* Table Header */}
-              <div className="bg-white rounded-lg py-3 px-4 grid grid-cols-3 text-center text-[12.5px] font-medium text-gray-700 shadow-sm">
-                <div>conta</div>
-                <div>nota</div>
-                <div>período</div>
-              </div>
-
-              {/* Members List */}
-              {filteredMembers.length > 0 ? (
-                filteredMembers.map((member, idx) => (
-                  <div key={idx} className="bg-white rounded-lg py-4 px-4 grid grid-cols-3 text-center text-[11px] text-gray-600 shadow-sm items-center">
-                    <div className="font-mono">
-                      {member.phone ? `${member.phone.substring(0, 3)}****${member.phone.substring(member.phone.length - 3)}` : '---'}
+              {showLevelPicker && (
+                <div className="absolute top-full right-0 mt-2 bg-white shadow-xl rounded-lg py-2 w-24 z-[100] border border-gray-100">
+                  {[1, 2, 3].map(lvl => (
+                    <div
+                      key={lvl}
+                      className={`px-4 py-2 hover:bg-gray-50 ${selectedLevel === lvl ? 'text-blue-600 font-bold' : ''}`}
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        setSelectedLevel(lvl);
+                        setShowLevelPicker(false);
+                      }}
+                    >
+                      Nível {lvl}
                     </div>
-                    <div>
-                      <span className="bg-blue-50 text-blue-600 px-2 py-0.5 rounded text-[10px]">L{member.level}</span>
-                    </div>
-                    <div className="text-[10px]">
-                      {new Date(member.created_at || member.registration_date).toLocaleDateString()}
-                    </div>
-                  </div>
-                ))
-              ) : (
-                /* Empty State */
-                <div className="bg-white rounded-[1.5rem] flex flex-col items-center justify-center p-8 shadow-sm min-h-[250px]">
-                  <div className="relative w-32 h-32 mb-4">
-                    <img
-                      alt="vazio"
-                      className="w-full h-full object-contain opacity-40 text-gray-300"
-                      src="https://www.mengniu.wang/assets/empty-image-CHCN_UjN.png"
-                    />
-                  </div>
-                  <p className="text-gray-400 text-[12.5px]">vazio</p>
+                  ))}
                 </div>
               )}
             </div>
-          </>
-        ) : (
-          <div className="space-y-4">
-            {/* Contribution Content - For now empty as per current design */}
-            <div className="bg-white rounded-[1.5rem] flex flex-col items-center justify-center p-8 shadow-sm min-h-[350px]">
-              <div className="relative w-32 h-32 mb-4">
-                <img
-                  alt="vazio"
-                  className="w-full h-full object-contain opacity-40 text-gray-300"
-                  src="https://www.mengniu.wang/assets/empty-image-CHCN_UjN.png"
-                />
-              </div>
-              <p className="text-gray-400 text-[12.5px]">nenhuma contribuição registrada</p>
-            </div>
           </div>
-        )}
+
+          {/* List Container */}
+          <div className="space-y-2">
+            {/* Table Header */}
+            <div className="bg-white rounded-lg py-3 px-4 grid grid-cols-3 text-center text-[12.5px] font-medium text-gray-700 shadow-sm">
+              <div>conta</div>
+              <div>nota</div>
+              <div>{activeTab === 'members' ? 'período' : 'investimento'}</div>
+            </div>
+
+            {/* Members List */}
+            {filteredMembers.length > 0 ? (
+              filteredMembers.map((member, idx) => (
+                <div key={idx} className="bg-white rounded-lg py-4 px-4 grid grid-cols-3 text-center text-[11px] text-gray-600 shadow-sm items-center">
+                  <div className="font-mono">
+                    {member.phone ? `${member.phone.substring(0, 3)}****${member.phone.substring(member.phone.length - 3)}` : '---'}
+                  </div>
+                  <div>
+                    <span className="bg-blue-50 text-blue-600 px-2 py-0.5 rounded text-[10px]">L{member.level}</span>
+                  </div>
+                  <div className={activeTab === 'members' ? "text-[10px]" : "text-[10px] font-bold text-blue-700"}>
+                    {activeTab === 'members'
+                      ? new Date(member.created_at || member.registration_date).toLocaleDateString()
+                      : `${Number(member.reloaded_amount).toLocaleString('pt-AO')} Kz`
+                    }
+                  </div>
+                </div>
+              ))
+            ) : (
+              /* Empty State */
+              <div className="bg-white rounded-[1.5rem] flex flex-col items-center justify-center p-8 shadow-sm min-h-[250px]">
+                <div className="relative w-32 h-32 mb-4">
+                  <img
+                    alt="vazio"
+                    className="w-full h-full object-contain opacity-40 text-gray-300"
+                    src="https://www.mengniu.wang/assets/empty-image-CHCN_UjN.png"
+                  />
+                </div>
+                <p className="text-gray-400 text-[12.5px]">vazio</p>
+              </div>
+            )}
+          </div>
+        </div>
       </main>
     </div>
   );
