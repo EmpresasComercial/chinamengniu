@@ -30,17 +30,12 @@ export const LoadingProvider = ({ children }: { children: ReactNode }) => {
     <LoadingContext.Provider value={{ isLoading, showLoading, hideLoading, setIsLoading }}>
       {children}
       {isLoading && (
-        <div className="fixed inset-0 z-[9999] flex flex-col items-center justify-center bg-black/20 backdrop-blur-[2px]">
-          <div className="bg-white rounded-2xl px-8 py-5 flex flex-col items-center gap-3 shadow-xl">
-            <div className="spinner spinner-dark"></div>
-            <p className="text-[12.5px] text-gray-600 font-medium">
-              {isSlow ? 'Aguarde, carregando dados...' : 'A carregar...'}
+        <div className="fixed inset-0 z-[9999] flex flex-col items-center justify-center bg-black/5 backdrop-blur-[1px]">
+          <div className="flex flex-col items-center gap-2">
+            <div className="spinner spinner-dark !w-6 !h-6 !border-[2.5px]"></div>
+            <p className="text-[12px] text-[#0000a0] font-bold uppercase tracking-wider opacity-80">
+              {isSlow ? 'Carregando dados...' : 'A carregar...'}
             </p>
-            {isSlow && (
-              <p className="text-[11px] text-gray-400 text-center max-w-[200px]">
-                Este conteúdo pode demorar alguns segundos.
-              </p>
-            )}
           </div>
         </div>
       )}
