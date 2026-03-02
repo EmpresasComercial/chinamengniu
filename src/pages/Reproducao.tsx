@@ -10,33 +10,7 @@ export default function Reproducao() {
   const { setIsLoading } = useLoading();
   const { user } = useAuth();
   const [purchases, setPurchases] = useState<any[]>([]);
-  const [teamStats, setTeamStats] = useState<[number, number][]>([[0, 0], [0, 0], [0, 0]]);
-  const [levelInvestment, setLevelInvestment] = useState<number[]>([0, 0, 0]);
 
-  useEffect(() => {
-    async function fetchTeamStats() {
-      if (!user) return;
-      const { data, error } = await supabase.rpc('get_my_team');
-      if (!error && data) {
-        const members = data as { level: number; reloaded_amount: number }[];
-        const stats: [number, number][] = [1, 2, 3].map(lvl => {
-          const lvlMembers = members.filter(m => m.level === lvl);
-          const activatedCount = lvlMembers.filter(m => {
-            const amount = Number(m.reloaded_amount);
-            // Threshold of 9000 for level 3 as requested
-            return lvl === 3 ? amount >= 9000 : amount > 0;
-          }).length;
-          return [lvlMembers.length, activatedCount];
-        });
-        const investments = [1, 2, 3].map(lvl =>
-          members.filter(m => m.level === lvl).reduce((sum, m) => sum + Number(m.reloaded_amount), 0)
-        );
-        setTeamStats(stats);
-        setLevelInvestment(investments);
-      }
-    }
-    fetchTeamStats();
-  }, [user]);
 
   useEffect(() => {
     async function fetchPurchases() {
@@ -152,21 +126,6 @@ export default function Reproducao() {
         </button>
       </section>
 
-      {/* Team Stats - Simplified */}
-      <section className="space-y-4 mb-8 px-1">
-        {[1, 2, 3].map((num) => (
-          <div key={num} className="grid grid-cols-2 text-[12.5px] border-b border-white/10 pb-2">
-            <div>
-              <p className="opacity-70">Nível {num} /Vinculado</p>
-              <p className="font-bold">{teamStats[num - 1][0]}/{teamStats[num - 1][1]}</p>
-            </div>
-            <div className="text-right">
-              <p className="opacity-70 mt-4">Total investimento</p>
-              <p className="font-bold">{levelInvestment[num - 1].toLocaleString('pt-AO')} Kz</p>
-            </div>
-          </div>
-        ))}
-      </section>
 
       {/* History Section */}
       <section className="bg-[#E5E7EB] rounded-t-[2.5rem] p-6 -mx-4 flex-grow min-h-[300px]">

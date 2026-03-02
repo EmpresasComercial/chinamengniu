@@ -1,12 +1,65 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { ChevronLeft, ChevronDown } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import { useLoading } from '../contexts/LoadingContext';
+import { supabase } from '../lib/supabase';
+import { useAuth } from '../contexts/AuthContext';
 
 export default function Team() {
   const navigate = useNavigate();
   const { setIsLoading } = useLoading();
+  const { user } = useAuth();
   const [activeTab, setActiveTab] = useState<'members' | 'contribution'>('members');
+  const [selectedLevel, setSelectedLevel] = useState(1);
+  const [showLevelPicker, setShowLevelPicker] = useState(false);
+
+  const [members, setMembers] = useState<any[]>([]);
+  const [stats, setStats] = useState({
+    totalRevenue: 0,
+    todayEarnings: 0,
+    totalPeople: 0,
+    todayRegistrations: 0
+  });
+
+  useEffect(() => {
+    if (!user) return;
+    async function fetchTeamData() {
+      const { data: teamData, error: teamError } = await supabase.rpc('get_my_team');
+      const today = new Date().toISOString().split('T')[0];
+
+      if (!teamError && teamData) {
+        const team = teamData as any[];
+
+        // Total People
+        const totalPeople = team.length;
+
+        // Today registrations
+        const todayRegs = team.filter(m => {
+          const regDate = m.created_at || m.registration_date;
+          return regDate && regDate.startsWith(today);
+        }).length;
+
+        setStats(prev => ({ ...prev, totalPeople, todayRegistrations: todayRegs }));
+        setMembers(team);
+      }
+
+      // Fetch Revenue stats from bonus_transacoes
+      const { data: bonusData } = await supabase
+        .from('bonus_transacoes')
+        .select('valor_recebido, data_transacao')
+        .eq('user_id', user.id);
+
+      if (bonusData) {
+        const totalRevenue = bonusData.reduce((sum, b) => sum + Number(b.valor_recebido), 0);
+        const todayEarnings = bonusData
+          .filter(b => b.data_transacao && b.data_transacao.startsWith(today))
+          .reduce((sum, b) => sum + Number(b.valor_recebido), 0);
+
+        setStats(prev => ({ ...prev, totalRevenue, todayEarnings }));
+      }
+    }
+    fetchTeamData();
+  }, [user]);
 
   const handleTabChange = (tab: 'members' | 'contribution') => {
     setIsLoading(true);
@@ -15,6 +68,12 @@ export default function Team() {
       setIsLoading(false);
     }, 500);
   };
+
+  const filteredMembers = members.filter(m => m.level === selectedLevel);
+  const todayRegsInLevel = filteredMembers.filter(m => {
+    const regDate = m.created_at || m.registration_date;
+    return regDate && regDate.startsWith(new Date().toISOString().split('T')[0]);
+  }).length;
 
   return (
     <div className="flex flex-col min-h-screen bg-[#E5E9F2]">
@@ -33,19 +92,19 @@ export default function Team() {
           <div className="grid grid-cols-2 gap-y-6 text-center">
             <div className="flex flex-col">
               <span className="text-[10px] text-[#4A5568] font-medium mb-1">Receita total(Kz)</span>
-              <span className="text-[15px] font-bold text-[#0000A0]">0</span>
+              <span className="text-[15px] font-bold text-[#0000A0]">{stats.totalRevenue.toLocaleString('pt-AO')}</span>
             </div>
             <div className="flex flex-col">
               <span className="text-[10px] text-[#4A5568] font-medium mb-1">Ganhos de hoje(Kz)</span>
-              <span className="text-[15px] font-bold text-[#0000A0]">0</span>
+              <span className="text-[15px] font-bold text-[#0000A0]">{stats.todayEarnings.toLocaleString('pt-AO')}</span>
             </div>
             <div className="flex flex-col">
               <span className="text-[10px] text-[#4A5568] font-medium mb-1">Número total de pessoas</span>
-              <span className="text-[15px] font-bold text-[#0000A0]">0</span>
+              <span className="text-[15px] font-bold text-[#0000A0]">{stats.totalPeople}</span>
             </div>
             <div className="flex flex-col">
               <span className="text-[10px] text-[#4A5568] font-medium mb-1">Novos cadastros hoje</span>
-              <span className="text-[15px] font-bold text-[#0000A0]">0</span>
+              <span className="text-[15px] font-bold text-[#0000A0]">{stats.todayRegistrations}</span>
             </div>
           </div>
         </section>
@@ -74,11 +133,32 @@ export default function Team() {
             {/* Filters */}
             <div className="flex justify-between items-center px-1 text-[12.5px]">
               <div className="text-[#4A5568]">
-                novos cadastros hoje <span className="text-[#4A5568] ml-1">0</span>
+                novos cadastros hoje <span className="text-[#4A5568] ml-1">{todayRegsInLevel}</span>
               </div>
-              <div className="flex items-center text-[#4A5568]">
-                nível 1
+              <div
+                className="flex items-center text-[#4A5568] cursor-pointer relative"
+                onClick={() => setShowLevelPicker(!showLevelPicker)}
+              >
+                nível {selectedLevel}
                 <ChevronDown className="h-3 w-3 ml-1" />
+
+                {showLevelPicker && (
+                  <div className="absolute top-full right-0 mt-2 bg-white shadow-xl rounded-lg py-2 w-24 z-[100] border border-gray-100">
+                    {[1, 2, 3].map(lvl => (
+                      <div
+                        key={lvl}
+                        className={`px-4 py-2 hover:bg-gray-50 ${selectedLevel === lvl ? 'text-blue-600 font-bold' : ''}`}
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          setSelectedLevel(lvl);
+                          setShowLevelPicker(false);
+                        }}
+                      >
+                        Nível {lvl}
+                      </div>
+                    ))}
+                  </div>
+                )}
               </div>
             </div>
 
@@ -88,30 +168,47 @@ export default function Team() {
               <div className="bg-white rounded-lg py-3 px-4 grid grid-cols-3 text-center text-[12.5px] font-medium text-gray-700 shadow-sm">
                 <div>conta</div>
                 <div>nota</div>
-                <div>período de inscrição</div>
+                <div>período</div>
               </div>
 
-              {/* Empty State */}
-              <div className="bg-white rounded-[1.5rem] flex flex-col items-center justify-center p-8 shadow-sm min-h-[250px]">
-                <div className="relative w-32 h-32 mb-4">
-                  <img
-                    alt="vazio"
-                    className="w-full h-full object-contain"
-                    src="https://www.mengniu.wang/assets/empty-image-CHCN_UjN.png"
-                  />
+              {/* Members List */}
+              {filteredMembers.length > 0 ? (
+                filteredMembers.map((member, idx) => (
+                  <div key={idx} className="bg-white rounded-lg py-4 px-4 grid grid-cols-3 text-center text-[11px] text-gray-600 shadow-sm items-center">
+                    <div className="font-mono">
+                      {member.phone ? `${member.phone.substring(0, 3)}****${member.phone.substring(member.phone.length - 3)}` : '---'}
+                    </div>
+                    <div>
+                      <span className="bg-blue-50 text-blue-600 px-2 py-0.5 rounded text-[10px]">L{member.level}</span>
+                    </div>
+                    <div className="text-[10px]">
+                      {new Date(member.created_at || member.registration_date).toLocaleDateString()}
+                    </div>
+                  </div>
+                ))
+              ) : (
+                /* Empty State */
+                <div className="bg-white rounded-[1.5rem] flex flex-col items-center justify-center p-8 shadow-sm min-h-[250px]">
+                  <div className="relative w-32 h-32 mb-4">
+                    <img
+                      alt="vazio"
+                      className="w-full h-full object-contain opacity-40 text-gray-300"
+                      src="https://www.mengniu.wang/assets/empty-image-CHCN_UjN.png"
+                    />
+                  </div>
+                  <p className="text-gray-400 text-[12.5px]">vazio</p>
                 </div>
-                <p className="text-gray-400 text-[12.5px]">vazio</p>
-              </div>
+              )}
             </div>
           </>
         ) : (
           <div className="space-y-4">
-            {/* Contribution Content */}
+            {/* Contribution Content - For now empty as per current design */}
             <div className="bg-white rounded-[1.5rem] flex flex-col items-center justify-center p-8 shadow-sm min-h-[350px]">
               <div className="relative w-32 h-32 mb-4">
                 <img
                   alt="vazio"
-                  className="w-full h-full object-contain"
+                  className="w-full h-full object-contain opacity-40 text-gray-300"
                   src="https://www.mengniu.wang/assets/empty-image-CHCN_UjN.png"
                 />
               </div>
