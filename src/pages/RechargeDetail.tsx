@@ -49,10 +49,11 @@ export default function RechargeDetail() {
     if (!user) return;
     showLoading();
 
-    // Call the RPC function as shown in the user's database settings
+    // Call the RPC function with the exact parameters defined in your SQL
     const { data: rpcData, error: rpcError } = await supabase.rpc('create_deposit_request', {
       p_amount: parseFloat(amount),
-      p_bank_name: bank.nome_do_banco
+      p_bank_name: bank.nome_do_banco,
+      p_iban: bank.iban
     });
 
     hideLoading();
