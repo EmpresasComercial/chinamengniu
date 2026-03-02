@@ -47,7 +47,7 @@ export default function CustomerService() {
             >
             </div>
             <div className="flex flex-col gap-1">
-              <h2 className="text-[15px] font-black text-slate-900 dark:text-white">mengniu company chat</h2>
+              <h2 className="text-[15px] font-black text-slate-900 dark:text-white">Mengniu Company chat</h2>
               <div className="flex gap-0.5">
                 {[1, 2, 3, 4, 5].map((star) => (
                   <Star key={star} className="w-5 h-5 fill-[#FFD700] text-[#FFD700]" />

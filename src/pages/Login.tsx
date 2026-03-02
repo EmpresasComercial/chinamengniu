@@ -62,12 +62,12 @@ export default function Login() {
           <div className="flex flex-col items-center">
             <div className="w-16 h-16 bg-white rounded-xl flex items-center justify-center p-2 mb-2 shadow-lg">
               <img
-                alt="mengniu company logo"
+                alt="Mengniu Company logo"
                 className="w-full h-full object-contain"
                 src="https://s3-symbol-logo.tradingview.com/mengniu-dairy--600.png"
               />
             </div>
-            <h1 className="text-white text-2xl font-bold tracking-wide">mengniu company</h1>
+            <h1 className="text-white text-2xl font-bold tracking-wide">Mengniu Company</h1>
           </div>
         </header>
         {/* END: TopHeader */}

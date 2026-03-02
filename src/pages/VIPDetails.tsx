@@ -77,7 +77,7 @@ export default function VIPDetails() {
 
         {/* Footer Spacing */}
         <div className="py-10 text-center text-slate-400 text-[12.5px]">
-          "certifique que possui saldo suficiente para comprar esse animal, caso contrário, por favor entre em contacto com o seu gestor para fazer depósito/transferência para recarregar a sua conta mengniu company!"
+          "certifique que possui saldo suficiente para comprar esse animal, caso contrário, por favor entre em contacto com o seu gestor para fazer depósito/transferência para recarregar a sua conta Mengniu Company!"
         </div>
       </main>
     </div>

@@ -33,7 +33,7 @@ export default function Profile() {
         <div className="flex items-center space-x-3 mb-2">
           <div className="w-12 h-12 rounded-full bg-white flex items-center justify-center overflow-hidden">
             <img
-              alt="mengniu company logo"
+              alt="Mengniu Company logo"
               className="w-full h-full object-contain p-1"
               src="https://s3-symbol-logo.tradingview.com/mengniu-dairy--600.png"
             />

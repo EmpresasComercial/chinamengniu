@@ -22,7 +22,7 @@ export default function RechargeHelp() {
 
           {/* Subtitle */}
           <h2 className="text-[0.95rem] font-medium mb-4 text-[#1a365d] opacity-80">
-            como investir na mengniu company
+            como investir na Mengniu Company
           </h2>
 
           {/* Instructions List */}

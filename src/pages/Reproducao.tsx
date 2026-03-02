@@ -31,7 +31,7 @@ export default function Reproducao() {
         <div className="absolute top-3 left-3 bg-white/20 backdrop-blur-sm rounded-full px-3 py-1 flex items-center gap-2">
           <div className="w-6 h-6 bg-white rounded-full flex items-center justify-center overflow-hidden p-1">
             <img
-              alt="mengniu company logo"
+              alt="Mengniu Company logo"
               className="w-full h-full object-contain"
               src="https://s3-symbol-logo.tradingview.com/mengniu-dairy--600.png"
               referrerPolicy="no-referrer"

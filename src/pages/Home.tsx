@@ -30,12 +30,12 @@ export default function Home() {
           <div className="flex items-center gap-2">
             <div className="w-8 h-8 bg-white rounded-md flex items-center justify-center p-1">
               <img
-                alt="mengniu company logo"
+                alt="Mengniu Company logo"
                 className="w-full h-full object-contain"
                 src="https://s3-symbol-logo.tradingview.com/mengniu-dairy--600.png"
               />
             </div>
-            <span className="text-white font-bold text-lg">mengniu company</span>
+            <span className="text-white font-bold text-lg">Mengniu Company</span>
           </div>
           <div className="flex gap-2">
             <div className="w-8 h-8 rounded-full bg-white/10 flex items-center justify-center">

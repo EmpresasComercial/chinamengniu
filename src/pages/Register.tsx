@@ -78,12 +78,12 @@ export default function Register() {
         <div className="relative z-10 flex flex-col items-center">
           <div className="w-16 h-16 bg-white rounded-xl flex items-center justify-center mb-2 shadow-lg p-2">
             <img
-              alt="mengniu company logo"
+              alt="Mengniu Company logo"
               className="w-full h-full object-contain"
               src="https://s3-symbol-logo.tradingview.com/mengniu-dairy--600.png"
             />
           </div>
-          <h1 className="text-white text-2xl font-semibold tracking-tight">mengniu company</h1>
+          <h1 className="text-white text-2xl font-semibold tracking-tight">Mengniu Company</h1>
         </div>
       </header>
       {/* END: Header */}

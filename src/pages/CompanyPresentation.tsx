@@ -27,7 +27,7 @@ export default function CompanyPresentation() {
         <div className="bg-white rounded-[24px] shadow-sm p-6 w-full mx-auto">
           <article className="text-[#333333] text-[12.5px] leading-[1.6] text-justify hyphens-none break-keep">
             <p className="mb-4">
-              bem-vindo a mengniu company. somos uma plataforma digital de operação e manutenção de criação estabelecida em cingapura. atualmente estamos recrutando parceiros de criação online. construímos um sistema de serviço completo de "adoção - alimentação - manejo - renda". rompendo os pontos problemáticos de alto limiar, alto risco e baixa eficiência da criação tradicional, o modelo "internet + criação física" permite que pessoas comuns participem facilmente na criação de gado de corte e vacas leiteiras e compartilhem os dividendos da indústria.
+              bem-vindo a Mengniu Company. somos uma plataforma digital de operação e manutenção de criação estabelecida em cingapura. atualmente estamos recrutando parceiros de criação online. construímos um sistema de serviço completo de "adoção - alimentação - manejo - renda". rompendo os pontos problemáticos de alto limiar, alto risco e baixa eficiência da criação tradicional, o modelo "internet + criação física" permite que pessoas comuns participem facilmente na criação de gado de corte e vacas leiteiras e compartilhem os dividendos da indústria.
             </p>
             <p className="mb-4 font-bold text-[14px]">
               modelo de cooperação: você pode ser um "chefe de gado" sem experiência
