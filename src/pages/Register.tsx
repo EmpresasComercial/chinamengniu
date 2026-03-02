@@ -123,7 +123,7 @@ export default function Register() {
           <form onSubmit={handleSubmit} className="space-y-4">
             {/* Field: Phone Number */}
             <div className="space-y-1">
-              <label className="block text-[12.5px] font-medium text-gray-700" htmlFor="phone">ID @user.com</label>
+              <label className="block text-[12.5px] font-medium text-gray-700" htmlFor="phone">telefone</label>
               <div className="border-b border-gray-200 py-2 flex items-center focus-within:border-[#00008b] transition-colors">
                 <span className="text-gray-800 mr-2 font-medium text-[12.5px]">+244</span>
                 <input
@@ -214,9 +214,6 @@ export default function Register() {
               <p className="text-[12.5px] text-gray-500">
                 você já possui uma conta? <Link className="text-[#00008b] font-semibold" to="/login">conecte-se</Link>
               </p>
-              <Link className="block text-[12.5px] text-gray-500 font-medium" to="/">
-                ir para a página inicial
-              </Link>
             </div>
           </form>
         </section>

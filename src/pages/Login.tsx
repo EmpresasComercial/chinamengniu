@@ -90,7 +90,7 @@ export default function Login() {
           {/* Tab Navigation */}
           <nav className="flex justify-center items-center bg-gray-100 rounded-full p-1 mb-8 text-[12.5px] font-medium text-gray-600">
             <button type="button" className="flex-1 py-3 px-1 text-center text-black font-bold relative leading-tight">
-              login por @user.com
+              Aceder por telefone
               <span className="absolute bottom-1 left-1/2 -translate-x-1/2 w-8 h-0.5 bg-black"></span>
             </button>
           </nav>
@@ -98,8 +98,8 @@ export default function Login() {
           {/* Form Fields */}
           <form onSubmit={handleSubmit} className="space-y-4 flex-grow">
             {/* Phone Input */}
-            <div className="space-y-2">
-              <label className="block text-[12.5px] font-semibold text-gray-800" htmlFor="phone">ID @user.com</label>
+            <div className="space-y-1">
+              <label className="block text-[12.5px] font-medium text-gray-700" htmlFor="phone">telefone</label>
               <div className="flex items-center border-b border-gray-200 py-2 focus-within:border-blue-600 transition-colors">
                 <span className="text-gray-900 font-medium mr-3 text-[12.5px]">+244</span>
                 <input
@@ -150,7 +150,6 @@ export default function Login() {
               <p className="text-[12.5px] text-gray-500">
                 não tem conta? <Link className="text-blue-700 font-medium ml-1" to="/registrar">registrar</Link>
               </p>
-              <Link className="text-[12.5px] text-gray-800 font-medium" to="/">ir para a página inicial</Link>
             </div>
           </form>
         </section>
