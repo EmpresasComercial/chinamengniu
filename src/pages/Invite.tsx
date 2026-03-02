@@ -1,26 +1,40 @@
-import { ChevronLeft } from 'lucide-react';
+import { ChevronLeft, Copy, Check } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import { useState } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
-import { useLoading } from '../contexts/LoadingContext';
+import { useAuth } from '../contexts/AuthContext';
 
 export default function Invite() {
   const navigate = useNavigate();
-  const { setIsLoading } = useLoading();
+  const { profile } = useAuth();
   const [toastMessage, setToastMessage] = useState<string | null>(null);
+  const [copied, setCopied] = useState(false);
+
+  const inviteCode = profile?.invite_code || '...';
+  const baseUrl = 'https://www.mengniu.wang/#/register?invite=';
+  const inviteLink = `${baseUrl}${inviteCode}`;
 
   const showToast = (message: string) => {
     setToastMessage(message);
-    setTimeout(() => setToastMessage(null), 3000);
+    setTimeout(() => setToastMessage(null), 2500);
   };
 
-  const handleCopy = (text: string) => {
-    setIsLoading(true);
-    setTimeout(() => {
-      setIsLoading(false);
-      navigator.clipboard.writeText(text);
-      showToast('Copiado com sucesso!');
-    }, 500);
+  const handleCopy = (text: string, label?: string) => {
+    navigator.clipboard.writeText(text).then(() => {
+      setCopied(true);
+      showToast(label ? `${label} copiado!` : 'Copiado com sucesso!');
+      setTimeout(() => setCopied(false), 2000);
+    });
+  };
+
+  const shareOnWhatsApp = () => {
+    const msg = encodeURIComponent(`🐄 Junte-se à Mengniu Company!\n\nUse o meu código de convite: *${inviteCode}*\nOu aceda ao link: ${inviteLink}`);
+    window.open(`https://wa.me/?text=${msg}`, '_blank');
+  };
+
+  const shareOnTelegram = () => {
+    const msg = encodeURIComponent(`🐄 Junte-se à Mengniu Company! Código: ${inviteCode} | Link: ${inviteLink}`);
+    window.open(`https://t.me/share/url?url=${encodeURIComponent(inviteLink)}&text=${msg}`, '_blank');
   };
 
   return (
@@ -37,29 +51,34 @@ export default function Invite() {
 
         {/* Invite Codes Section */}
         <div className="px-6 mt-8 text-white space-y-6">
+          {/* Code */}
           <div>
-            <p className="text-[12.5px] mb-2 font-bold">meu código de convite</p>
-            <button
-              onClick={() => handleCopy('123456')}
-              className="bg-gradient-to-r from-[#7367f0] to-[#a067f0] px-5 py-1 rounded-full text-[12.5px] text-white font-medium"
-            >
-              cópia
-            </button>
-          </div>
-
-          <div>
-            <p className="text-[12.5px] mb-2 font-bold">link de convite</p>
-            <div className="flex items-center justify-between">
-              <span className="text-[12.5px] opacity-90 truncate mr-4">
-                https://www.mengniu.wang/#/register?r...
-              </span>
+            <p className="text-[12.5px] mb-2 font-bold text-white/70 uppercase tracking-wider">meu código de convite</p>
+            <div className="flex items-center gap-3">
+              <span className="text-[22px] font-black tracking-[4px]">{inviteCode}</span>
               <button
-                onClick={() => handleCopy('https://www.mengniu.wang/#/register?r=123456')}
-                className="bg-gradient-to-r from-[#7367f0] to-[#a067f0] px-5 py-1 rounded-full text-[12.5px] text-white font-medium shrink-0"
+                onClick={() => handleCopy(inviteCode, 'Código')}
+                className="bg-gradient-to-r from-[#7367f0] to-[#a067f0] px-4 py-1.5 rounded-full text-[12px] text-white font-medium flex items-center gap-1.5 shrink-0"
               >
-                cópia
+                <Copy className="w-3.5 h-3.5" />
+                copiar
               </button>
             </div>
+          </div>
+
+          {/* Link */}
+          <div>
+            <p className="text-[12.5px] mb-2 font-bold text-white/70 uppercase tracking-wider">link de convite</p>
+            <div className="bg-white/10 rounded-xl px-3 py-2 mb-2">
+              <span className="text-[11px] text-white/80 break-all leading-relaxed">{inviteLink}</span>
+            </div>
+            <button
+              onClick={() => handleCopy(inviteLink, 'Link')}
+              className="bg-gradient-to-r from-[#7367f0] to-[#a067f0] px-4 py-1.5 rounded-full text-[12px] text-white font-medium flex items-center gap-1.5"
+            >
+              {copied ? <Check className="w-3.5 h-3.5" /> : <Copy className="w-3.5 h-3.5" />}
+              {copied ? 'copiado!' : 'copiar link'}
+            </button>
           </div>
         </div>
 
@@ -75,7 +94,7 @@ export default function Invite() {
           {/* Social Media Icons Row */}
           <div className="flex items-center justify-center gap-6">
             {/* Telegram */}
-            <button className="w-10 h-10 bg-white rounded-full flex items-center justify-center shadow-md">
+            <button onClick={shareOnTelegram} className="w-10 h-10 bg-white rounded-full flex items-center justify-center shadow-md">
               <img
                 alt="Telegram"
                 className="w-6 h-6 object-contain"
@@ -83,7 +102,7 @@ export default function Invite() {
               />
             </button>
             {/* WhatsApp */}
-            <button className="w-10 h-10 bg-white rounded-full flex items-center justify-center shadow-md">
+            <button onClick={shareOnWhatsApp} className="w-10 h-10 bg-white rounded-full flex items-center justify-center shadow-md">
               <img
                 alt="WhatsApp"
                 className="w-7 h-7 object-contain"

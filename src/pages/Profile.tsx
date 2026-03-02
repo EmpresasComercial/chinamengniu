@@ -1,14 +1,43 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { Rocket, Users, BarChart3, CircleDollarSign, ShieldCheck, HelpCircle, ChevronRight } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import { useLoading } from '../contexts/LoadingContext';
 import { useAuth } from '../contexts/AuthContext';
+import { supabase } from '../lib/supabase';
 
 export default function Profile() {
   const navigate = useNavigate();
   const { showLoading, hideLoading } = useLoading();
-  const { profile, signOut } = useAuth();
+  const { profile, signOut, user } = useAuth();
   const [copied, setCopied] = useState(false);
+
+  // Per-level team stats: [total, activated]
+  const [teamStats, setTeamStats] = useState<[number, number][]>([[0, 0], [0, 0], [0, 0]]);
+  // Per-level total investment of subordinates
+  const [levelInvestment, setLevelInvestment] = useState<number[]>([0, 0, 0]);
+
+  useEffect(() => {
+    if (!user) return;
+    async function fetchTeamStats() {
+      const { data, error } = await supabase.rpc('get_my_team');
+
+      if (!error && data) {
+        const members = data as { level: number; reloaded_amount: number }[];
+        const stats: [number, number][] = [1, 2, 3].map(lvl => {
+          const lvlMembers = members.filter(m => m.level === lvl);
+          return [lvlMembers.length, lvlMembers.filter(m => Number(m.reloaded_amount) > 0).length];
+        });
+        const investments = [1, 2, 3].map(lvl =>
+          members
+            .filter(m => m.level === lvl)
+            .reduce((sum, m) => sum + Number(m.reloaded_amount), 0)
+        );
+        setTeamStats(stats);
+        setLevelInvestment(investments);
+      }
+    }
+    fetchTeamStats();
+  }, [user]);
 
   const handleCopyUID = () => {
     if (profile?.invite_code) {
@@ -140,18 +169,18 @@ export default function Profile() {
         </div>
 
         <div className="mt-4">
-          <h3 className="text-center font-bold text-[15px] mb-4">Convite subordinado</h3>
+          <h3 className="text-center font-bold text-[15px] mb-4">Minha Equipe</h3> {/* Changed label */}
           <div className="space-y-4">
             {[1, 2, 3].map((num) => (
               <div key={num} className="grid grid-cols-2 text-[12.5px] border-b border-white/5 pb-2">
                 <div>
-                  <p className="font-bold mb-1">nota {num} <span className="ml-1">›</span></p>
+                  <p className="font-bold mb-1 underline">Nível {num} subordinado <span className="ml-1">›</span></p> {/* Changed label */}
                   <p className="opacity-70">Incluir/Vinculado</p>
-                  <p className="font-bold">0/0</p>
+                  <p className="font-bold">{teamStats[num - 1][0]}/{teamStats[num - 1][1]}</p>
                 </div>
                 <div className="text-right">
-                  <p className="opacity-70 mt-4">Ganhos acumulados</p>
-                  <p className="font-bold">0</p>
+                  <p className="opacity-70 mt-4">Total investimento</p>
+                  <p className="font-bold">{levelInvestment[num - 1].toLocaleString('pt-AO')} Kz</p>
                 </div>
               </div>
             ))}

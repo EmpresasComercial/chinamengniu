@@ -9,7 +9,7 @@ export default function VIPDetails() {
   const navigate = useNavigate();
   const location = useLocation();
   const { showLoading, hideLoading } = useLoading();
-  const { refreshProfile, user } = useAuth();
+  const { refreshProfile } = useAuth();
   const [feedback, setFeedback] = useState<string | null>(null);
 
   const product = location.state?.product;
@@ -20,15 +20,14 @@ export default function VIPDetails() {
   };
 
   const handlePurchase = async () => {
-    if (!product || !user) {
-      showToast('Autenticação ou produto inválido.');
+    if (!product) {
+      showToast('Produto inválido.');
       return;
     }
 
     showLoading();
     try {
       const { data, error } = await supabase.rpc('purchase_product', {
-        p_user_id: user.id,
         p_product_id: product.id
       });
 
