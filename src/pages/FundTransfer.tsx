@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, ChangeEvent } from 'react';
 import { ChevronLeft, Gift, ArrowRightLeft, Wallet } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import { motion, AnimatePresence } from 'motion/react';
@@ -92,15 +92,25 @@ export default function FundTransfer() {
 
   const fmt = (val: number) => val.toLocaleString('pt-AO', { minimumFractionDigits: 2 });
 
-  // Formatar input de valor ao digitar
-  const handleAmountChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  // Formatar input de valor ao digitar (trata como centavos para entrada fluida)
+  const handleAmountChange = (e: ChangeEvent<HTMLInputElement>) => {
     const raw = e.target.value.replace(/\D/g, '');
     if (!raw) { setAmountInput(''); return; }
     const num = parseInt(raw, 10) / 100;
     setAmountInput(num.toLocaleString('pt-AO', { minimumFractionDigits: 2 }));
   };
 
-  const parsedAmount = parseFloat(amountInput.replace(/\./g, '').replace(',', '.')) || 0;
+  // Parsing robusto: remove espaços (non-breaking e normais), pontos de milhar pt-AO
+  const parseAmount = (str: string): number => {
+    if (!str) return 0;
+    const cleaned = str
+      .replace(/[\s\u00A0\u202F]/g, '') // espaços e non-breaking spaces
+      .replace(/\./g, '')               // pontos de milhar
+      .replace(',', '.');               // vírgula decimal → ponto
+    return parseFloat(cleaned) || 0;
+  };
+
+  const parsedAmount = parseAmount(amountInput);
 
   return (
     <div className="flex flex-col min-h-screen bg-[#e9ecf3] antialiased page-content">
@@ -198,19 +208,19 @@ export default function FundTransfer() {
 
                 {/* Limites */}
                 <div className="flex justify-between text-[10px] text-gray-400 mb-5">
-                  <span>mínimo: <strong className="text-gray-600">3.000,00 Kz</strong></span>
+                  <span>mínimo: <strong className="text-gray-600">100,00 Kz</strong></span>
                   <span>máximo: <strong className="text-gray-600">30.000,00 Kz</strong></span>
                 </div>
 
                 {/* Atalhos rápidos */}
                 <div className="grid grid-cols-4 gap-2 mb-6">
-                  {[3000, 5000, 10000, 30000].map(v => (
+                  {[500, 1000, 5000, 30000].map(v => (
                     <button
                       key={v}
                       onClick={() => setAmountInput(v.toLocaleString('pt-AO', { minimumFractionDigits: 2 }))}
                       className="bg-[#0000AA]/8 border border-[#0000AA]/20 rounded-lg py-2 text-[10px] font-bold text-[#000080]"
                     >
-                      {v >= 1000 ? `${v / 1000}K` : v}
+                      {v.toLocaleString('pt-AO')}
                     </button>
                   ))}
                 </div>
@@ -221,9 +231,9 @@ export default function FundTransfer() {
 
                 <button
                   onClick={handleTransfer}
-                  disabled={parsedAmount < 3000 || parsedAmount > 30000 || parsedAmount > balanceCorrete}
+                  disabled={parsedAmount < 100 || parsedAmount > 30000 || parsedAmount > balanceCorrete}
                   className={`w-full h-[45px] rounded-full text-[15px] font-black transition-all lowercase shadow-lg
-                    ${parsedAmount >= 3000 && parsedAmount <= 30000 && parsedAmount <= balanceCorrete
+                    ${parsedAmount >= 100 && parsedAmount <= 30000 && parsedAmount <= balanceCorrete
                       ? 'bg-[#000080] text-white active:scale-[0.98]'
                       : 'bg-gray-200 text-gray-400 cursor-not-allowed'}`}
                 >

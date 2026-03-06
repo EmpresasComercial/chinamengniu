@@ -129,23 +129,34 @@ export default function FinancialRecords() {
           </div>
         );
 
-      case 'bonus_transacoes':
+      case 'bonus_transacoes': {
+        const dt = item.data_recebimento ? new Date(item.data_recebimento) : null;
+        const dateStr = dt ? dt.toLocaleDateString('pt-AO') : '—';
+        const timeStr = dt ? dt.toLocaleTimeString('pt-AO', { hour: '2-digit', minute: '2-digit' }) : '';
+        const isTransfer = String(item.origem_bonus || '').toLowerCase().includes('transferência');
         return (
-          <div key={item.id} className="border border-gray-100 rounded-xl p-4 flex justify-between items-center">
-            <div className="flex flex-col gap-1">
-              <p className="text-[13px] font-bold text-gray-800 max-w-[180px] truncate">{item.origem_bonus}</p>
-              <p className="text-[11px] text-gray-500">
-                {item.data_recebimento ? new Date(item.data_recebimento).toLocaleDateString('pt-AO') : '—'}
-              </p>
-            </div>
-            <div className="text-right flex flex-col items-end gap-1.5">
-              <p className="text-[14px] font-black text-[#0000A5]">+{Number(item.valor_recebido).toLocaleString('pt-AO')} Kz</p>
-              <span className={`text-[10px] px-2 py-0.5 rounded-full font-semibold ${statusColor[item.status] || 'bg-gray-100 text-gray-500'}`}>
-                {item.status}
-              </span>
+          <div key={item.id} className="border border-gray-100 rounded-xl p-4">
+            <div className="flex justify-between items-start gap-3">
+              <div className="flex flex-col gap-1 flex-1 min-w-0">
+                <p className="text-[13px] font-bold text-gray-800 leading-snug">
+                  {item.origem_bonus || 'Bónus'}
+                </p>
+                <p className="text-[11px] text-gray-500">
+                  {dateStr}{timeStr ? <span className="text-gray-400"> · {timeStr}</span> : null}
+                </p>
+              </div>
+              <div className="text-right flex flex-col items-end gap-1.5 flex-shrink-0">
+                <p className={`text-[14px] font-black ${isTransfer ? 'text-[#0000A5]' : 'text-green-600'}`}>
+                  +{Number(item.valor_recebido).toLocaleString('pt-AO', { minimumFractionDigits: 2 })} Kz
+                </p>
+                <span className={`text-[10px] px-2 py-0.5 rounded-full font-semibold ${statusColor[item.status] || 'bg-gray-100 text-gray-500'}`}>
+                  {item.status}
+                </span>
+              </div>
             </div>
           </div>
         );
+      }
 
       default:
         return null;
