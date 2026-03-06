@@ -1,3 +1,4 @@
+import React from 'react';
 import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
 import { LoadingProvider, RouteTransitionLoader } from './contexts/LoadingContext';
 import { AuthProvider, useAuth } from './contexts/AuthContext';
@@ -28,7 +29,7 @@ import WithdrawHelp from './pages/WithdrawHelp';
 import RechargeHelp from './pages/RechargeHelp';
 import Invite from './pages/Invite';
 import AddBank from './pages/AddBank';
-import CustomerService from './pages/CustomerService';
+
 
 /**
  * PublicOnlyRoute
@@ -95,7 +96,7 @@ export default function App() {
               <Route path="/ajuda-recarregar" element={<RechargeHelp />} />
               <Route path="/convidar" element={<Invite />} />
               <Route path="/adicionar-banco" element={<AddBank />} />
-              <Route path="/atendimento" element={<CustomerService />} />
+
 
             </Route>
 
