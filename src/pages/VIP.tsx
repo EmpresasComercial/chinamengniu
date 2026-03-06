@@ -35,23 +35,22 @@ export default function VIP() {
 
       if (productsData) setProducts(productsData);
 
-      // 2. Load Revenue Stats
+      // 2. Load Revenue Stats from tarefas_diarias
       if (user) {
-        const today = new Date().toISOString().split('T')[0];
-        const { data: bonusData } = await supabase
-          .from('bonus_transacoes')
-          .select('valor_recebido, data_transacao')
+        const { data: tarefas } = await supabase
+          .from('tarefas_diarias')
+          .select('balance_correte, renda_coletada')
           .eq('user_id', user.id);
 
-        if (bonusData) {
-          const total = bonusData.reduce((sum, b) => sum + Number(b.valor_recebido), 0);
-          const todayTotal = bonusData
-            .filter(b => b.data_transacao && b.data_transacao.startsWith(today))
-            .reduce((sum, b) => sum + Number(b.valor_recebido), 0);
+        if (tarefas) {
+          // receita total: soma de balance_correte
+          const total = tarefas.reduce((sum, t) => sum + Number(t.balance_correte || 0), 0);
+          // renda diária: soma de renda_coletada
+          const rendaColetada = tarefas.reduce((sum, t) => sum + Number(t.renda_coletada || 0), 0);
 
           setStats({
             totalRevenue: total,
-            dailyIncome: todayTotal > 0 ? (todayTotal / (total || 1)) * 100 : 0
+            dailyIncome: rendaColetada
           });
         }
       }
@@ -112,7 +111,7 @@ export default function VIP() {
             </div>
             <div className="text-right">
               <p className="text-[10px] opacity-80">renda diária</p>
-              <p className="text-[15px] font-bold">{stats.dailyIncome.toFixed(2)}%</p>
+              <p className="text-[15px] font-bold">{stats.dailyIncome.toLocaleString('pt-AO', { minimumFractionDigits: 2 })} Kz</p>
             </div>
           </div>
           <div className="text-center pt-2 border-t border-white/10">

@@ -13,9 +13,9 @@ export default function Reproducao() {
   const [purchases, setPurchases] = useState<any[]>([]);
   const [hasCollectedToday, setHasCollectedToday] = useState(false);
   const [stats, setStats] = useState({
-    reproductionBalance: 0,
-    totalProfit: 0,
-    dailyIncomeRate: 0,
+    reproductionBalance: 0,   // balance_correte
+    totalProfit: 0,           // balance_correte (ativos de lucro)
+    dailyIncomeTotal: 0,      // renda_coletada
     activeCowsCount: 0,
     totalPurchasesCount: 0
   });
@@ -64,7 +64,6 @@ export default function Reproducao() {
       setPurchases(formattedData);
       setStats(prev => ({
         ...prev,
-        dailyIncomeRate: totalInvested > 0 ? (totalDailyIncome / totalInvested) * 100 : 0,
         activeCowsCount: activeInvestments.length,
         totalPurchasesCount: historyData.length
       }));
@@ -91,12 +90,15 @@ export default function Reproducao() {
       .eq('user_id', user.id);
 
     if (tareas) {
+      // conta de reprodução: soma de balance_correte
       const balance = tareas.reduce((sum, t) => sum + Number(t.balance_correte || 0), 0);
-      const totalProfit = tareas.reduce((sum, t) => sum + Number(t.renda_coletada || 0), 0);
+      // renda diária: soma de renda_coletada
+      const rendaTotal = tareas.reduce((sum, t) => sum + Number(t.renda_coletada || 0), 0);
       setStats(prev => ({
         ...prev,
-        reproductionBalance: balance,
-        totalProfit: totalProfit
+        reproductionBalance: balance,  // conta de reprodução = balance_correte
+        totalProfit: balance,           // ativos de lucro = balance_correte (igual)
+        dailyIncomeTotal: rendaTotal    // renda diária = renda_coletada
       }));
     }
   }
@@ -198,7 +200,7 @@ export default function Reproducao() {
         </div>
         <div>
           <p className="text-[10px] text-gray-300">renda diária</p>
-          <p className="text-[12.5px] font-semibold">{stats.dailyIncomeRate.toFixed(2)}%</p>
+          <p className="text-[12.5px] font-semibold">{stats.dailyIncomeTotal.toLocaleString('pt-AO', { minimumFractionDigits: 2 })} Kz</p>
         </div>
         <div>
           <p className="text-[10px] text-gray-300">usado / número total de vezes</p>
