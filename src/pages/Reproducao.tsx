@@ -4,50 +4,116 @@ import { useNavigate } from 'react-router-dom';
 import { useLoading } from '../contexts/LoadingContext';
 import { supabase } from '../lib/supabase';
 import { useAuth } from '../contexts/AuthContext';
+import { motion, AnimatePresence } from 'motion/react';
 
 export default function Reproducao() {
   const navigate = useNavigate();
-  const { setIsLoading } = useLoading();
+  const { setIsLoading, showLoading, hideLoading } = useLoading();
   const { user } = useAuth();
   const [purchases, setPurchases] = useState<any[]>([]);
+  const [hasCollectedToday, setHasCollectedToday] = useState(false);
+  const [stats, setStats] = useState({
+    reproductionBalance: 0,
+    totalProfit: 0,
+    dailyIncomeRate: 0,
+    activeCowsCount: 0,
+    totalPurchasesCount: 0
+  });
+  const [feedback, setFeedback] = useState<string | null>(null);
 
+  const showToast = (message: string) => {
+    setFeedback(message);
+    setTimeout(() => setFeedback(null), 3000);
+  };
 
-  useEffect(() => {
-    async function fetchPurchases() {
-      if (!user) return;
+  async function fetchPurchases() {
+    if (!user) return;
 
-      // Primeiro buscamos todos os produtos para ter as imagens corretas
-      const { data: productsData } = await supabase
-        .from('products')
-        .select('name, image_url');
+    // Primeiro buscamos todos os produtos para ter as imagens corretas
+    const { data: productsData } = await supabase
+      .from('products')
+      .select('name, image_url');
 
-      const { data: historyData, error } = await supabase
-        .from('historico_compras')
-        .select('*')
-        .eq('user_id', user.id)
-        .order('data_compra', { ascending: false });
+    const { data: historyData, error } = await supabase
+      .from('historico_compras')
+      .select('*')
+      .eq('user_id', user.id)
+      .order('data_compra', { ascending: false });
 
-      if (error) {
-        console.error('Error fetching history:', error);
-        return;
-      }
-
-      if (historyData) {
-        const formattedData = historyData.map((item: any) => {
-          // Tenta encontrar a imagem do produto correspondente pelo nome
-          const product = productsData?.find(p => p.name === item.nome_produto);
-          return {
-            ...item,
-            image_url: product?.image_url || 'https://png.pngtree.com/png-clipart/20240615/original/pngtree-a-black-and-white-cow-with-tranparent-background-png-image_15340862.png'
-          };
-        });
-        setPurchases(formattedData);
-      }
+    if (error) {
+      console.error('Error fetching history:', error);
+      return;
     }
 
-    fetchPurchases();
+    if (historyData) {
+      const activeInvestments = historyData.filter(h =>
+        h.status === 'confirmado' && new Date(h.data_expiracao) > new Date()
+      );
 
-    const channel = supabase.channel('realtime_purchases')
+      const totalDailyIncome = activeInvestments.reduce((sum, h) => sum + Number(h.rendimento_diario), 0);
+      const totalInvested = activeInvestments.reduce((sum, h) => sum + Number(h.preco), 0);
+
+      const formattedData = historyData.map((item: any) => {
+        const product = productsData?.find(p => p.name === item.nome_produto);
+        return {
+          ...item,
+          image_url: product?.image_url || 'https://png.pngtree.com/png-clipart/20240615/original/pngtree-a-black-and-white-cow-with-tranparent-background-png-image_15340862.png'
+        };
+      });
+
+      setPurchases(formattedData);
+      setStats(prev => ({
+        ...prev,
+        dailyIncomeRate: totalInvested > 0 ? (totalDailyIncome / totalInvested) * 100 : 0,
+        activeCowsCount: activeInvestments.length,
+        totalPurchasesCount: historyData.length
+      }));
+    }
+  }
+
+  async function fetchDailyStats() {
+    if (!user) return;
+
+    // 1. Check if collected today
+    const { data: todayTask } = await supabase
+      .from('tarefas_diarias')
+      .select('id')
+      .eq('user_id', user.id)
+      .gte('data_atribuicao', new Date().toISOString().split('T')[0])
+      .limit(1);
+
+    setHasCollectedToday(!!(todayTask && todayTask.length > 0));
+
+    // 2. Fetch reproduction balance (sum of balance_correte from all tasks)
+    const { data: tareas } = await supabase
+      .from('tarefas_diarias')
+      .select('balance_correte, renda_coletada')
+      .eq('user_id', user.id);
+
+    if (tareas) {
+      const balance = tareas.reduce((sum, t) => sum + Number(t.balance_correte || 0), 0);
+      const totalProfit = tareas.reduce((sum, t) => sum + Number(t.renda_coletada || 0), 0);
+      setStats(prev => ({
+        ...prev,
+        reproductionBalance: balance,
+        totalProfit: totalProfit
+      }));
+    }
+  }
+
+  useEffect(() => {
+    fetchPurchases();
+    fetchDailyStats();
+
+    const channel = supabase.channel('realtime_reproducao')
+      .on('postgres_changes', {
+        event: '*',
+        schema: 'public',
+        table: 'tarefas_diarias',
+        filter: `user_id=eq.${user?.id}`
+      }, () => {
+        fetchDailyStats();
+      })
       .on('postgres_changes', {
         event: '*',
         schema: 'public',
@@ -63,11 +129,29 @@ export default function Reproducao() {
     };
   }, [user]);
 
-  const handleStart = () => {
-    setIsLoading(true);
-    setTimeout(() => {
-      setIsLoading(false);
-    }, 1000);
+  const handleStartCollection = async () => {
+    if (hasCollectedToday) {
+      showToast('você já realizou a coleta hoje!');
+      return;
+    }
+
+    showLoading();
+    try {
+      const { data, error } = await supabase.rpc('claim_daily_income');
+
+      if (error) {
+        showToast(`erro: ${error.message}`);
+      } else if (data && data.success) {
+        showToast('coleta realizada com sucesso!');
+        fetchDailyStats();
+      } else {
+        showToast(data?.message || 'erro ao processar coleta.');
+      }
+    } catch (err) {
+      showToast('erro inesperado ao coletar.');
+    } finally {
+      hideLoading();
+    }
   };
 
   return (
@@ -106,23 +190,25 @@ export default function Reproducao() {
       <section className="grid grid-cols-2 gap-y-4 mb-6 px-1">
         <div>
           <p className="text-[10px] text-gray-300">conta de reprodução</p>
-          <p className="text-[15px] font-bold">0.00 Kz</p>
+          <p className="text-[15px] font-bold">{stats.reproductionBalance.toLocaleString('pt-AO', { minimumFractionDigits: 2 })} Kz</p>
         </div>
         <div>
           <p className="text-[10px] text-gray-300">ativos de lucro</p>
-          <p className="text-[15px] font-bold">0.00 Kz</p>
+          <p className="text-[15px] font-bold">{stats.totalProfit.toLocaleString('pt-AO', { minimumFractionDigits: 2 })} Kz</p>
         </div>
         <div>
           <p className="text-[10px] text-gray-300">renda diária</p>
-          <p className="text-[12.5px] font-semibold">0.00%</p>
+          <p className="text-[12.5px] font-semibold">{stats.dailyIncomeRate.toFixed(2)}%</p>
         </div>
         <div>
           <p className="text-[10px] text-gray-300">usado / número total de vezes</p>
-          <p className="text-[12.5px] font-semibold">0/0</p>
+          <p className="text-[12.5px] font-semibold">{stats.activeCowsCount}/{stats.totalPurchasesCount}</p>
         </div>
         <div className="col-span-2 mt-2">
           <p className="text-[10px] text-gray-300">horário de reinicialização da alimentação</p>
-          <p className="text-[15px] font-bold lowercase">reinicialização concluída</p>
+          <p className="text-[15px] font-bold lowercase">
+            {hasCollectedToday ? 'coleta concluída hoje' : 'aguardando coleta diária'}
+          </p>
         </div>
       </section>
 
@@ -136,14 +222,15 @@ export default function Reproducao() {
           <ArrowLeftRight className="w-5 h-5" />
         </button>
         <button
-          onClick={handleStart}
-          className="bg-[#D2F076] text-black rounded-lg p-4 flex items-center justify-between text-left font-black lowercase leading-[1] h-[45px] shadow-lg shadow-black/20"
+          onClick={handleStartCollection}
+          disabled={hasCollectedToday}
+          className={`rounded-lg p-4 flex items-center justify-between text-left font-black lowercase leading-[1] h-[45px] shadow-lg shadow-black/20 transition-all ${hasCollectedToday ? 'bg-gray-400 cursor-not-allowed text-gray-200' : 'bg-[#D2F076] text-black active:scale-95'
+            }`}
         >
-          <span className="text-[12px]">comece agora</span>
-          <Play className="w-5 h-5 fill-current" />
+          <span className="text-[12px]">{hasCollectedToday ? 'coletado' : 'comece agora'}</span>
+          <Play className={`w-5 h-5 ${hasCollectedToday ? 'text-gray-300' : 'fill-current'}`} />
         </button>
       </section>
-
 
       {/* History Section */}
       <section className="bg-[#EBF1FF] rounded-t-[2.5rem] p-8 -mx-4 flex-grow min-h-[400px]">
@@ -157,7 +244,6 @@ export default function Reproducao() {
             <div className="grid grid-cols-3 gap-x-2 gap-y-8 pt-2">
               {purchases.map((item) => (
                 <div key={item.id} className="flex flex-col items-center text-center font-serif">
-                  {/* Imagem do Animal - Tamanho reduzido para 50px conforme solicitado */}
                   <div className="w-[50px] h-[50px] mb-2 flex items-center justify-center relative">
                     <img
                       alt={item.nome_produto}
@@ -166,13 +252,9 @@ export default function Reproducao() {
                       referrerPolicy="no-referrer"
                     />
                   </div>
-
-                  {/* Nome do Animal - Lowercase conforme regra */}
                   <h4 className="font-bold text-[18px] text-black lowercase leading-tight tracking-tight">
                     {item.nome_produto}
                   </h4>
-
-                  {/* Duração - Formato dias/X conforme regra */}
                   <p className="text-[15px] text-black font-medium">
                     dias/{item.duracao_dias}
                   </p>
@@ -193,6 +275,20 @@ export default function Reproducao() {
           )}
         </div>
       </section>
+
+      {/* Feedback Toast */}
+      <AnimatePresence>
+        {feedback && (
+          <motion.div
+            initial={{ opacity: 0, scale: 0.9, x: '-50%', y: '-50%' }}
+            animate={{ opacity: 1, scale: 1, x: '-50%', y: '-50%' }}
+            exit={{ opacity: 0, scale: 0.9, x: '-50%', y: '-50%' }}
+            className="fixed top-1/2 left-1/2 bg-black/80 text-white px-6 py-3 rounded-xl text-[12.5px] font-medium shadow-2xl z-[100] text-center min-w-[280px]"
+          >
+            {feedback}
+          </motion.div>
+        )}
+      </AnimatePresence>
     </div>
   );
 }
