@@ -14,6 +14,7 @@ export default function FundTransfer() {
   const { user } = useAuth();
   const [mode, setMode] = useState<Mode>(null);
   const [code, setCode] = useState('');
+  const [amountInput, setAmountInput] = useState('');
   const [balanceCorrete, setBalanceCorrete] = useState(0);
   const [feedback, setFeedback] = useState<{ message: string; type: 'error' | 'success' } | null>(null);
 
@@ -33,9 +34,10 @@ export default function FundTransfer() {
 
   const showToast = (message: string, type: 'error' | 'success') => {
     setFeedback({ message, type });
-    setTimeout(() => setFeedback(null), 3000);
+    setTimeout(() => setFeedback(null), 3500);
   };
 
+  // --- RESGATAR CÓDIGO DE PRESENTE ---
   const handleRedeemCode = async () => {
     if (!code) { showToast('por favor, insira o seu código', 'error'); return; }
     showLoading();
@@ -55,14 +57,29 @@ export default function FundTransfer() {
     }
   };
 
-  const handleTransferReproducao = async () => {
+  // --- TRANSFERIR CONTA DE REPRODUÇÃO → BALANCE ---
+  const handleTransfer = async () => {
+    const amount = parseFloat(amountInput.replace(/\./g, '').replace(',', '.'));
+    if (isNaN(amount) || amount <= 0) {
+      showToast('por favor, insira um valor válido', 'error'); return;
+    }
+    if (amount < 3000) {
+      showToast('valor mínimo para transferência é 3.000 Kz', 'error'); return;
+    }
+    if (amount > 30000) {
+      showToast('valor máximo para transferência é 30.000 Kz', 'error'); return;
+    }
+    if (amount > balanceCorrete) {
+      showToast('saldo insuficiente na conta de reprodução', 'error'); return;
+    }
     showLoading();
     try {
-      const { data, error } = await supabase.rpc('transfer_reproducao_to_balance');
+      const { data, error } = await supabase.rpc('transfer_reproducao_to_balance', { p_amount: amount });
       if (error) throw error;
       if (data.success) {
-        showToast(`transferido ${Number(data.amount).toLocaleString('pt-AO', { minimumFractionDigits: 2 })} Kz com sucesso!`, 'success');
-        setBalanceCorrete(0);
+        showToast(`${fmt(data.amount)} Kz transferidos com sucesso!`, 'success');
+        setBalanceCorrete(prev => prev - amount);
+        setAmountInput('');
       } else {
         showToast(data.message.toLowerCase(), 'error');
       }
@@ -74,6 +91,16 @@ export default function FundTransfer() {
   };
 
   const fmt = (val: number) => val.toLocaleString('pt-AO', { minimumFractionDigits: 2 });
+
+  // Formatar input de valor ao digitar
+  const handleAmountChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const raw = e.target.value.replace(/\D/g, '');
+    if (!raw) { setAmountInput(''); return; }
+    const num = parseInt(raw, 10) / 100;
+    setAmountInput(num.toLocaleString('pt-AO', { minimumFractionDigits: 2 }));
+  };
+
+  const parsedAmount = parseFloat(amountInput.replace(/\./g, '').replace(',', '.')) || 0;
 
   return (
     <div className="flex flex-col min-h-screen bg-[#e9ecf3] antialiased page-content">
@@ -96,13 +123,13 @@ export default function FundTransfer() {
 
       <main className="flex-grow p-4">
 
-        {/* MODO: CÓDIGO DE PRESENTE */}
+        {/* ── MODO: CÓDIGO DE PRESENTE ── */}
         {mode === 'gift' && (
           <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }}>
             <section className="mb-4">
-              <div className="bg-[#f5d7a1] rounded-[24px] border border-[#cfb586] p-8 flex flex-col items-center justify-center text-center">
-                <div className="bg-black w-12 h-12 rounded-full flex items-center justify-center shadow-lg mb-3">
-                  <Gift className="h-6 w-6 text-white" />
+              <div className="bg-[#f5d7a1] rounded-[24px] border border-[#cfb586] p-8 flex flex-col items-center text-center">
+                <div className="bg-black w-14 h-14 rounded-full flex items-center justify-center shadow-lg mb-3">
+                  <Gift className="h-7 w-7 text-white" />
                 </div>
                 <h2 className="text-[18px] font-black text-black lowercase leading-tight mb-1">resgatar código de presente</h2>
                 <p className="text-[11px] text-gray-700 font-medium lowercase">insira o seu código de convite ou código de presente</p>
@@ -111,7 +138,9 @@ export default function FundTransfer() {
             <section>
               <div className="bg-white rounded-[24px] shadow-[0_4px_25px_rgba(0,0,0,0.06)] p-8">
                 <div className="mb-8">
-                  <label className="block text-gray-400 text-[12.5px] mb-3 lowercase font-bold" htmlFor="gift-code">informe o seu código</label>
+                  <label className="block text-gray-400 text-[12.5px] mb-3 lowercase font-bold" htmlFor="gift-code">
+                    informe o seu código
+                  </label>
                   <div className="border-b-2 border-[#e2e8f0] py-3 focus-within:border-[#000080] transition-colors">
                     <input
                       className="w-full border-none focus:ring-0 p-0 text-gray-800 bg-transparent text-[16px] font-bold outline-none placeholder:text-gray-300 placeholder:font-normal"
@@ -134,85 +163,131 @@ export default function FundTransfer() {
           </motion.div>
         )}
 
-        {/* MODO: CONTA DE REPRODUÇÃO → BALANCE */}
+        {/* ── MODO: CONTA DE REPRODUÇÃO → BALANCE ── */}
         {mode === 'transfer' && (
           <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }}>
+            {/* Saldo disponível */}
             <section className="mb-4">
-              <div className="bg-gradient-to-br from-[#0000AA] to-[#0000CC] rounded-[24px] p-8 flex flex-col items-center text-center text-white">
-                <div className="bg-white/20 w-14 h-14 rounded-full flex items-center justify-center mb-4">
+              <div className="bg-gradient-to-br from-[#0000AA] to-[#0000CC] rounded-[24px] p-6 flex flex-col items-center text-center text-white">
+                <div className="bg-white/20 w-14 h-14 rounded-full flex items-center justify-center mb-3">
                   <ArrowRightLeft className="h-7 w-7 text-white" />
                 </div>
-                <p className="text-[12px] opacity-70 mb-1">saldo disponível para transferir</p>
-                <p className="text-[32px] font-black">{fmt(balanceCorrete)} Kz</p>
-                <p className="text-[10px] opacity-60 mt-1">conta de reprodução → saldo principal</p>
+                <p className="text-[11px] opacity-70 mb-1">saldo disponível</p>
+                <p className="text-[28px] font-black">{fmt(balanceCorrete)} Kz</p>
+                <p className="text-[10px] opacity-50 mt-1">conta de reprodução</p>
               </div>
             </section>
+
+            {/* Formulário de transferência */}
             <section>
-              <div className="bg-white rounded-[24px] shadow-[0_4px_25px_rgba(0,0,0,0.06)] p-8">
-                <div className="mb-6 text-center">
-                  <p className="text-[12.5px] text-gray-500 font-medium">ao confirmar, o valor da sua <strong>conta de reprodução</strong> será transferido integralmente para o seu <strong>saldo principal</strong>.</p>
+              <div className="bg-white rounded-[24px] shadow-[0_4px_25px_rgba(0,0,0,0.06)] p-6">
+                <label className="block text-gray-400 text-[12px] mb-2 font-bold lowercase">valor a transferir</label>
+                <div className="border-b-2 border-[#e2e8f0] py-3 focus-within:border-[#000080] transition-colors mb-2">
+                  <div className="flex items-center gap-2">
+                    <span className="text-gray-400 text-[15px] font-bold">Kz</span>
+                    <input
+                      className="flex-1 border-none focus:ring-0 p-0 text-gray-800 bg-transparent text-[22px] font-black outline-none placeholder:text-gray-200 placeholder:font-normal placeholder:text-[16px]"
+                      placeholder="0,00"
+                      type="text"
+                      inputMode="numeric"
+                      value={amountInput}
+                      onChange={handleAmountChange}
+                    />
+                  </div>
                 </div>
+
+                {/* Limites */}
+                <div className="flex justify-between text-[10px] text-gray-400 mb-5">
+                  <span>mínimo: <strong className="text-gray-600">3.000,00 Kz</strong></span>
+                  <span>máximo: <strong className="text-gray-600">30.000,00 Kz</strong></span>
+                </div>
+
+                {/* Atalhos rápidos */}
+                <div className="grid grid-cols-4 gap-2 mb-6">
+                  {[3000, 5000, 10000, 30000].map(v => (
+                    <button
+                      key={v}
+                      onClick={() => setAmountInput(v.toLocaleString('pt-AO', { minimumFractionDigits: 2 }))}
+                      className="bg-[#0000AA]/8 border border-[#0000AA]/20 rounded-lg py-2 text-[10px] font-bold text-[#000080]"
+                    >
+                      {v >= 1000 ? `${v / 1000}K` : v}
+                    </button>
+                  ))}
+                </div>
+
+                <p className="text-[11px] text-gray-400 text-center mb-5">
+                  o valor será transferido da sua <strong>conta de reprodução</strong> para o seu <strong>saldo principal</strong>
+                </p>
+
                 <button
-                  onClick={handleTransferReproducao}
-                  disabled={balanceCorrete <= 0}
-                  className={`w-full h-[45px] rounded-full text-[15px] font-black shadow-lg transition-all lowercase ${balanceCorrete > 0 ? 'bg-[#000080] text-white active:scale-[0.98]' : 'bg-gray-300 text-gray-400 cursor-not-allowed'}`}
+                  onClick={handleTransfer}
+                  disabled={parsedAmount < 3000 || parsedAmount > 30000 || parsedAmount > balanceCorrete}
+                  className={`w-full h-[45px] rounded-full text-[15px] font-black transition-all lowercase shadow-lg
+                    ${parsedAmount >= 3000 && parsedAmount <= 30000 && parsedAmount <= balanceCorrete
+                      ? 'bg-[#000080] text-white active:scale-[0.98]'
+                      : 'bg-gray-200 text-gray-400 cursor-not-allowed'}`}
                 >
-                  {balanceCorrete > 0 ? 'confirmar transferência' : 'saldo insuficiente'}
+                  confirmar transferência
                 </button>
               </div>
             </section>
           </motion.div>
         )}
 
-        {/* POPUP DE SELEÇÃO (modo === null) */}
+        {/* ── POPUP DE SELEÇÃO ── */}
         {mode === null && (
           <AnimatePresence>
             <motion.div
-              initial={{ opacity: 0, scale: 0.95 }}
-              animate={{ opacity: 1, scale: 1 }}
-              exit={{ opacity: 0, scale: 0.95 }}
-              className="fixed inset-0 z-50 flex items-end justify-center bg-black/50 backdrop-blur-sm"
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              className="fixed inset-0 z-50 flex items-end bg-black/60 backdrop-blur-sm"
             >
               <motion.div
                 initial={{ y: '100%' }}
                 animate={{ y: 0 }}
                 exit={{ y: '100%' }}
-                transition={{ type: 'spring', damping: 25, stiffness: 300 }}
-                className="bg-white w-full max-w-md rounded-t-[2rem] p-6 pb-10"
+                transition={{ type: 'spring', damping: 28, stiffness: 320 }}
+                className="bg-white w-full rounded-t-[2rem] px-5 pt-4 pb-10"
               >
-                <div className="w-10 h-1 bg-gray-200 rounded-full mx-auto mb-6"></div>
-                <h2 className="text-[15px] font-black text-[#000080] text-center mb-1">selecionar método</h2>
-                <p className="text-[11px] text-gray-400 text-center mb-6">escolha o que deseja fazer</p>
+                {/* Pill */}
+                <div className="w-10 h-1 bg-gray-200 rounded-full mx-auto mb-5" />
 
-                <div className="space-y-3">
-                  <button
-                    onClick={() => setMode('transfer')}
-                    className="w-full flex items-center gap-4 p-4 rounded-2xl border-2 border-[#0000AA]/20 bg-[#0000AA]/5 active:bg-[#0000AA]/10 transition-all"
-                  >
-                    <div className="w-12 h-12 rounded-full bg-[#0000AA] flex items-center justify-center flex-shrink-0">
-                      <Wallet className="h-6 w-6 text-white" />
-                    </div>
-                    <div className="text-left">
-                      <p className="text-[15px] font-black text-[#000080]">conta de reprodução</p>
-                      <p className="text-[11px] text-gray-500">transferir saldo reprodução → carteira</p>
-                    </div>
-                  </button>
+                <h2 className="text-[16px] font-black text-[#000080] text-center mb-1">selecionar método</h2>
+                <p className="text-[11px] text-gray-400 text-center mb-5">escolha o que deseja fazer</p>
 
-                  <button
-                    onClick={() => setMode('gift')}
-                    className="w-full flex items-center gap-4 p-4 rounded-2xl border-2 border-[#000]/10 bg-[#f5d7a1]/30 active:bg-[#f5d7a1]/50 transition-all"
-                  >
-                    <div className="w-12 h-12 rounded-full bg-black flex items-center justify-center flex-shrink-0">
-                      <Gift className="h-6 w-6 text-white" />
-                    </div>
-                    <div className="text-left">
-                      <p className="text-[15px] font-black text-black">código de presentes</p>
-                      <p className="text-[11px] text-gray-500">resgatar código de convite ou presente</p>
-                    </div>
-                  </button>
-                </div>
+                {/* Opção 1: Conta de reprodução */}
+                <button
+                  onClick={() => setMode('transfer')}
+                  className="w-full flex items-center gap-4 p-4 rounded-2xl border-2 border-[#0000AA]/25 bg-[#0000AA]/6 mb-3 active:bg-[#0000AA]/12 transition-all"
+                >
+                  <div className="w-12 h-12 min-w-[48px] rounded-xl bg-[#0000AA] flex items-center justify-center shadow-md">
+                    <Wallet className="h-6 w-6 text-white" />
+                  </div>
+                  <div className="text-left flex-1 min-w-0">
+                    <p className="text-[14px] font-black text-[#000080] leading-tight">conta de reprodução</p>
+                    <p className="text-[11px] text-gray-500 leading-snug">transferir saldo reprodução → saldo principal</p>
+                  </div>
+                </button>
 
-                <button onClick={() => navigate(-1)} className="w-full mt-4 h-[45px] rounded-full text-[12.5px] font-bold text-gray-400">
+                {/* Opção 2: Código de presente */}
+                <button
+                  onClick={() => setMode('gift')}
+                  className="w-full flex items-center gap-4 p-4 rounded-2xl border-2 border-amber-200 bg-amber-50 mb-4 active:bg-amber-100 transition-all"
+                >
+                  <div className="w-12 h-12 min-w-[48px] rounded-xl bg-gray-900 flex items-center justify-center shadow-md">
+                    <Gift className="h-6 w-6 text-white" />
+                  </div>
+                  <div className="text-left flex-1 min-w-0">
+                    <p className="text-[14px] font-black text-gray-900 leading-tight">código de presentes</p>
+                    <p className="text-[11px] text-gray-500 leading-snug">resgatar código de convite ou presente</p>
+                  </div>
+                </button>
+
+                <button
+                  onClick={() => navigate(-1)}
+                  className="w-full h-[42px] rounded-full text-[13px] font-semibold text-gray-400 border border-gray-200"
+                >
                   cancelar
                 </button>
               </motion.div>
