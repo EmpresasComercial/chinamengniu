@@ -53,7 +53,7 @@ export default function Invite() {
         <div className="px-6 mt-4 text-white space-y-3">
           {/* Code */}
           <div>
-            <p className="text-[11px] mb-1 font-bold text-white/70 uppercase tracking-wider">meu código de convite</p>
+            <p className="text-[11px] mb-1 font-bold text-white/70 tracking-wider">meu código de convite</p>
             <div className="flex items-center gap-3">
               <span className="text-[22px] font-black tracking-[4px]">{inviteCode}</span>
               <button
@@ -68,7 +68,7 @@ export default function Invite() {
 
           {/* Link */}
           <div>
-            <p className="text-[11px] mb-1 font-bold text-white/70 uppercase tracking-wider">link de convite</p>
+            <p className="text-[11px] mb-1 font-bold text-white/70 tracking-wider">link de convite</p>
             <div className="flex items-center gap-2">
               <div className="bg-white/10 rounded-xl px-3 py-1.5 flex-1 min-w-0">
                 <p className="text-[11px] text-white/80 truncate leading-relaxed">{inviteLink}</p>

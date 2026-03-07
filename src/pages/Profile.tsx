@@ -162,27 +162,21 @@ export default function Profile() {
         <div className="flex space-x-3 mt-6">
           <button
             onClick={() => navigate('/recarregar')}
-            className="flex-1 bg-[#D6F174] text-black font-bold h-[45px] rounded-lg px-4"
+            className="flex-1 bg-[#D6F174] text-black font-bold h-[45px] rounded-lg px-4 flex items-center justify-between"
           >
-            <span className="text-[15px] flex-1 text-left">recarregar</span>
-            <img
-              alt="recharge icon"
-              className="w-8 h-7 object-contain ml-2"
-              src="https://www.mengniu.wang/assets/deposit1-Dk3ugVyJ.png"
-              referrerPolicy="no-referrer"
-            />
+            <span className="text-[15px]">recarregar</span>
+            <svg xmlns="http://www.w3.org/2000/svg" className="w-6 h-6 shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+              <path d="M12 2v20M2 12h20" />
+            </svg>
           </button>
           <button
             onClick={() => navigate('/retirar')}
-            className="flex-1 bg-[#D6F174] text-black font-bold h-[45px] rounded-lg px-4"
+            className="flex-1 bg-[#D6F174] text-black font-bold h-[45px] rounded-lg px-4 flex items-center justify-between"
           >
-            <span className="text-[15px] flex-1 text-left">extrair</span>
-            <img
-              alt="withdraw icon"
-              className="w-7 h-7 object-contain ml-2"
-              src="https://www.mengniu.wang/assets/withdraw1-pLMbG-t2.png"
-              referrerPolicy="no-referrer"
-            />
+            <span className="text-[15px]">extrair</span>
+            <svg xmlns="http://www.w3.org/2000/svg" className="w-6 h-6 shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+              <path d="M12 22V2M2 12l10-10 10 10" />
+            </svg>
           </button>
         </div>
       </header>
@@ -205,10 +199,10 @@ export default function Profile() {
           </div>
         </div>
 
-      </section>
+      </section >
 
       {/* Action List Section */}
-      <section className="bg-[#EAEBED] rounded-t-3xl -mt-4 relative z-10 px-4 pt-6 flex-grow">
+      < section className="bg-[#EAEBED] rounded-t-3xl -mt-4 relative z-10 px-4 pt-6 flex-grow" >
         <div className="space-y-1">
           {menuItems.map((item, idx) => (
             <div
@@ -235,7 +229,7 @@ export default function Profile() {
         >
           sair
         </button>
-      </section>
-    </div>
+      </section >
+    </div >
   );
 }
