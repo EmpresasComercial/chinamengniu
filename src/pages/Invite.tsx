@@ -58,7 +58,7 @@ export default function Invite() {
               <span className="text-[22px] font-black tracking-[4px]">{inviteCode}</span>
               <button
                 onClick={() => handleCopy(inviteCode, 'código')}
-                className="bg-gradient-to-r from-[#7367f0] to-[#a067f0] px-4 h-[40px] rounded-full text-[12px] text-white font-medium flex items-center gap-1.5 shrink-0"
+                className="bg-gradient-to-r from-[#7367f0] to-[#a067f0] px-4 h-10 rounded-full text-[12px] text-white font-medium flex items-center gap-1.5 shrink-0 lowercase"
               >
                 <Copy className="w-3.5 h-3.5" />
                 copiar
@@ -75,7 +75,7 @@ export default function Invite() {
               </div>
               <button
                 onClick={() => handleCopy(inviteLink, 'link')}
-                className="bg-gradient-to-r from-[#7367f0] to-[#a067f0] px-4 h-[40px] rounded-full text-[12px] text-white font-medium flex items-center gap-1.5 shrink-0"
+                className="bg-gradient-to-r from-[#7367f0] to-[#a067f0] px-4 h-10 rounded-full text-[12px] text-white font-medium flex items-center gap-1.5 shrink-0 lowercase"
               >
                 {copied ? <Check className="w-3.5 h-3.5" /> : <Copy className="w-3.5 h-3.5" />}
                 {copied ? 'copiado!' : 'copiar'}
