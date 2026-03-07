@@ -177,12 +177,14 @@ export default function Home() {
               onClick={(e) => { e.stopPropagation(); navigate('/recarregar'); }}
               className="flex-1 bg-[#0000AA] text-white px-4 rounded-2xl text-[12.5px] font-black shadow-lg shadow-blue-900/10 h-[44px] flex items-center justify-center active:scale-[0.96] transition-all whitespace-nowrap"
             >
+              <img src="/images/recarregar.png" alt="Recarregar" className="w-5 h-5 mr-1.5 object-contain" />
               Recarregar
             </button>
             <button
               onClick={(e) => { e.stopPropagation(); navigate('/retirar'); }}
               className="flex-1 bg-white text-[#0000AA] border border-blue-100 px-4 rounded-2xl text-[12.5px] font-black shadow-lg shadow-blue-900/5 h-[44px] flex items-center justify-center active:scale-[0.96] transition-all whitespace-nowrap"
             >
+              <img src="/images/extrair.png" alt="Extrair" className="w-5 h-5 mr-1.5 object-contain" />
               Extrair
             </button>
           </div>
@@ -277,16 +279,18 @@ export default function Home() {
 
       {/* Notification Toast */}
       <AnimatePresence>
-        {notification && (
-          <motion.div
-            initial={{ opacity: 0, scale: 0.9, x: '-50%', y: '-50%' }}
-            animate={{ opacity: 1, scale: 1, x: '-50%', y: '-50%' }}
-            exit={{ opacity: 0, scale: 0.9, x: '-50%', y: '-50%' }}
-            className="fixed top-1/2 left-1/2 bg-black/80 text-white px-6 py-3 rounded-xl text-[12.5px] font-medium shadow-2xl z-[100] text-center min-w-[280px]"
-          >
-            {notification}
-          </motion.div>
-        )}
+        {
+          notification && (
+            <motion.div
+              initial={{ opacity: 0, scale: 0.9, x: '-50%', y: '-50%' }}
+              animate={{ opacity: 1, scale: 1, x: '-50%', y: '-50%' }}
+              exit={{ opacity: 0, scale: 0.9, x: '-50%', y: '-50%' }}
+              className="fixed top-1/2 left-1/2 bg-black/80 text-white px-6 py-3 rounded-xl text-[12.5px] font-medium shadow-2xl z-[100] text-center min-w-[280px]"
+            >
+              {notification}
+            </motion.div>
+          )
+        }
       </AnimatePresence>
     </div>
   );
