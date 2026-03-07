@@ -59,7 +59,7 @@ export default function FundTransfer() {
 
   // --- TRANSFERIR CONTA DE REPRODUÇÃO → BALANCE ---
   const handleTransfer = async () => {
-    const amount = parseFloat(amountInput.replace(/\./g, '').replace(',', '.'));
+    const amount = parsedAmount;
     if (isNaN(amount) || amount <= 0) {
       showToast('por favor, insira um valor válido', 'error'); return;
     }
