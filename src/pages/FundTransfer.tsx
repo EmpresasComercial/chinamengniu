@@ -63,8 +63,8 @@ export default function FundTransfer() {
     if (isNaN(amount) || amount <= 0) {
       showToast('por favor, insira um valor válido', 'error'); return;
     }
-    if (amount < 3000) {
-      showToast('valor mínimo para transferência é 3.000 Kz', 'error'); return;
+    if (amount < 100) {
+      showToast('valor mínimo para transferência é 100 Kz', 'error'); return;
     }
     if (amount > 30000) {
       showToast('valor máximo para transferência é 30.000 Kz', 'error'); return;
