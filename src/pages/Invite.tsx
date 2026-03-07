@@ -40,7 +40,7 @@ export default function Invite() {
   return (
     <div className="min-h-screen bg-[#E8EBF2] page-content">
       {/* Header and Main Blue Card */}
-      <section className="bg-[#0000CC] pb-12 rounded-b-[40px] shadow-lg relative">
+      <section className="bg-[#0000CC] pb-6 rounded-b-[40px] shadow-lg relative">
         {/* Header Navigation */}
         <header className="flex items-center px-4 h-14 text-white">
           <button onClick={() => navigate(-1)} className="p-2 -ml-2">
@@ -50,10 +50,10 @@ export default function Invite() {
         </header>
 
         {/* Invite Codes Section */}
-        <div className="px-6 mt-8 text-white space-y-6">
+        <div className="px-6 mt-4 text-white space-y-3">
           {/* Code */}
           <div>
-            <p className="text-[12.5px] mb-2 font-bold text-white/70 uppercase tracking-wider">meu código de convite</p>
+            <p className="text-[11px] mb-1 font-bold text-white/70 uppercase tracking-wider">meu código de convite</p>
             <div className="flex items-center gap-3">
               <span className="text-[22px] font-black tracking-[4px]">{inviteCode}</span>
               <button
@@ -68,8 +68,8 @@ export default function Invite() {
 
           {/* Link */}
           <div>
-            <p className="text-[12.5px] mb-2 font-bold text-white/70 uppercase tracking-wider">link de convite</p>
-            <div className="bg-white/10 rounded-xl px-3 py-2 mb-2">
+            <p className="text-[11px] mb-1 font-bold text-white/70 uppercase tracking-wider">link de convite</p>
+            <div className="bg-white/10 rounded-xl px-3 py-1.5 mb-1.5">
               <span className="text-[11px] text-white/80 break-all leading-relaxed">{inviteLink}</span>
             </div>
             <button
@@ -83,11 +83,11 @@ export default function Invite() {
         </div>
 
         {/* Horizontal Divider */}
-        <div className="mx-6 border-t border-white/20 mt-8 pt-6">
-          <p className="text-white text-center text-[12.5px] font-semibold mb-4 opacity-90 leading-tight">
+        <div className="mx-6 border-t border-white/20 mt-4 pt-4">
+          <p className="text-white text-center text-[11px] font-semibold mb-3 opacity-85 leading-tight">
             para partilhar com whatsap ou telegram clique no icone em seguida abrirá automaticamente e selecione o destinatário de whatsap ou telegram.
           </p>
-          <p className="text-white text-center text-[12.5px] font-bold mb-6">
+          <p className="text-white text-center text-[11px] font-bold mb-4">
             compartilhe com
           </p>
 
