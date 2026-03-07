@@ -165,18 +165,14 @@ export default function Profile() {
             className="flex-1 bg-[#D6F174] text-black font-bold h-[45px] rounded-lg px-4 flex items-center justify-between"
           >
             <span className="text-[15px]">recarregar</span>
-            <svg xmlns="http://www.w3.org/2000/svg" className="w-6 h-6 shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
-              <path d="M12 2v20M2 12h20" />
-            </svg>
+            <img src="/images/recarregar.png" alt="Recarregar" className="w-8 h-8 object-contain shrink-0" />
           </button>
           <button
             onClick={() => navigate('/retirar')}
             className="flex-1 bg-[#D6F174] text-black font-bold h-[45px] rounded-lg px-4 flex items-center justify-between"
           >
             <span className="text-[15px]">extrair</span>
-            <svg xmlns="http://www.w3.org/2000/svg" className="w-6 h-6 shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
-              <path d="M12 22V2M2 12l10-10 10 10" />
-            </svg>
+            <img src="/images/extrair.png" alt="Extrair" className="w-8 h-8 object-contain shrink-0" />
           </button>
         </div>
       </header>

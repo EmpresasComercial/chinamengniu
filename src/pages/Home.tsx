@@ -128,10 +128,7 @@ export default function Home() {
             className="flex flex-col items-center cursor-pointer"
           >
             <div className="w-[52px] h-[52px] bg-[#00008B] rounded-full flex items-center justify-center mb-2 overflow-hidden shadow-md">
-              <svg xmlns="http://www.w3.org/2000/svg" className="w-7 h-7" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                <rect x="2" y="3" width="20" height="14" rx="2" />
-                <path d="M8 21h8M12 17v4" />
-              </svg>
+              <img src="/images/icon-empresa.png" alt="Apresentação da Empresa" className="w-8 h-8 object-contain" />
             </div>
             <span className="text-[12.5px] font-black text-slate-900 leading-[1.1]">
               Apresentação da<br />Empresa
@@ -202,12 +199,8 @@ export default function Home() {
 
       {/* Hero Banner */}
       <section className="mt-4 px-4">
-        <div className="rounded-2xl overflow-hidden shadow-sm bg-gradient-to-r from-[#00008B] to-[#0000CC] min-h-[120px] flex items-center justify-center px-6 py-6">
-          <div className="text-center text-white">
-            <p className="text-[11px] font-medium opacity-70 mb-1 uppercase tracking-widest">mengniu company</p>
-            <p className="text-[18px] font-black leading-tight">uma plataforma digital de operação</p>
-            <p className="text-[11px] opacity-60 mt-1">investimento seguro e rentável</p>
-          </div>
+        <div className="rounded-2xl overflow-hidden shadow-sm bg-gray-100 min-h-[120px]">
+          <img src="/images/hero-banner.png" alt="Mengniu Banner" className="w-full h-auto object-cover" loading="lazy" />
         </div>
       </section>
 
