@@ -203,7 +203,7 @@ export default function FinancialRecords() {
               <img
                 alt="vazio"
                 className="w-24 h-24 object-contain opacity-50 mb-3"
-                src="https://www.mengniu.wang/assets/empty-image-CHCN_UjN.png"
+                src="/empty-image-CHCN_UjN.png"
               />
               <p className="text-gray-400 text-[12.5px]">nenhum registo encontrado</p>
             </div>

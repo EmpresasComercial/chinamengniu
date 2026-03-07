@@ -222,7 +222,7 @@ export default function Team() {
                   <img
                     alt="vazio"
                     className="w-full h-full object-contain opacity-40 text-gray-300"
-                    src="https://www.mengniu.wang/assets/empty-image-CHCN_UjN.png"
+                    src="/empty-image-CHCN_UjN.png"
                   />
                 </div>
                 <p className="text-gray-400 text-[12.5px]">vazio</p>
