@@ -57,8 +57,8 @@ export default function Invite() {
             <div className="flex items-center gap-3">
               <span className="text-[22px] font-black tracking-[4px]">{inviteCode}</span>
               <button
-                onClick={() => handleCopy(inviteCode, 'Código')}
-                className="bg-gradient-to-r from-[#7367f0] to-[#a067f0] px-4 py-1.5 rounded-full text-[12px] text-white font-medium flex items-center gap-1.5 shrink-0"
+                onClick={() => handleCopy(inviteCode, 'código')}
+                className="bg-gradient-to-r from-[#7367f0] to-[#a067f0] px-4 h-[40px] rounded-full text-[12px] text-white font-medium flex items-center gap-1.5 shrink-0"
               >
                 <Copy className="w-3.5 h-3.5" />
                 copiar
@@ -69,16 +69,18 @@ export default function Invite() {
           {/* Link */}
           <div>
             <p className="text-[11px] mb-1 font-bold text-white/70 uppercase tracking-wider">link de convite</p>
-            <div className="bg-white/10 rounded-xl px-3 py-1.5 mb-1.5">
-              <span className="text-[11px] text-white/80 break-all leading-relaxed">{inviteLink}</span>
+            <div className="flex items-center gap-2">
+              <div className="bg-white/10 rounded-xl px-3 py-1.5 flex-1 min-w-0">
+                <p className="text-[11px] text-white/80 truncate leading-relaxed">{inviteLink}</p>
+              </div>
+              <button
+                onClick={() => handleCopy(inviteLink, 'link')}
+                className="bg-gradient-to-r from-[#7367f0] to-[#a067f0] px-4 h-[40px] rounded-full text-[12px] text-white font-medium flex items-center gap-1.5 shrink-0"
+              >
+                {copied ? <Check className="w-3.5 h-3.5" /> : <Copy className="w-3.5 h-3.5" />}
+                {copied ? 'copiado!' : 'copiar'}
+              </button>
             </div>
-            <button
-              onClick={() => handleCopy(inviteLink, 'Link')}
-              className="bg-gradient-to-r from-[#7367f0] to-[#a067f0] px-4 py-1.5 rounded-full text-[12px] text-white font-medium flex items-center gap-1.5"
-            >
-              {copied ? <Check className="w-3.5 h-3.5" /> : <Copy className="w-3.5 h-3.5" />}
-              {copied ? 'copiado!' : 'copiar link'}
-            </button>
           </div>
         </div>
 
@@ -140,10 +142,10 @@ export default function Invite() {
             <div className="space-y-2 pt-2">
               <p className="font-bold text-[#333]">reembolso de recarga</p>
               <div className="text-gray-600 space-y-1">
-                <p>• Quando o subordinado de Nível 1 compra um produto pela primeira vez, você ganha <strong>10%</strong> do valor investido.</p>
-                <p>• Quando o subordinado de Nível 2 compra um produto pela primeira vez, você ganha <strong>5%</strong> do valor investido.</p>
-                <p>• Quando o subordinado de Nível 3 compra um produto pela primeira vez, você ganha <strong>2%</strong> do valor investido.</p>
-                <p className="pt-2 text-[12px] opacity-80 text-[#0000a5]">Válido pela primeira recarga para todos os níveis, contados a partir da criação: 365 dias.</p>
+                <p>• quando o subordinado de nível 1 compra um produto pela primeira vez, você ganha <strong>10%</strong> do valor investido.</p>
+                <p>• quando o subordinado de nível 2 compra um produto pela primeira vez, você ganha <strong>5%</strong> do valor investido.</p>
+                <p>• quando o subordinado de nível 3 compra um produto pela primeira vez, você ganha <strong>2%</strong> do valor investido.</p>
+                <p className="pt-2 text-[12px] opacity-80 text-[#0000a5]">válido pela primeira recarga para todos os níveis, contados a partir da criação: 365 dias.</p>
               </div>
             </div>
           </div>
