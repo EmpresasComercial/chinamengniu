@@ -140,9 +140,9 @@ export default function Invite() {
             <div className="space-y-2 pt-2">
               <p className="font-bold text-[#333]">reembolso de recarga</p>
               <div className="text-gray-600 space-y-1">
-                <p>recarga nível 1: 10%</p>
-                <p>recarga nível 2: 6%</p>
-                <p>recarga nível 3: 1%</p>
+                <p>Quando subordinado de Nível 1 compra um produto pela primeira vez ganhará sobre o valo investido 10%.</p>
+                <p>Quando subordinado de Nível 2 compra um produto pela primeira vez ganhará sobre o valo investido 5%.</p>
+                <p>Quando subordinado de Nível 3 compra um produto pela primeira vez ganhará sobre o valo investido 2%.</p>
                 <p className="pt-2 text-[12px] opacity-80">valido pela primeira recarga para todos níveis, da criação: 365 dias</p>
               </div>
             </div>
