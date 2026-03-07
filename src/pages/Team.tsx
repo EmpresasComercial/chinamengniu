@@ -202,7 +202,7 @@ export default function Team() {
               filteredMembers.map((member, idx) => (
                 <div key={idx} className="bg-white rounded-lg py-4 px-4 grid grid-cols-3 text-center text-[11px] text-gray-600 shadow-sm items-center">
                   <div className="font-mono">
-                    {member.phone ? `${member.phone.substring(0, 3)}****${member.phone.substring(member.phone.length - 3)}` : '---'}
+                    {member.phone || '---'}
                   </div>
                   <div>
                     <span className="bg-blue-50 text-blue-600 px-2 py-0.5 rounded text-[10px]">L{member.level}</span>
