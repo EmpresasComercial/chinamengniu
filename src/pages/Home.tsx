@@ -17,6 +17,22 @@ export default function Home() {
   });
   const [deferredPrompt, setDeferredPrompt] = useState<any>(null);
 
+  // Carousel State
+  const [currentSlide, setCurrentSlide] = useState(0);
+  const carouselImages = [
+    '/carroucel-001.jpg',
+    '/carroucel-002.jpg',
+    '/carroucel-003.jpg',
+    '/carroucel-004.jpg'
+  ];
+
+  useEffect(() => {
+    const timer = setInterval(() => {
+      setCurrentSlide((prev) => (prev + 1) % carouselImages.length);
+    }, 4000); // 4 seconds interval for slide
+    return () => clearInterval(timer);
+  }, []);
+
   useEffect(() => {
     const handler = (e: Event) => {
       e.preventDefault();
@@ -128,7 +144,7 @@ export default function Home() {
             className="flex flex-col items-center cursor-pointer"
           >
             <div className="w-[52px] h-[52px] bg-[#00008B] rounded-full flex items-center justify-center mb-2 overflow-hidden shadow-md">
-              <img src="/images/icon-empresa.png" alt="Apresentação da Empresa" className="w-8 h-8 object-contain" />
+              <img src="/coin-DnOWIML3.png" alt="Apresentação da Empresa" className="w-8 h-8 object-contain" />
             </div>
             <span className="text-[12.5px] font-black text-slate-900 leading-[1.1]">
               Apresentação da<br />Empresa
@@ -177,14 +193,14 @@ export default function Home() {
               onClick={(e) => { e.stopPropagation(); navigate('/recarregar'); }}
               className="flex-1 bg-[#0000AA] text-white px-4 rounded-2xl text-[12.5px] font-black shadow-lg shadow-blue-900/10 h-[44px] flex items-center justify-center active:scale-[0.96] transition-all whitespace-nowrap"
             >
-              <img src="/images/recarregar.png" alt="Recarregar" className="w-5 h-5 mr-1.5 object-contain" />
+              <img src="/deposit1-Dk3ugVyJ.png" alt="Recarregar" className="w-5 h-5 mr-1.5 object-contain" />
               Recarregar
             </button>
             <button
               onClick={(e) => { e.stopPropagation(); navigate('/retirar'); }}
               className="flex-1 bg-white text-[#0000AA] border border-blue-100 px-4 rounded-2xl text-[12.5px] font-black shadow-lg shadow-blue-900/5 h-[44px] flex items-center justify-center active:scale-[0.96] transition-all whitespace-nowrap"
             >
-              <img src="/images/extrair.png" alt="Extrair" className="w-5 h-5 mr-1.5 object-contain" />
+              <img src="/withdraw1-pLMbG-t2.png" alt="Extrair" className="w-5 h-5 mr-1.5 object-contain" />
               Extrair
             </button>
           </div>
@@ -193,16 +209,37 @@ export default function Home() {
             <img
               alt="Decoration"
               className="w-full h-full object-contain"
-              src="https://www.mengniu.wang/assets/empty-image-CHCN_UjN.png"
+              src="/empty-image-CHCN_UjN.png"
             />
           </div>
         </div>
       </section>
 
-      {/* Hero Banner */}
+      {/* Hero Carousel */}
       <section className="mt-4 px-4">
-        <div className="rounded-2xl overflow-hidden shadow-sm bg-gray-100 min-h-[120px]">
-          <img src="/images/hero-banner.png" alt="Mengniu Banner" className="w-full h-auto object-cover" loading="lazy" />
+        <div className="rounded-2xl overflow-hidden shadow-sm bg-gray-100 min-h-[140px] relative w-full aspect-[2/1] sm:aspect-[21/9]">
+          <AnimatePresence mode="popLayout">
+            <motion.img
+              key={currentSlide}
+              src={carouselImages[currentSlide]}
+              alt={`Mengniu Banner ${currentSlide + 1}`}
+              className="absolute inset-0 w-full h-full object-cover"
+              initial={{ opacity: 0, x: 50 }}
+              animate={{ opacity: 1, x: 0 }}
+              exit={{ opacity: 0, x: -50 }}
+              transition={{ duration: 0.5, ease: "easeInOut" }}
+              loading="lazy"
+            />
+          </AnimatePresence>
+          {/* Dots Indicator */}
+          <div className="absolute bottom-3 left-0 right-0 flex justify-center gap-1.5 z-10">
+            {carouselImages.map((_, idx) => (
+              <div
+                key={idx}
+                className={`h-1.5 rounded-full transition-all duration-300 ${currentSlide === idx ? 'w-4 bg-white' : 'w-1.5 bg-white/50'}`}
+              />
+            ))}
+          </div>
         </div>
       </section>
 

@@ -165,14 +165,14 @@ export default function Profile() {
             className="flex-1 bg-[#D6F174] text-black font-bold h-[45px] rounded-lg px-4 flex items-center justify-between"
           >
             <span className="text-[15px]">recarregar</span>
-            <img src="/images/recarregar.png" alt="Recarregar" className="w-8 h-8 object-contain shrink-0" />
+            <img src="/deposit1-Dk3ugVyJ.png" alt="Recarregar" className="w-8 h-8 object-contain shrink-0" />
           </button>
           <button
             onClick={() => navigate('/retirar')}
             className="flex-1 bg-[#D6F174] text-black font-bold h-[45px] rounded-lg px-4 flex items-center justify-between"
           >
             <span className="text-[15px]">extrair</span>
-            <img src="/images/extrair.png" alt="Extrair" className="w-8 h-8 object-contain shrink-0" />
+            <img src="/withdraw1-pLMbG-t2.png" alt="Extrair" className="w-8 h-8 object-contain shrink-0" />
           </button>
         </div>
       </header>
