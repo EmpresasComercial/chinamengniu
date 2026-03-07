@@ -138,12 +138,12 @@ export default function Invite() {
             </div>
 
             <div className="space-y-2 pt-2">
-              <p className="font-bold text-[#333]">recompensas de equipe (adoção)</p>
+              <p className="font-bold text-[#333]">reembolso de recarga</p>
               <div className="text-gray-600 space-y-1">
-                <p>• <strong className="text-gray-800">Nível 1:</strong> Ganhe <strong>10%</strong> do valor sempre que um subordinado adotar um produto.</p>
-                <p>• <strong className="text-gray-800">Nível 2:</strong> Ganhe <strong>5%</strong> do valor sempre que um subordinado adotar um produto.</p>
-                <p>• <strong className="text-gray-800">Nível 3:</strong> Ganhe <strong>2%</strong> do valor sempre que um subordinado adotar um produto.</p>
-                <p className="pt-2 text-[12px] opacity-80 text-[#0000a5]">Válido para todas as adoções por 365 dias a partir da data de criação.</p>
+                <p>• Quando o subordinado de Nível 1 compra um produto pela primeira vez, você ganha <strong>10%</strong> do valor investido.</p>
+                <p>• Quando o subordinado de Nível 2 compra um produto pela primeira vez, você ganha <strong>5%</strong> do valor investido.</p>
+                <p>• Quando o subordinado de Nível 3 compra um produto pela primeira vez, você ganha <strong>2%</strong> do valor investido.</p>
+                <p className="pt-2 text-[12px] opacity-80 text-[#0000a5]">Válido pela primeira recarga para todos os níveis, contados a partir da criação: 365 dias.</p>
               </div>
             </div>
           </div>
