@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { Suspense } from 'react';
 import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
 import { LoadingProvider, RouteTransitionLoader } from './contexts/LoadingContext';
 import { AuthProvider, useAuth } from './contexts/AuthContext';
@@ -6,29 +6,31 @@ import Layout from './components/Layout';
 import ProtectedRoute from './components/ProtectedRoute';
 
 // Páginas públicas (entrada)
-import Login from './pages/Login';
-import Register from './pages/Register';
+const Login = React.lazy(() => import('./pages/Login'));
+const Register = React.lazy(() => import('./pages/Register'));
 
 // Páginas privadas (requerem autenticação)
-import Home from './pages/Home';
-import VIP from './pages/VIP';
-import Reproducao from './pages/Reproducao';
-import Profile from './pages/Profile';
-import Team from './pages/Team';
-import RechargeList from './pages/RechargeList';
-import RechargeDetail from './pages/RechargeDetail';
-import FinancialRecords from './pages/FinancialRecords';
-import SecurityCenter from './pages/SecurityCenter';
-import ChangePassword from './pages/ChangePassword';
-import Withdraw from './pages/Withdraw';
-import VIPDetails from './pages/VIPDetails';
-import CompanyPresentation from './pages/CompanyPresentation';
-import FundTransfer from './pages/FundTransfer';
-import HelpCenter from './pages/HelpCenter';
-import WithdrawHelp from './pages/WithdrawHelp';
-import RechargeHelp from './pages/RechargeHelp';
-import Invite from './pages/Invite';
-import AddBank from './pages/AddBank';
+const Home = React.lazy(() => import('./pages/Home'));
+const VIP = React.lazy(() => import('./pages/VIP'));
+const Reproducao = React.lazy(() => import('./pages/Reproducao'));
+const Profile = React.lazy(() => import('./pages/Profile'));
+const Team = React.lazy(() => import('./pages/Team'));
+const RechargeList = React.lazy(() => import('./pages/RechargeList'));
+const RechargeDetail = React.lazy(() => import('./pages/RechargeDetail'));
+const FinancialRecords = React.lazy(() => import('./pages/FinancialRecords'));
+const SecurityCenter = React.lazy(() => import('./pages/SecurityCenter'));
+const ChangePassword = React.lazy(() => import('./pages/ChangePassword'));
+const Withdraw = React.lazy(() => import('./pages/Withdraw'));
+const VIPDetails = React.lazy(() => import('./pages/VIPDetails'));
+const CompanyPresentation = React.lazy(() => import('./pages/CompanyPresentation'));
+const FundTransfer = React.lazy(() => import('./pages/FundTransfer'));
+const HelpCenter = React.lazy(() => import('./pages/HelpCenter'));
+const WithdrawHelp = React.lazy(() => import('./pages/WithdrawHelp'));
+const RechargeHelp = React.lazy(() => import('./pages/RechargeHelp'));
+const Invite = React.lazy(() => import('./pages/Invite'));
+const AddBank = React.lazy(() => import('./pages/AddBank'));
+const Promotion = React.lazy(() => import('./pages/Promotion'));
+const PromotionDetails = React.lazy(() => import('./pages/PromotionDetails'));
 
 
 /**
@@ -49,61 +51,73 @@ export default function App() {
       <AuthProvider>
         <LoadingProvider>
           <RouteTransitionLoader />
-          <Routes>
+          <Suspense fallback={
+            <div className="fixed inset-0 z-[9999] flex flex-col items-center justify-center bg-black/5 backdrop-blur-[1px]">
+              <div className="spinner spinner-dark !w-7 !h-7 !border-[3px]"></div>
+              <div className="mt-4 text-[12.5px] text-gray-500 font-serif text-center px-6">
+                Carregando...<br />
+                <span className="text-[10px] opacity-60">A página poderá demorar a carregar dependendo da sua conexão.</span>
+              </div>
+            </div>
+          }>
+            <Routes>
 
-            {/* ── ROTAS PÚBLICAS (sem autenticação) ── */}
-            <Route
-              path="/login"
-              element={
-                <PublicOnlyRoute>
-                  <Login />
-                </PublicOnlyRoute>
-              }
-            />
-            <Route
-              path="/registrar"
-              element={
-                <PublicOnlyRoute>
-                  <Register />
-                </PublicOnlyRoute>
-              }
-            />
+              {/* ── ROTAS PÚBLICAS (sem autenticação) ── */}
+              <Route
+                path="/login"
+                element={
+                  <PublicOnlyRoute>
+                    <Login />
+                  </PublicOnlyRoute>
+                }
+              />
+              <Route
+                path="/registrar"
+                element={
+                  <PublicOnlyRoute>
+                    <Register />
+                  </PublicOnlyRoute>
+                }
+              />
 
-            {/* ── ROTAS PRIVADAS (exigem utilizador autenticado) ── */}
-            <Route element={<ProtectedRoute />}>
+              {/* ── ROTAS PRIVADAS (exigem utilizador autenticado) ── */}
+              <Route element={<ProtectedRoute />}>
 
-              {/* Rotas com Layout (barra de navegação) */}
-              <Route element={<Layout />}>
-                <Route path="/" element={<Home />} />
-                <Route path="/vip" element={<VIP />} />
-                <Route path="/reproducao" element={<Reproducao />} />
-                <Route path="/perfil" element={<Profile />} />
+                {/* Rotas com Layout (barra de navegação) */}
+                <Route element={<Layout />}>
+                  <Route path="/" element={<Home />} />
+                  <Route path="/vip" element={<VIP />} />
+                  <Route path="/reproducao" element={<Reproducao />} />
+                  <Route path="/perfil" element={<Profile />} />
+                </Route>
+
+                {/* Rotas sem Layout (ecrã completo) */}
+                <Route path="/equipe" element={<Team />} />
+                <Route path="/recarregar" element={<RechargeList />} />
+                <Route path="/detalhes-pagamento" element={<RechargeDetail />} />
+                <Route path="/detalhes" element={<FinancialRecords />} />
+                <Route path="/centro-de-seguranca" element={<SecurityCenter />} />
+                <Route path="/alterar-a-senha" element={<ChangePassword />} />
+                <Route path="/retirar" element={<Withdraw />} />
+                <Route path="/vip-detalhes" element={<VIPDetails />} />
+                <Route path="/apresentacao-da-empresa" element={<CompanyPresentation />} />
+                <Route path="/transferencia-de-fundos" element={<FundTransfer />} />
+                <Route path="/central-de-ajuda" element={<HelpCenter />} />
+                <Route path="/ajuda-retirar" element={<WithdrawHelp />} />
+                <Route path="/ajuda-recarregar" element={<RechargeHelp />} />
+                <Route path="/convidar" element={<Invite />} />
+                <Route path="/adicionar-banco" element={<AddBank />} />
+                <Route path="/promocao" element={<Promotion />} />
+                <Route path="/promocao-detalhes" element={<PromotionDetails />} />
+
+
               </Route>
 
-              {/* Rotas sem Layout (ecrã completo) */}
-              <Route path="/equipe" element={<Team />} />
-              <Route path="/recarregar" element={<RechargeList />} />
-              <Route path="/detalhes-pagamento" element={<RechargeDetail />} />
-              <Route path="/detalhes" element={<FinancialRecords />} />
-              <Route path="/centro-de-seguranca" element={<SecurityCenter />} />
-              <Route path="/alterar-a-senha" element={<ChangePassword />} />
-              <Route path="/retirar" element={<Withdraw />} />
-              <Route path="/vip-detalhes" element={<VIPDetails />} />
-              <Route path="/apresentacao-da-empresa" element={<CompanyPresentation />} />
-              <Route path="/transferencia-de-fundos" element={<FundTransfer />} />
-              <Route path="/central-de-ajuda" element={<HelpCenter />} />
-              <Route path="/ajuda-retirar" element={<WithdrawHelp />} />
-              <Route path="/ajuda-recarregar" element={<RechargeHelp />} />
-              <Route path="/convidar" element={<Invite />} />
-              <Route path="/adicionar-banco" element={<AddBank />} />
+              {/* Qualquer rota desconhecida → login */}
+              <Route path="*" element={<Navigate to="/login" replace />} />
 
-
-            </Route>
-
-            {/* Qualquer rota desconhecida → login */}
-            <Route path="*" element={<Navigate to="/login" replace />} />
-
-          </Routes>
+            </Routes>
+          </Suspense>
         </LoadingProvider>
       </AuthProvider>
     </Router>

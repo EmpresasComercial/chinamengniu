@@ -78,8 +78,11 @@ export default function VIPDetails() {
             <div className="flex flex-col gap-1">
               <h2 className="text-[15px] font-black text-slate-900">{product?.name || 'vaca'}</h2>
               <div className="flex gap-0.5">
-                {[1, 2, 3, 4, 5].map((i) => (
-                  <Star key={i} className="w-5 h-5 fill-[#FFD700] text-[#FFD700]" />
+                {Array.from({ length: product?.purchase_limit || 1 }).map((_, i) => (
+                  <Star
+                    key={i}
+                    className={`w-5 h-5 ${(product?.bought_count || 0) > i ? "fill-[#FFD700] text-[#FFD700]" : "text-slate-300"}`}
+                  />
                 ))}
               </div>
             </div>

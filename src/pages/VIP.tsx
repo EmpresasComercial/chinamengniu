@@ -12,6 +12,8 @@ interface Product {
   daily_income: number;
   duration_days: number;
   image_url: string;
+  purchase_limit: number;
+  bought_count?: number;
 }
 
 export default function VIP() {
@@ -26,14 +28,28 @@ export default function VIP() {
 
   useEffect(() => {
     async function loadData() {
-      // 1. Load Products
+      // 1. Load Products & Purchase Counts
       const { data: productsData } = await supabase
         .from('products')
         .select('*')
         .eq('status', 'active')
         .order('price', { ascending: true });
 
-      if (productsData) setProducts(productsData);
+      if (user && productsData) {
+        // Obter contagem de compras para cada produto
+        const { data: history } = await supabase
+          .from('historico_compras')
+          .select('nome_produto')
+          .eq('user_id', user.id);
+
+        const mappedProducts = productsData.map(p => ({
+          ...p,
+          bought_count: history?.filter(h => h.nome_produto === p.name).length || 0
+        }));
+        setProducts(mappedProducts);
+      } else if (productsData) {
+        setProducts(productsData);
+      }
 
       // 2. Load Revenue Stats from tarefas_diarias
       if (user) {
@@ -86,7 +102,10 @@ export default function VIP() {
               </div>
             </div>
           </div>
-          <button className="bg-blue-600/50 text-white px-4 py-1 rounded-full text-[10px] font-semibold">
+          <button
+            onClick={() => navigate('/promocao')}
+            className="bg-blue-600/50 text-white px-4 py-1 rounded-full text-[10px] font-semibold active:opacity-70 transition-opacity"
+          >
             promoção
           </button>
         </div>
@@ -150,11 +169,15 @@ export default function VIP() {
                 <img alt={vip.name} className="w-12 h-12 object-contain" src={vip.image_url} referrerPolicy="no-referrer" />
                 <div>
                   <p className="font-bold text-[12.5px] text-[#000080]">{vip.name}</p>
-                  <div className={`flex text-[10px] gap-1 ${profile?.state === vip.name ? 'text-gray-300' : 'text-[#FFD700]'}`}>
-                    {Array.from({ length: 5 }).map((_, i) => (
-                      <span key={i}>{profile?.state === vip.name ? '☆' : '★'}</span>
+                  <div className="flex text-[10px] gap-1 items-center">
+                    {Array.from({ length: vip.purchase_limit || 1 }).map((_, i) => (
+                      <span key={i} className={(vip.bought_count || 0) > i ? "text-[#FFD700]" : "text-gray-300"}>
+                        {(vip.bought_count || 0) > i ? '★' : '☆'}
+                      </span>
                     ))}
-                    {profile?.state === vip.name && <span className="ml-2 text-gray-400">posição atual</span>}
+                    {profile?.state === vip.name && (
+                      <span className="ml-2 text-[10px] text-gray-400 font-serif">posição atual</span>
+                    )}
                   </div>
                 </div>
               </div>
