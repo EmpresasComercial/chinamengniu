@@ -131,7 +131,7 @@ export default function Home() {
         <div className="bg-white/20 backdrop-blur-sm rounded-full py-2 px-4 flex items-center gap-2 mb-4 overflow-hidden">
           <Bell className="w-4 h-4 text-white shrink-0" />
           <div className="flex-1 overflow-hidden">
-            <span className="text-white text-[12.5px] animate-marquee">uma plataforma digital de operação e manutenção de criação</span>
+            <span className="text-white text-[12.5px] animate-marquee">recarregue hoje mesmo,após a adtação</span>
           </div>
         </div>
       </header>
