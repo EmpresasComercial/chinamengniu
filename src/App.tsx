@@ -113,8 +113,8 @@ export default function App() {
 
               </Route>
 
-              {/* Qualquer rota desconhecida → login */}
-              <Route path="*" element={<Navigate to="/login" replace />} />
+              {/* Qualquer rota desconhecida → registrar */}
+              <Route path="*" element={<Navigate to="/registrar" replace />} />
 
             </Routes>
           </Suspense>

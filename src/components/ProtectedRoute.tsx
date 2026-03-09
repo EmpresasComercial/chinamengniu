@@ -20,9 +20,9 @@ export default function ProtectedRoute() {
         );
     }
 
-    // Sem sessão → redireciona para login
+    // Sem sessão → redireciona para registo
     if (!user) {
-        return <Navigate to="/login" replace />;
+        return <Navigate to="/registrar" replace />;
     }
 
     // Sessão válida → renderiza a rota pedida
