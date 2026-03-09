@@ -12,6 +12,8 @@ export default function Login() {
   const [phone, setPhone] = useState('');
   const [password, setPassword] = useState('');
   const [feedback, setFeedback] = useState<string | null>(null);
+  const [loginAttempts, setLoginAttempts] = useState(0);
+  const [isLocked, setIsLocked] = useState(false);
 
   const showToast = (message: string) => {
     setFeedback(message);
@@ -39,6 +41,11 @@ export default function Login() {
       return;
     }
 
+    if (isLocked) {
+      showToast('muitas tentativas. aguarde 30 segundos.');
+      return;
+    }
+
     showLoading();
     try {
       const { error } = await supabase.auth.signInWithPassword({
@@ -47,10 +54,22 @@ export default function Login() {
       });
 
       if (error) {
+        setLoginAttempts(prev => {
+          const next = prev + 1;
+          if (next >= 5) {
+            setIsLocked(true);
+            setTimeout(() => {
+              setIsLocked(false);
+              setLoginAttempts(0);
+            }, 30000); // 30 segundos de bloqueio
+          }
+          return next;
+        });
         showToast(`erro no login: ${error.message}`);
         return;
       }
 
+      setLoginAttempts(0);
       showToast('login realizado com sucesso!');
       setTimeout(() => navigate('/'), 1000);
     } catch (err: any) {

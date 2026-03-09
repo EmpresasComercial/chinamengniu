@@ -24,7 +24,9 @@ export default function Register() {
   useEffect(() => {
     const code = searchParams.get('invite');
     if (code) {
-      setFormData(prev => ({ ...prev, inviteCode: code }));
+      // Sanitização rigorosa: apenas caracteres alfanuméricos
+      const sanitizedCode = code.replace(/[^\w]/g, '').slice(0, 20);
+      setFormData(prev => ({ ...prev, inviteCode: sanitizedCode }));
     }
   }, [searchParams]);
 
