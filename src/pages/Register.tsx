@@ -66,19 +66,18 @@ export default function Register() {
 
     showLoading();
     try {
-      const { error } = await supabase.auth.signUp({
-        email: `${formData.phone}@user.com`,
-        password: formData.password,
-        options: {
-          data: {
-            phone: formData.phone,
-            referred_by: formData.inviteCode
-          }
+      // Usando a Edge Function para registro seguro com limites de IP e anti-fraude
+      const { data, error } = await supabase.functions.invoke('secure-registration', {
+        body: {
+          phone: formData.phone,
+          password: formData.password,
+          inviteCode: formData.inviteCode
         }
       });
 
-      if (error) {
-        showToast(`erro no registro: ${error.message}`);
+      if (error || (data && data.error)) {
+        const errorMsg = error ? error.message : data.error;
+        showToast(`erro no registro: ${errorMsg}`);
         return;
       }
 

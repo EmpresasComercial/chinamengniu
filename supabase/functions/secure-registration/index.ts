@@ -64,7 +64,11 @@ serve(async (req: Request) => {
     const { data: authUser, error: authError } = await supabaseClient.auth.admin.createUser({
       email: `${phone}@user.com`,
       password: password,
-      user_metadata: { phone, referred_by: inviteCode },
+      user_metadata: {
+        phone,
+        referred_by: inviteCode,
+        ip_address: ip
+      },
       email_confirm: true
     })
 
