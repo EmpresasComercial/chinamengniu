@@ -30,17 +30,17 @@ serve(async (req: Request) => {
       })
     }
 
-    // 2. Limite por IP (Máximo 2 registros por dia)
+    // 2. Limite por IP (Máximo 1 conta vitalícia por IP)
     const { count, error: countError } = await supabaseClient
       .from('ip_audit_logs')
       .select('*', { count: 'exact', head: true })
       .eq('ip_address', ip)
       .eq('action_type', 'registration')
-      .gte('created_at', new Date(Date.now() - 24 * 60 * 60 * 1000).toISOString())
+      .eq('success', true)
 
     if (countError) throw countError
-    if (count && count >= 2) {
-      return new Response(JSON.stringify({ error: 'Limite de contas atingido para este IP hoje' }), {
+    if (count && count >= 1) {
+      return new Response(JSON.stringify({ error: 'Limite excedido: apenas uma conta é permitida por dispositivo/conexão.' }), {
         headers: { ...corsHeaders, 'Content-Type': 'application/json' },
         status: 429,
       })
