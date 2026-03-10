@@ -47,7 +47,7 @@ export default function FinancialRecords() {
     let query;
     switch (filter) {
       case 'retiradas':
-        query = supabase.from('retirada_clientes').select('*').eq('user_id', user!.id).order('data_de_criacao', { ascending: false });
+        query = supabase.from('retirada_clientes').select('*').eq('user_id', user!.id).order('created_at', { ascending: false });
         break;
       case 'recarregamentos':
         query = supabase.from('depositos_clientes').select('*').eq('user_id', user!.id).order('created_at', { ascending: false });

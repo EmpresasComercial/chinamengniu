@@ -75,9 +75,21 @@ export default function Register() {
         }
       });
 
-      if (error || (data && data.error)) {
-        const errorMsg = error ? error.message : data.error;
+      if (error) {
+        // If it's a 4xx/5xx error, the body might contain the actual error message
+        let errorMsg = error.message;
+        try {
+          const body = await error.context?.json();
+          if (body && body.error) errorMsg = body.error;
+        } catch (e) {
+          // Fallback to default error message
+        }
         showToast(`erro no registro: ${errorMsg}`);
+        return;
+      }
+
+      if (data && data.error) {
+        showToast(`erro no registro: ${data.error}`);
         return;
       }
 
