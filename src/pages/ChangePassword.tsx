@@ -75,14 +75,14 @@ export default function ChangePassword() {
         setValidationError(updateError.message);
         setTimeout(() => setValidationError(null), 3000);
       } else {
-        setValidationError('Senha alterada com sucesso!');
+        setValidationError('bem-sucedido');
         setTimeout(() => {
           setValidationError(null);
           navigate(-1);
         }, 2000);
       }
     } catch (err: any) {
-      setValidationError('Erro inesperado ao alterar senha.');
+      setValidationError('falha ao alterar senha');
       setTimeout(() => setValidationError(null), 3000);
     } finally {
       hideLoading();

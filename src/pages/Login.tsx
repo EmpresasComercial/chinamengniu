@@ -65,15 +65,15 @@ export default function Login() {
           }
           return next;
         });
-        showToast(`erro no login: ${error.message}`);
+        showToast(error.message);
         return;
       }
 
       setLoginAttempts(0);
-      showToast('login realizado com sucesso!');
+      showToast('bem-sucedido');
       setTimeout(() => navigate('/'), 1000);
     } catch (err: any) {
-      showToast('Erro inesperado no login');
+      showToast('falha no acesso');
     } finally {
       hideLoading();
     }

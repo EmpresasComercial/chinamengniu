@@ -75,10 +75,15 @@ export default function AddBank() {
         setValidationError(error.message);
         setTimeout(() => setValidationError(null), 3000);
       } else {
-        navigate(-1);
+        // Success case for bank addition
+        setValidationError('bem-sucedido');
+        setTimeout(() => {
+          setValidationError(null);
+          navigate(-1);
+        }, 1500);
       }
     } catch (err: any) {
-      setValidationError('Erro inesperado ao salvar banco.');
+      setValidationError('falha ao salvar');
       setTimeout(() => setValidationError(null), 3000);
     } finally {
       hideLoading();

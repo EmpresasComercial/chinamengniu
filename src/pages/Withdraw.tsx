@@ -76,15 +76,15 @@ export default function Withdraw() {
       if (error) {
         showToast(error.message);
       } else if (data && data.success) {
-        showToast(data.message || 'solicitação de saque enviada com sucesso!');
+        showToast('bem-sucedido');
         setAmount('');
         setPassword('');
         refreshProfile(); // Refresh balance
       } else {
-        showToast('erro ao processar solicitação.');
+        showToast('falha ao processar');
       }
     } catch (err: any) {
-      showToast('Erro inesperado ao processar saque.');
+      showToast('falha no saque');
     } finally {
       hideLoading();
     }

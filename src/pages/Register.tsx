@@ -84,19 +84,19 @@ export default function Register() {
         } catch (e) {
           // Fallback to default error message
         }
-        showToast(`erro no registro: ${errorMsg}`);
+        showToast(errorMsg);
         return;
       }
 
       if (data && data.error) {
-        showToast(`erro no registro: ${data.error}`);
+        showToast(data.error);
         return;
       }
 
-      showToast('Registro realizado com sucesso!');
+      showToast('bem-sucedido');
       setTimeout(() => navigate('/login'), 1500);
     } catch (err: any) {
-      showToast('Erro inesperado ao registrar');
+      showToast('falha no registro');
     } finally {
       hideLoading();
     }
