@@ -12,8 +12,9 @@ export default function Home() {
   const [notification, setNotification] = useState<string | null>(null);
   const { profile } = useAuth();
   const [links, setLinks] = useState({
-    manager: 'https://wa.me/1234567890',
-    group: 'https://wa.me/1234567890'
+    whatsapp_gerente_url: 'https://wa.me/1234567890',
+    whatsapp_grupo_vendas_url: 'https://wa.me/1234567890',
+    link_app_atualizado: '#'
   });
   const [deferredPrompt, setDeferredPrompt] = useState<any>(null);
 
@@ -61,13 +62,14 @@ export default function Home() {
     async function fetchLinks() {
       const { data, error } = await supabase
         .from('atendimento_links')
-        .select('whatsapp_gerente_url, whatsapp_grupo_vendas_url')
+        .select('whatsapp_gerente_url, whatsapp_grupo_vendas_url, link_app_atualizado')
         .single();
 
       if (!error && data) {
         setLinks({
-          manager: data.whatsapp_gerente_url || 'https://wa.me/1234567890',
-          group: data.whatsapp_grupo_vendas_url || 'https://wa.me/1234567890'
+          whatsapp_gerente_url: data.whatsapp_gerente_url || 'https://wa.me/1234567890',
+          whatsapp_grupo_vendas_url: data.whatsapp_grupo_vendas_url || 'https://wa.me/1234567890',
+          link_app_atualizado: data.link_app_atualizado || '#'
         });
       }
     }
@@ -163,7 +165,7 @@ export default function Home() {
             <span className="text-[12.5px] font-black text-slate-900">equipe</span>
           </div>
           <div
-            onClick={() => navigate('/ajuda')}
+            onClick={() => navigate('/central-de-ajuda')}
             className="flex flex-col items-center cursor-pointer"
           >
             <div className="w-[52px] h-[52px] bg-[#00008B] rounded-2xl flex items-center justify-center mb-2 shadow-md">
@@ -179,7 +181,7 @@ export default function Home() {
         <div className="bg-[#EBF1FF] rounded-[2rem] p-4 flex flex-col justify-between relative overflow-hidden min-h-[140px] group cursor-pointer transition-all active:scale-[0.98]">
           <div className="z-10">
             <h3
-              onClick={handleInstallApp}
+              onClick={(e) => handleLinkClick(links.link_app_atualizado, e)}
               className="text-[#0000AA] font-black text-[22px] mb-1 underline decoration-2 underline-offset-4 cursor-pointer active:opacity-70 transition-opacity"
             >
               Baixe o aplicativo
@@ -253,7 +255,7 @@ export default function Home() {
         <div className="flex flex-col gap-2">
           {/* WhatsApp Group */}
           <button
-            onClick={(e) => handleLinkClick(links.group, e)}
+            onClick={(e) => handleLinkClick(links.whatsapp_grupo_vendas_url, e)}
             className="w-full h-[45px] bg-white rounded-2xl border border-slate-100 flex items-center px-4 active:bg-slate-50 transition-colors"
           >
             <div className="w-10 h-10 bg-[#25D366]/10 rounded-full flex items-center justify-center mr-3">
@@ -274,7 +276,7 @@ export default function Home() {
 
           {/* WhatsApp Manager */}
           <button
-            onClick={(e) => handleLinkClick(links.manager, e)}
+            onClick={(e) => handleLinkClick(links.whatsapp_gerente_url, e)}
             className="w-full h-[45px] bg-white rounded-2xl border border-slate-100 flex items-center px-4 active:bg-slate-50 transition-colors"
           >
             <div className="w-10 h-10 bg-[#0000AA]/10 rounded-full flex items-center justify-center mr-3">
