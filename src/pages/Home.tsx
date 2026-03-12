@@ -181,7 +181,7 @@ export default function Home() {
         <div className="bg-[#EBF1FF] rounded-[2rem] p-4 flex flex-col justify-between relative overflow-hidden min-h-[140px] group cursor-pointer transition-all active:scale-[0.98]">
           <div className="z-10">
             <h3
-              onClick={(e) => handleLinkClick(links.link_app_atualizado, e)}
+              onClick={handleInstallApp}
               className="text-[#0000AA] font-black text-[22px] mb-1 underline decoration-2 underline-offset-4 cursor-pointer active:opacity-70 transition-opacity"
             >
               Baixe o aplicativo
