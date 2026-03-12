@@ -31,6 +31,7 @@ const Invite = React.lazy(() => import('./pages/Invite'));
 const AddBank = React.lazy(() => import('./pages/AddBank'));
 const Promotion = React.lazy(() => import('./pages/Promotion'));
 const PromotionDetails = React.lazy(() => import('./pages/PromotionDetails'));
+const RechargeUSDT = React.lazy(() => import('./pages/RechargeUSDT'));
 
 
 /**
@@ -109,6 +110,7 @@ export default function App() {
                 <Route path="/adicionar-banco" element={<AddBank />} />
                 <Route path="/promocao" element={<Promotion />} />
                 <Route path="/promocao-detalhes" element={<PromotionDetails />} />
+                <Route path="/recarregar-usdt" element={<RechargeUSDT />} />
 
 
               </Route>

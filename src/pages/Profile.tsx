@@ -159,20 +159,29 @@ export default function Profile() {
         </div>
 
         {/* Action Buttons */}
-        <div className="flex space-x-3 mt-6">
+        <div className="grid grid-cols-3 gap-2 mt-6">
           <button
             onClick={() => navigate('/recarregar')}
-            className="flex-1 bg-[#D6F174] text-black font-bold h-[45px] rounded-lg px-4 flex items-center justify-between"
+            className="bg-[#D6F174] text-black font-bold h-[45px] rounded-lg px-2 flex items-center justify-between shadow-sm"
           >
-            <span className="text-[15px]">recarregar</span>
-            <img src="/deposit1-Dk3ugVyJ.png" alt="Recarregar" className="w-8 h-8 object-contain shrink-0" />
+            <span className="text-[12.5px]">recarregar</span>
+            <img src="/deposit1-Dk3ugVyJ.png" alt="Recarregar" className="w-6 h-6 object-contain shrink-0" />
+          </button>
+          <button
+            onClick={() => navigate('/recarregar-usdt')}
+            className="bg-[#00D1FF] text-white font-bold h-[45px] rounded-lg px-2 flex items-center justify-between shadow-sm"
+          >
+            <span className="text-[12.5px]">recarga USDT</span>
+            <div className="w-6 h-6 bg-white rounded-full flex items-center justify-center p-0.5 shrink-0">
+              <img src="https://cryptologos.cc/logos/tether-usdt-logo.png" alt="USDT" className="w-full h-full object-contain" />
+            </div>
           </button>
           <button
             onClick={() => navigate('/retirar')}
-            className="flex-1 bg-[#D6F174] text-black font-bold h-[45px] rounded-lg px-4 flex items-center justify-between"
+            className="bg-[#D6F174] text-black font-bold h-[45px] rounded-lg px-2 flex items-center justify-between shadow-sm"
           >
-            <span className="text-[15px]">extrair</span>
-            <img src="/withdraw1-pLMbG-t2.png" alt="Extrair" className="w-8 h-8 object-contain shrink-0" />
+            <span className="text-[12.5px]">extrair</span>
+            <img src="/withdraw1-pLMbG-t2.png" alt="Extrair" className="w-6 h-6 object-contain shrink-0" />
           </button>
         </div>
       </header>
