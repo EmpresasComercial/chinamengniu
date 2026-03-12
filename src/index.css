@@ -12,7 +12,11 @@
   }
 
   html {
-    scroll-behavior: smooth;
+    /* Removendo smooth scroll global para resposta instantânea */
+    scroll-behavior: auto;
+    -webkit-overflow-scrolling: touch;
+    overscroll-behavior-y: none;
+    height: 100%;
   }
 
   body {
@@ -24,6 +28,9 @@
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
     overflow-x: hidden;
+    /* GPU Acceleration for main body scroll */
+    transform: translateZ(0);
+    backface-visibility: hidden;
   }
 
   h1,
@@ -60,10 +67,12 @@
     transition: opacity 0.15s ease, transform 0.12s ease;
     -webkit-user-select: none;
     user-select: none;
+    /* Evita jitter em transições */
+    will-change: transform, opacity;
   }
 
   button:active {
-    transform: scale(0.97);
+    transform: scale(0.97) translateZ(0);
     opacity: 0.92;
   }
 
@@ -102,6 +111,13 @@
     display: block;
     max-width: 100%;
     height: auto;
+    /* Otimização de renderização de imagens */
+    image-rendering: -webkit-optimize-contrast;
+    content-visibility: auto;
+    /* Previne repaints e promove para camada GPU */
+    transform: translate3d(0, 0, 0);
+    backface-visibility: hidden;
+    perspective: 1000px;
   }
 }
 
@@ -115,9 +131,11 @@
   min-height: 100vh;
 }
 
-/* Sombra suave de card */
+/* Sombra suave de card - otimizada */
 .card-shadow {
   box-shadow: 0 2px 12px rgba(0, 0, 0, 0.06), 0 1px 3px rgba(0, 0, 0, 0.04);
+  /* GPU acceleration for cards with shadow */
+  will-change: transform;
 }
 
 /* Padrão pontilhado no header */
@@ -214,6 +232,9 @@
 ────────────────────────────────────── */
 .page-content {
   animation: fadeIn 0.28s ease both;
+  /* Garante que o conteúdo seja promovido para GPU */
+  transform: translate3d(0, 0, 0);
+  will-change: transform;
 }
 
 /* ──────────────────────────────────────
@@ -223,7 +244,7 @@
   position: fixed;
   top: 50%;
   left: 50%;
-  transform: translate(-50%, -50%);
+  transform: translate(-50%, -50%) translate3d(0, 0, 0);
   background: rgba(10, 10, 30, 0.88);
   color: #fff;
   padding: 12px 24px;
@@ -237,6 +258,8 @@
   backdrop-filter: blur(6px);
   -webkit-backdrop-filter: blur(6px);
   pointer-events: none;
+  /* Promove para camada de composição fixa */
+  will-change: transform, opacity;
 }
 
 /* ──────────────────────────────────────
@@ -248,6 +271,10 @@
   padding: 16px;
   box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
   border: 1px solid rgba(0, 0, 0, 0.04);
+  /* Otimização de renderização */
+  content-visibility: auto;
+  contain-intrinsic-size: 100px 300px;
+  transform: translate3d(0, 0, 0);
 }
 
 /* ──────────────────────────────────────
@@ -257,6 +284,9 @@
   overflow-y: auto;
   -webkit-overflow-scrolling: touch;
   scrollbar-width: none;
+  /* GPU acceleration */
+  will-change: scroll-position;
+  transform: translateZ(0);
 }
 
 .scrollable::-webkit-scrollbar {
