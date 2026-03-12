@@ -12,15 +12,29 @@ export default function RechargeUSDT() {
   const { showLoading, hideLoading } = useLoading();
   
   const [amountUSDT, setAmountUSDT] = useState('');
-  const [exchangeRate, setExchangeRate] = useState(900); // Taxa padrão
+  const [exchangeRate, setExchangeRate] = useState(900); // Taxa padrão fallback
   const [companyWallet, setCompanyWallet] = useState<any>(null);
   const [step, setStep] = useState(1); // 1: Input, 2: Payment Details
   const [notification, setNotification] = useState<string | null>(null);
   const [copied, setCopied] = useState(false);
+  const [loadingRate, setLoadingRate] = useState(true);
 
   useEffect(() => {
     async function fetchData() {
-      // Tentar buscar carteira USDT ativa
+      // 1. Buscar taxa de câmbio em tempo real (USD -> AOA)
+      try {
+        const response = await fetch('https://open.er-api.com/v6/latest/USD');
+        const data = await response.json();
+        if (data && data.rates && data.rates.AOA) {
+          setExchangeRate(Math.ceil(data.rates.AOA));
+        }
+      } catch (err) {
+        console.error('Erro ao buscar taxa de câmbio:', err);
+      } finally {
+        setLoadingRate(false);
+      }
+
+      // 2. Buscar carteira USDT ativa
       const { data: walletData } = await supabase
         .from('usdt_empresarial')
         .select('*')
@@ -100,7 +114,7 @@ export default function RechargeUSDT() {
               <div className="flex items-center gap-2 mb-6 p-3 bg-blue-50 rounded-xl border border-blue-100 italic">
                 <Info className="w-5 h-5 text-blue-600 shrink-0" />
                 <p className="text-[12.5px] text-blue-800">
-                  Deposite USDT de forma rápida e segura. A taxa de conversão atual é fixa.
+                  {loadingRate ? 'Atualizando taxa de câmbio...' : 'Deposite USDT de forma rápida com conversão em tempo real.'}
                 </p>
               </div>
 
