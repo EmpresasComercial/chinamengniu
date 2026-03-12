@@ -144,13 +144,13 @@ export default function Reproducao() {
       if (error) {
         showToast(`erro: ${error.message}`);
       } else if (data && data.success) {
-        showToast('coleta realizada com sucesso!');
+        showToast('coleta bem-sucedida!');
         fetchDailyStats();
       } else {
-        showToast(data?.message || 'erro ao processar coleta.');
+        showToast(data?.message || 'coleta não sucedida tente novamente.');
       }
     } catch (err) {
-      showToast('erro inesperado ao coletar.');
+      showToast('conexão instavel.');
     } finally {
       hideLoading();
     }

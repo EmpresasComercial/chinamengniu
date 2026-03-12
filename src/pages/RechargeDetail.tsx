@@ -78,13 +78,13 @@ export default function RechargeDetail() {
     // Handle the RPC response (typically returns JSON with success/message)
     if (!rpcError && (rpcData?.success || rpcData)) {
       setConfirmed(true);
-      showNotification('Depósito solicitado com sucesso!');
+      showNotification('bem-sucedido');
       setTimeout(() => {
         setConfirmed(false);
         navigate('/detalhes');
       }, 3000);
     } else {
-      const errorMsg = rpcError?.message || rpcData?.message || 'Erro ao processar depósito. Tente novamente.';
+      const errorMsg = rpcError?.message || rpcData?.message || 'não sucedido,Tente novamente.';
       showNotification(errorMsg);
     }
   };

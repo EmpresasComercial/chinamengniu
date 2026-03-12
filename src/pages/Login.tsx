@@ -25,14 +25,14 @@ export default function Login() {
 
     // Validation Logic
     if (!phone) {
-      showToast('por favor, insira o número de telefone');
+      showToast('por favor, celular');
       return;
     }
 
     // Validate phone format: starts with 9 and has 9 digits
     const phoneRegex = /^9\d{8}$/;
     if (!phoneRegex.test(phone)) {
-      showToast('o número de telefone deve começar com 9 e ter 9 dígitos');
+      showToast('celular deve começar com 9 e ter 9 dígitos');
       return;
     }
 
@@ -70,10 +70,10 @@ export default function Login() {
       }
 
       setLoginAttempts(0);
-      showToast('bem-sucedido');
+      showToast('login sucedido');
       setTimeout(() => navigate('/'), 1000);
     } catch (err: any) {
-      showToast('falha no acesso');
+      showToast('não login sucedido');
     } finally {
       hideLoading();
     }

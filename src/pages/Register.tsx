@@ -39,12 +39,12 @@ export default function Register() {
     e.preventDefault();
 
     if (!formData.phone) {
-      showToast('por favor, insira o número de telefone');
+      showToast('por favor, insira celular');
       return;
     }
     const phoneRegex = /^9\d{8}$/;
     if (!phoneRegex.test(formData.phone)) {
-      showToast('o número de telefone deve começar com 9 e ter 9 dígitos');
+      showToast('celular começar com 9 e ter 9 dígitos');
       return;
     }
     if (!formData.password) {
@@ -60,7 +60,7 @@ export default function Register() {
       return;
     }
     if (!formData.inviteCode) {
-      showToast('por favor, insira o código de convite');
+      showToast('por favor, insira código');
       return;
     }
 
@@ -93,10 +93,10 @@ export default function Register() {
         return;
       }
 
-      showToast('bem-sucedido');
+      showToast('registro bem-sucedido');
       setTimeout(() => navigate('/login'), 1500);
     } catch (err: any) {
-      showToast('falha no registro');
+      showToast('registro não sucedido');
     } finally {
       hideLoading();
     }

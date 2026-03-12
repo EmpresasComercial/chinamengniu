@@ -38,7 +38,7 @@ export default function WithdrawHelp() {
             </p>
 
             <p>
-              pode retirar dinheiro todos os dias. o valor mínimo de retirada é de 1000 kz e o valor máximo é de 1.000.000,00 kz por operação. o processamento é rápido e cobramos uma taxa de retirada de 14%. em caso de dúvida, contacte o suporte.
+              pode retirar dinheiro todos os dias. o valor mínimo de retirada é de 1000 kz e o valor máximo é de 100.000,00 kz por operação. o processamento é rápido e cobramos uma taxa de retirada de 14%. em caso de dúvida, contacte o suporte.
             </p>
           </div>
         </article>

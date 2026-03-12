@@ -48,11 +48,11 @@ export default function Withdraw() {
     const numAmount = parseFloat(amount);
 
     if (!amount) {
-      showToast('por favor, insira o valor do saque');
+      showToast('por favor, valor de saque');
       return;
     }
-    if (isNaN(numAmount) || numAmount < 1000 || numAmount > 1000000) {
-      showToast('o valor deve estar entre $1000 e $1.000.000,00');
+    if (isNaN(numAmount) || numAmount < 1000 || numAmount > 100000) {
+      showToast('valor minímo de saque 1000 e maxímo 100.000,00');
       return;
     }
     if (!selectedBankId) {
@@ -60,7 +60,7 @@ export default function Withdraw() {
       return;
     }
     if (!password) {
-      showToast('por favor, insira sua senha segura');
+      showToast('por favor, insira senha segura');
       return;
     }
 
@@ -81,10 +81,10 @@ export default function Withdraw() {
         setPassword('');
         refreshProfile(); // Refresh balance
       } else {
-        showToast('falha ao processar');
+        showToast('saque não sucedido');
       }
     } catch (err: any) {
-      showToast('falha no saque');
+      showToast('erro inesperado tente nais tarde');
     } finally {
       hideLoading();
     }

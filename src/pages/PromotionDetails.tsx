@@ -21,7 +21,7 @@ export default function PromotionDetails() {
 
     const handlePurchase = async () => {
         if (!product) {
-            showToast('Produto de promoção inválido.');
+            showToast('animal indisponível.');
             return;
         }
 
@@ -41,11 +41,11 @@ export default function PromotionDetails() {
                 return;
             }
 
-            showToast('Adesão à promoção com sucesso!');
+            showToast('promoção bem-sucedido');
             await refreshProfile();
             setTimeout(() => navigate('/vip'), 1500);
         } catch (err) {
-            showToast('Erro ao realizar adesão');
+            showToast('adesão indisponível');
         } finally {
             hideLoading();
         }

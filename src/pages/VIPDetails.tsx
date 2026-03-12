@@ -21,7 +21,7 @@ export default function VIPDetails() {
 
   const handlePurchase = async () => {
     if (!product) {
-      showToast('Produto inválido.');
+      showToast('animal indisponível');
       return;
     }
 
@@ -41,11 +41,11 @@ export default function VIPDetails() {
         return;
       }
 
-      showToast('Adoção realizada com sucesso!');
+      showToast('Adoção bem-sucedida!');
       await refreshProfile();
       setTimeout(() => navigate('/vip'), 1500);
     } catch (err) {
-      showToast('Erro inesperado ao realizar adoção');
+      showToast('Erro inesperado na adoção');
     } finally {
       hideLoading();
     }
