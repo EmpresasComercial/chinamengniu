@@ -172,9 +172,7 @@ export default function Profile() {
             className="bg-[#00D1FF] text-white font-bold h-[45px] rounded-lg px-2 flex items-center justify-between shadow-sm"
           >
             <span className="text-[12.5px]">recarga USDT</span>
-            <div className="w-6 h-6 bg-white rounded-full flex items-center justify-center p-0.5 shrink-0">
-              <img src="https://cryptologos.cc/logos/tether-usdt-logo.png" alt="USDT" className="w-full h-full object-contain" />
-            </div>
+            <img src="/image-svasa.png" alt="USDT" className="w-8 h-8 object-contain shrink-0" />
           </button>
           <button
             onClick={() => navigate('/retirar')}
