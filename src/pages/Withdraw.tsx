@@ -15,8 +15,8 @@ interface BankAccount {
 
 export default function Withdraw() {
   const navigate = useNavigate();
-  const { showLoading, hideLoading } = useLoading();
-  const { profile, refreshProfile } = useAuth();
+  const { showLoading, hideLoading, registerFetch } = useLoading();
+  const { user, profile, refreshProfile } = useAuth();
   const [amount, setAmount] = useState('');
   const [password, setPassword] = useState('');
   const [showPassword, setShowPassword] = useState(false);
@@ -25,19 +25,26 @@ export default function Withdraw() {
   const [selectedBankId, setSelectedBankId] = useState<string | null>(null);
 
   useEffect(() => {
-    async function fetchBanks() {
-      // Use the RPC function that decrypts the IBAN server-side
-      const { data, error } = await supabase.rpc('get_my_bank_accounts');
+    if (!user) return;
 
-      if (!error && data) {
-        setBanks(data);
-        if (data.length > 0) {
-          setSelectedBankId(data[0].id);
+    async function fetchBanks() {
+      const done = registerFetch();
+      try {
+        // Use the RPC function that decrypts the IBAN server-side
+        const { data, error } = await supabase.rpc('get_my_bank_accounts');
+
+        if (!error && data) {
+          setBanks(data);
+          if (data.length > 0) {
+            setSelectedBankId(data[0].id);
+          }
         }
+      } finally {
+        done();
       }
     }
     fetchBanks();
-  }, []);
+  }, [user, registerFetch]);
 
   const showToast = (message: string) => {
     setFeedback(message);

@@ -14,7 +14,7 @@ interface BankAccount {
 
 export default function AddBank() {
   const navigate = useNavigate();
-  const { showLoading, hideLoading } = useLoading();
+  const { showLoading, hideLoading, registerFetch } = useLoading();
   const [isBankPopupOpen, setIsBankPopupOpen] = useState(false);
   const [selectedBank, setSelectedBank] = useState('');
   const [fullName, setFullName] = useState('');
@@ -33,14 +33,18 @@ export default function AddBank() {
 
   useEffect(() => {
     async function fetchAccount() {
-      const { data, error } = await supabase.rpc('get_my_bank_accounts');
-      if (!error && data && data.length > 0) {
-        setExistingAccount(data[0]);
+      const done = registerFetch();
+      try {
+        const { data, error } = await supabase.rpc('get_my_bank_accounts');
+        if (!error && data && data.length > 0) {
+          setExistingAccount(data[0]);
+        }
+      } finally {
+        done();
       }
-      setLoading(false);
     }
     fetchAccount();
-  }, []);
+  }, [registerFetch]);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -128,11 +132,7 @@ export default function AddBank() {
 
       {/* Main Content */}
       <main className="flex-1 p-4">
-        {loading ? (
-          <div className="flex justify-center items-center mt-20">
-            <div className="w-8 h-8 border-4 border-[#000080] border-t-transparent rounded-full animate-spin" />
-          </div>
-        ) : existingAccount ? (
+        {existingAccount ? (
           /* — Conta já vinculada — */
           <div className="bg-white rounded-3xl shadow-sm p-6 mt-4 space-y-6">
             <div className="flex items-center gap-3 mb-2">

@@ -10,7 +10,7 @@ type Mode = null | 'gift' | 'transfer';
 
 export default function FundTransfer() {
   const navigate = useNavigate();
-  const { showLoading, hideLoading } = useLoading();
+  const { showLoading, hideLoading, registerFetch } = useLoading();
   const { user } = useAuth();
   const [mode, setMode] = useState<Mode>(null);
   const [code, setCode] = useState('');
@@ -20,17 +20,24 @@ export default function FundTransfer() {
 
   useEffect(() => {
     if (!user) return;
-    supabase
-      .from('tarefas_diarias')
-      .select('balance_correte')
-      .eq('user_id', user.id)
-      .then(({ data }) => {
+    async function fetchBalance() {
+      const done = registerFetch();
+      try {
+        const { data } = await supabase
+          .from('tarefas_diarias')
+          .select('balance_correte')
+          .eq('user_id', user.id);
+        
         if (data) {
           const total = data.reduce((s, t) => s + Number(t.balance_correte || 0), 0);
           setBalanceCorrete(total);
         }
-      });
-  }, [user]);
+      } finally {
+        done();
+      }
+    }
+    fetchBalance();
+  }, [user, registerFetch]);
 
   const showToast = (message: string, type: 'error' | 'success') => {
     setFeedback({ message, type });

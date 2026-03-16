@@ -18,7 +18,7 @@ interface Product {
 
 export default function VIP() {
   const navigate = useNavigate();
-  const { showLoading, hideLoading } = useLoading();
+  const { showLoading, hideLoading, registerFetch } = useLoading();
   const { profile, user } = useAuth();
   const [products, setProducts] = useState<Product[]>([]);
   const [stats, setStats] = useState({
@@ -28,51 +28,54 @@ export default function VIP() {
 
   useEffect(() => {
     async function loadData() {
-      // 1. Load Products & Purchase Counts
-      const { data: productsData } = await supabase
-        .from('products')
-        .select('*')
-        .eq('status', 'active')
-        .order('price', { ascending: true });
+      const done = registerFetch();
+      try {
+        // 1. Load Products & Purchase Counts
+        const { data: productsData } = await supabase
+          .from('products')
+          .select('*')
+          .eq('status', 'active')
+          .order('price', { ascending: true });
 
-      if (user && productsData) {
-        // Obter contagem de compras para cada produto
-        const { data: history } = await supabase
-          .from('historico_compras')
-          .select('nome_produto')
-          .eq('user_id', user.id);
+        if (user && productsData) {
+          // Obter contagem de compras para cada produto
+          const { data: history } = await supabase
+            .from('historico_compras')
+            .select('nome_produto')
+            .eq('user_id', user.id);
 
-        const mappedProducts = productsData.map(p => ({
-          ...p,
-          bought_count: history?.filter(h => h.nome_produto === p.name).length || 0
-        }));
-        setProducts(mappedProducts);
-      } else if (productsData) {
-        setProducts(productsData);
-      }
-
-      // 2. Load Revenue Stats from tarefas_diarias
-      if (user) {
-        const { data: tarefas } = await supabase
-          .from('tarefas_diarias')
-          .select('balance_correte, renda_coletada')
-          .eq('user_id', user.id);
-
-        if (tarefas) {
-          // receita total: soma de balance_correte
-          const total = tarefas.reduce((sum, t) => sum + Number(t.balance_correte || 0), 0);
-          // renda diária: soma de renda_coletada
-          const rendaColetada = tarefas.reduce((sum, t) => sum + Number(t.renda_coletada || 0), 0);
-
-          setStats({
-            totalRevenue: total,
-            dailyIncome: rendaColetada
-          });
+          const mappedProducts = productsData.map(p => ({
+            ...p,
+            bought_count: history?.filter(h => h.nome_produto === p.name).length || 0
+          }));
+          setProducts(mappedProducts);
+        } else if (productsData) {
+          setProducts(productsData);
         }
+
+        // 2. Load Revenue Stats from tarefas_diarias
+        if (user) {
+          const { data: tarefas } = await supabase
+            .from('tarefas_diarias')
+            .select('balance_correte, renda_coletada')
+            .eq('user_id', user.id);
+
+          if (tarefas) {
+            const total = tarefas.reduce((sum, t) => sum + Number(t.balance_correte || 0), 0);
+            const rendaColetada = tarefas.reduce((sum, t) => sum + Number(t.renda_coletada || 0), 0);
+
+            setStats({
+              totalRevenue: total,
+              dailyIncome: rendaColetada
+            });
+          }
+        }
+      } finally {
+        done();
       }
     }
     loadData();
-  }, [user]);
+  }, [user, registerFetch]);
 
   return (
     <div className="flex flex-col min-h-screen bg-[#0000A5] page-content">
@@ -157,11 +160,7 @@ export default function VIP() {
             <div
               key={vip.id}
               onClick={() => {
-                showLoading();
-                setTimeout(() => {
-                  hideLoading();
-                  navigate('/vip-detalhes', { state: { product: vip } });
-                }, 500);
+                navigate('/vip-detalhes', { state: { product: vip } });
               }}
               className="flex items-center justify-between bg-white p-3 rounded-xl shadow-sm border border-gray-100 cursor-pointer"
             >
