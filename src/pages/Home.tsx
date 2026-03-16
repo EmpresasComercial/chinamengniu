@@ -47,27 +47,36 @@ export default function Home() {
   const handleInstallApp = async (e: React.MouseEvent) => {
     e.stopPropagation();
     
-    // Se o evento de instalação do PWA foi capturado (navegador compatível)
-    if (deferredPrompt) {
-      deferredPrompt.prompt();
-      const { outcome } = await deferredPrompt.userChoice;
-      if (outcome === 'accepted') {
-        setDeferredPrompt(null);
+    // Agora o botão foca em copiar e partilhar o link de convite (usando o link do banco de dados)
+    const inviteCode = profile?.invite_code || '';
+    const baseLink = links.link_app_atualizado && links.link_app_atualizado !== '#' 
+      ? links.link_app_atualizado 
+      : `https://www.mengniu.wang/#/register`;
+    
+    // Concatena o código de convite se não estiver presente
+    const shareUrl = baseLink.includes('invite=') 
+      ? baseLink 
+      : baseLink.includes('?') ? `${baseLink}&invite=${inviteCode}` : `${baseLink}?invite=${inviteCode}`;
+
+    try {
+      // Tenta copiar para o clipboard
+      await navigator.clipboard.writeText(shareUrl);
+      
+      // Tenta usar a API de partilha nativa do celular (mais intuitivo para o usuário)
+      if (navigator.share) {
+        await navigator.share({
+          title: 'Mengniu Company',
+          text: 'Faça parte da Mengniu Company e comece a ganhar hoje!',
+          url: shareUrl,
+        });
+        setNotification('Link partilhado com sucesso!');
+      } else {
+        setNotification('Link de convite copiado para partilhar!');
       }
-    } 
-    // Fallback: Se não houver prompt, tentamos o link de download direto do banco de dados
-    else if (links.link_app_atualizado && links.link_app_atualizado !== '#') {
-      setNotification('Iniciando download do aplicativo...');
-      setTimeout(() => {
-        setNotification(null);
-        window.open(links.link_app_atualizado, '_blank');
-      }, 1500);
-    } 
-    // Se nada funcionar, mostramos uma instrução amigável
-    else {
-      setNotification('Abra o menu do seu navegador e selecione "Instalar Aplicativo" ou "Adicionar à Tela de Início".');
-      setTimeout(() => setNotification(null), 5000);
+    } catch (err) {
+      setNotification('Link de convite copiado!');
     }
+    setTimeout(() => setNotification(null), 3000);
   };
 
   useEffect(() => {
@@ -201,7 +210,7 @@ export default function Home() {
               onClick={handleInstallApp}
               className="text-[#0000AA] font-black text-[22px] mb-1 underline decoration-2 underline-offset-4 cursor-pointer active:opacity-70 transition-opacity"
             >
-              Baixe o aplicativo
+              Partilhar aplicativo
             </h3>
             <p className="text-[#0000AA]/60 text-[11px] font-bold uppercase tracking-tight">mengniu company premium</p>
           </div>
