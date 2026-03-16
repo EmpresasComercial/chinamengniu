@@ -7,7 +7,7 @@ import { supabase } from '../lib/supabase';
 
 export default function RechargeList() {
   const navigate = useNavigate();
-  const { showLoading, hideLoading } = useLoading();
+  const { showLoading, hideLoading, registerFetch } = useLoading();
   const [amount, setAmount] = useState('');
   const [selectedBankId, setSelectedBankId] = useState('');
   const [banks, setBanks] = useState<any[]>([]);
@@ -15,13 +15,18 @@ export default function RechargeList() {
 
   useEffect(() => {
     async function fetchBanks() {
-      const { data, error } = await supabase
-        .from('bancos_empresa')
-        .select('*')
-        .eq('ativo', true);
+      const done = registerFetch();
+      try {
+        const { data, error } = await supabase
+          .from('bancos_empresa')
+          .select('*')
+          .eq('ativo', true);
 
-      if (!error && data) {
-        setBanks(data);
+        if (!error && data) {
+          setBanks(data);
+        }
+      } finally {
+        done();
       }
     }
     fetchBanks();

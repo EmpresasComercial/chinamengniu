@@ -1,4 +1,4 @@
-import React, { createContext, useContext, useState, ReactNode, useEffect, useRef } from 'react';
+import React, { createContext, useContext, useState, ReactNode, useEffect, useRef, useCallback } from 'react';
 import { useLocation } from 'react-router-dom';
 import { motion, AnimatePresence } from 'motion/react';
 
@@ -7,6 +7,8 @@ interface LoadingContextType {
   showLoading: (slow?: boolean) => void;
   hideLoading: () => void;
   setIsLoading: (v: boolean) => void;
+  /** Register a pending data fetch. Returns a done() callback to call when fetch completes. */
+  registerFetch: () => () => void;
 }
 
 const LoadingContext = createContext<LoadingContextType | undefined>(undefined);
@@ -15,39 +17,83 @@ const LoadingContext = createContext<LoadingContextType | undefined>(undefined);
 const HEAVY_ROUTES = ['/equipe', '/detalhes', '/recarregar', '/retirar', '/reproducao'];
 
 export const LoadingProvider = ({ children }: { children: ReactNode }) => {
-  const [isLoading, setIsLoading] = useState(false);
+  const [isLoading, setIsLoadingState] = useState(false);
   const [isSlow, setIsSlow] = useState(false);
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
-  const timerRef = useRef<NodeJS.Timeout | null>(null);
+  const timerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+  // Counter of active (pending) data fetches registered via registerFetch()
+  const pendingFetchesRef = useRef(0);
+  // Whether loading was triggered by showLoading() explicitly
+  const isExplicitRef = useRef(false);
 
   const showError = (msg: string) => {
     setErrorMessage(msg);
     setTimeout(() => setErrorMessage(null), 4000);
   };
 
-  const showLoading = (slow = false) => {
+  const showLoading = useCallback((slow = false) => {
     setIsSlow(slow);
-    setIsLoading(true);
+    setIsLoadingState(true);
+    isExplicitRef.current = true;
 
     if (timerRef.current) clearTimeout(timerRef.current);
 
     // Timeout global de 20s
     timerRef.current = setTimeout(() => {
-      setIsLoading(false);
+      setIsLoadingState(false);
+      isExplicitRef.current = false;
       showError('O servidor demorou muito a responder. Verifique a sua conexão de internet e tente de novo.');
     }, 20000);
-  };
+  }, []);
 
-  const hideLoading = () => {
-    setIsLoading(false);
+  const hideLoading = useCallback(() => {
+    // Only hide if there are no pending fetches
+    if (pendingFetchesRef.current > 0) return;
+    setIsLoadingState(false);
     setIsSlow(false);
+    isExplicitRef.current = false;
     if (timerRef.current) clearTimeout(timerRef.current);
-  };
+  }, []);
 
-  const handleSetIsLoading = (v: boolean) => {
+  /**
+   * Register a pending async fetch.
+   * Returns a `done` function to call when the fetch is complete.
+   * Loading will only stop once ALL registered fetches are done.
+   */
+  const registerFetch = useCallback((): (() => void) => {
+    pendingFetchesRef.current += 1;
+    // Show loading immediately, ensuring spinner is visible
+    setIsLoadingState(true);
+
+    let released = false;
+    const done = () => {
+      if (released) return;
+      released = true;
+      pendingFetchesRef.current = Math.max(0, pendingFetchesRef.current - 1);
+      if (pendingFetchesRef.current === 0) {
+        // All fetches done – hide loading (and clear timeout if any)
+        setIsLoadingState(false);
+        setIsSlow(false);
+        if (timerRef.current) clearTimeout(timerRef.current);
+        isExplicitRef.current = false;
+      }
+    };
+
+    // Safety timeout for this specific fetch (15s max)
+    const safetyTimer = setTimeout(() => {
+      done();
+    }, 15000);
+
+    return () => {
+      clearTimeout(safetyTimer);
+      done();
+    };
+  }, []);
+
+  const handleSetIsLoading = useCallback((v: boolean) => {
     if (v) showLoading(false);
     else hideLoading();
-  };
+  }, [showLoading, hideLoading]);
 
   // Monitor Global de Conexão à Internet
   useEffect(() => {
@@ -67,14 +113,19 @@ export const LoadingProvider = ({ children }: { children: ReactNode }) => {
       window.removeEventListener('offline', handleOffline);
       window.removeEventListener('online', handleOnline);
     };
-  }, []);
+  }, [hideLoading]);
 
   return (
-    <LoadingContext.Provider value={{ isLoading, showLoading, hideLoading, setIsLoading: handleSetIsLoading }}>
+    <LoadingContext.Provider value={{ isLoading: isLoading, showLoading, hideLoading, setIsLoading: handleSetIsLoading, registerFetch }}>
       {children}
       {isLoading && (
-        <div className="fixed inset-0 z-[9999] flex items-center justify-center bg-black/5 backdrop-blur-[1px]">
+        <div className="fixed inset-0 z-[9999] flex flex-col items-center justify-center bg-black/5 backdrop-blur-[1px]">
           <div className="spinner spinner-dark !w-7 !h-7 !border-[3px]"></div>
+          {isSlow && (
+            <p className="mt-3 text-[11px] text-gray-500 font-serif text-center px-6 leading-relaxed">
+              este conteúdo pode demorar alguns segundos a carregar...
+            </p>
+          )}
         </div>
       )}
 
@@ -105,19 +156,22 @@ export const useLoading = () => {
 
 export const RouteTransitionLoader = () => {
   const location = useLocation();
-  const { showLoading, hideLoading } = useLoading();
+  const { registerFetch } = useLoading();
 
   useEffect(() => {
-    const isHeavy = HEAVY_ROUTES.includes(location.pathname);
-    showLoading(isHeavy);
+    const isHeavy = HEAVY_ROUTES.some(r => location.pathname.startsWith(r));
+    const done = registerFetch();
+    // Give the page a short grace period before marking nav-load as done
+    // Pages that actually call registerFetch() themselves will extend this naturally
     const timer = setTimeout(() => {
-      hideLoading();
-    }, isHeavy ? 600 : 350);
+      done();
+    }, isHeavy ? 500 : 250);
 
     return () => {
       clearTimeout(timer);
-      hideLoading();
+      done();
     };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [location.pathname]);
 
   return null;

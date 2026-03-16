@@ -8,7 +8,7 @@ import { supabase } from '../lib/supabase';
 
 export default function Home() {
   const navigate = useNavigate();
-  const { showLoading, hideLoading } = useLoading();
+  const { showLoading, hideLoading, registerFetch } = useLoading();
   const [notification, setNotification] = useState<string | null>(null);
   const { profile } = useAuth();
   const [links, setLinks] = useState({
@@ -60,17 +60,22 @@ export default function Home() {
 
   useEffect(() => {
     async function fetchLinks() {
-      const { data, error } = await supabase
-        .from('atendimento_links')
-        .select('whatsapp_gerente_url, whatsapp_grupo_vendas_url, link_app_atualizado')
-        .single();
+      const done = registerFetch();
+      try {
+        const { data, error } = await supabase
+          .from('atendimento_links')
+          .select('whatsapp_gerente_url, whatsapp_grupo_vendas_url, link_app_atualizado')
+          .single();
 
-      if (!error && data) {
-        setLinks({
-          whatsapp_gerente_url: data.whatsapp_gerente_url || 'https://wa.me/1234567890',
-          whatsapp_grupo_vendas_url: data.whatsapp_grupo_vendas_url || 'https://wa.me/1234567890',
-          link_app_atualizado: data.link_app_atualizado || '#'
-        });
+        if (!error && data) {
+          setLinks({
+            whatsapp_gerente_url: data.whatsapp_gerente_url || 'https://wa.me/1234567890',
+            whatsapp_grupo_vendas_url: data.whatsapp_grupo_vendas_url || 'https://wa.me/1234567890',
+            link_app_atualizado: data.link_app_atualizado || '#'
+          });
+        }
+      } finally {
+        done();
       }
     }
     fetchLinks();

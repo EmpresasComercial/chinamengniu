@@ -4,6 +4,7 @@ import { useNavigate } from 'react-router-dom';
 import { motion, AnimatePresence } from 'motion/react';
 import { supabase } from '../lib/supabase';
 import { useAuth } from '../contexts/AuthContext';
+import { useLoading } from '../contexts/LoadingContext';
 
 type FilterType = 'retiradas' | 'recarregamentos' | 'tarefas_diarias' | 'bonus_transacoes';
 
@@ -27,6 +28,7 @@ const statusColor: Record<string, string> = {
 export default function FinancialRecords() {
   const navigate = useNavigate();
   const { user } = useAuth();
+  const { registerFetch } = useLoading();
 
   const [activeFilter, setActiveFilter] = useState<FilterType>('retiradas');
   const [showFilterPopup, setShowFilterPopup] = useState(false);
@@ -43,6 +45,7 @@ export default function FinancialRecords() {
   async function fetchRecords(filter: FilterType) {
     setLoading(true);
     setRecords([]);
+    const done = registerFetch();
 
     let query;
     switch (filter) {
@@ -60,9 +63,13 @@ export default function FinancialRecords() {
         break;
     }
 
-    const { data, error } = await query;
-    if (!error && data) setRecords(data);
-    setLoading(false);
+    try {
+      const { data, error } = await query;
+      if (!error && data) setRecords(data);
+    } finally {
+      setLoading(false);
+      done();
+    }
   }
 
   const handleFilterSelect = (filter: FilterType) => {

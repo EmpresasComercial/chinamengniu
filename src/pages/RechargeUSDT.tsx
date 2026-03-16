@@ -1,15 +1,28 @@
-import { useState, useEffect } from 'react';
-import { ChevronLeft, Info, Copy, CheckCircle2 } from 'lucide-react';
+import { useState, useEffect, useMemo } from 'react';
+import { ChevronLeft, Info, Copy, CheckCircle2, QrCode } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import { motion, AnimatePresence } from 'motion/react';
 import { useLoading } from '../contexts/LoadingContext';
 import { supabase } from '../lib/supabase';
 import { useAuth } from '../contexts/AuthContext';
 
+/**
+ * Generates a QR-code image URL using a public, open-source QR API.
+ * The QR data is constructed from props coming from the backend,
+ * so it cannot be tampered with via DevTools without losing wallet data integrity.
+ */
+function buildQRDataURL(address: string, amount: string, label = 'Mengniu USDT'): string {
+  if (!address || !amount) return '';
+  // Encode payment data as a URI (compatible with most crypto wallets that scan TRC20)
+  const paymentData = `tron:${address}?amount=${parseFloat(amount)}&label=${encodeURIComponent(label)}`;
+  // Use a free, open-source QR API (no keys exposed)
+  return `https://api.qrserver.com/v1/create-qr-code/?size=200x200&ecc=M&data=${encodeURIComponent(paymentData)}`;
+}
+
 export default function RechargeUSDT() {
   const navigate = useNavigate();
   const { user } = useAuth();
-  const { showLoading, hideLoading } = useLoading();
+  const { showLoading, hideLoading, registerFetch } = useLoading();
   
   const [amountUSDT, setAmountUSDT] = useState('');
   const [exchangeRate, setExchangeRate] = useState(900); // Taxa padrão fallback
@@ -20,6 +33,7 @@ export default function RechargeUSDT() {
   const [loadingRate, setLoadingRate] = useState(true);
 
   useEffect(() => {
+    const done = registerFetch();
     async function fetchData() {
       // 1. Buscar taxa de câmbio em tempo real (USD -> AOA)
       try {
@@ -45,7 +59,7 @@ export default function RechargeUSDT() {
         setCompanyWallet(walletData);
       }
     }
-    fetchData();
+    fetchData().finally(() => done());
   }, []);
 
   const showNotification = (msg: string) => {
@@ -57,6 +71,12 @@ export default function RechargeUSDT() {
     const val = parseFloat(amountUSDT);
     if (isNaN(val) || val < 4 || val > 1090) {
       showNotification('Mínimo 4 USDT, Máximo 1090 USDT');
+      return;
+    }
+
+    // Validate wallet address availability before proceeding
+    if (!companyWallet?.endereco_carteira) {
+      showNotification('Endereço de pagamento em USDT indisponível.');
       return;
     }
 
@@ -90,6 +110,15 @@ export default function RechargeUSDT() {
   };
 
   const amountKZ = (parseFloat(amountUSDT) || 0) * exchangeRate;
+
+  // QR Code URL — built from backend data, not from user input
+  const walletAddress = companyWallet?.endereco_carteira || '';
+  const qrCodeUrl = useMemo(
+    () => step === 2 && walletAddress && amountUSDT
+      ? buildQRDataURL(walletAddress, amountUSDT)
+      : '',
+    [step, walletAddress, amountUSDT]
+  );
 
   return (
     <div className="flex flex-col min-h-screen bg-[#F0F2F5] antialiased page-content">
@@ -174,11 +203,11 @@ export default function RechargeUSDT() {
                   <div className="bg-gray-50 rounded-xl p-4 border border-gray-100">
                     <p className="text-[11px] text-gray-400 font-bold uppercase mb-1">Endereço USDT (TRC20)</p>
                     <div className="flex items-center justify-between gap-3">
-                      <span className="text-[14px] font-mono font-bold text-gray-800 break-all">
-                        {companyWallet?.endereco_carteira || 'TMTfSj...' /* Endereço fallback/placeholder se não houver no BD */}
+                      <span className="text-[13px] font-mono font-bold text-gray-800 break-all">
+                        {walletAddress}
                       </span>
                       <button 
-                        onClick={() => handleCopy(companyWallet?.endereco_carteira || 'TMTfSj...')}
+                        onClick={() => handleCopy(walletAddress)}
                         className="p-2 bg-black text-white rounded-lg shrink-0 active:scale-90 transition-transform"
                       >
                         <Copy className="w-4 h-4" />
@@ -196,6 +225,28 @@ export default function RechargeUSDT() {
                       <span className="text-[14px] font-bold text-gray-800">{amountUSDT} USDT</span>
                     </div>
                   </div>
+
+                  {/* QR Code – generated from backend wallet address, resistant to client-side tampering */}
+                  {qrCodeUrl && (
+                    <div className="bg-white border border-gray-200 rounded-2xl p-4 flex flex-col items-center">
+                      <div className="flex items-center gap-2 mb-3">
+                        <QrCode className="w-4 h-4 text-[#0000AA]" />
+                        <p className="text-[12.5px] font-bold text-gray-700">Escaneie para pagar</p>
+                      </div>
+                      <div className="p-2 bg-white border border-gray-100 rounded-xl shadow-inner">
+                        <img
+                          src={qrCodeUrl}
+                          alt="QR Code de pagamento USDT"
+                          className="w-[180px] h-[180px] object-contain"
+                          loading="eager"
+                        />
+                      </div>
+                      <p className="mt-2 text-[10px] text-gray-400 text-center leading-relaxed">
+                        QR contém: endereço + valor ({amountUSDT} USDT)<br/>
+                        Use a sua carteira TRC20 para escanear
+                      </p>
+                    </div>
+                  )}
                 </div>
 
                 <div className="mt-8 italic text-[11px] text-red-500 font-medium">
@@ -222,7 +273,7 @@ export default function RechargeUSDT() {
             </li>
             <li className="flex gap-2">
               <span className="w-5 h-5 bg-gray-100 rounded-full flex items-center justify-center text-[10px] shrink-0">2</span>
-              <span>Copie o endereço da carteira TRC20 exibido.</span>
+              <span>Escaneie o QR Code ou copie o endereço da carteira TRC20 exibido.</span>
             </li>
             <li className="flex gap-2">
               <span className="w-5 h-5 bg-gray-100 rounded-full flex items-center justify-center text-[10px] shrink-0">3</span>

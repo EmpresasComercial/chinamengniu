@@ -8,7 +8,7 @@ import { motion, AnimatePresence } from 'motion/react';
 
 export default function Reproducao() {
   const navigate = useNavigate();
-  const { setIsLoading, showLoading, hideLoading } = useLoading();
+  const { showLoading, hideLoading, registerFetch } = useLoading();
   const { user } = useAuth();
   const [purchases, setPurchases] = useState<any[]>([]);
   const [hasCollectedToday, setHasCollectedToday] = useState(false);
@@ -104,8 +104,13 @@ export default function Reproducao() {
   }
 
   useEffect(() => {
-    fetchPurchases();
-    fetchDailyStats();
+    if (!user) return;
+    // Use registerFetch for each parallel initial load
+    const donePurchases = registerFetch();
+    const doneStats = registerFetch();
+
+    fetchPurchases().finally(() => donePurchases());
+    fetchDailyStats().finally(() => doneStats());
 
     const channel = supabase.channel('realtime_reproducao')
       .on('postgres_changes', {

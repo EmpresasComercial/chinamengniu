@@ -4,12 +4,12 @@ import path from 'path';
 import { defineConfig, loadEnv } from 'vite';
 
 export default defineConfig(({ mode }) => {
-  const env = loadEnv(mode, '.', '');
+  // NOTE: loadEnv kept for potential future safe env vars (VITE_ prefixed only).
+  // NEVER expose secret keys (GEMINI_API_KEY, etc.) via define{} — they end up in
+  // the client bundle and are visible in DevTools.
+  loadEnv(mode, '.', '');
   return {
     plugins: [react(), tailwindcss()],
-    define: {
-      'process.env.GEMINI_API_KEY': JSON.stringify(env.GEMINI_API_KEY),
-    },
     resolve: {
       alias: {
         '@': path.resolve(__dirname, './src'),

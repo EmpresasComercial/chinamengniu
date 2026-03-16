@@ -1,13 +1,20 @@
 import { useState, useEffect } from 'react';
 import { Rocket, Users, BarChart3, CircleDollarSign, ShieldCheck, HelpCircle, ChevronRight } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
+import { motion, AnimatePresence } from 'motion/react';
 import { useLoading } from '../contexts/LoadingContext';
 import { useAuth } from '../contexts/AuthContext';
 import { supabase } from '../lib/supabase';
 
 export default function Profile() {
   const navigate = useNavigate();
-  const { showLoading, hideLoading } = useLoading();
+  const { showLoading, hideLoading, registerFetch } = useLoading();
+  const [profileNotification, setProfileNotification] = useState<string | null>(null);
+
+  const showProfileNotification = (msg: string) => {
+    setProfileNotification(msg);
+    setTimeout(() => setProfileNotification(null), 3000);
+  };
   const { profile, signOut, user } = useAuth();
   const [copied, setCopied] = useState(false);
   const [financialData, setFinancialData] = useState({
@@ -26,51 +33,55 @@ export default function Profile() {
 
   async function fetchFinancialData() {
     if (!user) return;
+    const done = registerFetch();
+    try {
+      const hoje = new Date();
+      const inicioDia = new Date(hoje.getFullYear(), hoje.getMonth(), hoje.getDate()).toISOString();
+      const inicioOntem = new Date(hoje.getFullYear(), hoje.getMonth(), hoje.getDate() - 1).toISOString();
+      const fimOntem = inicioDia;
 
-    const hoje = new Date();
-    const inicioDia = new Date(hoje.getFullYear(), hoje.getMonth(), hoje.getDate()).toISOString();
-    const inicioOntem = new Date(hoje.getFullYear(), hoje.getMonth(), hoje.getDate() - 1).toISOString();
-    const fimOntem = inicioDia;
+      // 1. tarefas_diarias: balance_correte e renda_coletada
+      const { data: tarefas } = await supabase
+        .from('tarefas_diarias')
+        .select('balance_correte, renda_coletada, data_atribuicao')
+        .eq('user_id', user.id);
 
-    // 1. tarefas_diarias: balance_correte e renda_coletada
-    const { data: tarefas } = await supabase
-      .from('tarefas_diarias')
-      .select('balance_correte, renda_coletada, data_atribuicao')
-      .eq('user_id', user.id);
+      // 2. retiradas aprovadas: valor_solicitado
+      const { data: retiradas } = await supabase
+        .from('retirada_clientes')
+        .select('valor_solicitado')
+        .eq('user_id', user.id)
+        .eq('estado_da_retirada', 'aprovado');
 
-    // 2. retiradas aprovadas: valor_solicitado
-    const { data: retiradas } = await supabase
-      .from('retirada_clientes')
-      .select('valor_solicitado')
-      .eq('user_id', user.id)
-      .eq('estado_da_retirada', 'aprovado');
+      // 3. bonus_transacoes: todos os bônus (cadastro + investimento + comissões)
+      const { data: bonus } = await supabase
+        .from('bonus_transacoes')
+        .select('valor_recebido, data_recebimento')
+        .eq('user_id', user.id);
 
-    // 3. bonus_transacoes: todos os bônus (cadastro + investimento + comissões)
-    const { data: bonus } = await supabase
-      .from('bonus_transacoes')
-      .select('valor_recebido, data_recebimento')
-      .eq('user_id', user.id);
+      const contaReproducao = (tarefas || []).reduce((s, t) => s + Number(t.balance_correte || 0), 0);
+      const retiradaTotal = (retiradas || []).reduce((s, r) => s + Number(r.valor_solicitado || 0), 0);
+      const comissaoTotalEquipe = (bonus || []).reduce((s, b) => s + Number(b.valor_recebido || 0), 0);
 
-    const contaReproducao = (tarefas || []).reduce((s, t) => s + Number(t.balance_correte || 0), 0);
-    const retiradaTotal = (retiradas || []).reduce((s, r) => s + Number(r.valor_solicitado || 0), 0);
-    const comissaoTotalEquipe = (bonus || []).reduce((s, b) => s + Number(b.valor_recebido || 0), 0);
+      const lucrosOntem = (tarefas || [])
+        .filter(t => {
+          const d = new Date(t.data_atribuicao);
+          return d >= new Date(inicioOntem) && d < new Date(fimOntem);
+        })
+        .reduce((s, t) => s + Number(t.renda_coletada || 0), 0);
 
-    const lucrosOntem = (tarefas || [])
-      .filter(t => {
-        const d = new Date(t.data_atribuicao);
-        return d >= new Date(inicioOntem) && d < new Date(fimOntem);
-      })
-      .reduce((s, t) => s + Number(t.renda_coletada || 0), 0);
+      const ganhoHoje = (tarefas || [])
+        .filter(t => new Date(t.data_atribuicao) >= new Date(inicioDia))
+        .reduce((s, t) => s + Number(t.renda_coletada || 0), 0);
 
-    const ganhoHoje = (tarefas || [])
-      .filter(t => new Date(t.data_atribuicao) >= new Date(inicioDia))
-      .reduce((s, t) => s + Number(t.renda_coletada || 0), 0);
+      const comissaoHoje = (bonus || [])
+        .filter(b => new Date(b.data_recebimento) >= new Date(inicioDia))
+        .reduce((s, b) => s + Number(b.valor_recebido || 0), 0);
 
-    const comissaoHoje = (bonus || [])
-      .filter(b => new Date(b.data_recebimento) >= new Date(inicioDia))
-      .reduce((s, b) => s + Number(b.valor_recebido || 0), 0);
-
-    setFinancialData({ contaReproducao, retiradaTotal, comissaoTotalEquipe, lucrosOntem, ganhoHoje, comissaoHoje });
+      setFinancialData({ contaReproducao, retiradaTotal, comissaoTotalEquipe, lucrosOntem, ganhoHoje, comissaoHoje });
+    } finally {
+      done();
+    }
   }
 
   const handleCopyUID = () => {
@@ -168,7 +179,19 @@ export default function Profile() {
             <img src="/deposit1-Dk3ugVyJ.png" alt="Recarregar" className="w-6 h-6 object-contain shrink-0" />
           </button>
           <button
-            onClick={() => navigate('/recarregar-usdt')}
+            onClick={async () => {
+              // Pre-check USDT wallet availability before navigating
+              const { data: wallet } = await supabase
+                .from('usdt_empresarial')
+                .select('endereco_carteira')
+                .eq('ativo', true)
+                .single();
+              if (!wallet?.endereco_carteira) {
+                showProfileNotification('Endereço de pagamento em USDT indisponível.');
+                return;
+              }
+              navigate('/recarregar-usdt');
+            }}
             className="bg-[#00D1FF] text-white font-bold h-[45px] rounded-lg px-2 flex items-center justify-between shadow-sm"
           >
             <span className="text-[12.5px]">recarga USDT</span>
@@ -233,6 +256,20 @@ export default function Profile() {
           sair
         </button>
       </section >
+
+      {/* Profile inline toast for USDT validation */}
+      <AnimatePresence>
+        {profileNotification && (
+          <motion.div
+            initial={{ opacity: 0, scale: 0.9, x: '-50%', y: '-50%' }}
+            animate={{ opacity: 1, scale: 1, x: '-50%', y: '-50%' }}
+            exit={{ opacity: 0, scale: 0.9, x: '-50%', y: '-50%' }}
+            className="fixed top-1/2 left-1/2 bg-black/80 text-white px-6 py-3 rounded-xl text-[12.5px] font-medium shadow-2xl z-[100] text-center min-w-[280px]"
+          >
+            {profileNotification}
+          </motion.div>
+        )}
+      </AnimatePresence>
     </div >
   );
 }

@@ -7,7 +7,7 @@ import { useAuth } from '../contexts/AuthContext';
 
 export default function Team() {
   const navigate = useNavigate();
-  const { showLoading, hideLoading } = useLoading();
+  const { showLoading, hideLoading, registerFetch } = useLoading();
   const { user } = useAuth();
   const [activeTab, setActiveTab] = useState<'members' | 'contribution'>('members');
   const [selectedLevel, setSelectedLevel] = useState(1);
@@ -24,39 +24,44 @@ export default function Team() {
   useEffect(() => {
     if (!user) return;
     async function fetchTeamData() {
-      const { data: teamData, error: teamError } = await supabase.rpc('get_my_team');
-      const today = new Date().toISOString().split('T')[0];
+      const done = registerFetch();
+      try {
+        const { data: teamData, error: teamError } = await supabase.rpc('get_my_team');
+        const today = new Date().toISOString().split('T')[0];
 
-      if (!teamError && teamData) {
-        console.log('Team data structure check:', teamData[0]); // Debug log to see field names
-        const team = teamData as any[];
+        if (!teamError && teamData) {
+          console.log('Team data structure check:', teamData[0]); // Debug log to see field names
+          const team = teamData as any[];
 
-        // Total People
-        const totalPeople = team.length;
+          // Total People
+          const totalPeople = team.length;
 
-        // Today registrations
-        const todayRegs = team.filter(m => {
-          const regDate = m.created_at || m.registration_date;
-          return regDate && regDate.startsWith(today);
-        }).length;
+          // Today registrations
+          const todayRegs = team.filter(m => {
+            const regDate = m.created_at || m.registration_date;
+            return regDate && regDate.startsWith(today);
+          }).length;
 
-        setStats(prev => ({ ...prev, totalPeople, todayRegistrations: todayRegs }));
-        setMembers(team);
-      }
+          setStats(prev => ({ ...prev, totalPeople, todayRegistrations: todayRegs }));
+          setMembers(team);
+        }
 
-      // Fetch Revenue stats from bonus_transacoes
-      const { data: bonusData } = await supabase
-        .from('bonus_transacoes')
-        .select('valor_recebido, data_transacao')
-        .eq('user_id', user.id);
+        // Fetch Revenue stats from bonus_transacoes
+        const { data: bonusData } = await supabase
+          .from('bonus_transacoes')
+          .select('valor_recebido, data_transacao')
+          .eq('user_id', user.id);
 
-      if (bonusData) {
-        const totalRevenue = bonusData.reduce((sum, b) => sum + Number(b.valor_recebido), 0);
-        const todayEarnings = bonusData
-          .filter(b => b.data_transacao && b.data_transacao.startsWith(today))
-          .reduce((sum, b) => sum + Number(b.valor_recebido), 0);
+        if (bonusData) {
+          const totalRevenue = bonusData.reduce((sum, b) => sum + Number(b.valor_recebido), 0);
+          const todayEarnings = bonusData
+            .filter(b => b.data_transacao && b.data_transacao.startsWith(today))
+            .reduce((sum, b) => sum + Number(b.valor_recebido), 0);
 
-        setStats(prev => ({ ...prev, totalRevenue, todayEarnings }));
+          setStats(prev => ({ ...prev, totalRevenue, todayEarnings }));
+        }
+      } finally {
+        done();
       }
     }
     fetchTeamData();
