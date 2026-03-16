@@ -15,21 +15,25 @@ export default defineConfig(({ mode }) => {
       tailwindcss(),
       VitePWA({
         registerType: 'autoUpdate',
+        includeAssets: ['pwa-icon.png', 'favicon.ico', 'robots.txt', 'apple-touch-icon.png'],
         manifest: {
           name: 'Mengniu Company',
           short_name: 'Mengniu',
           description: 'Mengniu Company Premium Application',
           theme_color: '#000080',
+          background_color: '#ffffff',
+          display: 'standalone',
           icons: [
             {
-              src: 'https://s3-symbol-logo.tradingview.com/mengniu-dairy--600.png',
+              src: 'pwa-icon.png',
               sizes: '192x192',
               type: 'image/png'
             },
             {
-              src: 'https://s3-symbol-logo.tradingview.com/mengniu-dairy--600.png',
+              src: 'pwa-icon.png',
               sizes: '512x512',
-              type: 'image/png'
+              type: 'image/png',
+              purpose: 'any maskable'
             }
           ]
         }

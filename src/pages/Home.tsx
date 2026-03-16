@@ -46,15 +46,27 @@ export default function Home() {
 
   const handleInstallApp = async (e: React.MouseEvent) => {
     e.stopPropagation();
+    
+    // Se o evento de instalação do PWA foi capturado (navegador compatível)
     if (deferredPrompt) {
       deferredPrompt.prompt();
       const { outcome } = await deferredPrompt.userChoice;
       if (outcome === 'accepted') {
         setDeferredPrompt(null);
       }
-    } else {
-      setNotification('Instalação já disponível no seu navegador ou já instalada.');
-      setTimeout(() => setNotification(null), 3000);
+    } 
+    // Fallback: Se não houver prompt, tentamos o link de download direto do banco de dados
+    else if (links.link_app_atualizado && links.link_app_atualizado !== '#') {
+      setNotification('Iniciando download do aplicativo...');
+      setTimeout(() => {
+        setNotification(null);
+        window.open(links.link_app_atualizado, '_blank');
+      }, 1500);
+    } 
+    // Se nada funcionar, mostramos uma instrução amigável
+    else {
+      setNotification('Abra o menu do seu navegador e selecione "Instalar Aplicativo" ou "Adicionar à Tela de Início".');
+      setTimeout(() => setNotification(null), 5000);
     }
   };
 
