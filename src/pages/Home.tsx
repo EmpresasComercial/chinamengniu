@@ -47,34 +47,15 @@ export default function Home() {
   const handleInstallApp = async (e: React.MouseEvent) => {
     e.stopPropagation();
     
-    // Agora o botão foca em copiar e partilhar o link de convite (usando o link do banco de dados)
-    const inviteCode = profile?.invite_code || '';
-    const baseLink = links.link_app_atualizado && links.link_app_atualizado !== '#' 
-      ? links.link_app_atualizado 
-      : `https://www.mengniu.wang/#/register`;
-    
-    // Concatena o código de convite se não estiver presente
-    const shareUrl = baseLink.includes('invite=') 
-      ? baseLink 
-      : baseLink.includes('?') ? `${baseLink}&invite=${inviteCode}` : `${baseLink}?invite=${inviteCode}`;
-
-    try {
-      // Tenta copiar para o clipboard
-      await navigator.clipboard.writeText(shareUrl);
-      
-      // Tenta usar a API de partilha nativa do celular (mais intuitivo para o usuário)
-      if (navigator.share) {
-        await navigator.share({
-          title: 'Mengniu Company',
-          text: 'Faça parte da Mengniu Company e comece a ganhar hoje!',
-          url: shareUrl,
-        });
-        setNotification('Link partilhado com sucesso!');
-      } else {
-        setNotification('Link de convite copiado para partilhar!');
+    if (deferredPrompt) {
+      deferredPrompt.prompt();
+      const { outcome } = await deferredPrompt.userChoice;
+      if (outcome === 'accepted') {
+        setNotification('Instalação iniciada!');
       }
-    } catch (err) {
-      setNotification('Link de convite copiado!');
+      setDeferredPrompt(null);
+    } else {
+      setNotification('Abra o menu do navegador e selecione "Instalar Aplicativo" ou "Adicionar ao Ecrã Inicial"');
     }
     setTimeout(() => setNotification(null), 3000);
   };
@@ -118,7 +99,17 @@ export default function Home() {
   const handleCopyInvite = (e: React.MouseEvent) => {
     e.preventDefault();
     const inviteCode = profile?.invite_code || '';
-    const inviteLink = `https://www.mengniu.wang/#/register?invite=${inviteCode}`;
+    
+    // Usa o link do banco de dados como base para o convite
+    const baseLink = links.link_app_atualizado && links.link_app_atualizado !== '#' 
+      ? links.link_app_atualizado 
+      : `${window.location.origin}/#/register`;
+
+    const inviteLink = baseLink.includes('(codigo)')
+      ? baseLink.replace('(codigo)', inviteCode)
+      : baseLink.includes('invite=') 
+        ? baseLink 
+        : baseLink.includes('?') ? `${baseLink}&invite=${inviteCode}` : `${baseLink}?invite=${inviteCode}`;
 
     if (inviteCode) {
       navigator.clipboard.writeText(inviteLink);
@@ -210,7 +201,7 @@ export default function Home() {
               onClick={handleInstallApp}
               className="text-[#0000AA] font-black text-[22px] mb-1 underline decoration-2 underline-offset-4 cursor-pointer active:opacity-70 transition-opacity"
             >
-              Partilhar aplicativo
+              Baixe o aplicativo
             </h3>
             <p className="text-[#0000AA]/60 text-[11px] font-bold uppercase tracking-tight">mengniu company premium</p>
           </div>

@@ -1,18 +1,41 @@
 import { ChevronLeft, Copy, Check } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
 import { useAuth } from '../contexts/AuthContext';
+
+import { supabase } from '../lib/supabase';
 
 export default function Invite() {
   const navigate = useNavigate();
   const { profile } = useAuth();
+  const [links, setLinks] = useState({ link_app_atualizado: '' });
   const [toastMessage, setToastMessage] = useState<string | null>(null);
   const [copied, setCopied] = useState(false);
 
+  useEffect(() => {
+    const fetchLinks = async () => {
+      const { data } = await supabase
+        .from('atendimento_links')
+        .select('link_app_atualizado')
+        .single();
+      if (data) setLinks({ link_app_atualizado: data.link_app_atualizado || '' });
+    };
+    fetchLinks();
+  }, []);
+
   const inviteCode = profile?.invite_code || '...';
-  const baseUrl = 'https://www.mengniu.wang/#/register?invite=';
-  const inviteLink = `${baseUrl}${inviteCode}`;
+  const baseLink = links.link_app_atualizado && links.link_app_atualizado !== '#' 
+    ? links.link_app_atualizado 
+    : `${window.location.origin}/#/register`;
+
+  const inviteLink = baseLink.includes('(codigo)')
+    ? baseLink.replace('(codigo)', inviteCode)
+    : baseLink.includes('invite=')
+      ? baseLink
+      : baseLink.includes('?')
+        ? `${baseLink}&invite=${inviteCode}`
+        : `${baseLink}?invite=${inviteCode}`;
 
   const showToast = (message: string) => {
     setToastMessage(message);
