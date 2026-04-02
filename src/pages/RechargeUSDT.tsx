@@ -120,9 +120,10 @@ export default function RechargeUSDT() {
           {step === 1 ? (
             <motion.section
               key="step1"
-              initial={{ opacity: 0, x: 20 }}
-              animate={{ opacity: 1, x: 0 }}
-              exit={{ opacity: 0, x: -20 }}
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              transition={{ duration: 0.1 }}
               className="bg-white rounded-3xl p-6 shadow-sm"
             >
               <div className="flex items-center gap-2 mb-6 p-3 bg-blue-50 rounded-xl border border-blue-100 italic">
@@ -133,20 +134,20 @@ export default function RechargeUSDT() {
               </div>
 
               <div className="mb-6">
-                <label className="block text-[13px] font-bold text-gray-700 mb-4 uppercase tracking-wider">Quantia em USDT</label>
+                <label className="block text-[12.5px] font-bold text-gray-700 mb-2 uppercase tracking-wider">Quantia em USDT</label>
                 <div className="relative flex items-center group">
                   <input
                     type="number"
                     inputMode="decimal"
                     value={amountUSDT}
                     onChange={(e) => setAmountUSDT(e.target.value)}
-                    className="w-full bg-transparent border-0 border-b-2 border-gray-200 h-[70px] px-0 font-bold text-[36px] focus:border-[#0000AA] outline-none transition-all placeholder:text-gray-200"
+                    className="w-full bg-transparent border-0 border-b-2 border-gray-200 h-[50px] px-0 font-bold text-[24px] focus:border-[#0000AA] outline-none transition-all placeholder:text-gray-200"
                     placeholder="0.00"
                   />
-                  <span className="ml-2 font-black text-gray-300 text-[24px] select-none">USDT</span>
+                  <span className="ml-2 font-black text-gray-300 text-[18px] select-none">USDT</span>
                   <div className="absolute bottom-0 left-0 h-[2px] bg-[#0000AA] w-0 group-focus-within:w-full transition-all duration-300" />
                 </div>
-                <div className="mt-4 flex justify-between text-[12px] text-gray-400 font-bold italic">
+                <div className="mt-3 flex justify-between text-[11px] text-gray-400 font-bold italic">
                   <span>Mín: 4.00 USDT</span>
                   <span>Máx: 1,090.00 USDT</span>
                 </div>
@@ -175,16 +176,17 @@ export default function RechargeUSDT() {
           ) : (
             <motion.section
               key="step2"
-              initial={{ opacity: 0, scale: 0.95 }}
-              animate={{ opacity: 1, scale: 1 }}
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              transition={{ duration: 0.1 }}
               className="space-y-4"
             >
               <div className="bg-white rounded-3xl p-6 shadow-sm flex flex-col items-center text-center">
-                <div className="w-16 h-16 bg-green-100 rounded-full flex items-center justify-center mb-4">
-                  <CheckCircle2 className="w-10 h-10 text-green-600" />
+                <div className="w-12 h-12 bg-green-100 rounded-full flex items-center justify-center mb-4">
+                  <CheckCircle2 className="w-6 h-6 text-green-600" />
                 </div>
-                <h2 className="text-[18px] font-black text-gray-900 mb-1">Depósito Solicitado!</h2>
-                <p className="text-[12.5px] text-gray-500 mb-6">Por favor, envie o valor exato para o endereço abaixo.</p>
+                <h2 className="text-[15px] font-black text-gray-900 mb-1">Depósito Solicitado!</h2>
+                <p className="text-[12px] text-gray-500 mb-6 font-medium">Envie o valor exato para o endereço abaixo.</p>
 
                 <div className="w-full space-y-4 text-left">
                   <div className="bg-gray-50 rounded-xl p-4 border border-gray-100">
@@ -258,9 +260,10 @@ export default function RechargeUSDT() {
       <AnimatePresence>
         {notification && (
           <motion.div
-            initial={{ opacity: 0, scale: 0.8, x: '-50%', y: '-50%' }}
-            animate={{ opacity: 1, scale: 1, x: '-50%', y: '-50%' }}
-            exit={{ opacity: 0, scale: 0.8, x: '-50%', y: '-50%' }}
+            initial={{ opacity: 0, x: '-50%', y: '-50%' }}
+            animate={{ opacity: 1, x: '-50%', y: '-50%' }}
+            exit={{ opacity: 0, x: '-50%', y: '-50%' }}
+            transition={{ duration: 0.1 }}
             className="fixed top-1/2 left-1/2 bg-black/80 backdrop-blur-md text-white px-8 py-4 rounded-2xl text-[13px] font-bold shadow-2xl z-[100] text-center min-w-[280px] border border-white/10"
           >
             {notification}

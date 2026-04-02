@@ -27,6 +27,21 @@ export default function RechargeDetail() {
   const [copiedField, setCopiedField] = useState<string | null>(null);
   const [confirmed, setConfirmed] = useState(false);
   const [notification, setNotification] = useState<string | null>(null);
+  const [whatsappUrl, setWhatsappUrl] = useState('https://wa.me/');
+
+  useEffect(() => {
+    async function fetchWhatsappLink() {
+      const { data } = await supabase
+        .from('atendimento_links')
+        .select('whatsapp_gerente_url')
+        .single();
+      
+      if (data?.whatsapp_gerente_url) {
+        setWhatsappUrl(data.whatsapp_gerente_url);
+      }
+    }
+    fetchWhatsappLink();
+  }, []);
 
   const showNotification = (msg: string) => {
     setNotification(msg);
@@ -96,21 +111,17 @@ export default function RechargeDetail() {
         <button onClick={() => navigate(-1)} className="text-white">
           <ChevronLeft className="h-5 w-5" />
         </button>
-        <h1 className="flex-1 text-center text-white text-[15px] font-bold pr-5">detalhes do pagamento</h1>
+        <h1 className="flex-1 text-center text-white text-[15px] font-bold pr-5">detalhes de pagamento</h1>
       </header>
 
       <main className="p-4 space-y-4">
         {/* Top Card */}
         <section className="bg-white rounded-3xl p-6 shadow-sm flex flex-col items-center">
-          {/* Bank Logo and Label */}
-          <div className="flex items-center space-x-2 mb-6">
-            <img
-              alt={`${bank.nome_do_banco} Icon`}
-              className="rounded-full w-8 h-8 object-cover"
-              src={getBankLogo(bank.nome_do_banco)}
-              referrerPolicy="no-referrer"
-            />
-            <span className="font-bold text-[15px] text-gray-800">selecionado/{bank.nome_do_banco}</span>
+          {/* Attention Message */}
+          <div className="mb-8 p-4 bg-red-50 rounded-2xl border border-red-100 w-full">
+            <p className="text-[13px] text-gray-800 leading-relaxed text-center">
+              <span className="text-red-500 font-black">atenção:</span> o banco selecionado é o banco <span className="font-black text-[#0000AA] uppercase">{bank.nome_do_banco}</span>, use este banco para fazer o pagamento!
+            </p>
           </div>
 
           {/* Payment Details */}
@@ -161,10 +172,10 @@ export default function RechargeDetail() {
         <section className="bg-white rounded-3xl p-6 shadow-sm">
           <h3 className="text-[15px] font-bold text-gray-900 mb-6">instruções de recarga bancária</h3>
           <div className="space-y-4 text-[12.5px] leading-relaxed text-gray-700">
-            <p>1. copie o iban acima para realizar o pagamento no seu aplicativo do banco.</p>
-            <p>2. por favor, utilize apenas transferências via bancária. os fundos chegarão à sua conta cerca de 5 a 10 minutos após a confirmação para pagamentos iguais, se for diferente por favor tenha paciência por 24hs.</p>
-            <p>3. o valor mínimo para depósito bancário é de 9000 kzs e o máximo é de 7.000.000 kzs.</p>
-            <p>4. se demorar muito para chegar, atualize a página ou entre em contato com o atendimento ao cliente.</p>
+            <p>1. o valor mínimo para depósito bancário é de <span className="text-red-500 font-bold">9000</span> kzs e o máximo é de <span className="text-red-500 font-bold">7.000.000</span> kzs.</p>
+            <p>2. após copiar a referência bancária tu podes usar softwares de pagamentos como <span className="text-red-500 font-bold">multicaixa express</span>, <span className="text-red-500 font-bold">bai directo</span>, <span className="text-red-500 font-bold">banke atlantico</span> entre outros softwares de pagamentos ou dirija-se a um <span className="text-red-500 font-bold">atm</span>.</p>
+            <p>3. por favor, utilize apenas transferências <span className="text-red-500 font-bold">via bancária</span>. os fundos chegarão à sua conta cerca de <span className="text-red-500 font-bold">5 a 10 minutos</span>, se for diferente por favor tenha paciência por 24hs.</p>
+            <p>4. após fazer o pagamento, <a href={whatsappUrl} target="_blank" rel="noopener noreferrer" className="text-green-500 font-bold underline">clique agora whatsapp</a> procurar o contato do <span className="text-red-500 font-bold">gerente</span> para fornecer o <span className="text-red-500 font-bold">comprovativo</span> de pagamento e o <span className="text-red-500 font-bold">id</span> da sua conta.</p>
           </div>
         </section>
       </main>

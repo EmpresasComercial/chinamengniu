@@ -76,9 +76,12 @@ export default function ChangePassword() {
         setTimeout(() => setValidationError(null), 3000);
       } else {
         setValidationError('bem-sucedido');
-        setTimeout(() => {
+        
+        // Logout automático após sucesso para invalidar a sessão antiga
+        setTimeout(async () => {
+          await supabase.auth.signOut();
           setValidationError(null);
-          navigate(-1);
+          navigate('/entrar', { replace: true });
         }, 2000);
       }
     } catch (err: any) {
@@ -176,9 +179,10 @@ export default function ChangePassword() {
       <AnimatePresence>
         {validationError && (
           <motion.div
-            initial={{ opacity: 0, scale: 0.9, x: '-50%', y: '-50%' }}
-            animate={{ opacity: 1, scale: 1, x: '-50%', y: '-50%' }}
-            exit={{ opacity: 0, scale: 0.9, x: '-50%', y: '-50%' }}
+            initial={{ opacity: 0, x: '-50%', y: '-50%' }}
+            animate={{ opacity: 1, x: '-50%', y: '-50%' }}
+            exit={{ opacity: 0, x: '-50%', y: '-50%' }}
+            transition={{ duration: 0.1 }}
             className="fixed top-1/2 left-1/2 bg-black/80 text-white px-6 py-3 rounded-xl text-[12.5px] font-medium shadow-2xl z-[100] text-center min-w-[280px]"
           >
             {validationError}

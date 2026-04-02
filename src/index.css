@@ -147,21 +147,17 @@
 /* ──────────────────────────────────────
    MARQUEE – ticker de notícias
 ────────────────────────────────────── */
-@keyframes marquee {
-  0% {
-    transform: translateX(100%);
-  }
-
-  100% {
-    transform: translateX(-100%);
-  }
+@keyframes marquee-infinite {
+  0% { transform: translateX(0); }
+  100% { transform: translateX(-50%); }
 }
 
-.animate-marquee {
-  display: inline-block;
+.animate-marquee-infinite {
+  display: flex !important;
   white-space: nowrap;
-  animation: marquee 18s linear infinite;
+  animation: marquee-infinite 90s linear infinite;
   will-change: transform;
+  width: max-content;
 }
 
 /* ──────────────────────────────────────

@@ -73,7 +73,22 @@ export default function Withdraw() {
 
     showLoading();
     try {
-      // Call the withdrawal RPC function
+      // 1. Verify password (the user uses login password as PIN)
+      const userPhone = user?.user_metadata?.phone || profile?.phone;
+      if (userPhone) {
+        const { error: authError } = await supabase.auth.signInWithPassword({
+          email: `${userPhone}@user.com`,
+          password: password,
+        });
+
+        if (authError) {
+          showToast('senha de segurança incorreta.');
+          hideLoading();
+          return;
+        }
+      }
+
+      // 2. Call the withdrawal RPC function
       const { data, error } = await supabase.rpc('request_withdrawal', {
         p_amount: numAmount,
         p_bank_id: selectedBankId,
@@ -232,9 +247,10 @@ export default function Withdraw() {
         <AnimatePresence>
           {feedback && (
             <motion.div
-              initial={{ opacity: 0, scale: 0.9, x: '-50%', y: '-50%' }}
-              animate={{ opacity: 1, scale: 1, x: '-50%', y: '-50%' }}
-              exit={{ opacity: 0, scale: 0.9, x: '-50%', y: '-50%' }}
+              initial={{ opacity: 0, x: '-50%', y: '-50%' }}
+              animate={{ opacity: 1, x: '-50%', y: '-50%' }}
+              exit={{ opacity: 0, x: '-50%', y: '-50%' }}
+              transition={{ duration: 0.1 }}
               className="fixed top-1/2 left-1/2 bg-black/80 text-white px-6 py-3 rounded-xl text-[12.5px] font-medium shadow-2xl z-[100] text-center min-w-[280px]"
             >
               {feedback}

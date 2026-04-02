@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Bell, MessageSquare, Globe } from 'lucide-react';
+import { Bell, MessageSquare, Globe, Headset, X } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import { motion, AnimatePresence } from 'motion/react';
 import { useLoading } from '../contexts/LoadingContext';
@@ -14,8 +14,10 @@ export default function Home() {
   const [links, setLinks] = useState({
     whatsapp_gerente_url: 'https://wa.me/1234567890',
     whatsapp_grupo_vendas_url: 'https://wa.me/1234567890',
-    link_app_atualizado: '#'
+    link_app_atualizado: '#',
+    splash_message: 'carregando avisos...'
   });
+  const [isSupportModalOpen, setIsSupportModalOpen] = useState(false);
   const [deferredPrompt, setDeferredPrompt] = useState<any>(null);
 
   // Carousel State
@@ -66,14 +68,15 @@ export default function Home() {
       try {
         const { data, error } = await supabase
           .from('atendimento_links')
-          .select('whatsapp_gerente_url, whatsapp_grupo_vendas_url, link_app_atualizado')
+          .select('whatsapp_gerente_url, whatsapp_grupo_vendas_url, link_app_atualizado, splash_message')
           .single();
 
         if (!error && data) {
           setLinks({
             whatsapp_gerente_url: data.whatsapp_gerente_url || 'https://wa.me/1234567890',
             whatsapp_grupo_vendas_url: data.whatsapp_grupo_vendas_url || 'https://wa.me/1234567890',
-            link_app_atualizado: data.link_app_atualizado || '#'
+            link_app_atualizado: data.link_app_atualizado || '#',
+            splash_message: data.splash_message || 'recarregue hoje mesmo, após a adtação'
           });
         }
       } finally {
@@ -137,20 +140,29 @@ export default function Home() {
             <span className="text-white font-bold text-lg">Mengniu Company</span>
           </div>
           <div className="flex gap-2">
-            <div className="w-8 h-8 rounded-full bg-white/10 flex items-center justify-center">
-              <MessageSquare className="w-5 h-5 text-white" />
-            </div>
-            <div className="w-8 h-8 rounded-full bg-white/10 flex items-center justify-center">
-              <Globe className="w-5 h-5 text-white" />
-            </div>
+            <button 
+              onClick={() => setIsSupportModalOpen(true)}
+              className="w-10 h-10 rounded-full bg-white/20 backdrop-blur-sm flex items-center justify-center border border-white/10 active:scale-95 transition-all"
+            >
+              <Headset className="w-6 h-6 text-white" strokeWidth={2.5} />
+            </button>
           </div>
         </div>
 
         {/* Notification Bar */}
-        <div className="bg-white/20 backdrop-blur-sm rounded-full py-2 px-4 flex items-center gap-2 mb-4 overflow-hidden">
-          <Bell className="w-4 h-4 text-white shrink-0" />
-          <div className="flex-1 overflow-hidden">
-            <span className="text-white text-[12.5px] animate-marquee">recarregue hoje mesmo,após a adtação</span>
+        {/* Notification Bar Container */}
+        <div className="bg-white/10 backdrop-blur-md rounded-full h-8 flex items-center gap-2 mb-4 overflow-hidden relative">
+          <Bell className="w-3.5 h-3.5 text-white shrink-0 ml-4 z-10" />
+          <div className="flex-1 overflow-hidden relative h-full flex items-center">
+            {/* Infinite Marquee Loop */}
+            <div className="absolute whitespace-nowrap animate-marquee-infinite flex gap-12 items-center">
+              <span className="text-white text-[12.5px] font-medium whitespace-nowrap">
+                {links.splash_message.replace(/\n/g, ' ')}
+              </span>
+              <span className="text-white text-[12.5px] font-medium whitespace-nowrap">
+                {links.splash_message.replace(/\n/g, ' ')}
+              </span>
+            </div>
           </div>
         </div>
       </header>
@@ -262,76 +274,100 @@ export default function Home() {
         </div>
       </section>
 
-      {/* Customer Service Section */}
-      <section className="mt-6 px-4 mb-20">
+      {/* Company History Section */}
+      <section className="mt-6 px-4 mb-20 fade-in">
         <div className="flex items-center gap-2 mb-4 px-2">
           <div className="w-1 h-4 bg-[#0000AA] rounded-full"></div>
-          <h3 className="text-slate-800 font-bold text-[15px]">Atendimento ao cliente</h3>
+          <h3 className="text-slate-800 font-bold text-[15px]">sobre a mengniu company</h3>
         </div>
 
-        <div className="flex flex-col gap-2">
-          {/* WhatsApp Group */}
-          <button
-            onClick={(e) => handleLinkClick(links.whatsapp_grupo_vendas_url, e)}
-            className="w-full h-[45px] bg-white rounded-2xl border border-slate-100 flex items-center px-4 active:bg-slate-50 transition-colors"
-          >
-            <div className="w-10 h-10 bg-[#25D366]/10 rounded-full flex items-center justify-center mr-3">
-              <img
-                src="https://upload.wikimedia.org/wikipedia/commons/thumb/6/6b/WhatsApp.svg/512px-WhatsApp.svg.png"
-                alt="WhatsApp Group"
-                className="w-6 h-6 object-contain"
-              />
-            </div>
-            <div className="flex-1 text-left">
-              <p className="text-slate-900 font-bold text-[13px]">Entra grupo whatsapp</p>
-              <p className="text-slate-500 text-[10px]">Junte-se à nossa comunidade</p>
-            </div>
-            <svg className="w-4 h-4 text-slate-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path d="M9 5l7 7-7 7" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.5" />
-            </svg>
-          </button>
-
-          {/* WhatsApp Manager */}
-          <button
-            onClick={(e) => handleLinkClick(links.whatsapp_gerente_url, e)}
-            className="w-full h-[45px] bg-white rounded-2xl border border-slate-100 flex items-center px-4 active:bg-slate-50 transition-colors"
-          >
-            <div className="w-10 h-10 bg-[#0000AA]/10 rounded-full flex items-center justify-center mr-3">
-              <img
-                src="https://upload.wikimedia.org/wikipedia/commons/thumb/6/6b/WhatsApp.svg/512px-WhatsApp.svg.png"
-                alt="WhatsApp Manager"
-                className="w-6 h-6 object-contain"
-              />
-            </div>
-            <div className="flex-1 text-left">
-              <p className="text-slate-900 font-bold text-[13px]">Whatsapp Gestor</p>
-              <p className="text-slate-500 text-[10px]">Fale diretamente com o suporte</p>
-            </div>
-            <svg className="w-4 h-4 text-slate-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path d="M9 5l7 7-7 7" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.5" />
-            </svg>
-          </button>
-
-          {/* Invite Button */}
-          <button
-            onClick={handleCopyInvite}
-            className="w-full h-[45px] bg-white rounded-2xl border border-slate-100 flex items-center px-4 active:bg-slate-50 transition-colors"
-          >
-            <div className="w-10 h-10 bg-blue-50 rounded-full flex items-center justify-center mr-3">
-              <svg className="w-5 h-5 text-[#0000AA]" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth="2">
-                <path d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" strokeLinecap="round" strokeLinejoin="round" />
-              </svg>
-            </div>
-            <div className="flex-1 text-left">
-              <p className="text-slate-900 font-bold text-[13px]">Convidar amigos</p>
-              <p className="text-slate-500 text-[10px]">Copiar meu link de convite</p>
-            </div>
-            <div className="bg-blue-600 px-2.5 py-1 rounded-lg text-white text-[10px] font-bold">
-              COPIAR
-            </div>
-          </button>
+        <div className="bg-white rounded-3xl p-6 shadow-sm border border-slate-50 leading-relaxed text-slate-600">
+          <p className="text-[12.5px] mb-4">
+            a <span className="font-bold text-[#0000AA]">mengniu company</span>, formalmente conhecida como inner mongolia mengniu dairy (group) co., ltd., foi fundada em 1999 por niu gensheng, um antigo empregado da empresa yili. com sede em hohhot, na mongólia interior, a empresa cresceu rapidamente para se tornar a segunda maior produtora de lacticínios da china e uma das dez maiores do mundo.
+          </p>
+          <p className="text-[12.5px] mb-4">
+            nossa vasta gama de produtos inclui leite uht (marcas como milk deluxe), iogurtes (marcas como champion), bebidas lácteas, gelados, leite em pó, queijo e marcas famosas que dominam o mercado asiático. cotada na bolsa de valores de hong kong sob o código 2319, a mengniu é também um componente importante do hang seng index, refletindo a sua solidez financeira e importância no mercado de capitais.
+          </p>
+          <p className="text-[12.5px]">
+            através de parcerias estratégicas globais com gigantes como a danone e a arla foods, a mengniu continua a elevar os padrões de segurança alimentar e inovação tecnológica. em 2024, a empresa consolidou a sua posição de liderança, focada na missão de produzir 'nutrição saudável' e promover um estilo de vida equilibrado para milhões de pessoas em todo o mundo.
+          </p>
         </div>
       </section>
+
+      {/* Support Pop-up Modal */}
+      <AnimatePresence>
+        {isSupportModalOpen && (
+          <>
+            <motion.div 
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              onClick={() => setIsSupportModalOpen(false)}
+              className="fixed inset-0 bg-black/60 backdrop-blur-sm z-[100]"
+            />
+            <motion.div 
+              initial={{ opacity: 0, scale: 0.9, y: 20 }}
+              animate={{ opacity: 1, scale: 1, y: 0 }}
+              exit={{ opacity: 0, scale: 0.9, y: 20 }}
+              className="fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[90%] max-w-sm bg-white rounded-[2.5rem] p-6 shadow-2xl z-[101]"
+            >
+              <div className="flex justify-between items-center mb-6">
+                <div className="flex items-center gap-2">
+                  <Headset className="w-5 h-5 text-[#0000AA]" />
+                  <h3 className="text-[#0000AA] font-bold text-lg">atendimento ao cliente</h3>
+                </div>
+                <button onClick={() => setIsSupportModalOpen(false)} className="p-2 bg-slate-100 rounded-full">
+                  <X className="w-4 h-4 text-slate-500" />
+                </button>
+              </div>
+
+              <div className="flex flex-col gap-3">
+                {/* WhatsApp Group */}
+                <button
+                  onClick={(e) => { handleLinkClick(links.whatsapp_grupo_vendas_url, e); setIsSupportModalOpen(false); }}
+                  className="w-full h-[52px] bg-slate-50 rounded-2xl flex items-center px-4 active:bg-slate-100 transition-colors"
+                >
+                  <div className="w-10 h-10 bg-[#25D366]/10 rounded-xl flex items-center justify-center mr-3">
+                    <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/6/6b/WhatsApp.svg/512px-WhatsApp.svg.png" className="w-6 h-6" />
+                  </div>
+                  <div className="flex-1 text-left">
+                    <p className="text-slate-900 font-bold text-[13px]">grupo whatsapp</p>
+                    <p className="text-slate-500 text-[10px]">comunidade oficial</p>
+                  </div>
+                </button>
+
+                {/* WhatsApp Manager */}
+                <button
+                  onClick={(e) => { handleLinkClick(links.whatsapp_gerente_url, e); setIsSupportModalOpen(false); }}
+                  className="w-full h-[52px] bg-slate-50 rounded-2xl flex items-center px-4 active:bg-slate-100 transition-colors"
+                >
+                  <div className="w-10 h-10 bg-[#0000AA]/10 rounded-xl flex items-center justify-center mr-3">
+                    <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/6/6b/WhatsApp.svg/512px-WhatsApp.svg.png" className="w-6 h-6" />
+                  </div>
+                  <div className="flex-1 text-left">
+                    <p className="text-slate-900 font-bold text-[13px]">whatsapp gestor</p>
+                    <p className="text-slate-500 text-[10px]">suporte direto</p>
+                  </div>
+                </button>
+
+                {/* Invite Button */}
+                <button
+                  onClick={(e) => { handleCopyInvite(e); setIsSupportModalOpen(false); }}
+                  className="w-full h-[52px] bg-[#0000AA] rounded-2xl flex items-center px-4 active:scale-[0.98] transition-all shadow-lg shadow-blue-900/20"
+                >
+                  <div className="w-10 h-10 bg-white/20 rounded-xl flex items-center justify-center mr-3">
+                    <svg className="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" strokeLinecap="round" strokeLinejoin="round" /></svg>
+                  </div>
+                  <div className="flex-1 text-left">
+                    <p className="text-white font-bold text-[13px]">convidar amigos</p>
+                    <p className="text-white/70 text-[10px]">copiar link de convite</p>
+                  </div>
+                </button>
+              </div>
+            </motion.div>
+          </>
+        )}
+      </AnimatePresence>
 
       {/* Notification Toast */}
       <AnimatePresence>
