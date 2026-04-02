@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from 'react';
-import { Bell, MessageSquare, Globe, Headset, X } from 'lucide-react';
+import { Bell, Headset, X } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
-import { motion, AnimatePresence } from 'motion/react';
 import { useLoading } from '../contexts/LoadingContext';
 import { useAuth } from '../contexts/AuthContext';
 import { supabase } from '../lib/supabase';
@@ -32,9 +31,9 @@ export default function Home() {
   useEffect(() => {
     const timer = setInterval(() => {
       setCurrentSlide((prev) => (prev + 1) % carouselImages.length);
-    }, 4000); // 4 seconds interval for slide
+    }, 4000);
     return () => clearInterval(timer);
-  }, []);
+  }, [carouselImages.length]);
 
   useEffect(() => {
     const handler = (e: Event) => {
@@ -84,7 +83,7 @@ export default function Home() {
       }
     }
     fetchLinks();
-  }, []);
+  }, [registerFetch]);
 
   const handleLinkClick = (url: string, e: React.MouseEvent) => {
     e.preventDefault();
@@ -103,7 +102,6 @@ export default function Home() {
     e.preventDefault();
     const inviteCode = profile?.invite_code || '';
     
-    // Usa o link do banco de dados como base para o convite
     const baseLink = links.link_app_atualizado && links.link_app_atualizado !== '#' 
       ? links.link_app_atualizado 
       : `${window.location.origin}/#/register`;
@@ -126,7 +124,6 @@ export default function Home() {
 
   return (
     <div className="flex flex-col min-h-screen bg-[#f0f2f5] page-content">
-      {/* Header */}
       <header className="bg-gradient-to-b from-[#001f8d] to-[#001561] pt-4 pb-16 px-4 relative">
         <div className="flex justify-between items-center mb-4">
           <div className="flex items-center gap-2">
@@ -142,19 +139,17 @@ export default function Home() {
           <div className="flex gap-2">
             <button 
               onClick={() => setIsSupportModalOpen(true)}
-              className="w-10 h-10 rounded-full bg-white/20 backdrop-blur-sm flex items-center justify-center border border-white/10 active:scale-95 transition-all"
+              className="w-10 h-10 rounded-full bg-white/20 backdrop-blur-sm flex items-center justify-center border border-white/10"
+              title="suporte"
             >
               <Headset className="w-6 h-6 text-white" strokeWidth={2.5} />
             </button>
           </div>
         </div>
 
-        {/* Notification Bar */}
-        {/* Notification Bar Container */}
         <div className="bg-white/10 backdrop-blur-md rounded-full h-8 flex items-center gap-2 mb-4 overflow-hidden relative">
           <Bell className="w-3.5 h-3.5 text-white shrink-0 ml-4 z-10" />
           <div className="flex-1 overflow-hidden relative h-full flex items-center">
-            {/* Infinite Marquee Loop */}
             <div className="absolute whitespace-nowrap animate-marquee-infinite flex gap-12 items-center">
               <span className="text-white text-[12.5px] font-medium whitespace-nowrap">
                 {links.splash_message.replace(/\n/g, ' ')}
@@ -167,7 +162,6 @@ export default function Home() {
         </div>
       </header>
 
-      {/* Quick Actions Card */}
       <section className="mx-4 -mt-12 z-10 bg-white rounded-[2rem] p-6 shadow-sm border border-slate-100">
         <div className="grid grid-cols-3 gap-2 text-center mb-8">
           <div
@@ -186,7 +180,6 @@ export default function Home() {
             className="flex flex-col items-center cursor-pointer"
           >
             <div className="w-[52px] h-[52px] bg-[#0000AA] rounded-2xl flex items-center justify-center mb-2 shadow-md">
-              {/* Custom SVG reflecting the 'Logout/Action' icon in image */}
               <svg className="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth="3">
                 <path d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h7a3 3 0 013 3v1" strokeLinecap="round" strokeLinejoin="round" />
               </svg>
@@ -206,30 +199,28 @@ export default function Home() {
           </div>
         </div>
 
-        {/* App Banner */}
-        <div className="bg-[#EBF1FF] rounded-[2rem] p-4 flex flex-col justify-between relative overflow-hidden min-h-[140px] group cursor-pointer transition-all active:scale-[0.98]">
+        <div className="bg-[#EBF1FF] rounded-[2rem] p-4 flex flex-col justify-between relative overflow-hidden min-h-[140px] group cursor-pointer transition-none">
           <div className="z-10">
             <h3
               onClick={handleInstallApp}
-              className="text-[#0000AA] font-black text-[22px] mb-1 underline decoration-2 underline-offset-4 cursor-pointer active:opacity-70 transition-opacity"
+              className="text-[#0000AA] font-black text-[22px] mb-1 underline decoration-2 underline-offset-4 cursor-pointer active:opacity-70 transition-none"
             >
               Baixe o aplicativo
             </h3>
             <p className="text-[#0000AA]/60 text-[11px] font-bold uppercase tracking-tight">mengniu company premium</p>
           </div>
 
-          {/* Nova Row de Botões Esticados */}
           <div className="flex gap-2 w-full z-10 mt-4">
             <button
               onClick={(e) => { e.stopPropagation(); navigate('/recarregar'); }}
-              className="flex-1 bg-[#0000AA] text-white px-4 rounded-2xl text-[12.5px] font-black shadow-lg shadow-blue-900/10 h-[44px] flex items-center justify-center active:scale-[0.96] transition-all whitespace-nowrap"
+              className="flex-1 bg-[#0000AA] text-white px-4 rounded-2xl text-[12.5px] font-black shadow-lg shadow-blue-900/10 h-[44px] flex items-center justify-center active:scale-[0.96] transition-none whitespace-nowrap"
             >
               <img src="/deposit1-Dk3ugVyJ.png" alt="Recarregar" className="w-5 h-5 mr-1.5 object-contain" />
               Recarregar
             </button>
             <button
               onClick={(e) => { e.stopPropagation(); navigate('/retirar'); }}
-              className="flex-1 bg-white text-[#0000AA] border border-blue-100 px-4 rounded-2xl text-[12.5px] font-black shadow-lg shadow-blue-900/5 h-[44px] flex items-center justify-center active:scale-[0.96] transition-all whitespace-nowrap"
+              className="flex-1 bg-white text-[#0000AA] border border-blue-100 px-4 rounded-2xl text-[12.5px] font-black shadow-lg shadow-blue-900/5 h-[44px] flex items-center justify-center active:scale-[0.96] transition-none whitespace-nowrap"
             >
               <img src="/withdraw1-pLMbG-t2.png" alt="Extrair" className="w-5 h-5 mr-1.5 object-contain" />
               Extrair
@@ -246,35 +237,26 @@ export default function Home() {
         </div>
       </section>
 
-      {/* Hero Carousel */}
       <section className="mt-4 px-4">
         <div className="rounded-2xl overflow-hidden shadow-sm bg-gray-100 min-h-[140px] relative w-full aspect-[2/1] sm:aspect-[21/9]">
-          <AnimatePresence mode="popLayout">
-            <motion.img
-              key={currentSlide}
-              src={carouselImages[currentSlide]}
-              alt={`Mengniu Banner ${currentSlide + 1}`}
-              className="absolute inset-0 w-full h-full object-cover"
-              initial={{ opacity: 0, x: 50 }}
-              animate={{ opacity: 1, x: 0 }}
-              exit={{ opacity: 0, x: -50 }}
-              transition={{ duration: 0.5, ease: "easeInOut" }}
-              loading="lazy"
-            />
-          </AnimatePresence>
-          {/* Dots Indicator */}
+          <img
+            key={currentSlide}
+            src={carouselImages[currentSlide]}
+            alt={`Mengniu Banner ${currentSlide + 1}`}
+            className="absolute inset-0 w-full h-full object-cover"
+            loading="lazy"
+          />
           <div className="absolute bottom-3 left-0 right-0 flex justify-center gap-1.5 z-10">
             {carouselImages.map((_, idx) => (
               <div
                 key={idx}
-                className={`h-1.5 rounded-full transition-all duration-300 ${currentSlide === idx ? 'w-4 bg-white' : 'w-1.5 bg-white/50'}`}
+                className={`h-1.5 rounded-full transition-none ${currentSlide === idx ? 'w-4 bg-white' : 'w-1.5 bg-white/50'}`}
               />
             ))}
           </div>
         </div>
       </section>
 
-      {/* Company History Section */}
       <section className="mt-6 px-4 mb-20 fade-in">
         <div className="flex items-center gap-2 mb-4 px-2">
           <div className="w-1 h-4 bg-[#0000AA] rounded-full"></div>
@@ -294,96 +276,76 @@ export default function Home() {
         </div>
       </section>
 
-      {/* Support Pop-up Modal */}
-      <AnimatePresence>
-        {isSupportModalOpen && (
-          <>
-            <motion.div 
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              exit={{ opacity: 0 }}
-              onClick={() => setIsSupportModalOpen(false)}
-              className="fixed inset-0 bg-black/60 backdrop-blur-sm z-[100]"
-            />
-            <motion.div 
-              initial={{ opacity: 0, scale: 0.9, y: 20 }}
-              animate={{ opacity: 1, scale: 1, y: 0 }}
-              exit={{ opacity: 0, scale: 0.9, y: 20 }}
-              className="fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[90%] max-w-sm bg-white rounded-[2.5rem] p-6 shadow-2xl z-[101]"
-            >
-              <div className="flex justify-between items-center mb-6">
-                <div className="flex items-center gap-2">
-                  <Headset className="w-5 h-5 text-[#0000AA]" />
-                  <h3 className="text-[#0000AA] font-bold text-lg">atendimento ao cliente</h3>
+      {isSupportModalOpen && (
+        <div className="fixed inset-0 z-[100] flex items-center justify-center p-4">
+          <div 
+            onClick={() => setIsSupportModalOpen(false)}
+            className="absolute inset-0 bg-black/60 backdrop-blur-[2px]"
+          />
+          <div className="relative w-[90%] max-w-sm bg-white rounded-[2.5rem] p-6 shadow-2xl z-[101]">
+            <div className="flex justify-between items-center mb-6">
+              <div className="flex items-center gap-2">
+                <Headset className="w-5 h-5 text-[#0000AA]" />
+                <h3 className="text-[#0000AA] font-bold text-lg">atendimento ao cliente</h3>
+              </div>
+              <button 
+                onClick={() => setIsSupportModalOpen(false)} 
+                className="p-2 bg-slate-100 rounded-full"
+                title="fechar"
+              >
+                <X className="w-4 h-4 text-slate-500" />
+              </button>
+            </div>
+
+            <div className="flex flex-col gap-3">
+              <button
+                onClick={(e) => { handleLinkClick(links.whatsapp_grupo_vendas_url, e); setIsSupportModalOpen(false); }}
+                className="w-full h-[52px] bg-slate-50 rounded-2xl flex items-center px-4 active:bg-slate-100 transition-none"
+              >
+                <div className="w-10 h-10 bg-[#25D366]/10 rounded-xl flex items-center justify-center mr-3">
+                  <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/6/6b/WhatsApp.svg/512px-WhatsApp.svg.png" className="w-6 h-6" alt="whatsapp" />
                 </div>
-                <button onClick={() => setIsSupportModalOpen(false)} className="p-2 bg-slate-100 rounded-full">
-                  <X className="w-4 h-4 text-slate-500" />
-                </button>
-              </div>
+                <div className="flex-1 text-left">
+                  <p className="text-slate-900 font-bold text-[13px]">grupo whatsapp</p>
+                  <p className="text-slate-500 text-[10px]">comunidade oficial</p>
+                </div>
+              </button>
 
-              <div className="flex flex-col gap-3">
-                {/* WhatsApp Group */}
-                <button
-                  onClick={(e) => { handleLinkClick(links.whatsapp_grupo_vendas_url, e); setIsSupportModalOpen(false); }}
-                  className="w-full h-[52px] bg-slate-50 rounded-2xl flex items-center px-4 active:bg-slate-100 transition-colors"
-                >
-                  <div className="w-10 h-10 bg-[#25D366]/10 rounded-xl flex items-center justify-center mr-3">
-                    <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/6/6b/WhatsApp.svg/512px-WhatsApp.svg.png" className="w-6 h-6" />
-                  </div>
-                  <div className="flex-1 text-left">
-                    <p className="text-slate-900 font-bold text-[13px]">grupo whatsapp</p>
-                    <p className="text-slate-500 text-[10px]">comunidade oficial</p>
-                  </div>
-                </button>
+              <button
+                onClick={(e) => { handleLinkClick(links.whatsapp_gerente_url, e); setIsSupportModalOpen(false); }}
+                className="w-full h-[52px] bg-slate-50 rounded-2xl flex items-center px-4 active:bg-slate-100 transition-none"
+              >
+                <div className="w-10 h-10 bg-[#0000AA]/10 rounded-xl flex items-center justify-center mr-3">
+                  <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/6/6b/WhatsApp.svg/512px-WhatsApp.svg.png" className="w-6 h-6" alt="whatsapp" />
+                </div>
+                <div className="flex-1 text-left">
+                  <p className="text-slate-900 font-bold text-[13px]">whatsapp gestor</p>
+                  <p className="text-slate-500 text-[10px]">suporte direto</p>
+                </div>
+              </button>
 
-                {/* WhatsApp Manager */}
-                <button
-                  onClick={(e) => { handleLinkClick(links.whatsapp_gerente_url, e); setIsSupportModalOpen(false); }}
-                  className="w-full h-[52px] bg-slate-50 rounded-2xl flex items-center px-4 active:bg-slate-100 transition-colors"
-                >
-                  <div className="w-10 h-10 bg-[#0000AA]/10 rounded-xl flex items-center justify-center mr-3">
-                    <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/6/6b/WhatsApp.svg/512px-WhatsApp.svg.png" className="w-6 h-6" />
-                  </div>
-                  <div className="flex-1 text-left">
-                    <p className="text-slate-900 font-bold text-[13px]">whatsapp gestor</p>
-                    <p className="text-slate-500 text-[10px]">suporte direto</p>
-                  </div>
-                </button>
+              <button
+                onClick={(e) => { handleCopyInvite(e); setIsSupportModalOpen(false); }}
+                className="w-full h-[52px] bg-[#0000AA] rounded-2xl flex items-center px-4 active:scale-[0.98] transition-none shadow-lg shadow-blue-900/20"
+              >
+                <div className="w-10 h-10 bg-white/20 rounded-xl flex items-center justify-center mr-3">
+                  <svg className="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" strokeLinecap="round" strokeLinejoin="round" /></svg>
+                </div>
+                <div className="flex-1 text-left">
+                  <p className="text-white font-bold text-[13px]">convidar amigos</p>
+                  <p className="text-white/70 text-[10px]">copiar link de convite</p>
+                </div>
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
 
-                {/* Invite Button */}
-                <button
-                  onClick={(e) => { handleCopyInvite(e); setIsSupportModalOpen(false); }}
-                  className="w-full h-[52px] bg-[#0000AA] rounded-2xl flex items-center px-4 active:scale-[0.98] transition-all shadow-lg shadow-blue-900/20"
-                >
-                  <div className="w-10 h-10 bg-white/20 rounded-xl flex items-center justify-center mr-3">
-                    <svg className="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" strokeLinecap="round" strokeLinejoin="round" /></svg>
-                  </div>
-                  <div className="flex-1 text-left">
-                    <p className="text-white font-bold text-[13px]">convidar amigos</p>
-                    <p className="text-white/70 text-[10px]">copiar link de convite</p>
-                  </div>
-                </button>
-              </div>
-            </motion.div>
-          </>
-        )}
-      </AnimatePresence>
-
-      {/* Notification Toast */}
-      <AnimatePresence>
-        {
-          notification && (
-            <motion.div
-              initial={{ opacity: 0, scale: 0.9, x: '-50%', y: '-50%' }}
-              animate={{ opacity: 1, scale: 1, x: '-50%', y: '-50%' }}
-              exit={{ opacity: 0, scale: 0.9, x: '-50%', y: '-50%' }}
-              className="fixed top-1/2 left-1/2 bg-black/80 text-white px-6 py-3 rounded-xl text-[12.5px] font-medium shadow-2xl z-[100] text-center min-w-[280px]"
-            >
-              {notification}
-            </motion.div>
-          )
-        }
-      </AnimatePresence>
+      {notification && (
+        <div className="fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 bg-black/80 text-white px-6 py-3 rounded-xl text-[12.5px] font-medium shadow-2xl z-[500] text-center min-w-[280px]">
+          {notification}
+        </div>
+      )}
     </div>
   );
 }

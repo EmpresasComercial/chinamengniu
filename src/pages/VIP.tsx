@@ -1,7 +1,6 @@
 import { useState, useEffect } from 'react';
-import { Send, ChevronRight, X } from 'lucide-react';
+import { Send, X } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
-import { motion, AnimatePresence } from 'motion/react';
 import { useLoading } from '../contexts/LoadingContext';
 import { useAuth } from '../contexts/AuthContext';
 import { supabase } from '../lib/supabase';
@@ -29,17 +28,12 @@ export default function VIP() {
 
   const [isPurchaseModalOpen, setIsPurchaseModalOpen] = useState(false);
   const [selectedProduct, setSelectedProduct] = useState<Product | null>(null);
-  const [notification, setNotification] = useState<string | null>(null);
-
-  const showToast = (msg: string) => {
-    setNotification(msg);
-    setTimeout(() => setNotification(null), 3000);
-  };
+  const [purchaseResult, setPurchaseResult] = useState<{ success: boolean; message: string } | null>(null);
+  const [isResultModalOpen, setIsResultModalOpen] = useState(false);
 
   const handlePurchase = async () => {
     if (!selectedProduct) return;
 
-    // Close modal first for clear notification UI
     setIsPurchaseModalOpen(false);
     
     const done = registerFetch();
@@ -49,23 +43,41 @@ export default function VIP() {
         p_product_id: selectedProduct.id
       });
 
+      hideLoading();
+      done();
+
       if (error) {
-        showToast(`erro: ${error.message}`);
+        setPurchaseResult({ 
+          success: false, 
+          message: error.message || 'erro na conexão com o servidor' 
+        });
+        setIsResultModalOpen(true);
         return;
       }
 
       if (data && data.success === false) {
-        showToast(`erro: ${data.message}`);
+        setPurchaseResult({ 
+          success: false, 
+          message: data.message || 'erro ao processar adoção' 
+        });
+        setIsResultModalOpen(true);
         return;
       }
 
-      showToast('adoção bem-sucedida!');
+      setPurchaseResult({ 
+        success: true, 
+        message: data?.message || 'adoção realizada com sucesso!' 
+      });
+      setIsResultModalOpen(true);
       await refreshProfile();
     } catch (err) {
-      showToast('erro inesperado');
-    } finally {
       hideLoading();
       done();
+      setPurchaseResult({ 
+        success: false, 
+        message: 'erro inesperado ao processar solicitação' 
+      });
+      setIsResultModalOpen(true);
     }
   };
 
@@ -73,7 +85,6 @@ export default function VIP() {
     async function loadData() {
       const done = registerFetch();
       try {
-        // 1. Load Products & Purchase Counts
         const { data: productsData } = await supabase
           .from('products')
           .select('*')
@@ -81,7 +92,6 @@ export default function VIP() {
           .order('price', { ascending: true });
 
         if (user && productsData) {
-          // Obter contagem de compras para cada produto
           const { data: history } = await supabase
             .from('historico_compras')
             .select('nome_produto')
@@ -96,7 +106,6 @@ export default function VIP() {
           setProducts(productsData);
         }
 
-        // 2. Load Revenue Stats from tarefas_diarias
         if (user) {
           const { data: tarefas } = await supabase
             .from('tarefas_diarias')
@@ -122,7 +131,6 @@ export default function VIP() {
 
   return (
     <div className="flex flex-col min-h-screen bg-[#0000A5] page-content uppercase-none">
-      {/* Header Section */}
       <header className="p-4 text-white">
         <div className="flex items-center justify-between mb-4">
           <div className="flex items-center gap-3">
@@ -150,13 +158,12 @@ export default function VIP() {
           </div>
           <button
             onClick={() => navigate('/promocao')}
-            className="bg-blue-600/50 text-white px-4 py-1 rounded-full text-[10px] font-semibold active:opacity-70 transition-opacity lowercase"
+            className="bg-blue-600/50 text-white px-4 py-1 rounded-full text-[10px] font-semibold active:opacity-70 transition-none lowercase"
           >
             promoção
           </button>
         </div>
 
-        {/* Credit Score */}
         <div className="mb-6">
           <div className="flex justify-between items-center text-[10px] mb-1 lowercase">
             <span>pontuação de crédito:</span>
@@ -167,7 +174,6 @@ export default function VIP() {
           </div>
         </div>
 
-        {/* Earnings Stats */}
         <div className="mb-6 relative overflow-hidden bg-white/10 p-4 rounded-xl">
           <div className="flex justify-between mb-4">
             <div>
@@ -185,7 +191,6 @@ export default function VIP() {
           <div className="absolute -right-4 -bottom-4 w-24 h-24 border-[12px] border-white/10 rounded-full"></div>
         </div>
 
-        {/* Invite Banner */}
         <div
           onClick={() => navigate('/convidar')}
           className="bg-[#D4ED71] text-black flex items-center justify-between p-4 rounded-lg mb-2 cursor-pointer"
@@ -195,16 +200,14 @@ export default function VIP() {
         </div>
       </header>
 
-      {/* Job System List */}
-      <main className="bg-[#EBF1FF] rounded-t-[1.5rem] flex-grow text-black p-6">
+      <main className="bg-[#EBF1FF] rounded-t-[1.5rem] flex-grow text-black p-6 mb-20">
         <h2 className="text-[15px] font-bold text-[#000080] mb-4 lowercase">sistema de empregos</h2>
         <div className="space-y-3">
           {products.map((vip) => (
             <div
               key={vip.id}
-              className="relative overflow-hidden flex flex-col bg-white p-3.5 rounded-[8px] border border-slate-100 transition-all shadow-none"
+              className="relative overflow-hidden flex flex-col bg-white p-3.5 rounded-[8px] border border-slate-100 shadow-none"
             >
-              {/* artistic background - full coverage - no crop */}
               <div 
                 className="absolute inset-0 opacity-[0.14] pointer-events-none bg-no-repeat bg-contain bg-center"
                 style={{ 
@@ -213,8 +216,7 @@ export default function VIP() {
                 }}
               />
 
-              {/* card header - compact */}
-              <div className="flex items-center justify-between mb-2 relative z-10">
+              <div className="flex items-start justify-between mb-2 relative z-10">
                 <div>
                   <p className="font-black text-[14px] text-[#000080] lowercase tracking-tight mb-0.5 leading-none">
                     {vip.name.toLowerCase()}
@@ -227,31 +229,33 @@ export default function VIP() {
                     ))}
                   </div>
                 </div>
-                {profile?.state === vip.name && (
-                  <span className="bg-blue-50 text-[#0000AA] px-2 py-0.5 rounded-full text-[9px] font-black lowercase leading-none">
-                    posição atual
-                  </span>
-                )}
+                
+                <div className="flex flex-col items-end gap-1">
+                  {profile?.state === vip.name && (
+                    <span className="bg-blue-50 text-[#0000AA] px-2 py-0.5 rounded-full text-[9px] font-black lowercase leading-none mb-1">
+                      posição atual
+                    </span>
+                  )}
+                  <div className="text-right">
+                    <p className="text-[9px] text-green-600 font-bold lowercase leading-tight">renda diária:</p>
+                    <p className="text-[11px] font-black text-green-600 lowercase leading-tight">{vip.daily_income.toLocaleString('pt-AO')} kz</p>
+                  </div>
+                  <div className="text-right">
+                    <p className="text-[9px] text-slate-400 font-bold lowercase leading-tight">limite:</p>
+                    <p className="text-[11px] font-black text-slate-800 lowercase leading-tight">{vip.purchase_limit} vezes</p>
+                  </div>
+                </div>
               </div>
 
-              {/* info grid & buy button */}
               <div className="flex items-end justify-between border-t border-slate-50/50 pt-2.5 mt-0.5 relative z-10">
-                <div className="grid grid-cols-2 gap-y-2.5 gap-x-4 flex-1">
+                <div className="flex flex-col gap-2.5 flex-1">
                   <div className="flex flex-col">
                     <p className="text-[9px] text-slate-400 mb-0.5 font-bold lowercase tracking-tight leading-none">preço</p>
                     <p className="text-[13px] font-black text-[#FF0000] lowercase leading-none">{vip.price.toLocaleString('pt-AO')} kz</p>
                   </div>
                   <div className="flex flex-col">
-                    <p className="text-[9px] text-slate-400 mb-0.5 font-bold lowercase tracking-tight leading-none">renda diária</p>
-                    <p className="text-[12.5px] font-black text-green-600 lowercase leading-none">{vip.daily_income.toLocaleString('pt-AO')} kz</p>
-                  </div>
-                  <div className="flex flex-col">
                     <p className="text-[9px] text-slate-400 mb-0.5 font-bold lowercase tracking-tight leading-none">duração</p>
                     <p className="text-[12.5px] font-black text-slate-800 lowercase leading-none">{vip.duration_days} dias</p>
-                  </div>
-                  <div className="flex flex-col">
-                    <p className="text-[9px] text-slate-400 mb-0.5 font-bold lowercase tracking-tight leading-none">limite compra</p>
-                    <p className="text-[12.5px] font-black text-slate-800 lowercase leading-none">{vip.purchase_limit} vezes</p>
                   </div>
                 </div>
                 
@@ -260,7 +264,7 @@ export default function VIP() {
                     setSelectedProduct(vip);
                     setIsPurchaseModalOpen(true);
                   }}
-                  className="bg-[#0000AA] hover:bg-blue-800 text-white px-4 h-[22px] rounded-lg text-[10px] font-bold lowercase active:scale-95 transition-all ml-2 flex items-center justify-center"
+                  className="bg-[#0000AA] hover:bg-blue-800 text-white px-4 h-[22px] rounded-lg text-[10px] font-bold lowercase active:scale-95 transition-none ml-2 flex items-center justify-center"
                 >
                   comprar
                 </button>
@@ -270,86 +274,94 @@ export default function VIP() {
         </div>
       </main>
 
-      {/* product details & purchase pop-up */}
-      <AnimatePresence>
-        {isPurchaseModalOpen && selectedProduct && (
-          <>
-            <motion.div 
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              exit={{ opacity: 0 }}
-              onClick={() => setIsPurchaseModalOpen(false)}
-              className="fixed inset-0 bg-black/60 backdrop-blur-sm z-[100]"
-            />
-            <motion.div 
-              initial={{ opacity: 0, scale: 0.9, y: 20 }}
-              animate={{ opacity: 1, scale: 1, y: 0 }}
-              exit={{ opacity: 0, scale: 0.9, y: 20 }}
-              className="fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[90%] max-w-sm bg-white rounded-[2rem] p-6 shadow-2xl z-[101]"
-            >
-              <div className="flex flex-col items-center">
-                <p className="text-slate-400 text-[11px] font-bold lowercase mb-4 tracking-wider">detalhe do animal de compra</p>
-                <div className="w-24 h-24 bg-slate-50 rounded-3xl flex items-center justify-center p-3 mb-4 border border-slate-100">
-                  <img src={selectedProduct.image_url} className="w-full h-full object-contain" alt={selectedProduct.name} />
-                </div>
-                <h3 className="text-[#000080] font-black text-lg lowercase mb-1">{selectedProduct.name.toLowerCase()}</h3>
-                <div className="flex gap-0.5 mb-6">
-                  {Array.from({ length: selectedProduct.purchase_limit || 1 }).map((_, i) => (
-                    <span key={i} className={(selectedProduct.bought_count || 0) > i ? "text-[#FFD700]" : "text-slate-200"}>★</span>
-                  ))}
-                </div>
-
-                <div className="w-full space-y-2 mb-8">
-                  <div className="flex justify-between items-center border-b border-slate-50 pb-2">
-                    <span className="text-slate-400 text-[11px] lowercase font-medium">frequência alimentar</span>
-                    <span className="text-slate-900 font-black text-[13.5px]">1 vez/dia</span>
-                  </div>
-                  <div className="flex justify-between items-center border-b border-slate-50 pb-2">
-                    <span className="text-slate-400 text-[11px] lowercase font-medium">rendimento diário</span>
-                    <span className="text-green-600 font-black text-[13.5px]">{selectedProduct.daily_income.toLocaleString('pt-AO')} kz p/ dia</span>
-                  </div>
-                  <div className="flex justify-between items-center border-b border-slate-50 pb-2">
-                    <span className="text-slate-400 text-[11px] lowercase font-medium">preço de adoção</span>
-                    <span className="text-[#FF0000] font-black text-[13.5px]">{selectedProduct.price.toLocaleString('pt-AO')} kz</span>
-                  </div>
-                  <div className="flex justify-between items-center">
-                    <span className="text-slate-400 text-[11px] lowercase font-medium">período de adoção</span>
-                    <span className="text-slate-900 font-black text-[13.5px]">{selectedProduct.duration_days} dias</span>
-                  </div>
-                </div>
-
-                <button
-                  onClick={handlePurchase}
-                  className="w-full h-[32px] bg-[#0000AA] hover:bg-blue-800 text-white font-bold rounded-xl shadow-lg shadow-blue-900/20 transition-all active:scale-[0.98] lowercase text-[13px] flex items-center justify-center p-0"
-                >
-                  adotar
-                </button>
-                <button 
-                  onClick={() => setIsPurchaseModalOpen(false)}
-                  className="mt-4 text-slate-400 text-[11px] font-medium lowercase"
-                  title="fechar"
-                >
-                  cancelar
-                </button>
+      {isPurchaseModalOpen && selectedProduct && (
+        <div className="fixed inset-0 z-[100] flex items-center justify-center p-4">
+          <div 
+            onClick={() => setIsPurchaseModalOpen(false)}
+            className="absolute inset-0 bg-black/60 backdrop-blur-[2px]"
+          />
+          <div className="relative w-full max-w-sm bg-white rounded-[2rem] p-6 shadow-2xl z-[101]">
+            <div className="flex flex-col items-center">
+              <p className="text-slate-400 text-[11px] font-bold lowercase mb-4 tracking-wider">detalhe do animal de compra</p>
+              <div className="w-24 h-24 bg-slate-50 rounded-3xl flex items-center justify-center p-3 mb-4 border border-slate-100">
+                <img src={selectedProduct.image_url} className="w-full h-full object-contain" alt={selectedProduct.name} />
               </div>
-            </motion.div>
-          </>
-        )}
-      </AnimatePresence>
+              <h3 className="text-[#000080] font-black text-lg lowercase mb-1">{selectedProduct.name.toLowerCase()}</h3>
+              <div className="flex gap-0.5 mb-6">
+                {Array.from({ length: selectedProduct.purchase_limit || 1 }).map((_, i) => (
+                  <span key={i} className={(selectedProduct.bought_count || 0) > i ? "text-[#FFD700]" : "text-slate-200"}>★</span>
+                ))}
+              </div>
+              <div className="w-full space-y-2 mb-8">
+                <div className="flex justify-between items-center border-b border-slate-50 pb-2">
+                  <span className="text-slate-400 text-[11px] lowercase font-medium">frequência alimentar</span>
+                  <span className="text-slate-900 font-black text-[13.5px]">1 vez/dia</span>
+                </div>
+                <div className="flex justify-between items-center border-b border-slate-50 pb-2">
+                  <span className="text-slate-400 text-[11px] lowercase font-medium">rendimento diário</span>
+                  <span className="text-green-600 font-black text-[13.5px]">{selectedProduct.daily_income.toLocaleString('pt-AO')} kz p/ dia</span>
+                </div>
+                <div className="flex justify-between items-center border-b border-slate-50 pb-2">
+                  <span className="text-slate-400 text-[11px] lowercase font-medium">preço de adoção</span>
+                  <span className="text-[#FF0000] font-black text-[13.5px]">{selectedProduct.price.toLocaleString('pt-AO')} kz</span>
+                </div>
+                <div className="flex justify-between items-center">
+                  <span className="text-slate-400 text-[11px] lowercase font-medium">período de adoção</span>
+                  <span className="text-slate-900 font-black text-[13.5px]">{selectedProduct.duration_days} dias</span>
+                </div>
+              </div>
+              <button
+                onClick={handlePurchase}
+                className="w-full h-[32px] bg-[#0000AA] hover:bg-blue-800 text-white font-bold rounded-xl shadow-lg shadow-blue-900/20 transition-none lowercase text-[13px] flex items-center justify-center p-0"
+              >
+                adotar
+              </button>
+              <button 
+                onClick={() => setIsPurchaseModalOpen(false)}
+                className="mt-4 text-slate-400 text-[11px] font-medium lowercase"
+              >
+                cancelar
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
 
-      {/* Notification Toast */}
-      <AnimatePresence>
-        {notification && (
-          <motion.div
-            initial={{ opacity: 0, scale: 0.9, x: '-50%', y: -20 }}
-            animate={{ opacity: 1, scale: 1, x: '-50%', y: 20 }}
-            exit={{ opacity: 0, scale: 0.9, x: '-50%', y: -20 }}
-            className="fixed top-0 left-1/2 bg-black/80 text-white px-6 py-3 rounded-xl text-[12.5px] font-medium shadow-2xl z-[1000] text-center min-w-[280px]"
-          >
-            {notification}
-          </motion.div>
-        )}
-      </AnimatePresence>
+      {isResultModalOpen && purchaseResult && (
+        <div className="fixed inset-0 z-[10001] flex items-center justify-center p-4">
+          <div 
+            className="absolute inset-0 bg-black/60 backdrop-blur-[2px]"
+            onClick={() => setIsResultModalOpen(false)}
+          />
+          <div className="relative w-[85%] max-w-[320px] bg-white rounded-[2rem] p-8 shadow-2xl z-[10002] text-center flex flex-col items-center justify-center">
+            <div className={`w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-4 ${purchaseResult.success ? 'bg-green-100 text-green-600' : 'bg-red-100 text-red-600'}`}>
+              {purchaseResult.success ? (
+                <svg className="w-8 h-8" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3} d="M5 13l4 4L19 7" />
+                </svg>
+              ) : (
+                <X className="w-8 h-8" strokeWidth={3} />
+              )}
+            </div>
+            <h3 className={`text-lg font-black lowercase mb-2 ${purchaseResult.success ? 'text-green-600' : 'text-red-600'}`}>
+              {purchaseResult.success ? 'sucesso' : 'ops! houve um erro'}
+            </h3>
+            <p className="text-slate-600 text-[13px] lowercase leading-relaxed mb-8">
+              {purchaseResult.message}
+            </p>
+            <button
+              onClick={() => setIsResultModalOpen(false)}
+              className={`w-full h-11 rounded-2xl font-bold text-[14px] lowercase transition-none shadow-lg ${
+                purchaseResult.success 
+                  ? 'bg-green-600 hover:bg-green-700 text-white' 
+                  : 'bg-[#0000AA] hover:bg-blue-800 text-white'
+              }`}
+            >
+              entendido
+            </button>
+          </div>
+        </div>
+      )}
     </div>
   );
 }

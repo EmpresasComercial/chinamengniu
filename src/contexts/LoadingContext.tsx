@@ -1,6 +1,5 @@
 import React, { createContext, useContext, useState, ReactNode, useEffect, useRef, useCallback } from 'react';
 import { useLocation } from 'react-router-dom';
-import { motion, AnimatePresence } from 'motion/react';
 
 interface LoadingContextType {
   isLoading: boolean;
@@ -130,18 +129,11 @@ export const LoadingProvider = ({ children }: { children: ReactNode }) => {
       )}
 
       {/* Global Toast Error / Warnings */}
-      <AnimatePresence>
-        {errorMessage && (
-          <motion.div
-            initial={{ opacity: 0, scale: 0.9, x: '-50%', y: '-50%' }}
-            animate={{ opacity: 1, scale: 1, x: '-50%', y: '-50%' }}
-            exit={{ opacity: 0, scale: 0.9, x: '-50%', y: '-50%' }}
-            className="fixed top-1/2 left-1/2 bg-black/85 text-white px-6 py-4 rounded-xl text-[12.5px] font-medium shadow-2xl z-[10000] text-center min-w-[280px] leading-relaxed"
-          >
-            {errorMessage}
-          </motion.div>
-        )}
-      </AnimatePresence>
+      {errorMessage && (
+        <div className="fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 bg-black/85 text-white px-6 py-4 rounded-xl text-[12.5px] font-medium shadow-2xl z-[10000] text-center min-w-[280px] leading-relaxed">
+          {errorMessage}
+        </div>
+      )}
     </LoadingContext.Provider>
   );
 };
@@ -161,8 +153,7 @@ export const RouteTransitionLoader = () => {
   useEffect(() => {
     const isHeavy = HEAVY_ROUTES.some(r => location.pathname.startsWith(r));
     const done = registerFetch();
-    // Give the page a short grace period before marking nav-load as done
-    // Pages that actually call registerFetch() themselves will extend this naturally
+    // Give the page a short grace period
     const timer = setTimeout(() => {
       done();
     }, isHeavy ? 500 : 250);
