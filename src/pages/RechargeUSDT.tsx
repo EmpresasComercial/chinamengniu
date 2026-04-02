@@ -1,23 +1,13 @@
 import { useState, useEffect, useMemo } from 'react';
-import { ChevronLeft, Info, Copy, CheckCircle2, QrCode } from 'lucide-react';
+import { ChevronLeft, Info, Copy, CheckCircle2 } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import { motion, AnimatePresence } from 'motion/react';
 import { useLoading } from '../contexts/LoadingContext';
 import { supabase } from '../lib/supabase';
 import { useAuth } from '../contexts/AuthContext';
 
-/**
- * Generates a QR-code image URL using a public, open-source QR API.
- * The QR data is constructed from props coming from the backend,
- * so it cannot be tampered with via DevTools without losing wallet data integrity.
- */
-function buildQRDataURL(address: string, amount: string): string {
-  if (!address || !amount) return '';
-  // Encode as standard TRC20 URI
-  const paymentData = `tron:${address}?amount=${amount}`;
-  // Use QuickChart as primary (high reliability, low latency)
-  return `https://quickchart.io/qr?text=${encodeURIComponent(paymentData)}&size=250&margin=1&ecLevel=M`;
-}
+
+
 
 export default function RechargeUSDT() {
   const navigate = useNavigate();
@@ -113,12 +103,7 @@ export default function RechargeUSDT() {
 
   // QR Code URL — built from backend data, not from user input
   const walletAddress = companyWallet?.endereco_carteira || '';
-  const qrCodeUrl = useMemo(
-    () => step === 2 && walletAddress && amountUSDT
-      ? buildQRDataURL(walletAddress, amountUSDT)
-      : '',
-    [step, walletAddress, amountUSDT]
-  );
+
 
   return (
     <div className="flex flex-col min-h-screen bg-[#F0F2F5] antialiased page-content">
@@ -228,47 +213,7 @@ export default function RechargeUSDT() {
                     </div>
                   </div>
 
-                  {/* QR Code – Multiple fallbacks to ensure display */}
-                  {qrCodeUrl && (
-                    <div className="bg-white border border-gray-100 rounded-3xl p-6 flex flex-col items-center shadow-inner mt-4">
-                      <div className="flex items-center gap-2 mb-4">
-                        <div className="w-8 h-8 bg-blue-50 rounded-full flex items-center justify-center">
-                          <QrCode className="w-4 h-4 text-[#0000AA]" />
-                        </div>
-                        <p className="text-[14px] font-black text-gray-800 uppercase">Escaneie para pagar</p>
-                      </div>
-                      <div className="p-3 bg-white border-2 border-gray-50 rounded-2xl shadow-sm hover:shadow-md transition-shadow relative overflow-hidden group">
-                        <img
-                          src={qrCodeUrl}
-                          alt="QR Code USDT"
-                          className="w-[200px] h-[200px] object-contain relative z-10 transition-transform group-hover:scale-[1.02]"
-                          loading="eager"
-                          onError={(e) => {
-                            const target = e.target as HTMLImageElement;
-                            const paymentData = `tron:${walletAddress}?amount=${amountUSDT}`;
-                            
-                            // Chain of fallbacks (QuickChart -> QRServer -> Google Charts -> Simple URI)
-                            if (target.src.includes('quickchart.io')) {
-                              target.src = `https://api.qrserver.com/v1/create-qr-code/?size=250x250&data=${encodeURIComponent(paymentData)}`;
-                            } else if (target.src.includes('qrserver.com')) {
-                              target.src = `https://chart.googleapis.com/chart?cht=qr&chs=250x250&chl=${encodeURIComponent(paymentData)}`;
-                            } else if (target.src.includes('chart.googleapis.com')) {
-                               // Final fallback: just the address
-                               target.src = `https://quickchart.io/qr?text=${encodeURIComponent(walletAddress)}&size=250`;
-                            }
-                          }}
-                        />
-                      </div>
-                      <div className="mt-4 flex flex-col items-center gap-1">
-                        <p className="text-[12px] font-bold text-gray-500 text-center">
-                          {amountUSDT} USDT via TRC20
-                        </p>
-                        <p className="text-[10px] text-gray-400 text-center italic">
-                          Se o QR não carregar, use o endereço acima para copiar.
-                        </p>
-                      </div>
-                    </div>
-                  )}
+
                 </div>
 
                 <div className="mt-8 italic text-[11px] text-red-500 font-medium">
