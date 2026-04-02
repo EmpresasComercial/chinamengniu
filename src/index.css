@@ -242,8 +242,8 @@
   min-width: 260px;
   z-index: 9999;
   box-shadow: 0 8px 32px rgba(0, 0, 0, 0.25);
-  backdrop-filter: blur(6px);
   -webkit-backdrop-filter: blur(6px);
+  backdrop-filter: blur(6px);
   pointer-events: none;
   /* Promove para camada de composição fixa */
   will-change: transform, opacity;
@@ -307,4 +307,15 @@
 
 .animate-walk {
   animation: walk 1.5s ease-in-out infinite;
+}
+
+/* ──────────────────────────────────────
+  TIPOGRAFIA - Estilo Minimalista
+────────────────────────────────────── */
+.uppercase-none {
+  text-transform: none !important;
+}
+
+.lowercase {
+  text-transform: lowercase !important;
 }

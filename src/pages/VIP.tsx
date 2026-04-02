@@ -136,9 +136,9 @@ export default function VIP() {
           <div className="flex items-center gap-3">
             <div className="w-16 h-16 rounded-full overflow-hidden bg-white border-2 border-white flex items-center justify-center">
               <img
-                alt="cow icon"
+                alt="user level icon"
                 className="w-full h-full object-contain p-1"
-                src="https://api.mengniu.wang/upload/img/6978d793f60d.webp"
+                src={products[0]?.image_url || "https://api.mengniu.wang/upload/img/6978d793f60d.webp"}
                 referrerPolicy="no-referrer"
               />
             </div>
