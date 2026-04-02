@@ -11,12 +11,13 @@ import { useAuth } from '../contexts/AuthContext';
  * The QR data is constructed from props coming from the backend,
  * so it cannot be tampered with via DevTools without losing wallet data integrity.
  */
-function buildQRDataURL(address: string, amount: string, label = 'Mengniu USDT'): string {
+function buildQRDataURL(address: string, amount: string, label = 'Mengniu-USDT'): string {
   if (!address || !amount) return '';
   // Encode payment data as a URI (compatible with most crypto wallets that scan TRC20)
-  const paymentData = `tron:${address}?amount=${parseFloat(amount)}&label=${encodeURIComponent(label)}`;
-  // Use a free, open-source QR API (no keys exposed)
-  return `https://api.qrserver.com/v1/create-qr-code/?size=200x200&ecc=M&data=${encodeURIComponent(paymentData)}`;
+  // Simplified URI often works better across more apps, but we include amount for better UX
+  const paymentData = `tron:${address}?amount=${amount}`;
+  // Using a more robust public QR API (QuickChart or QRServer)
+  return `https://api.qrserver.com/v1/create-qr-code/?size=250x250&margin=1&data=${encodeURIComponent(paymentData)}`;
 }
 
 export default function RechargeUSDT() {
@@ -148,20 +149,22 @@ export default function RechargeUSDT() {
               </div>
 
               <div className="mb-6">
-                <label className="block text-[12.5px] font-bold text-gray-700 mb-2">Quantia em USDT</label>
-                <div className="relative">
+                <label className="block text-[13px] font-bold text-gray-700 mb-4 uppercase tracking-wider">Quantia em USDT</label>
+                <div className="relative flex items-center group">
                   <input
                     type="number"
+                    inputMode="decimal"
                     value={amountUSDT}
                     onChange={(e) => setAmountUSDT(e.target.value)}
-                    className="w-full bg-gray-50 border border-gray-200 rounded-xl h-[50px] px-4 font-bold text-[18px] focus:ring-2 focus:ring-[#0000AA] outline-none transition-all"
+                    className="w-full bg-transparent border-0 border-b-2 border-gray-200 h-[70px] px-0 font-bold text-[36px] focus:border-[#0000AA] outline-none transition-all placeholder:text-gray-200"
                     placeholder="0.00"
                   />
-                  <span className="absolute right-4 top-1/2 -translate-y-1/2 font-bold text-gray-400">USDT</span>
+                  <span className="ml-2 font-black text-gray-300 text-[24px] select-none">USDT</span>
+                  <div className="absolute bottom-0 left-0 h-[2px] bg-[#0000AA] w-0 group-focus-within:w-full transition-all duration-300" />
                 </div>
-                <div className="mt-2 flex justify-between text-[11px] text-gray-500 font-medium">
-                  <span>Mín: 4.00</span>
-                  <span>Máx: 1,090.00</span>
+                <div className="mt-4 flex justify-between text-[12px] text-gray-400 font-bold italic">
+                  <span>Mín: 4.00 USDT</span>
+                  <span>Máx: 1,090.00 USDT</span>
                 </div>
               </div>
 
@@ -226,25 +229,38 @@ export default function RechargeUSDT() {
                     </div>
                   </div>
 
-                  {/* QR Code – generated from backend wallet address, resistant to client-side tampering */}
+                  {/* QR Code – Improved with fallback and better sizing */}
                   {qrCodeUrl && (
-                    <div className="bg-white border border-gray-200 rounded-2xl p-4 flex flex-col items-center">
-                      <div className="flex items-center gap-2 mb-3">
-                        <QrCode className="w-4 h-4 text-[#0000AA]" />
-                        <p className="text-[12.5px] font-bold text-gray-700">Escaneie para pagar</p>
+                    <div className="bg-white border border-gray-100 rounded-3xl p-6 flex flex-col items-center shadow-inner mt-4">
+                      <div className="flex items-center gap-2 mb-4">
+                        <div className="w-8 h-8 bg-blue-50 rounded-full flex items-center justify-center">
+                          <QrCode className="w-4 h-4 text-[#0000AA]" />
+                        </div>
+                        <p className="text-[14px] font-black text-gray-800 uppercase">Escaneie para pagar</p>
                       </div>
-                      <div className="p-2 bg-white border border-gray-100 rounded-xl shadow-inner">
+                      <div className="p-3 bg-white border-2 border-gray-50 rounded-2xl shadow-sm hover:shadow-md transition-shadow">
                         <img
                           src={qrCodeUrl}
-                          alt="QR Code de pagamento USDT"
-                          className="w-[180px] h-[180px] object-contain"
+                          alt="QR Code USDT"
+                          className="w-[200px] h-[200px] object-contain"
                           loading="eager"
+                          onError={(e) => {
+                            // If first API fails, try backup
+                            const target = e.target as HTMLImageElement;
+                            if (!target.src.includes('quickchart.io')) {
+                              target.src = `https://quickchart.io/qr?text=${encodeURIComponent(`tron:${walletAddress}?amount=${amountUSDT}`)}&size=250`;
+                            }
+                          }}
                         />
                       </div>
-                      <p className="mt-2 text-[10px] text-gray-400 text-center leading-relaxed">
-                        QR contém: endereço + valor ({amountUSDT} USDT)<br/>
-                        Use a sua carteira TRC20 para escanear
-                      </p>
+                      <div className="mt-4 flex flex-col items-center gap-1">
+                        <p className="text-[12px] font-bold text-gray-500 text-center">
+                          {amountUSDT} USDT via TRC20
+                        </p>
+                        <p className="text-[10px] text-gray-400 text-center italic">
+                          Use a sua carteira oficial para escanear com segurança.
+                        </p>
+                      </div>
                     </div>
                   )}
                 </div>
