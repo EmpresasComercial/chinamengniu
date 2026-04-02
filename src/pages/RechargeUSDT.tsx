@@ -11,13 +11,12 @@ import { useAuth } from '../contexts/AuthContext';
  * The QR data is constructed from props coming from the backend,
  * so it cannot be tampered with via DevTools without losing wallet data integrity.
  */
-function buildQRDataURL(address: string, amount: string, label = 'Mengniu-USDT'): string {
+function buildQRDataURL(address: string, amount: string): string {
   if (!address || !amount) return '';
-  // Encode payment data as a URI (compatible with most crypto wallets that scan TRC20)
-  // Simplified URI often works better across more apps, but we include amount for better UX
+  // Encode as standard TRC20 URI
   const paymentData = `tron:${address}?amount=${amount}`;
-  // Using a more robust public QR API (QuickChart or QRServer)
-  return `https://api.qrserver.com/v1/create-qr-code/?size=250x250&margin=1&data=${encodeURIComponent(paymentData)}`;
+  // Use QuickChart as primary (high reliability, low latency)
+  return `https://quickchart.io/qr?text=${encodeURIComponent(paymentData)}&size=250&margin=1&ecLevel=M`;
 }
 
 export default function RechargeUSDT() {
@@ -229,7 +228,7 @@ export default function RechargeUSDT() {
                     </div>
                   </div>
 
-                  {/* QR Code – Improved with fallback and better sizing */}
+                  {/* QR Code – Multiple fallbacks to ensure display */}
                   {qrCodeUrl && (
                     <div className="bg-white border border-gray-100 rounded-3xl p-6 flex flex-col items-center shadow-inner mt-4">
                       <div className="flex items-center gap-2 mb-4">
@@ -238,17 +237,24 @@ export default function RechargeUSDT() {
                         </div>
                         <p className="text-[14px] font-black text-gray-800 uppercase">Escaneie para pagar</p>
                       </div>
-                      <div className="p-3 bg-white border-2 border-gray-50 rounded-2xl shadow-sm hover:shadow-md transition-shadow">
+                      <div className="p-3 bg-white border-2 border-gray-50 rounded-2xl shadow-sm hover:shadow-md transition-shadow relative overflow-hidden group">
                         <img
                           src={qrCodeUrl}
                           alt="QR Code USDT"
-                          className="w-[200px] h-[200px] object-contain"
+                          className="w-[200px] h-[200px] object-contain relative z-10 transition-transform group-hover:scale-[1.02]"
                           loading="eager"
                           onError={(e) => {
-                            // If first API fails, try backup
                             const target = e.target as HTMLImageElement;
-                            if (!target.src.includes('quickchart.io')) {
-                              target.src = `https://quickchart.io/qr?text=${encodeURIComponent(`tron:${walletAddress}?amount=${amountUSDT}`)}&size=250`;
+                            const paymentData = `tron:${walletAddress}?amount=${amountUSDT}`;
+                            
+                            // Chain of fallbacks (QuickChart -> QRServer -> Google Charts -> Simple URI)
+                            if (target.src.includes('quickchart.io')) {
+                              target.src = `https://api.qrserver.com/v1/create-qr-code/?size=250x250&data=${encodeURIComponent(paymentData)}`;
+                            } else if (target.src.includes('qrserver.com')) {
+                              target.src = `https://chart.googleapis.com/chart?cht=qr&chs=250x250&chl=${encodeURIComponent(paymentData)}`;
+                            } else if (target.src.includes('chart.googleapis.com')) {
+                               // Final fallback: just the address
+                               target.src = `https://quickchart.io/qr?text=${encodeURIComponent(walletAddress)}&size=250`;
                             }
                           }}
                         />
@@ -258,7 +264,7 @@ export default function RechargeUSDT() {
                           {amountUSDT} USDT via TRC20
                         </p>
                         <p className="text-[10px] text-gray-400 text-center italic">
-                          Use a sua carteira oficial para escanear com segurança.
+                          Se o QR não carregar, use o endereço acima para copiar.
                         </p>
                       </div>
                     </div>
