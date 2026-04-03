@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import { Rocket, Users, BarChart3, CircleDollarSign, ShieldCheck, HelpCircle, ChevronRight } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import { motion, AnimatePresence } from 'motion/react';
@@ -31,66 +31,74 @@ export default function Profile() {
     fetchFinancialData();
   }, [user]);
 
-  async function fetchFinancialData() {
+  const fetchFinancialData = useCallback(async () => {
     if (!user) return;
     const done = registerFetch();
     try {
       const hoje = new Date();
-      const inicioDia = new Date(hoje.getFullYear(), hoje.getMonth(), hoje.getDate()).toISOString();
-      const inicioOntem = new Date(hoje.getFullYear(), hoje.getMonth(), hoje.getDate() - 1).toISOString();
+      const inicioDia = new Date(hoje.getFullYear(), hoje.getMonth(), hoje.getDate()).getTime();
+      const inicioOntem = new Date(hoje.getFullYear(), hoje.getMonth(), hoje.getDate() - 1).getTime();
       const fimOntem = inicioDia;
 
-      // 1. tarefas_diarias: balance_correte e renda_coletada
-      const { data: tarefas } = await supabase
+      const tarefasPromise = supabase
         .from('tarefas_diarias')
         .select('balance_correte, renda_coletada, data_atribuicao')
         .eq('user_id', user.id);
 
-      // 2. retiradas aprovadas: valor_solicitado
-      const { data: retiradas } = await supabase
+      const retiradasPromise = supabase
         .from('retirada_clientes')
         .select('valor_solicitado')
         .eq('user_id', user.id)
         .eq('estado_da_retirada', 'aprovado');
 
-      // 3. bonus_transacoes: todos os bônus (cadastro + investimento + comissões)
-      const { data: bonus } = await supabase
+      const bonusPromise = supabase
         .from('bonus_transacoes')
         .select('valor_recebido, data_recebimento')
         .eq('user_id', user.id);
 
-      const contaReproducao = (tarefas || []).reduce((s, t) => s + Number(t.balance_correte || 0), 0);
-      const retiradaTotal = (retiradas || []).reduce((s, r) => s + Number(r.valor_solicitado || 0), 0);
-      const comissaoTotalEquipe = (bonus || []).reduce((s, b) => s + Number(b.valor_recebido || 0), 0);
+      const [tarefasRes, retiradasRes, bonusRes] = await Promise.all([
+        tarefasPromise,
+        retiradasPromise,
+        bonusPromise
+      ]);
 
-      const lucrosOntem = (tarefas || [])
-        .filter(t => {
-          const d = new Date(t.data_atribuicao);
-          return d >= new Date(inicioOntem) && d < new Date(fimOntem);
-        })
-        .reduce((s, t) => s + Number(t.renda_coletada || 0), 0);
+      const tarefas = tarefasRes.data || [];
+      const retiradas = retiradasRes.data || [];
+      const bonus = bonusRes.data || [];
 
-      const ganhoHoje = (tarefas || [])
-        .filter(t => new Date(t.data_atribuicao) >= new Date(inicioDia))
-        .reduce((s, t) => s + Number(t.renda_coletada || 0), 0);
+      const contaReproducao = tarefas.reduce((s, t) => s + Number(t.balance_correte || 0), 0);
+      const retiradaTotal = retiradas.reduce((s, r) => s + Number(r.valor_solicitado || 0), 0);
+      const comissaoTotalEquipe = bonus.reduce((s, b) => s + Number(b.valor_recebido || 0), 0);
 
-      const comissaoHoje = (bonus || [])
-        .filter(b => new Date(b.data_recebimento) >= new Date(inicioDia))
-        .reduce((s, b) => s + Number(b.valor_recebido || 0), 0);
+      let lucrosOntem = 0;
+      let ganhoHoje = 0;
+      tarefas.forEach(t => {
+        const time = new Date(t.data_atribuicao).getTime();
+        const val = Number(t.renda_coletada || 0);
+        if (time >= inicioDia) ganhoHoje += val;
+        else if (time >= inicioOntem && time < fimOntem) lucrosOntem += val;
+      });
+
+      let comissaoHoje = 0;
+      bonus.forEach(b => {
+        if (new Date(b.data_recebimento).getTime() >= inicioDia) {
+          comissaoHoje += Number(b.valor_recebido || 0);
+        }
+      });
 
       setFinancialData({ contaReproducao, retiradaTotal, comissaoTotalEquipe, lucrosOntem, ganhoHoje, comissaoHoje });
     } finally {
       done();
     }
-  }
+  }, [user, registerFetch]);
 
-  const handleCopyUID = () => {
+  const handleCopyUID = useCallback(() => {
     if (profile?.invite_code) {
       navigator.clipboard.writeText(profile.invite_code);
       setCopied(true);
       setTimeout(() => setCopied(false), 2000);
     }
-  };
+  }, [profile?.invite_code]);
 
   const fmt = (val: number) => val.toLocaleString('pt-AO', { minimumFractionDigits: 2 });
 

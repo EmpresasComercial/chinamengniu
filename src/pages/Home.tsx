@@ -1,9 +1,16 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useCallback } from 'react';
 import { Bell, Headset, X, Share, MoreVertical } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import { useLoading } from '../contexts/LoadingContext';
 import { useAuth } from '../contexts/AuthContext';
 import { supabase } from '../lib/supabase';
+
+const CAROUSEL_IMAGES = [
+  '/carroucel-001.jpg',
+  '/carroucel-002.jpg',
+  '/carroucel-003.jpg',
+  '/carroucel-004.jpg'
+];
 
 export default function Home() {
   const navigate = useNavigate();
@@ -22,19 +29,13 @@ export default function Home() {
 
   // Carousel State
   const [currentSlide, setCurrentSlide] = useState(0);
-  const carouselImages = [
-    '/carroucel-001.jpg',
-    '/carroucel-002.jpg',
-    '/carroucel-003.jpg',
-    '/carroucel-004.jpg'
-  ];
 
   useEffect(() => {
     const timer = setInterval(() => {
-      setCurrentSlide((prev) => (prev + 1) % carouselImages.length);
+      setCurrentSlide((prev) => (prev + 1) % CAROUSEL_IMAGES.length);
     }, 4000);
     return () => clearInterval(timer);
-  }, [carouselImages.length]);
+  }, []);
 
   useEffect(() => {
     const handler = (e: Event) => {
@@ -46,15 +47,15 @@ export default function Home() {
     return () => window.removeEventListener('beforeinstallprompt', handler);
   }, []);
 
-  const isIos = () => {
+  const isIos = useCallback(() => {
     const ua = window.navigator.userAgent.toLowerCase();
     return /iphone|ipad|ipod/.test(ua);
-  };
+  }, []);
 
-  const isInStandaloneMode = () =>
-    ('standalone' in window.navigator) && (window.navigator as any).standalone;
+  const isInStandaloneMode = useCallback(() =>
+    ('standalone' in window.navigator) && (window.navigator as any).standalone, []);
 
-  const handleInstallApp = async (e: React.MouseEvent) => {
+  const handleInstallApp = useCallback(async (e: React.MouseEvent) => {
     e.stopPropagation();
 
     if (deferredPrompt) {
@@ -77,7 +78,7 @@ export default function Home() {
       setNotification('Para instalar, use o menu do navegador → "Adicionar ao ecrã inicial"');
       setTimeout(() => setNotification(null), 3500);
     }
-  };
+  }, [deferredPrompt, isIos, isInStandaloneMode]);
 
   useEffect(() => {
     async function fetchLinks() {
@@ -103,7 +104,7 @@ export default function Home() {
     fetchLinks();
   }, [registerFetch]);
 
-  const handleLinkClick = (url: string, e: React.MouseEvent) => {
+  const handleLinkClick = useCallback((url: string, e: React.MouseEvent) => {
     e.preventDefault();
     showLoading();
     setTimeout(() => {
@@ -114,9 +115,9 @@ export default function Home() {
         window.open(url, '_blank');
       }, 2000);
     }, 500);
-  };
+  }, [showLoading, hideLoading]);
 
-  const handleCopyInvite = (e: React.MouseEvent) => {
+  const handleCopyInvite = useCallback((e: React.MouseEvent) => {
     e.preventDefault();
     const inviteCode = profile?.invite_code || '';
     
@@ -138,7 +139,7 @@ export default function Home() {
       setNotification('Erro ao gerar link. Tente novamente.');
       setTimeout(() => setNotification(null), 2500);
     }
-  };
+  }, [profile?.invite_code, links.link_app_atualizado]);
 
   return (
     <div className="flex flex-col min-h-screen bg-[#f0f2f5] page-content">
@@ -259,13 +260,13 @@ export default function Home() {
         <div className="rounded-2xl overflow-hidden shadow-sm bg-gray-100 min-h-[140px] relative w-full aspect-[2/1] sm:aspect-[21/9]">
           <img
             key={currentSlide}
-            src={carouselImages[currentSlide]}
+            src={CAROUSEL_IMAGES[currentSlide]}
             alt={`Mengniu Banner ${currentSlide + 1}`}
             className="absolute inset-0 w-full h-full object-cover"
             loading="lazy"
           />
           <div className="absolute bottom-3 left-0 right-0 flex justify-center gap-1.5 z-10">
-            {carouselImages.map((_, idx) => (
+            {CAROUSEL_IMAGES.map((_, idx) => (
               <div
                 key={idx}
                 className={`h-1.5 rounded-full transition-none ${currentSlide === idx ? 'w-4 bg-white' : 'w-1.5 bg-white/50'}`}

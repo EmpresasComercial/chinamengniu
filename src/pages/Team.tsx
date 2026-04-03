@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useMemo, useCallback } from 'react';
 import { ChevronLeft, ChevronDown } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import { useLoading } from '../contexts/LoadingContext';
@@ -26,17 +26,18 @@ export default function Team() {
     async function fetchTeamData() {
       const done = registerFetch();
       try {
-        const { data: teamData, error: teamError } = await supabase.rpc('get_my_team');
+        const teamPromise = supabase.rpc('get_my_team');
+        const bonusPromise = supabase
+          .from('bonus_transacoes')
+          .select('valor_recebido, data_transacao')
+          .eq('user_id', user.id);
+
+        const [teamRes, bonusRes] = await Promise.all([teamPromise, bonusPromise]);
         const today = new Date().toISOString().split('T')[0];
 
-        if (!teamError && teamData) {
-          console.log('Team data structure check:', teamData[0]); // Debug log to see field names
-          const team = teamData as any[];
-
-          // Total People
+        if (!teamRes.error && teamRes.data) {
+          const team = teamRes.data as any[];
           const totalPeople = team.length;
-
-          // Today registrations
           const todayRegs = team.filter(m => {
             const regDate = m.created_at || m.registration_date;
             return regDate && regDate.startsWith(today);
@@ -46,13 +47,8 @@ export default function Team() {
           setMembers(team);
         }
 
-        // Fetch Revenue stats from bonus_transacoes
-        const { data: bonusData } = await supabase
-          .from('bonus_transacoes')
-          .select('valor_recebido, data_transacao')
-          .eq('user_id', user.id);
-
-        if (bonusData) {
+        if (bonusRes.data) {
+          const bonusData = bonusRes.data;
           const totalRevenue = bonusData.reduce((sum, b) => sum + Number(b.valor_recebido), 0);
           const todayEarnings = bonusData
             .filter(b => b.data_transacao && b.data_transacao.startsWith(today))
@@ -65,49 +61,43 @@ export default function Team() {
       }
     }
     fetchTeamData();
-  }, [user]);
+  }, [user, registerFetch]);
 
-  const isContributionTab = activeTab === 'contribution';
-  const filteredMembers = members.filter(m => {
-    // Check both 'level' and 'sub_level' for robustness
-    const mLevel = Number(m.level || m.sub_level || 0);
-    const isCorrectLevel = mLevel === selectedLevel;
-    if (!isCorrectLevel) return false;
+  const filteredMembers = useMemo(() => {
+    const isContributionTab = activeTab === 'contribution';
+    return members.filter(m => {
+      const mLevel = Number(m.level || m.sub_level || 0);
+      const isCorrectLevel = mLevel === selectedLevel;
+      if (!isCorrectLevel) return false;
 
-    if (isContributionTab) {
-      // Robust check for various possible field names from the RPC
-      const investment = Number(
-        m.reloaded_amount ??
-        m.total_recharge ??
-        m.recharge_amount ??
-        0
-      );
-      return investment >= 9000;
-    }
-    return true; // Members tab: Show everyone
-  });
+      if (isContributionTab) {
+        const investment = Number(m.reloaded_amount ?? m.total_recharge ?? m.recharge_amount ?? 0);
+        return investment >= 9000;
+      }
+      return true;
+    });
+  }, [members, selectedLevel, activeTab]);
 
-  const todayRegsInLevel = members.filter(m => {
-    const mLevel = Number(m.level || m.sub_level || 0);
-    const isCorrectLevel = mLevel === selectedLevel;
-    const regDate = m.created_at || m.registration_date;
-    const isToday = regDate && regDate.startsWith(new Date().toISOString().split('T')[0]);
-    return isCorrectLevel && isToday;
-  }).length;
+  const todayRegsInLevel = useMemo(() => {
+    const today = new Date().toISOString().split('T')[0];
+    return members.filter(m => {
+      const mLevel = Number(m.level || m.sub_level || 0);
+      const isCorrectLevel = mLevel === selectedLevel;
+      const regDate = m.created_at || m.registration_date;
+      const isToday = regDate && regDate.startsWith(today);
+      return isCorrectLevel && isToday;
+    }).length;
+  }, [members, selectedLevel]);
 
-  const handleTabChange = (tab: 'members' | 'contribution') => {
-    showLoading();
-    setTimeout(() => {
-      setActiveTab(tab);
-      hideLoading();
-    }, 500);
-  };
+  const handleTabChange = useCallback((tab: 'members' | 'contribution') => {
+    setActiveTab(tab);
+  }, []);
 
   return (
     <div className="flex flex-col min-h-screen bg-[#E5E9F2] page-content">
       {/* Header */}
       <header className="sticky top-0 z-50 bg-[#0000A0] text-white flex items-center h-12 px-4">
-        <button onClick={() => navigate(-1)} className="w-8 h-8 flex items-center justify-start">
+        <button onClick={() => navigate(-1)} className="w-8 h-8 flex items-center justify-start" aria-label="voltar" title="voltar">
           <ChevronLeft className="h-5 w-5" />
         </button>
         <h1 className="flex-1 text-center font-medium text-[15px] mr-8">minha equipe</h1>

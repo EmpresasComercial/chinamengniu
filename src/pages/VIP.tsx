@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback, useMemo } from 'react';
 import { Send, X } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import { useLoading } from '../contexts/LoadingContext';
@@ -33,7 +33,7 @@ export default function VIP() {
   const [purchaseResult, setPurchaseResult] = useState<{ success: boolean; message: string } | null>(null);
   const [isResultModalOpen, setIsResultModalOpen] = useState(false);
 
-  const handlePurchase = async () => {
+  const handlePurchase = useCallback(async () => {
     if (!selectedProduct) return;
 
     setIsPurchaseModalOpen(false);
@@ -57,7 +57,7 @@ export default function VIP() {
         return;
       }
 
-      if (data && data.success === false) {
+      if (data?.success === false) {
         setPurchaseResult({ 
           success: false, 
           message: data.message || 'erro ao processar adoção' 
@@ -81,48 +81,52 @@ export default function VIP() {
       });
       setIsResultModalOpen(true);
     }
-  };
+  }, [selectedProduct, showLoading, hideLoading, registerFetch, refreshProfile]);
 
   useEffect(() => {
     async function loadData() {
       const done = registerFetch();
       try {
-        const { data: productsData } = await supabase
+        const productsPromise = supabase
           .from('products')
-          .select('*')
+          .select('id, name, description, price, daily_income, total_income, duration_days, image_url, purchase_limit')
           .eq('status', 'active')
           .order('price', { ascending: true });
 
-        if (user && productsData) {
-          const { data: history } = await supabase
-            .from('historico_compras')
-            .select('nome_produto')
-            .eq('user_id', user.id);
+        const historyPromise = user 
+          ? supabase.from('historico_compras').select('nome_produto').eq('user_id', user.id)
+          : Promise.resolve({ data: null });
 
+        const tarefasPromise = user
+          ? supabase.from('tarefas_diarias').select('balance_correte, renda_coletada').eq('user_id', user.id)
+          : Promise.resolve({ data: null });
+
+        const [productsRes, historyRes, tarefasRes] = await Promise.all([
+          productsPromise,
+          historyPromise,
+          tarefasPromise
+        ]);
+
+        const productsData = productsRes.data;
+        const history = historyRes.data;
+        const tarefas = tarefasRes.data;
+
+        if (productsData) {
           const mappedProducts = productsData.map(p => ({
             ...p,
             bought_count: history?.filter(h => h.nome_produto === p.name).length || 0
           }));
           setProducts(mappedProducts);
-        } else if (productsData) {
-          setProducts(productsData);
         }
 
-        if (user) {
-          const { data: tarefas } = await supabase
-            .from('tarefas_diarias')
-            .select('balance_correte, renda_coletada')
-            .eq('user_id', user.id);
+        if (tarefas) {
+          const total = tarefas.reduce((sum, t) => sum + Number(t.balance_correte || 0), 0);
+          const rendaColetada = tarefas.reduce((sum, t) => sum + Number(t.renda_coletada || 0), 0);
 
-          if (tarefas) {
-            const total = tarefas.reduce((sum, t) => sum + Number(t.balance_correte || 0), 0);
-            const rendaColetada = tarefas.reduce((sum, t) => sum + Number(t.renda_coletada || 0), 0);
-
-            setStats({
-              totalRevenue: total,
-              dailyIncome: rendaColetada
-            });
-          }
+          setStats({
+            totalRevenue: total,
+            dailyIncome: rendaColetada
+          });
         }
       } finally {
         done();

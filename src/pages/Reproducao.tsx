@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import { ArrowLeftRight, Play } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import { useLoading } from '../contexts/LoadingContext';
@@ -26,40 +26,37 @@ export default function Reproducao() {
     setTimeout(() => setFeedback(null), 3000);
   };
 
-  async function fetchPurchases() {
+  const fetchPurchases = useCallback(async () => {
     if (!user) return;
 
-    // Primeiro buscamos todos os produtos para ter as imagens corretas
-    const { data: productsData } = await supabase
-      .from('products')
-      .select('name, image_url');
+    // Parallel fetch of products and history for faster loading
+    const [productsRes, historyRes] = await Promise.all([
+      supabase.from('products').select('name, image_url'),
+      supabase.from('historico_compras')
+        .select('*')
+        .eq('user_id', user.id)
+        .order('data_compra', { ascending: false })
+    ]);
 
-    const { data: historyData, error } = await supabase
-      .from('historico_compras')
-      .select('*')
-      .eq('user_id', user.id)
-      .order('data_compra', { ascending: false });
-
-    if (error) {
-      console.error('Error fetching history:', error);
+    if (historyRes.error) {
+      console.error('Error fetching history:', historyRes.error);
       return;
     }
 
-    if (historyData) {
+    if (historyRes.data) {
+      const historyData = historyRes.data;
+      const today = new Date();
       const activeInvestments = historyData.filter(h =>
-        h.status === 'confirmado' && new Date(h.data_expiracao) > new Date()
+        h.status === 'confirmado' && new Date(h.data_expiracao) > today
       );
 
-      const totalDailyIncome = activeInvestments.reduce((sum, h) => sum + Number(h.rendimento_diario), 0);
-      const totalInvested = activeInvestments.reduce((sum, h) => sum + Number(h.preco), 0);
+      const productsData = productsRes.data || [];
+      const productMap = new Map(productsData.map(p => [p.name, p.image_url]));
 
-      const formattedData = historyData.map((item: any) => {
-        const product = productsData?.find(p => p.name === item.nome_produto);
-        return {
-          ...item,
-          image_url: product?.image_url || 'https://png.pngtree.com/png-clipart/20240615/original/pngtree-a-black-and-white-cow-with-tranparent-background-png-image_15340862.png'
-        };
-      });
+      const formattedData = historyData.map((item: any) => ({
+        ...item,
+        image_url: productMap.get(item.nome_produto) || 'https://png.pngtree.com/png-clipart/20240615/original/pngtree-a-black-and-white-cow-with-tranparent-background-png-image_15340862.png'
+      }));
 
       setPurchases(formattedData);
       setStats(prev => ({
@@ -68,40 +65,33 @@ export default function Reproducao() {
         totalPurchasesCount: historyData.length
       }));
     }
-  }
+  }, [user]);
 
-  async function fetchDailyStats() {
+  const fetchDailyStats = useCallback(async () => {
     if (!user) return;
 
-    // 1. Check if collected today
-    const { data: todayTask } = await supabase
-      .from('tarefas_diarias')
-      .select('id')
-      .eq('user_id', user.id)
-      .gte('data_atribuicao', new Date().toISOString().split('T')[0])
-      .limit(1);
+    // Parallel fetch of tasks and today check
+    const todayStr = new Date().toISOString().split('T')[0];
+    
+    const [todayTaskRes, tasksRes] = await Promise.all([
+      supabase.from('tarefas_diarias').select('id').eq('user_id', user.id).gte('data_atribuicao', todayStr).limit(1),
+      supabase.from('tarefas_diarias').select('balance_correte, renda_coletada').eq('user_id', user.id)
+    ]);
 
-    setHasCollectedToday(!!(todayTask && todayTask.length > 0));
+    setHasCollectedToday(!!(todayTaskRes.data && todayTaskRes.data.length > 0));
 
-    // 2. Fetch reproduction balance (sum of balance_correte from all tasks)
-    const { data: tareas } = await supabase
-      .from('tarefas_diarias')
-      .select('balance_correte, renda_coletada')
-      .eq('user_id', user.id);
-
-    if (tareas) {
-      // conta de reprodução: soma de balance_correte
-      const balance = tareas.reduce((sum, t) => sum + Number(t.balance_correte || 0), 0);
-      // renda diária: soma de renda_coletada
-      const rendaTotal = tareas.reduce((sum, t) => sum + Number(t.renda_coletada || 0), 0);
+    if (tasksRes.data) {
+      const tasks = tasksRes.data;
+      const balance = tasks.reduce((sum, t) => sum + Number(t.balance_correte || 0), 0);
+      const rendaTotal = tasks.reduce((sum, t) => sum + Number(t.renda_coletada || 0), 0);
       setStats(prev => ({
         ...prev,
-        reproductionBalance: balance,  // conta de reprodução = balance_correte
-        totalProfit: balance,           // ativos de lucro = balance_correte (igual)
-        dailyIncomeTotal: rendaTotal    // renda diária = renda_coletada
+        reproductionBalance: balance,
+        totalProfit: balance,
+        dailyIncomeTotal: rendaTotal
       }));
     }
-  }
+  }, [user]);
 
   useEffect(() => {
     if (!user) return;
@@ -134,9 +124,9 @@ export default function Reproducao() {
     return () => {
       supabase.removeChannel(channel);
     };
-  }, [user]);
+  }, [user, fetchPurchases, fetchDailyStats, registerFetch]);
 
-  const handleStartCollection = async () => {
+  const handleStartCollection = useCallback(async () => {
     if (hasCollectedToday) {
       showToast('você já realizou a coleta hoje!');
       return;
@@ -159,7 +149,7 @@ export default function Reproducao() {
     } finally {
       hideLoading();
     }
-  };
+  }, [hasCollectedToday, showLoading, hideLoading, fetchDailyStats]);
 
   return (
     <div className="flex flex-col min-h-screen bg-[#0000AA] text-white p-4 page-content">

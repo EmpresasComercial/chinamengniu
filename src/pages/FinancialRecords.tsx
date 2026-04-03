@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback, useMemo } from 'react';
 import { ChevronLeft, Filter } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import { motion, AnimatePresence } from 'motion/react';
@@ -35,14 +35,10 @@ export default function FinancialRecords() {
   const [records, setRecords] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
 
-  const currentFilter = FILTER_OPTIONS.find(f => f.id === activeFilter)!;
+  const currentFilter = useMemo(() => FILTER_OPTIONS.find(f => f.id === activeFilter)!, [activeFilter]);
 
-  useEffect(() => {
+  const fetchRecords = useCallback(async (filter: FilterType) => {
     if (!user) return;
-    fetchRecords(activeFilter);
-  }, [user, activeFilter]);
-
-  async function fetchRecords(filter: FilterType) {
     setLoading(true);
     setRecords([]);
     const done = registerFetch();
@@ -50,16 +46,16 @@ export default function FinancialRecords() {
     let query;
     switch (filter) {
       case 'retiradas':
-        query = supabase.from('retirada_clientes').select('*').eq('user_id', user!.id).order('created_at', { ascending: false });
+        query = supabase.from('retirada_clientes').select('*').eq('user_id', user.id).order('created_at', { ascending: false });
         break;
       case 'recarregamentos':
-        query = supabase.from('depositos_clientes').select('*').eq('user_id', user!.id).order('created_at', { ascending: false });
+        query = supabase.from('depositos_clientes').select('*').eq('user_id', user.id).order('created_at', { ascending: false });
         break;
       case 'tarefas_diarias':
-        query = supabase.from('tarefas_diarias').select('*').eq('user_id', user!.id).order('data_atribuicao', { ascending: false });
+        query = supabase.from('tarefas_diarias').select('*').eq('user_id', user.id).order('data_atribuicao', { ascending: false });
         break;
       case 'bonus_transacoes':
-        query = supabase.from('bonus_transacoes').select('*').eq('user_id', user!.id).order('data_recebimento', { ascending: false });
+        query = supabase.from('bonus_transacoes').select('*').eq('user_id', user.id).order('data_recebimento', { ascending: false });
         break;
     }
 
@@ -70,14 +66,18 @@ export default function FinancialRecords() {
       setLoading(false);
       done();
     }
-  }
+  }, [user, registerFetch]);
 
-  const handleFilterSelect = (filter: FilterType) => {
+  useEffect(() => {
+    fetchRecords(activeFilter);
+  }, [fetchRecords, activeFilter]);
+
+  const handleFilterSelect = useCallback((filter: FilterType) => {
     setActiveFilter(filter);
     setShowFilterPopup(false);
-  };
+  }, []);
 
-  const renderItem = (item: any) => {
+  const renderItem = useCallback((item: any) => {
     switch (activeFilter) {
       case 'retiradas':
         return (
@@ -168,13 +168,13 @@ export default function FinancialRecords() {
       default:
         return null;
     }
-  };
+  }, [activeFilter]);
 
   return (
     <div className="flex flex-col min-h-screen bg-[#E2E4EB] page-content">
       {/* Header */}
       <header className="bg-[#0000A5] text-white flex items-center justify-between px-4 py-3 sticky top-0 z-50">
-        <button onClick={() => navigate(-1)} className="w-10">
+        <button onClick={() => navigate(-1)} className="w-10" aria-label="voltar" title="voltar">
           <ChevronLeft className="w-5 h-5" />
         </button>
         <h1 className="text-[15px] font-bold tracking-wide">registros de conta</h1>
@@ -195,6 +195,8 @@ export default function FinancialRecords() {
             <button
               onClick={() => setShowFilterPopup(true)}
               className="ml-3 w-9 h-9 flex items-center justify-center rounded-full hover:bg-gray-100 transition-colors"
+              aria-label="filtrar"
+              title="filtrar"
             >
               <Filter className="w-5 h-5 text-gray-600" />
             </button>
@@ -242,7 +244,12 @@ export default function FinancialRecords() {
             >
               <div className="p-5 border-b border-gray-100 flex justify-between items-center">
                 <h3 className="font-bold text-gray-800 text-[16px]">filtrar por</h3>
-                <button onClick={() => setShowFilterPopup(false)} className="text-gray-400 p-1 hover:bg-gray-100 rounded-full transition-colors">
+                <button 
+                  onClick={() => setShowFilterPopup(false)} 
+                  className="text-gray-400 p-1 hover:bg-gray-100 rounded-full transition-colors"
+                  aria-label="fechar"
+                  title="fechar"
+                >
                   <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M6 18L18 6M6 6l12 12" /></svg>
                 </button>
               </div>
