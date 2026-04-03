@@ -1,5 +1,5 @@
 import React, { SVGProps } from 'react';
-import { Home, CheckCircle2, Building2 } from 'lucide-react';
+import { Home, CheckCircle2, User } from 'lucide-react';
 import { Link, useLocation } from 'react-router-dom';
 
 const CowIcon = (props: SVGProps<SVGSVGElement>) => (
@@ -28,7 +28,7 @@ export default function BottomNav() {
     { name: 'home', path: '/', icon: Home },
     { name: 'fazenda', path: '/vip', icon: CowIcon },
     { name: 'reprodução', path: '/reproducao', icon: CheckCircle2 },
-    { name: 'perfil', path: '/perfil', icon: Building2 },
+    { name: 'perfil', path: '/perfil', icon: User },
   ];
 
   return (

@@ -432,7 +432,7 @@ export default function Home() {
       )}
 
       {notification && (
-        <div className="fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 bg-black/50 backdrop-blur-sm text-white px-4 py-2 rounded-xl text-[12.5px] shadow-lg z-[500] text-center whitespace-nowrap">
+        <div className="fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 bg-black/50 backdrop-blur-sm text-white px-5 py-3 rounded-2xl text-[12.5px] shadow-xl z-[500] text-center max-w-[85vw] whitespace-normal break-words">
           {notification}
         </div>
       )}

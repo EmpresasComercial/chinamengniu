@@ -130,7 +130,7 @@ export const LoadingProvider = ({ children }: { children: ReactNode }) => {
 
       {/* Global Toast Error / Warnings */}
       {errorMessage && (
-        <div className="fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 bg-black/85 text-white px-6 py-4 rounded-xl text-[12.5px] font-medium shadow-2xl z-[10000] text-center min-w-[280px] leading-relaxed">
+        <div className="fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 bg-black/50 backdrop-blur-sm text-white px-5 py-3 rounded-2xl text-[12.5px] shadow-xl z-[10000] text-center max-w-[85vw] whitespace-normal break-words leading-relaxed">
           {errorMessage}
         </div>
       )}

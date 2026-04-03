@@ -334,7 +334,7 @@ export default function FundTransfer() {
             initial={{ opacity: 0, scale: 0.9, x: '-50%', y: '-10%' }}
             animate={{ opacity: 1, scale: 1, x: '-50%', y: '-50%' }}
             exit={{ opacity: 0, scale: 0.9, x: '-50%', y: '-10%' }}
-            className={`fixed top-1/2 left-1/2 ${feedback.type === 'error' ? 'bg-red-600' : 'bg-black/90'} text-white px-6 py-4 rounded-2xl text-[12.5px] font-bold shadow-2xl z-[100] text-center min-w-[280px]`}
+            className={`fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 ${feedback.type === 'error' ? 'bg-red-600/80' : 'bg-black/50'} backdrop-blur-sm text-white px-5 py-3 rounded-2xl text-[12.5px] shadow-xl z-[500] text-center max-w-[85vw] whitespace-normal break-words`}
           >
             {feedback.message}
           </motion.div>

@@ -183,7 +183,7 @@ export default function ChangePassword() {
             animate={{ opacity: 1, x: '-50%', y: '-50%' }}
             exit={{ opacity: 0, x: '-50%', y: '-50%' }}
             transition={{ duration: 0.1 }}
-            className="fixed top-1/2 left-1/2 bg-black/80 text-white px-6 py-3 rounded-xl text-[12.5px] font-medium shadow-2xl z-[100] text-center min-w-[280px]"
+            className="fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 bg-black/50 backdrop-blur-sm text-white px-5 py-3 rounded-2xl text-[12.5px] shadow-xl z-[500] text-center max-w-[85vw] whitespace-normal break-words"
           >
             {validationError}
           </motion.div>
