@@ -8,8 +8,10 @@ import { supabase } from '../lib/supabase';
 interface Product {
   id: string;
   name: string;
+  description?: string;
   price: number;
   daily_income: number;
+  total_income?: number;
   duration_days: number;
   image_url: string;
   purchase_limit: number;
@@ -221,7 +223,7 @@ export default function VIP() {
                   </h3>
                 </div>
                 <p className="text-[11px] text-slate-500 lowercase leading-snug mb-2 font-medium">
-                  ganhe comissão válida por {vip.duration_days} dias<br/>
+                  {vip.description || `ganhe comissão válida por ${vip.duration_days} dias`}<br/>
                   (limite de {vip.purchase_limit} compras)
                 </p>
                 <div className="space-y-1 mt-auto">
@@ -276,8 +278,8 @@ export default function VIP() {
               </div>
               <div className="w-full space-y-2 mb-8">
                 <div className="flex justify-between items-center border-b border-slate-50 pb-2">
-                  <span className="text-slate-400 text-[11px] lowercase font-medium">frequência alimentar</span>
-                  <span className="text-slate-900 font-black text-[13.5px]">1 vez/dia</span>
+                  <span className="text-slate-400 text-[11px] lowercase font-medium">rendimento total previsível</span>
+                  <span className="text-slate-900 font-black text-[13.5px]">{(selectedProduct.total_income || (selectedProduct.daily_income * selectedProduct.duration_days)).toLocaleString('pt-AO')} kz</span>
                 </div>
                 <div className="flex justify-between items-center border-b border-slate-50 pb-2">
                   <span className="text-slate-400 text-[11px] lowercase font-medium">rendimento diário</span>
