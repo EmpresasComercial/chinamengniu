@@ -268,45 +268,59 @@ export default function FundTransfer() {
                 className="bg-white w-full rounded-t-[2rem] px-5 pt-4 pb-10"
               >
                 {/* Pill */}
-                <div className="w-10 h-1 bg-gray-200 rounded-full mx-auto mb-5" />
+                <div className="w-10 h-1 bg-gray-200 rounded-full mx-auto mb-6" />
 
-                <h2 className="text-[16px] font-black text-[#000080] text-center mb-1">selecionar método</h2>
-                <p className="text-[11px] text-gray-400 text-center mb-5">escolha o que deseja fazer</p>
+                <h2 className="text-[16px] font-black text-gray-800 text-center mb-6 lowercase">
+                  selecione o método
+                </h2>
 
-                {/* Opção 1: Conta de reprodução */}
-                <button
-                  onClick={() => setMode('transfer')}
-                  className="w-full flex items-center gap-4 p-4 rounded-2xl border-2 border-[#0000AA]/25 bg-[#0000AA]/6 mb-3 active:bg-[#0000AA]/12 transition-all"
-                >
-                  <div className="w-12 h-12 min-w-[48px] rounded-xl bg-[#0000AA] flex items-center justify-center shadow-md">
-                    <Wallet className="h-6 w-6 text-white" />
-                  </div>
-                  <div className="text-left flex-1 min-w-0">
-                    <p className="text-[14px] font-black text-[#000080] leading-tight">conta de reprodução</p>
-                    <p className="text-[11px] text-gray-500 leading-snug">transferir saldo reprodução → saldo principal</p>
-                  </div>
-                </button>
+                <div className="flex flex-col gap-2 mb-8">
+                  {/* Opção 1: Conversão Reprodução (Radio à direita) */}
+                  <button
+                    onClick={() => {
+                      showLoading();
+                      setTimeout(() => { hideLoading(); setMode('transfer'); }, 300);
+                    }}
+                    className="w-full flex items-center justify-between p-4 rounded-xl border border-gray-100 bg-gray-50 active:bg-gray-100 transition-all group"
+                  >
+                    <span className="text-[14px] font-bold text-gray-800 lowercase">conversão reprodução</span>
+                    <div className="w-5 h-5 rounded-full border-2 border-gray-300 flex items-center justify-center group-active:border-[#0000AA] group-active:bg-[#0000AA] transition-colors">
+                      <svg className="w-3 h-3 text-white opacity-0 group-active:opacity-100" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="4">
+                        <path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" />
+                      </svg>
+                    </div>
+                  </button>
 
-                {/* Opção 2: Código de presente */}
-                <button
-                  onClick={() => setMode('gift')}
-                  className="w-full flex items-center gap-4 p-4 rounded-2xl border-2 border-amber-200 bg-amber-50 mb-4 active:bg-amber-100 transition-all"
-                >
-                  <div className="w-12 h-12 min-w-[48px] rounded-xl bg-gray-900 flex items-center justify-center shadow-md">
-                    <Gift className="h-6 w-6 text-white" />
-                  </div>
-                  <div className="text-left flex-1 min-w-0">
-                    <p className="text-[14px] font-black text-gray-900 leading-tight">código de presentes</p>
-                    <p className="text-[11px] text-gray-500 leading-snug">resgatar código de convite ou presente</p>
-                  </div>
-                </button>
+                  {/* Opção 2: Resgate de Presente (Radio à esquerda) */}
+                  <button
+                    onClick={() => {
+                      showLoading();
+                      setTimeout(() => { hideLoading(); setMode('gift'); }, 300);
+                    }}
+                    className="w-full flex items-center justify-start gap-4 p-4 rounded-xl border border-gray-100 bg-gray-50 active:bg-gray-100 transition-all group"
+                  >
+                    <div className="w-5 h-5 rounded-full border-2 border-gray-300 flex items-center justify-center group-active:border-[#0000AA] group-active:bg-[#0000AA] transition-colors">
+                      <svg className="w-3 h-3 text-white opacity-0 group-active:opacity-100" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="4">
+                        <path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" />
+                      </svg>
+                    </div>
+                    <span className="text-[14px] font-bold text-gray-800 lowercase">resgate de presente</span>
+                  </button>
+                </div>
 
-                <button
-                  onClick={() => navigate(-1)}
-                  className="w-full h-[42px] rounded-full text-[13px] font-semibold text-gray-400 border border-gray-200"
-                >
-                  cancelar
-                </button>
+                <div className="flex justify-center">
+                  <button
+                    onClick={() => navigate(-1)}
+                    className="flex flex-col items-center justify-center text-gray-400 active:scale-95 transition-transform"
+                  >
+                    <div className="w-12 h-12 rounded-full bg-gray-100 flex items-center justify-center mb-1">
+                      <svg className="w-5 h-5 stroke-current" fill="none" viewBox="0 0 24 24" strokeWidth="2.5">
+                        <path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" />
+                      </svg>
+                    </div>
+                    <span className="text-[11px] font-bold lowercase">cancelar</span>
+                  </button>
+                </div>
               </motion.div>
             </motion.div>
           </AnimatePresence>
