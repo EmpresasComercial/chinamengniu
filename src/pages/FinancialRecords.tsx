@@ -234,34 +234,37 @@ export default function FinancialRecords() {
               className="fixed inset-0 bg-black/50 z-[60]"
             />
             <motion.div
-              initial={{ y: '100%' }}
-              animate={{ y: 0 }}
-              exit={{ y: '100%' }}
+              initial={{ scale: 0.9, opacity: 0, x: '-50%', y: '-50%' }}
+              animate={{ scale: 1, opacity: 1, x: '-50%', y: '-50%' }}
+              exit={{ scale: 0.9, opacity: 0, x: '-50%', y: '-50%' }}
               transition={{ type: 'spring', damping: 25, stiffness: 200 }}
-              className="fixed bottom-0 left-0 right-0 bg-white rounded-t-3xl z-[70] overflow-hidden"
+              className="fixed top-1/2 left-1/2 w-[90%] max-w-sm bg-white rounded-[1.5rem] z-[70] overflow-hidden shadow-2xl"
             >
-              <div className="p-4 border-b border-gray-100 flex justify-between items-center">
-                <h3 className="font-bold text-gray-800 text-[15px]">filtrar por</h3>
-                <button onClick={() => setShowFilterPopup(false)} className="text-gray-400 p-1">✕</button>
+              <div className="p-5 border-b border-gray-100 flex justify-between items-center">
+                <h3 className="font-bold text-gray-800 text-[16px]">filtrar por</h3>
+                <button onClick={() => setShowFilterPopup(false)} className="text-gray-400 p-1 hover:bg-gray-100 rounded-full transition-colors">
+                  <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M6 18L18 6M6 6l12 12" /></svg>
+                </button>
               </div>
               <div className="py-2">
                 {FILTER_OPTIONS.map((option) => (
                   <button
                     key={option.id}
                     onClick={() => handleFilterSelect(option.id)}
-                    className={`w-full text-left px-6 py-4 border-b border-gray-50 flex items-center justify-between transition-colors ${activeFilter === option.id ? 'bg-[#0000A5]/5' : 'hover:bg-gray-50'
+                    className={`w-full text-left px-6 py-4 flex items-center justify-between transition-colors ${activeFilter === option.id ? 'bg-[#0000A5]/5' : 'hover:bg-gray-50'
                       }`}
                   >
-                    <span className={`text-[14px] font-medium ${activeFilter === option.id ? 'text-[#0000A5] font-bold' : 'text-gray-700'}`}>
+                    <span className={`text-[14.5px] font-medium ${activeFilter === option.id ? 'text-[#0000A5] font-bold' : 'text-gray-700'}`}>
                       {option.label}
                     </span>
                     {activeFilter === option.id && (
-                      <div className="w-2 h-2 rounded-full bg-[#0000A5]" />
+                      <svg className="w-5 h-5 text-[#0000A5]" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth="3">
+                        <path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" />
+                      </svg>
                     )}
                   </button>
                 ))}
               </div>
-              <div className="h-6" />
             </motion.div>
           </>
         )}

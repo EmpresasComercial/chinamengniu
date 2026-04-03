@@ -206,65 +206,47 @@ export default function VIP() {
           {products.map((vip) => (
             <div
               key={vip.id}
-              className="relative overflow-hidden flex flex-col bg-white p-3.5 rounded-[8px] border border-slate-100 shadow-none"
+              className="flex bg-white p-3 rounded-xl border border-slate-100 shadow-sm relative min-h-[140px]"
             >
-              <div 
-                className="absolute inset-0 opacity-[0.14] pointer-events-none bg-no-repeat bg-contain bg-center"
-                style={{ 
-                  backgroundImage: `url(${vip.image_url})`,
-                  filter: 'grayscale(25%)'
-                }}
-              />
+              {/* Product Image */}
+              <div className="w-[100px] shrink-0 flex items-center justify-center bg-slate-50/50 rounded-lg p-2 mr-3 border border-slate-50/50">
+                <img src={vip.image_url} alt={vip.name} className="max-h-[100px] object-contain" />
+              </div>
 
-              <div className="flex items-start justify-between mb-2 relative z-10">
-                <div>
-                  <p className="font-black text-[14px] text-[#000080] lowercase tracking-tight mb-0.5 leading-none">
+              {/* Product Details */}
+              <div className="flex flex-col flex-1 py-1 pr-16">
+                <div className="flex items-center gap-1 mb-1">
+                  <h3 className="text-[15px] font-black text-[#000080] lowercase leading-tight">
                     {vip.name.toLowerCase()}
-                  </p>
-                  <div className="flex text-[9px] gap-0.5 items-center leading-none">
-                    {Array.from({ length: vip.purchase_limit || 1 }).map((_, i) => (
-                      <span key={i} className={(vip.bought_count || 0) > i ? "text-[#FFD700]" : "text-slate-200"}>
-                        {(vip.bought_count || 0) > i ? '★' : '☆'}
-                      </span>
-                    ))}
-                  </div>
+                  </h3>
                 </div>
-                
-                <div className="flex flex-col items-end gap-1">
-                  {profile?.state === vip.name && (
-                    <span className="bg-blue-50 text-[#0000AA] px-2 py-0.5 rounded-full text-[9px] font-black lowercase leading-none mb-1">
-                      posição atual
-                    </span>
-                  )}
-                  <div className="text-right">
-                    <p className="text-[9px] text-green-600 font-bold lowercase leading-tight">renda diária:</p>
-                    <p className="text-[11px] font-black text-green-600 lowercase leading-tight">{vip.daily_income.toLocaleString('pt-AO')} kz</p>
-                  </div>
-                  <div className="text-right">
-                    <p className="text-[9px] text-slate-400 font-bold lowercase leading-tight">limite:</p>
-                    <p className="text-[11px] font-black text-slate-800 lowercase leading-tight">{vip.purchase_limit} vezes</p>
-                  </div>
+                <p className="text-[11px] text-slate-500 lowercase leading-snug mb-2 font-medium">
+                  ganhe comissão válida por {vip.duration_days} dias<br/>
+                  (limite de {vip.purchase_limit} compras)
+                </p>
+                <div className="space-y-1 mt-auto">
+                  <p className="text-[12px] font-bold text-slate-700 lowercase leading-none">
+                    kz: <span className="text-[#FF0000]">{vip.price.toLocaleString('pt-AO')}</span>
+                  </p>
+                  <p className="text-[12px] font-bold text-slate-700 lowercase leading-none">
+                    renda diária: <span className="text-green-600">{vip.daily_income.toLocaleString('pt-AO')}</span>
+                  </p>
                 </div>
               </div>
 
-              <div className="flex items-end justify-between border-t border-slate-50/50 pt-2.5 mt-0.5 relative z-10">
-                <div className="flex flex-col gap-2.5 flex-1">
-                  <div className="flex flex-col">
-                    <p className="text-[9px] text-slate-400 mb-0.5 font-bold lowercase tracking-tight leading-none">preço</p>
-                    <p className="text-[13px] font-black text-[#FF0000] lowercase leading-none">{vip.price.toLocaleString('pt-AO')} kz</p>
-                  </div>
-                  <div className="flex flex-col">
-                    <p className="text-[9px] text-slate-400 mb-0.5 font-bold lowercase tracking-tight leading-none">duração</p>
-                    <p className="text-[12.5px] font-black text-slate-800 lowercase leading-none">{vip.duration_days} dias</p>
-                  </div>
-                </div>
-                
+              {/* Buy Button & Position Tag */}
+              <div className="absolute right-3 bottom-3 flex flex-col items-end">
+                {profile?.state === vip.name && (
+                  <span className="absolute -top-7 right-0 bg-blue-50 text-[#0000AA] px-2 py-0.5 rounded-full text-[9px] font-black lowercase leading-none whitespace-nowrap">
+                    posição atual
+                  </span>
+                )}
                 <button
                   onClick={() => {
                     setSelectedProduct(vip);
                     setIsPurchaseModalOpen(true);
                   }}
-                  className="bg-[#0000AA] hover:bg-blue-800 text-white px-4 h-[22px] rounded-lg text-[10px] font-bold lowercase active:scale-95 transition-none ml-2 flex items-center justify-center"
+                  className="bg-[#0000AA] hover:bg-blue-800 text-white px-5 py-1.5 rounded-[8px] text-[11.5px] font-bold lowercase active:scale-95 transition-none shadow-md shadow-blue-900/10"
                 >
                   comprar
                 </button>
