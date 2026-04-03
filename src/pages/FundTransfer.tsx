@@ -123,7 +123,7 @@ export default function FundTransfer() {
     <div className="flex flex-col min-h-screen bg-[#e9ecf3] antialiased page-content">
       {/* Header */}
       <header className="flex items-center px-4 h-12 bg-[#000080] sticky top-0 z-50">
-        <button onClick={() => navigate(-1)} className="flex-none">
+        <button onClick={() => navigate(-1)} className="flex-none" title="voltar" aria-label="voltar">
           <ChevronLeft className="h-6 w-6 text-white" />
         </button>
         <div className="flex-grow text-center">
@@ -291,20 +291,20 @@ export default function FundTransfer() {
                     </div>
                   </button>
 
-                  {/* Opção 2: Resgate de Presente (Radio à esquerda) */}
+                  {/* Opção 2: Resgate de Presente (Radio à direita) */}
                   <button
                     onClick={() => {
                       showLoading();
                       setTimeout(() => { hideLoading(); setMode('gift'); }, 300);
                     }}
-                    className="w-full flex items-center justify-start gap-4 p-4 rounded-xl border border-gray-100 bg-gray-50 active:bg-gray-100 transition-all group"
+                    className="w-full flex items-center justify-between p-4 rounded-xl border border-gray-100 bg-gray-50 active:bg-gray-100 transition-all group"
                   >
+                    <span className="text-[14px] font-bold text-gray-800 lowercase">resgate de presente</span>
                     <div className="w-5 h-5 rounded-full border-2 border-gray-300 flex items-center justify-center group-active:border-[#0000AA] group-active:bg-[#0000AA] transition-colors">
                       <svg className="w-3 h-3 text-white opacity-0 group-active:opacity-100" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="4">
                         <path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" />
                       </svg>
                     </div>
-                    <span className="text-[14px] font-bold text-gray-800 lowercase">resgate de presente</span>
                   </button>
                 </div>
 
