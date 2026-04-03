@@ -247,11 +247,11 @@ export default function Withdraw() {
         <AnimatePresence>
           {feedback && (
             <motion.div
-              initial={{ opacity: 0, x: '-50%', y: '-50%' }}
-              animate={{ opacity: 1, x: '-50%', y: '-50%' }}
-              exit={{ opacity: 0, x: '-50%', y: '-50%' }}
+              initial={{ opacity: 0, x: 0, y: 0 }}
+              animate={{ opacity: 1, x: 0, y: 0 }}
+              exit={{ opacity: 0, x: 0, y: 0 }}
               transition={{ duration: 0.1 }}
-              className="fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 bg-black/50 backdrop-blur-sm text-white px-5 py-3 rounded-2xl text-[12.5px] shadow-xl z-[500] text-center max-w-[85vw] whitespace-normal break-words"
+              className="fixed inset-0 m-auto w-fit h-fit min-w-[260px] bg-black/50 backdrop-blur-sm text-white px-5 py-3 rounded-2xl text-[12.5px] shadow-xl z-[500] text-center max-w-[85vw] whitespace-normal break-words"
             >
               {feedback}
             </motion.div>

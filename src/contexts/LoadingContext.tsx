@@ -41,7 +41,7 @@ export const LoadingProvider = ({ children }: { children: ReactNode }) => {
     timerRef.current = setTimeout(() => {
       setIsLoadingState(false);
       isExplicitRef.current = false;
-      showError('O servidor demorou muito a responder. Verifique a sua conexão de internet e tente de novo.');
+      showError('Sem conecção. Verifique a internet e tente novamente');
     }, 20000);
   }, []);
 
@@ -130,8 +130,10 @@ export const LoadingProvider = ({ children }: { children: ReactNode }) => {
 
       {/* Global Toast Error / Warnings */}
       {errorMessage && (
-        <div className="fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 bg-black/50 backdrop-blur-sm text-white px-5 py-3 rounded-2xl text-[12.5px] shadow-xl z-[10000] text-center max-w-[85vw] whitespace-normal break-words leading-relaxed">
-          {errorMessage}
+        <div className="fixed inset-0 pointer-events-none z-[10000] flex items-center justify-center p-4">
+          <div className="bg-black/80 backdrop-blur-sm text-white px-5 py-3 rounded-2xl text-[12.5px] shadow-xl text-center max-w-[85vw] whitespace-normal break-words leading-relaxed pointer-events-auto fade-in">
+            {errorMessage}
+          </div>
         </div>
       )}
     </LoadingContext.Provider>

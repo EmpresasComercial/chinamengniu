@@ -229,9 +229,10 @@
 ────────────────────────────────────── */
 .toast {
   position: fixed;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%) translate3d(0, 0, 0);
+  inset: 0;
+  margin: auto;
+  width: fit-content;
+  height: fit-content;
   background: rgba(10, 10, 30, 0.88);
   color: #fff;
   padding: 12px 24px;
@@ -246,7 +247,7 @@
   backdrop-filter: blur(6px);
   pointer-events: none;
   /* Promove para camada de composição fixa */
-  will-change: transform, opacity;
+  will-change: opacity;
 }
 
 /* ──────────────────────────────────────

@@ -234,9 +234,9 @@ export default function FinancialRecords() {
               className="fixed inset-0 bg-black/50 z-[60]"
             />
             <motion.div
-              initial={{ scale: 0.9, opacity: 0, x: '-50%', y: '-50%' }}
-              animate={{ scale: 1, opacity: 1, x: '-50%', y: '-50%' }}
-              exit={{ scale: 0.9, opacity: 0, x: '-50%', y: '-50%' }}
+              initial={{ scale: 0.9, opacity: 0, x: 0, y: 0 }}
+              animate={{ scale: 1, opacity: 1, x: 0, y: 0 }}
+              exit={{ scale: 0.9, opacity: 0, x: 0, y: 0 }}
               transition={{ type: 'spring', damping: 25, stiffness: 200 }}
               className="fixed top-1/2 left-1/2 w-[90%] max-w-sm bg-white rounded-[1.5rem] z-[70] overflow-hidden shadow-2xl"
             >

@@ -260,14 +260,16 @@ export default function Profile() {
       {/* Profile inline toast for USDT validation */}
       <AnimatePresence>
         {profileNotification && (
-          <motion.div
-            initial={{ opacity: 0, scale: 0.9, x: '-50%', y: '-50%' }}
-            animate={{ opacity: 1, scale: 1, x: '-50%', y: '-50%' }}
-            exit={{ opacity: 0, scale: 0.9, x: '-50%', y: '-50%' }}
-            className="fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 bg-black/50 backdrop-blur-sm text-white px-5 py-3 rounded-2xl text-[12.5px] shadow-xl z-[500] text-center max-w-[85vw] whitespace-normal break-words"
-          >
-            {profileNotification}
-          </motion.div>
+          <div className="fixed inset-0 pointer-events-none z-[10000] flex items-center justify-center p-4">
+            <motion.div
+              initial={{ opacity: 0, scale: 0.9 }}
+              animate={{ opacity: 1, scale: 1 }}
+              exit={{ opacity: 0, scale: 0.9 }}
+              className="bg-black/80 backdrop-blur-sm text-white px-5 py-3 rounded-2xl text-[12.5px] shadow-xl text-center max-w-[85vw] whitespace-normal break-words pointer-events-auto"
+            >
+              {profileNotification}
+            </motion.div>
+          </div>
         )}
       </AnimatePresence>
     </div >
