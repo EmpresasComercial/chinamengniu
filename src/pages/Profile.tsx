@@ -95,12 +95,12 @@ export default function Profile() {
   const fmt = (val: number) => val.toLocaleString('pt-AO', { minimumFractionDigits: 2 });
 
   const menuItems = [
-    { name: 'convidar amigos', icon: Rocket, path: '/convidar' },
-    { name: 'minha equipe', icon: Users, path: '/equipe' },
-    { name: 'registros de conta', icon: BarChart3, path: '/detalhes' },
-    { name: 'trocar saldo', icon: CircleDollarSign, path: '/transferencia-de-fundos' },
-    { name: 'centro de segurança', icon: ShieldCheck, path: '/centro-de-seguranca' },
-    { name: 'perguntas frequentes', icon: HelpCircle, path: '/central-de-ajuda' },
+    { name: 'Convidar amigos', icon: Rocket, path: '/convidar' },
+    { name: 'Minha equipe', icon: Users, path: '/equipe' },
+    { name: 'Registros de conta', icon: BarChart3, path: '/detalhes' },
+    { name: 'Trocar saldo', icon: CircleDollarSign, path: '/transferencia-de-fundos' },
+    { name: 'Centro de segurança', icon: ShieldCheck, path: '/centro-de-seguranca' },
+    { name: 'Perguntas frequentes', icon: HelpCircle, path: '/central-de-ajuda' },
   ];
 
   return (
