@@ -372,59 +372,51 @@ export default function Home() {
             onClick={() => setIsSupportModalOpen(false)}
             className="absolute inset-0 bg-black/60 backdrop-blur-[2px]"
           />
-          <div className="relative w-[90%] max-w-sm bg-white rounded-[2.5rem] p-6 shadow-2xl z-[101]">
-            <div className="flex justify-between items-center mb-6">
+          <div className="relative w-[90%] max-w-sm bg-white rounded-[8px] p-5 shadow-2xl z-[101]">
+            <div className="flex justify-between items-center mb-5">
               <div className="flex items-center gap-2">
                 <Headset className="w-5 h-5 text-[#0000AA]" />
-                <h3 className="text-[#0000AA] font-bold text-lg">atendimento ao cliente</h3>
+                <h3 className="text-[#0000AA] font-bold text-[15px]">atendimento ao cliente</h3>
               </div>
               <button 
                 onClick={() => setIsSupportModalOpen(false)} 
-                className="p-2 bg-slate-100 rounded-full"
+                className="p-1.5 bg-slate-100 rounded-[6px]"
                 title="fechar"
               >
                 <X className="w-4 h-4 text-slate-500" />
               </button>
             </div>
 
-            <div className="flex flex-col gap-3">
+            <div className="flex flex-col gap-2.5">
               <button
                 onClick={(e) => { handleLinkClick(links.whatsapp_grupo_vendas_url, e); setIsSupportModalOpen(false); }}
-                className="w-full h-[52px] bg-slate-50 rounded-2xl flex items-center px-4 active:bg-slate-100 transition-none"
+                className="w-full h-[48px] bg-slate-50 rounded-[8px] flex items-center px-3 active:bg-slate-100 transition-none"
               >
-                <div className="w-10 h-10 bg-[#25D366]/10 rounded-xl flex items-center justify-center mr-3">
-                  <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/6/6b/WhatsApp.svg/512px-WhatsApp.svg.png" className="w-6 h-6" alt="whatsapp" />
+                <div className="w-9 h-9 bg-[#25D366]/10 rounded-[6px] flex items-center justify-center mr-3">
+                  <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/6/6b/WhatsApp.svg/512px-WhatsApp.svg.png" className="w-5 h-5" alt="whatsapp" />
                 </div>
-                <div className="flex-1 text-left">
-                  <p className="text-slate-900 font-bold text-[13px]">grupo whatsapp</p>
-                  <p className="text-slate-500 text-[10px]">comunidade oficial</p>
-                </div>
+                <p className="text-slate-900 font-bold text-[12.5px] text-left">entrar no grupo de venda de whatsapp</p>
               </button>
 
               <button
                 onClick={(e) => { handleLinkClick(links.whatsapp_gerente_url, e); setIsSupportModalOpen(false); }}
-                className="w-full h-[52px] bg-slate-50 rounded-2xl flex items-center px-4 active:bg-slate-100 transition-none"
+                className="w-full h-[48px] bg-slate-50 rounded-[8px] flex items-center px-3 active:bg-slate-100 transition-none"
               >
-                <div className="w-10 h-10 bg-[#0000AA]/10 rounded-xl flex items-center justify-center mr-3">
-                  <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/6/6b/WhatsApp.svg/512px-WhatsApp.svg.png" className="w-6 h-6" alt="whatsapp" />
+                <div className="w-9 h-9 bg-[#25D366]/10 rounded-[6px] flex items-center justify-center mr-3">
+                  <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/6/6b/WhatsApp.svg/512px-WhatsApp.svg.png" className="w-5 h-5" alt="whatsapp" />
                 </div>
-                <div className="flex-1 text-left">
-                  <p className="text-slate-900 font-bold text-[13px]">whatsapp gestor</p>
-                  <p className="text-slate-500 text-[10px]">suporte direto</p>
-                </div>
+                <p className="text-slate-900 font-bold text-[12.5px] text-left">contactar o gerente pelo whatsapp</p>
               </button>
 
               <button
                 onClick={(e) => { handleCopyInvite(e); setIsSupportModalOpen(false); }}
-                className="w-full h-[52px] bg-[#0000AA] rounded-2xl flex items-center px-4 active:scale-[0.98] transition-none shadow-lg shadow-blue-900/20"
+                className="w-full h-[48px] bg-slate-50 rounded-[8px] flex items-center justify-center gap-2 active:bg-slate-100 transition-none"
               >
-                <div className="w-10 h-10 bg-white/20 rounded-xl flex items-center justify-center mr-3">
-                  <svg className="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" strokeLinecap="round" strokeLinejoin="round" /></svg>
-                </div>
-                <div className="flex-1 text-left">
-                  <p className="text-white font-bold text-[13px]">convidar amigos</p>
-                  <p className="text-white/70 text-[10px]">copiar link de convite</p>
-                </div>
+                <p className="text-slate-700 font-bold text-[12.5px]">copiar link</p>
+                <svg className="w-4 h-4 text-[#0000AA]" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth="2">
+                  <rect x="9" y="9" width="13" height="13" rx="2" ry="2" />
+                  <path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1" />
+                </svg>
               </button>
             </div>
           </div>
