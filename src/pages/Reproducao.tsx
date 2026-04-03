@@ -168,7 +168,7 @@ export default function Reproducao() {
         <img
           alt="Banner Cow"
           className="w-full h-auto object-cover"
-          src="https://lh3.googleusercontent.com/aida-public/AB6AXuD_dmEaeb_6QdTc9_t3C9uz0fPnsvMp25ERBHFoJFw9-ZJkyj9fv3txK-A_CYl2G2NTtY8S2GflPhIURitNTkIAqQ4w7Q_bXLJORqADk92DnNXFA1rwzZduTXz4LySeAXyWjQ-6N_p0dik_C-Bdrw7TelHwWYSh43i_QtxINNceX05WLGuc4ioII6DK_zfKOrera0B4SvL56bRw2yqHvZMiSeEK_Y5XQC776XoZFgwCKTc12o5hspuU26F14CUmCioOhLAD6GloKw"
+          src="/vaca-6978d793f60d.webp"
           loading="lazy"
         />
         <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/60 to-transparent p-4">
@@ -290,7 +290,7 @@ export default function Reproducao() {
             initial={{ opacity: 0, scale: 0.9, x: '-50%', y: '-50%' }}
             animate={{ opacity: 1, scale: 1, x: '-50%', y: '-50%' }}
             exit={{ opacity: 0, scale: 0.9, x: '-50%', y: '-50%' }}
-            className="fixed top-1/2 left-1/2 bg-black/80 text-white px-6 py-3 rounded-xl text-[12.5px] font-medium shadow-2xl z-[100] text-center min-w-[280px]"
+            className="fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 bg-black/50 backdrop-blur-sm text-white px-4 py-2 rounded-xl text-[12.5px] shadow-lg z-[500] text-center whitespace-nowrap"
           >
             {feedback}
           </motion.div>

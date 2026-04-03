@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Bell, Headset, X } from 'lucide-react';
+import { Bell, Headset, X, Share, MoreVertical } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import { useLoading } from '../contexts/LoadingContext';
 import { useAuth } from '../contexts/AuthContext';
@@ -18,6 +18,7 @@ export default function Home() {
   });
   const [isSupportModalOpen, setIsSupportModalOpen] = useState(false);
   const [deferredPrompt, setDeferredPrompt] = useState<any>(null);
+  const [isIosModalOpen, setIsIosModalOpen] = useState(false);
 
   // Carousel State
   const [currentSlide, setCurrentSlide] = useState(0);
@@ -45,20 +46,37 @@ export default function Home() {
     return () => window.removeEventListener('beforeinstallprompt', handler);
   }, []);
 
+  const isIos = () => {
+    const ua = window.navigator.userAgent.toLowerCase();
+    return /iphone|ipad|ipod/.test(ua);
+  };
+
+  const isInStandaloneMode = () =>
+    ('standalone' in window.navigator) && (window.navigator as any).standalone;
+
   const handleInstallApp = async (e: React.MouseEvent) => {
     e.stopPropagation();
-    
+
     if (deferredPrompt) {
+      // Android Chrome: acionar prompt nativo
       deferredPrompt.prompt();
       const { outcome } = await deferredPrompt.userChoice;
       if (outcome === 'accepted') {
         setNotification('Instalação iniciada!');
+        setTimeout(() => setNotification(null), 2500);
       }
       setDeferredPrompt(null);
+    } else if (isIos() && !isInStandaloneMode()) {
+      // iOS Safari: mostrar guia visual
+      setIsIosModalOpen(true);
+    } else if (isInStandaloneMode()) {
+      setNotification('Aplicativo já está instalado!');
+      setTimeout(() => setNotification(null), 2500);
     } else {
-      setNotification('Abra o menu do navegador e selecione "Instalar Aplicativo" ou "Adicionar ao Ecrã Inicial"');
+      // Android sem prompt: app pode já estar instalado ou contexto não elegível
+      setNotification('Para instalar, use o menu do navegador → "Adicionar ao ecrã inicial"');
+      setTimeout(() => setNotification(null), 3500);
     }
-    setTimeout(() => setNotification(null), 3000);
   };
 
   useEffect(() => {
@@ -276,6 +294,78 @@ export default function Home() {
         </div>
       </section>
 
+      {/* Modal de instruções iOS */}
+      {isIosModalOpen && (
+        <div className="fixed inset-0 z-[200] flex items-end justify-center p-0">
+          <div
+            onClick={() => setIsIosModalOpen(false)}
+            className="absolute inset-0 bg-black/60 backdrop-blur-[2px]"
+          />
+          <div className="relative w-full bg-white rounded-t-[2.5rem] p-6 shadow-2xl z-[201] pb-10">
+            <div className="w-12 h-1.5 bg-slate-200 rounded-full mx-auto mb-6" />
+            <div className="flex items-center gap-3 mb-5">
+              <div className="w-12 h-12 bg-[#001f8d] rounded-2xl flex items-center justify-center shrink-0">
+                <img
+                  src="https://s3-symbol-logo.tradingview.com/mengniu-dairy--600.png"
+                  alt="Mengniu"
+                  className="w-8 h-8 object-contain"
+                />
+              </div>
+              <div>
+                <p className="text-slate-900 font-bold text-[15px]">Mengniu Company</p>
+                <p className="text-slate-500 text-[11px]">adicionar ao ecrã inicial</p>
+              </div>
+            </div>
+
+            <div className="flex flex-col gap-4">
+              <div className="flex items-start gap-4">
+                <div className="w-9 h-9 bg-[#EBF1FF] rounded-xl flex items-center justify-center shrink-0">
+                  <span className="text-[#0000AA] font-black text-[15px]">1</span>
+                </div>
+                <div className="flex-1 pt-1">
+                  <p className="text-slate-900 font-bold text-[13px] mb-0.5">Toque no botão de partilhar</p>
+                  <p className="text-slate-500 text-[11px]">Na barra inferior do Safari, toque no ícone <span className="font-bold text-[#0000AA]">Partilhar</span> (quadrado com seta para cima)</p>
+                </div>
+                <div className="w-9 h-9 bg-slate-100 rounded-xl flex items-center justify-center shrink-0">
+                  <Share className="w-5 h-5 text-[#0000AA]" />
+                </div>
+              </div>
+
+              <div className="h-px bg-slate-100" />
+
+              <div className="flex items-start gap-4">
+                <div className="w-9 h-9 bg-[#EBF1FF] rounded-xl flex items-center justify-center shrink-0">
+                  <span className="text-[#0000AA] font-black text-[15px]">2</span>
+                </div>
+                <div className="flex-1 pt-1">
+                  <p className="text-slate-900 font-bold text-[13px] mb-0.5">Selecione "Adicionar ao Ecrã Inicial"</p>
+                  <p className="text-slate-500 text-[11px]">Role para baixo nas opções e toque em <span className="font-bold text-[#0000AA]">Adicionar ao Ecrã Inicial</span></p>
+                </div>
+              </div>
+
+              <div className="h-px bg-slate-100" />
+
+              <div className="flex items-start gap-4">
+                <div className="w-9 h-9 bg-[#EBF1FF] rounded-xl flex items-center justify-center shrink-0">
+                  <span className="text-[#0000AA] font-black text-[15px]">3</span>
+                </div>
+                <div className="flex-1 pt-1">
+                  <p className="text-slate-900 font-bold text-[13px] mb-0.5">Confirme a instalação</p>
+                  <p className="text-slate-500 text-[11px]">Toque em <span className="font-bold text-[#0000AA]">Adicionar</span> no canto superior direito para concluir</p>
+                </div>
+              </div>
+            </div>
+
+            <button
+              onClick={() => setIsIosModalOpen(false)}
+              className="mt-6 w-full h-[48px] bg-[#0000AA] text-white rounded-2xl font-black text-[13px] shadow-lg shadow-blue-900/20 active:scale-[0.98] transition-none"
+            >
+              entendido
+            </button>
+          </div>
+        </div>
+      )}
+
       {isSupportModalOpen && (
         <div className="fixed inset-0 z-[100] flex items-center justify-center p-4">
           <div 
@@ -342,7 +432,7 @@ export default function Home() {
       )}
 
       {notification && (
-        <div className="fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 bg-black/80 text-white px-6 py-3 rounded-xl text-[12.5px] font-medium shadow-2xl z-[500] text-center min-w-[280px]">
+        <div className="fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 bg-black/50 backdrop-blur-sm text-white px-4 py-2 rounded-xl text-[12.5px] shadow-lg z-[500] text-center whitespace-nowrap">
           {notification}
         </div>
       )}

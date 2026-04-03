@@ -25,14 +25,14 @@ export default function BottomNav() {
   const location = useLocation();
 
   const navItems = [
-    { name: 'lar', path: '/', icon: Home },
-    { name: 'vip', path: '/vip', icon: CowIcon },
+    { name: 'home', path: '/', icon: Home },
+    { name: 'fazenda', path: '/vip', icon: CowIcon },
     { name: 'reprodução', path: '/reproducao', icon: CheckCircle2 },
-    { name: 'eu', path: '/perfil', icon: Building2 },
+    { name: 'perfil', path: '/perfil', icon: Building2 },
   ];
 
   return (
-    <nav className="w-full bg-white border-t border-gray-100 flex justify-around items-center py-2 z-50">
+    <nav className="fixed bottom-0 left-0 right-0 w-full max-w-md mx-auto bg-white border-t border-gray-100 flex justify-around items-center py-2 z-[100] pb-[calc(0.5rem+env(safe-area-inset-bottom))]">
       {navItems.map((item) => {
         const isActive = location.pathname === item.path;
         return (
