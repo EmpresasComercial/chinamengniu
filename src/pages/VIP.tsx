@@ -268,47 +268,23 @@ export default function VIP() {
             onClick={() => setIsPurchaseModalOpen(false)}
             className="absolute inset-0 bg-black/60 backdrop-blur-[2px]"
           />
-          <div className="relative w-full max-w-sm bg-white rounded-[2rem] p-6 shadow-2xl z-[101]">
-            <div className="flex flex-col items-center">
-              <p className="text-slate-400 text-[11px] font-bold lowercase mb-4 tracking-wider">detalhe do animal de compra</p>
-              <div className="w-24 h-24 bg-slate-50 rounded-3xl flex items-center justify-center p-3 mb-4 border border-slate-100">
-                <img src={selectedProduct.image_url} className="w-full h-full object-contain" alt={selectedProduct.name} />
-              </div>
-              <h3 className="text-[#000080] font-black text-lg lowercase mb-1">{selectedProduct.name.toLowerCase()}</h3>
-              <div className="flex gap-0.5 mb-6">
-                {Array.from({ length: selectedProduct.purchase_limit || 1 }).map((_, i) => (
-                  <span key={i} className={(selectedProduct.bought_count || 0) > i ? "text-[#FFD700]" : "text-slate-200"}>★</span>
-                ))}
-              </div>
-              <div className="w-full space-y-2 mb-8">
-                <div className="flex justify-between items-center border-b border-slate-50 pb-2">
-                  <span className="text-slate-400 text-[11px] lowercase font-medium">rendimento total previsível</span>
-                  <span className="text-slate-900 font-black text-[13.5px]">{(selectedProduct.total_income || (selectedProduct.daily_income * selectedProduct.duration_days)).toLocaleString('pt-AO')} kz</span>
-                </div>
-                <div className="flex justify-between items-center border-b border-slate-50 pb-2">
-                  <span className="text-slate-400 text-[11px] lowercase font-medium">rendimento diário</span>
-                  <span className="text-green-600 font-black text-[13.5px]">{selectedProduct.daily_income.toLocaleString('pt-AO')} kz p/ dia</span>
-                </div>
-                <div className="flex justify-between items-center border-b border-slate-50 pb-2">
-                  <span className="text-slate-400 text-[11px] lowercase font-medium">preço de adoção</span>
-                  <span className="text-[#FF0000] font-black text-[13.5px]">{selectedProduct.price.toLocaleString('pt-AO')} kz</span>
-                </div>
-                <div className="flex justify-between items-center">
-                  <span className="text-slate-400 text-[11px] lowercase font-medium">período de adoção</span>
-                  <span className="text-slate-900 font-black text-[13.5px]">{selectedProduct.duration_days} dias</span>
-                </div>
-              </div>
-              <button
-                onClick={handlePurchase}
-                className="w-full h-[32px] bg-[#0000AA] hover:bg-blue-800 text-white font-bold rounded-xl shadow-lg shadow-blue-900/20 transition-none lowercase text-[13px] flex items-center justify-center p-0"
-              >
-                adotar
-              </button>
+          <div className="relative w-full max-w-[280px] bg-white rounded-3xl p-5 shadow-2xl z-[101] text-center">
+            <h3 className="text-[#000080] font-black text-[16px] lowercase mb-3">confirmar adoção</h3>
+            <p className="text-slate-600 text-[13px] lowercase leading-relaxed mb-6 px-1">
+              tens a certeza que desejas comprar o animal <span className="font-bold text-[#000080]">{selectedProduct.name.toLowerCase()}</span> no preço de <span className="font-bold text-[#FF0000]">{selectedProduct.price.toLocaleString('pt-AO')} kz</span>?
+            </p>
+            <div className="grid grid-cols-2 gap-3">
               <button 
                 onClick={() => setIsPurchaseModalOpen(false)}
-                className="mt-4 text-slate-400 text-[11px] font-medium lowercase"
+                className="h-[38px] bg-slate-100 hover:bg-slate-200 text-slate-500 font-bold rounded-xl text-[13px] lowercase transition-colors"
               >
                 cancelar
+              </button>
+              <button
+                onClick={handlePurchase}
+                className="h-[38px] bg-[#0000AA] hover:bg-blue-800 text-white font-bold rounded-xl text-[13px] lowercase shadow-md transition-colors"
+              >
+                adotar
               </button>
             </div>
           </div>
@@ -321,25 +297,25 @@ export default function VIP() {
             className="absolute inset-0 bg-black/60 backdrop-blur-[2px]"
             onClick={() => setIsResultModalOpen(false)}
           />
-          <div className="relative w-[85%] max-w-[320px] bg-white rounded-[2rem] p-8 shadow-2xl z-[10002] text-center flex flex-col items-center justify-center">
-            <div className={`w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-4 ${purchaseResult.success ? 'bg-green-100 text-green-600' : 'bg-red-100 text-red-600'}`}>
+          <div className="relative w-full max-w-[260px] bg-white rounded-[1.5rem] p-5 shadow-2xl z-[10002] text-center flex flex-col items-center justify-center">
+            <div className={`w-12 h-12 rounded-full flex items-center justify-center mx-auto mb-3 ${purchaseResult.success ? 'bg-green-100 text-green-600' : 'bg-red-100 text-red-600'}`}>
               {purchaseResult.success ? (
-                <svg className="w-8 h-8" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <svg className="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3} d="M5 13l4 4L19 7" />
                 </svg>
               ) : (
-                <X className="w-8 h-8" strokeWidth={3} />
+                <X className="w-6 h-6" strokeWidth={3} />
               )}
             </div>
-            <h3 className={`text-lg font-black lowercase mb-2 ${purchaseResult.success ? 'text-green-600' : 'text-red-600'}`}>
-              {purchaseResult.success ? 'sucesso' : 'ops! houve um erro'}
+            <h3 className={`text-[15px] font-black lowercase mb-1 ${purchaseResult.success ? 'text-green-600' : 'text-red-600'}`}>
+              {purchaseResult.success ? 'sucesso' : 'falhou'}
             </h3>
-            <p className="text-slate-600 text-[13px] lowercase leading-relaxed mb-8">
+            <p className="text-slate-600 text-[11.5px] lowercase leading-snug mb-5 px-2">
               {purchaseResult.message}
             </p>
             <button
               onClick={() => setIsResultModalOpen(false)}
-              className={`w-full h-11 rounded-2xl font-bold text-[14px] lowercase transition-none shadow-lg ${
+              className={`w-full h-9 rounded-xl font-bold text-[13px] lowercase transition-none shadow-md ${
                 purchaseResult.success 
                   ? 'bg-green-600 hover:bg-green-700 text-white' 
                   : 'bg-[#0000AA] hover:bg-blue-800 text-white'

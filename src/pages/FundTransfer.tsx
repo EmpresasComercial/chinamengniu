@@ -16,27 +16,38 @@ export default function FundTransfer() {
   const [code, setCode] = useState('');
   const [amountInput, setAmountInput] = useState('');
   const [balanceCorrete, setBalanceCorrete] = useState(0);
+  const [balanceMain, setBalanceMain] = useState(0);
   const [feedback, setFeedback] = useState<{ message: string; type: 'error' | 'success' } | null>(null);
 
   useEffect(() => {
     if (!user) return;
-    async function fetchBalance() {
+    async function fetchData() {
       const done = registerFetch();
       try {
-        const { data } = await supabase
+        const { data: reprData } = await supabase
           .from('tarefas_diarias')
           .select('balance_correte')
           .eq('user_id', user.id);
         
-        if (data) {
-          const total = data.reduce((s, t) => s + Number(t.balance_correte || 0), 0);
+        if (reprData) {
+          const total = reprData.reduce((s, t) => s + Number(t.balance_correte || 0), 0);
           setBalanceCorrete(total);
+        }
+
+        const { data: profData } = await supabase
+          .from('profiles')
+          .select('balance')
+          .eq('id', user.id)
+          .single();
+        
+        if (profData) {
+          setBalanceMain(Number(profData.balance || 0));
         }
       } finally {
         done();
       }
     }
-    fetchBalance();
+    fetchData();
   }, [user, registerFetch]);
 
   const showToast = (message: string, type: 'error' | 'success') => {
@@ -44,7 +55,6 @@ export default function FundTransfer() {
     setTimeout(() => setFeedback(null), 3500);
   };
 
-  // --- RESGATAR CÓDIGO DE PRESENTE ---
   const handleRedeemCode = async () => {
     if (!code) { showToast('por favor, insira o seu código', 'error'); return; }
     showLoading();
@@ -64,28 +74,41 @@ export default function FundTransfer() {
     }
   };
 
-  // --- TRANSFERIR CONTA DE REPRODUÇÃO → BALANCE ---
   const handleTransfer = async () => {
-    const amount = parsedAmount;
+    const amount = Number(amountInput);
     if (isNaN(amount) || amount <= 0) {
       showToast('por favor, insira um valor válido', 'error'); return;
     }
-    if (amount < 100) {
-      showToast('valor mínimo para transferência é 100 Kz', 'error'); return;
+
+    const now = new Date();
+    const day = now.getDay();
+    const hour = now.getHours();
+
+    if (day < 1 || day > 5) {
+      showToast('conversões apenas de segunda a sexta-feira', 'error'); return;
     }
-    if (amount > 30000) {
-      showToast('valor máximo para transferência é 30.000 Kz', 'error'); return;
+    if (hour < 10 || hour >= 22) {
+      showToast('conversões apenas entre as 10:00 e 22:00', 'error'); return;
+    }
+
+    if (amount < 1000) {
+      showToast('o valor mínimo de conversão é 1.000 Kz', 'error'); return;
+    }
+    if (amount > 100000) {
+      showToast('o valor máximo de conversão é 100.000 Kz', 'error'); return;
     }
     if (amount > balanceCorrete) {
-      showToast('saldo insuficiente na conta de reprodução', 'error'); return;
+      showToast('saldo de reprodução insuficiente', 'error'); return;
     }
+
     showLoading();
     try {
       const { data, error } = await supabase.rpc('transfer_reproducao_to_balance', { p_amount: amount });
       if (error) throw error;
       if (data.success) {
-        showToast(`${fmt(data.amount)} Kz transferidos com sucesso!`, 'success');
+        showToast(`conversão de ${amount.toLocaleString('pt-AO')} Kz realizada com sucesso!`, 'success');
         setBalanceCorrete(prev => prev - amount);
+        setBalanceMain(prev => prev + amount);
         setAmountInput('');
       } else {
         showToast(data.message.toLowerCase(), 'error');
@@ -97,155 +120,130 @@ export default function FundTransfer() {
     }
   };
 
-  const fmt = (val: number) => val.toLocaleString('pt-AO', { minimumFractionDigits: 2 });
+  const fmt = (val: number) => val.toLocaleString('pt-AO', { minimumFractionDigits: 0 });
 
-  // Formatar input de valor ao digitar (trata como centavos para entrada fluida)
   const handleAmountChange = (e: ChangeEvent<HTMLInputElement>) => {
     const raw = e.target.value.replace(/\D/g, '');
-    if (!raw) { setAmountInput(''); return; }
-    const num = parseInt(raw, 10) / 100;
-    setAmountInput(num.toLocaleString('pt-AO', { minimumFractionDigits: 2 }));
+    setAmountInput(raw);
   };
 
-  // Parsing robusto: remove espaços (non-breaking e normais), pontos de milhar pt-AO
-  const parseAmount = (str: string): number => {
-    if (!str) return 0;
-    const cleaned = str
-      .replace(/[\s\u00A0\u202F]/g, '') // espaços e non-breaking spaces
-      .replace(/\./g, '')               // pontos de milhar
-      .replace(',', '.');               // vírgula decimal → ponto
-    return parseFloat(cleaned) || 0;
-  };
-
-  const parsedAmount = parseAmount(amountInput);
+  const parsedAmount = Number(amountInput) || 0;
 
   return (
-    <div className="flex flex-col min-h-screen bg-[#e9ecf3] antialiased page-content">
-      {/* Header */}
+    <div className="flex flex-col min-h-screen bg-[#F5F7FA] antialiased page-content">
+      {/* Header Clássico Azul (#000080) */}
       <header className="flex items-center px-4 h-12 bg-[#000080] sticky top-0 z-50">
-        <button onClick={() => navigate(-1)} className="flex-none" title="voltar" aria-label="voltar">
-          <ChevronLeft className="h-6 w-6 text-white" />
+        <button onClick={() => navigate(-1)} className="p-2 -ml-2" title="voltar" aria-label="voltar">
+          <ChevronLeft className="h-5 w-5 text-white" />
         </button>
         <div className="flex-grow text-center">
-          <h1 className="text-white text-[15px] font-bold pr-6">
-            {mode === 'gift' ? 'código de presentes' : mode === 'transfer' ? 'conta de reprodução' : 'trocar saldo'}
+          <h1 className="text-white text-[14px] font-bold pr-8 font-serif lowercase">
+            {mode === 'gift' ? 'resgate de presente' : mode === 'transfer' ? 'conversão de fundos' : 'trocar saldo'}
           </h1>
         </div>
-        {mode !== null && (
-          <button onClick={() => setMode(null)} className="flex-none text-white text-[11px] font-bold opacity-70">
-            voltar
-          </button>
-        )}
       </header>
 
       <main className="flex-grow p-4">
 
         {/* ── MODO: CÓDIGO DE PRESENTE ── */}
         {mode === 'gift' && (
-          <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }}>
-            <section className="mb-4">
-              <div className="bg-[#f5d7a1] rounded-[24px] border border-[#cfb586] p-8 flex flex-col items-center text-center">
-                <div className="bg-black w-14 h-14 rounded-full flex items-center justify-center shadow-lg mb-3">
-                  <Gift className="h-7 w-7 text-white" />
-                </div>
-                <h2 className="text-[18px] font-black text-black lowercase leading-tight mb-1">resgatar código de presente</h2>
-                <p className="text-[11px] text-gray-700 font-medium lowercase">insira o seu código de convite ou código de presente</p>
+          <motion.div initial={{ opacity: 0, y: 5 }} animate={{ opacity: 1, y: 0 }} className="bg-white rounded-3xl p-5 border border-slate-50">
+            <div className="flex flex-col items-center text-center mb-6">
+              <div className="bg-[#000080]/5 w-11 h-11 rounded-full flex items-center justify-center mb-2">
+                <Gift className="h-5 w-5 text-[#000080]" />
               </div>
-            </section>
-            <section>
-              <div className="bg-white rounded-[24px] shadow-[0_4px_25px_rgba(0,0,0,0.06)] p-8">
-                <div className="mb-8">
-                  <label className="block text-gray-400 text-[12.5px] mb-3 lowercase font-bold" htmlFor="gift-code">
-                    informe o seu código
-                  </label>
-                  <div className="border-b-2 border-[#e2e8f0] py-3 focus-within:border-[#000080] transition-colors">
-                    <input
-                      className="w-full border-none focus:ring-0 p-0 text-gray-800 bg-transparent text-[16px] font-bold outline-none placeholder:text-gray-300 placeholder:font-normal"
-                      id="gift-code"
-                      placeholder="insira o código aqui"
-                      type="text"
-                      value={code}
-                      onChange={(e) => setCode(e.target.value.toUpperCase())}
-                    />
-                  </div>
-                </div>
-                <button
-                  onClick={handleRedeemCode}
-                  className="w-full h-[45px] bg-[#000080] text-white rounded-full text-[15px] font-black shadow-lg active:scale-[0.98] transition-all lowercase"
-                >
-                  resgatar código
-                </button>
+              <h2 className="text-[16px] font-black text-[#000080] lowercase">resgatar código</h2>
+            </div>
+
+            <div className="mb-6">
+              <div className="border-b-2 border-[#000080] py-1.5 transition-colors">
+                <input
+                  className="w-full border-none focus:ring-0 p-0 text-slate-800 bg-transparent text-[15px] outline-none placeholder:text-slate-200"
+                  id="gift-code"
+                  placeholder="por favor, insira o valor da conversão"
+                  type="text"
+                  value={code}
+                  onChange={(e) => setCode(e.target.value.toUpperCase())}
+                />
               </div>
-            </section>
+            </div>
+
+            <button
+              onClick={handleRedeemCode}
+              className="w-full h-10 bg-[#000080] text-white rounded-2xl text-[13px] font-normal active:scale-[0.98] transition-all lowercase"
+            >
+              confirmar resgate
+            </button>
           </motion.div>
         )}
 
-        {/* ── MODO: CONTA DE REPRODUÇÃO → BALANCE ── */}
+        {/* ── MODO: CONVERSÃO DE REPRODUÇÃO → BALANCE ── */}
         {mode === 'transfer' && (
-          <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }}>
-            {/* Saldo disponível */}
-            <section className="mb-4">
-              <div className="bg-gradient-to-br from-[#0000AA] to-[#0000CC] rounded-[24px] p-6 flex flex-col items-center text-center text-white">
-                <div className="bg-white/20 w-14 h-14 rounded-full flex items-center justify-center mb-3">
-                  <ArrowRightLeft className="h-7 w-7 text-white" />
-                </div>
-                <p className="text-[11px] opacity-70 mb-1">saldo disponível</p>
-                <p className="text-[28px] font-black">{fmt(balanceCorrete)} Kz</p>
-                <p className="text-[10px] opacity-50 mt-1">conta de reprodução</p>
+          <motion.div initial={{ opacity: 0, y: 5 }} animate={{ opacity: 1, y: 0 }}>
+            {/* Seção Estatística Compacta */}
+            <div className="bg-white rounded-3xl p-4 mb-4 flex justify-between items-center">
+              <div className="text-center flex-1">
+                <p className="text-[9px] text-slate-400 lowercase font-bold mb-0.5">saldo de reprodução</p>
+                <p className="text-[16px] font-black text-[#000080]">{fmt(balanceCorrete)} kz</p>
               </div>
-            </section>
+              <div className="w-10 h-10 bg-[#000080] rounded-full flex items-center justify-center shrink-0 mx-2">
+                <ArrowRightLeft className="w-5 h-5 text-white" />
+              </div>
+              <div className="text-center flex-1">
+                <p className="text-[9px] text-slate-400 lowercase font-bold mb-0.5">novo principal</p>
+                <p className="text-[16px] font-black text-green-600">{(balanceMain + parsedAmount).toLocaleString('pt-AO')} kz</p>
+              </div>
+            </div>
 
-            {/* Formulário de transferência */}
-            <section>
-              <div className="bg-white rounded-[24px] shadow-[0_4px_25px_rgba(0,0,0,0.06)] p-6">
-                <label className="block text-gray-400 text-[12px] mb-2 font-bold lowercase">valor a transferir</label>
-                <div className="border-b-2 border-[#e2e8f0] py-3 focus-within:border-[#000080] transition-colors mb-2">
-                  <div className="flex items-center gap-2">
-                    <span className="text-gray-400 text-[15px] font-bold">Kz</span>
-                    <input
-                      className="flex-1 border-none focus:ring-0 p-0 text-gray-800 bg-transparent text-[22px] font-black outline-none placeholder:text-gray-200 placeholder:font-normal placeholder:text-[16px]"
-                      placeholder="0,00"
-                      type="text"
-                      inputMode="numeric"
-                      value={amountInput}
-                      onChange={handleAmountChange}
-                    />
-                  </div>
+            <div className="bg-white rounded-3xl p-5">
+              {/* Atalhos Rápidos (Compactos e Azuis) */}
+              <div className="flex justify-between gap-1 mb-8">
+                {[1000, 5000, 10000, 50000].map(v => (
+                  <button
+                    key={v}
+                    onClick={() => setAmountInput(String(v))}
+                    className="flex-1 bg-[#000080] text-white rounded-md h-[24px] text-[9.5px] font-bold hover:bg-[#0000AA] active:scale-95 transition-all"
+                  >
+                    {v.toLocaleString('pt-AO')}
+                  </button>
+                ))}
+              </div>
+
+              {/* Input Underline Azul e Alinhado à Esquerda */}
+              <div className="flex flex-col mb-8">
+                <div className="border-b-2 border-[#000080] w-full pb-1 focus-within:border-blue-400 transition-colors">
+                  <input
+                    className="w-full border-none focus:ring-0 p-0 text-slate-800 bg-transparent text-[18px] outline-none text-left placeholder:text-slate-200"
+                    placeholder="por favor, insira o valor da conversão"
+                    type="text"
+                    inputMode="numeric"
+                    value={amountInput}
+                    onChange={handleAmountChange}
+                  />
                 </div>
+              </div>
 
-                {/* Limites */}
-                <div className="flex justify-between text-[10px] text-gray-400 mb-5">
-                  <span>mínimo: <strong className="text-gray-600">100,00 Kz</strong></span>
-                  <span>máximo: <strong className="text-gray-600">30.000,00 Kz</strong></span>
-                </div>
+              <button
+                onClick={handleTransfer}
+                disabled={parsedAmount < 1000 || parsedAmount > 100000 || parsedAmount > balanceCorrete}
+                className={`w-full h-11 rounded-2xl text-[14px] font-normal transition-all
+                  ${parsedAmount >= 1000 && parsedAmount <= 100000 && parsedAmount <= balanceCorrete
+                    ? 'bg-[#000080] text-white active:scale-[0.98]'
+                    : 'bg-slate-50 text-slate-300 cursor-not-allowed border border-slate-100'}`}
+              >
+                confirmar conversão
+              </button>
+            </div>
 
-                {/* Atalhos rápidos */}
-                <div className="grid grid-cols-4 gap-2 mb-6">
-                  {[500, 1000, 5000, 30000].map(v => (
-                    <button
-                      key={v}
-                      onClick={() => setAmountInput(v.toLocaleString('pt-AO', { minimumFractionDigits: 2 }))}
-                      className="bg-[#0000AA]/8 border border-[#0000AA]/20 rounded-lg py-2 text-[10px] font-bold text-[#000080]"
-                    >
-                      {v.toLocaleString('pt-AO')}
-                    </button>
-                  ))}
-                </div>
-
-                <p className="text-[11px] text-gray-400 text-center mb-5">
-                  o valor será transferido da sua <strong>conta de reprodução</strong> para o seu <strong>saldo principal</strong>
-                </p>
-
-                <button
-                  onClick={handleTransfer}
-                  disabled={parsedAmount < 100 || parsedAmount > 30000 || parsedAmount > balanceCorrete}
-                  className={`w-full h-[45px] rounded-full text-[15px] font-black transition-all lowercase shadow-lg
-                    ${parsedAmount >= 100 && parsedAmount <= 30000 && parsedAmount <= balanceCorrete
-                      ? 'bg-[#000080] text-white active:scale-[0.98]'
-                      : 'bg-gray-200 text-gray-400 cursor-not-allowed'}`}
-                >
-                  confirmar transferência
-                </button>
+            {/* Instruções Detalhas (Flat e Compactas) */}
+            <section className="mt-5 px-1 pb-10">
+              <h4 className="text-red-500 font-bold text-[13px] uppercase tracking-tighter mb-2 pl-0.5">instrução</h4>
+              <div className="space-y-1.5 text-[10px] text-slate-400 leading-normal lowercase">
+                <p>1. as conversões ocorrem apenas de <strong className="text-slate-500">segunda a sexta-feira</strong>, das <strong className="text-slate-500">10:00 às 22:00</strong>.</p>
+                <p>2. valor <strong className="text-slate-500">mínimo</strong> de <strong className="text-slate-500">1.000 kz</strong> e <strong className="text-slate-500">máximo</strong> de <strong className="text-slate-500">100.000 kz</strong>.</p>
+                <p>3. certifique-se de possuir saldo suficiente.</p>
+                <p>4. só é permitida uma conversão diária por usuário.</p>
+                <p className="bg-red-50/50 text-red-400 p-2 rounded-xl mt-2">5. evite tentativas sem saldo para evitar o <strong className="text-red-600">bloqueio ou banimento</strong> da sua conta.</p>
               </div>
             </section>
           </motion.div>
