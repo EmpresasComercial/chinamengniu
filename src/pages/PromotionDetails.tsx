@@ -1,9 +1,10 @@
-import { ChevronLeft, X } from 'lucide-react';
+import { ChevronLeft, X, Gift, Sparkles, Star, Zap, Sprout } from 'lucide-react';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { useLoading } from '../contexts/LoadingContext';
 import { supabase } from '../lib/supabase';
 import { useAuth } from '../contexts/AuthContext';
 import { useState } from 'react';
+import { motion, AnimatePresence } from 'motion/react';
 
 export default function PromotionDetails() {
     const navigate = useNavigate();
@@ -67,103 +68,163 @@ export default function PromotionDetails() {
         }
     };
 
+    if (!product) return null;
+
     return (
-        <div className="flex flex-col min-h-screen bg-[#0000A5] page-content uppercase-none">
-            <header className="p-4 text-white flex items-center">
+        <div className="flex flex-col min-h-screen bg-[#F0F4FF] antialiased page-content overflow-hidden relative">
+             {/* Elementos Decorativos de Fundo */}
+             <div className="fixed inset-0 pointer-events-none z-0">
+                <div className="absolute top-24 right-14 opacity-20 text-6xl">🐄</div>
+                <div className="absolute bottom-48 left-10 opacity-20 text-5xl">🚜</div>
+                <div className="absolute top-[45%] left-[8%] opacity-10 text-7xl rotate-12">🌽</div>
+            </div>
+
+            <header className="relative z-20 px-4 pt-6 pb-4 flex items-center">
                 <button
                     onClick={() => navigate(-1)}
-                    className="flex items-center justify-center p-1 rounded-full active:bg-white/10 transition-none"
+                    className="w-10 h-10 bg-[#000080] rounded-2xl flex items-center justify-center shadow-lg shadow-blue-900/20 active:scale-90 transition-transform"
                     title="voltar"
                 >
-                    <ChevronLeft className="w-6 h-6" />
+                    <ChevronLeft className="w-6 h-6 text-white" />
                 </button>
-                <h1 className="flex-1 text-center text-[15px] font-bold pr-8 lowercase">detalhe da promoção</h1>
+                <div className="flex-grow text-center pr-10">
+                    <h1 className="text-[14.5px] font-black tracking-tight text-[#000080] bg-white/70 backdrop-blur-sm inline-block px-5 py-2 rounded-full border border-blue-100/50 lowercase shadow-sm">
+                        detalhes da farm ✨
+                    </h1>
+                </div>
             </header>
 
-            <main className="bg-[#EBF1FF] rounded-t-[1.5rem] flex-grow text-black p-6 mt-2 mb-20">
-                <div className="bg-white rounded-xl shadow-lg border border-slate-200 overflow-hidden p-6 mt-4">
-                    <div className="flex flex-col items-center">
-                        <p className="text-slate-400 text-[11px] font-bold lowercase mb-4 tracking-wider">animal de promoção limitada</p>
-                        <div className="w-24 h-24 bg-slate-50 rounded-3xl flex items-center justify-center p-3 mb-4 border border-slate-100">
-                            <img src={product?.image_url} className="w-full h-full object-contain" alt={product?.name} />
+            <main className="relative z-10 flex-grow px-5 pb-24">
+                <motion.div 
+                    initial={{ opacity: 0, scale: 0.94 }}
+                    animate={{ opacity: 1, scale: 1 }}
+                    className="bg-white rounded-[3rem] border border-blue-50 p-8 shadow-[0_20px_50px_rgba(0,0,128,0.12)] relative overflow-hidden"
+                >
+                    {/* Background decoration */}
+                    <div className="absolute top-0 right-0 w-56 h-56 bg-blue-50/60 rounded-full blur-[90px] -mr-28 -mt-28" />
+                    
+                    <div className="flex flex-col items-center relative z-10 text-center">
+                        <div className="bg-[#000080] text-white text-[10px] font-black px-4 py-1.5 rounded-2xl lowercase mb-7 shadow-lg shadow-blue-900/10 tracking-widest uppercase">
+                             oferta vip limitada
                         </div>
-                        <h3 className="text-[#000080] font-black text-lg lowercase mb-1">{product?.name.toLowerCase()}</h3>
-                        <div className="flex gap-0.5 mb-6">
-                            {Array.from({ length: product?.purchase_limit || 1 }).map((_, i) => (
-                                <span key={i} className={(product?.bought_count || 0) > i ? "text-[#FFD700]" : "text-slate-200"}>★</span>
+
+                        <div className="w-36 h-36 bg-gradient-to-br from-indigo-50/50 to-blue-50/50 rounded-[3rem] flex items-center justify-center p-5 border border-blue-50 shadow-inner mb-7">
+                            <img src={product.image_url} className="w-full h-full object-contain drop-shadow-2xl" alt={product.name} />
+                        </div>
+
+                        <h2 className="text-[26px] font-black text-slate-800 lowercase mb-1 leading-none tracking-tighter">
+                            {product.name.toLowerCase()}
+                        </h2>
+                        
+                        <div className="flex gap-1.5 mb-10">
+                            {Array.from({ length: 5 }).map((_, i) => (
+                                <Star 
+                                    key={i} 
+                                    className={`w-4.5 h-4.5 ${(product.bought_count || 0) > i ? 'text-yellow-400 fill-yellow-400' : 'text-slate-100 fill-slate-100'}`} 
+                                    strokeWidth={3.5}
+                                />
                             ))}
                         </div>
 
-                        <div className="w-full space-y-2 mb-8">
-                            <div className="flex justify-between items-center border-b border-slate-50 pb-2">
-                                <span className="text-slate-400 text-[11px] lowercase font-medium">rendimento diário</span>
-                                <span className="text-green-600 font-black text-[13.5px]">{product?.daily_income.toLocaleString('pt-AO')} kz p/ dia</span>
+                        <div className="w-full space-y-4 mb-12">
+                            <div className="bg-slate-50/70 rounded-3xl p-5 flex justify-between items-center border border-slate-100/30">
+                                <div className="flex flex-col items-start">
+                                    <span className="text-[11px] text-slate-400 font-bold lowercase tracking-tighter leading-none mb-1.5">rendimento diário</span>
+                                    <span className="text-green-600 font-black text-[18px] leading-none">{product.daily_income.toLocaleString('pt-AO')} kz</span>
+                                </div>
+                                <div className="w-12 h-12 bg-green-50 rounded-[1.2rem] flex items-center justify-center">
+                                    <Zap className="w-6 h-6 text-green-600 fill-green-600 outline-none" />
+                                </div>
                             </div>
-                            <div className="flex justify-between items-center border-b border-slate-50 pb-2">
-                                <span className="text-slate-400 text-[11px] lowercase font-medium">preço de promoção</span>
-                                <span className="text-[#FF0000] font-black text-[13.5px]">{product?.price.toLocaleString('pt-AO')} kz</span>
+
+                            <div className="bg-slate-50/70 rounded-3xl p-5 flex justify-between items-center border border-slate-100/30">
+                                <div className="flex flex-col items-start">
+                                    <span className="text-[11px] text-slate-400 font-bold lowercase tracking-tighter leading-none mb-1.5">investimento</span>
+                                    <span className="text-red-500 font-black text-[18px] leading-none">{product.price.toLocaleString('pt-AO')} kz</span>
+                                </div>
+                                <div className="w-12 h-12 bg-red-50 rounded-[1.2rem] flex items-center justify-center">
+                                    <Gift className="w-6 h-6 text-red-500" />
+                                </div>
                             </div>
-                            <div className="flex justify-between items-center">
-                                <span className="text-slate-400 text-[11px] lowercase font-medium">período de adoção</span>
-                                <span className="text-slate-900 font-black text-[13.5px]">{product?.duration_days} dias</span>
+
+                            <div className="bg-slate-50/70 rounded-3xl p-5 flex justify-between items-center border border-slate-100/30">
+                                <div className="flex flex-col items-start">
+                                    <span className="text-[11px] text-slate-400 font-bold lowercase tracking-tighter leading-none mb-1.5">período</span>
+                                    <span className="text-slate-900 font-black text-[18px] leading-none">{product.duration_days} dias</span>
+                                </div>
+                                <div className="w-12 h-12 bg-blue-50 rounded-[1.2rem] flex items-center justify-center">
+                                    <Sprout className="w-6 h-6 text-[#000080] fill-[#000080]/10" />
+                                </div>
                             </div>
                         </div>
 
                         <button
                             onClick={handlePurchase}
-                            className="w-full h-[45px] bg-[#0000AA] hover:bg-blue-800 text-white font-bold rounded-xl shadow-lg transition-none active:scale-[0.98] lowercase text-[14px] flex items-center justify-center"
+                            className="w-full h-15 bg-gradient-to-r from-[#000080] to-[#0000BB] text-white font-black rounded-3xl shadow-2xl shadow-blue-900/30 active:scale-[0.98] transition-all lowercase text-[15.5px] flex items-center justify-center gap-3.5 group"
                         >
-                            Confirmar Adesão
+                            <Zap className="w-5 h-5 fill-white group-hover:scale-125 transition-transform" />
+                            garantir este animal na oferta
                         </button>
-                        <p className="mt-6 text-center text-slate-400 text-[10px] leading-relaxed lowercase">
-                            Esta é uma oferta especial limitada. Certifique-se de que possui saldo suficiente em sua conta para participar desta promoção especial da Mengniu Company.
+
+                        <p className="mt-10 text-center text-slate-400 text-[11px] leading-relaxed lowercase font-medium opacity-70">
+                            esta oferta faz parte da promoção exclusiva mengniu. certifique-se de possuir o valor disponível em seu balance.
                         </p>
                     </div>
-                </div>
+                </motion.div>
             </main>
 
-            {/* Purchase Result Modal */}
-            {isResultModalOpen && purchaseResult && (
-                <div className="fixed inset-0 z-[10001] flex items-center justify-center p-4">
-                    <div 
-                        className="absolute inset-0 bg-black/60 backdrop-blur-[1px]"
-                        onClick={() => setIsResultModalOpen(false)}
-                    />
-                    <div className="relative w-[85%] max-w-[320px] bg-white rounded-[2rem] p-8 shadow-2xl z-[10002] text-center flex flex-col items-center justify-center">
-                        <div className={`w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-4 ${purchaseResult.success ? 'bg-green-100 text-green-600' : 'bg-red-100 text-red-600'}`}>
-                            {purchaseResult.success ? (
-                                <svg className="w-8 h-8" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3} d="M5 13l4 4L19 7" />
-                                </svg>
-                            ) : (
-                                <X className="w-8 h-8" strokeWidth={3} />
-                            )}
-                        </div>
-                        
-                        <h3 className={`text-lg font-black lowercase mb-2 ${purchaseResult.success ? 'text-green-600' : 'text-red-600'}`}>
-                            {purchaseResult.success ? 'sucesso' : 'ops! houve um erro'}
-                        </h3>
-                        
-                        <p className="text-slate-600 text-[13px] lowercase leading-relaxed mb-8">
-                            {purchaseResult.message}
-                        </p>
-
-                        <button
-                            onClick={() => {
-                                setIsResultModalOpen(false);
-                                if (purchaseResult.success) navigate('/vip');
-                            }}
-                            className={`w-full h-11 rounded-2xl font-bold text-[14px] lowercase transition-none active:scale-95 shadow-lg ${
-                                purchaseResult.success 
-                                    ? 'bg-green-600 hover:bg-green-700 text-white' 
-                                    : 'bg-[#0000AA] hover:bg-blue-800 text-white'
-                            }`}
+            {/* Modal de Resultado seguindo padrão Mengniu */}
+            <AnimatePresence>
+                {isResultModalOpen && purchaseResult && (
+                    <div className="fixed inset-0 z-[10001] flex items-center justify-center p-5">
+                        <motion.div 
+                            initial={{ opacity: 0 }}
+                            animate={{ opacity: 1 }}
+                            exit={{ opacity: 0 }}
+                            className="absolute inset-0 bg-black/60 backdrop-blur-md"
+                            onClick={() => setIsResultModalOpen(false)}
+                        />
+                        <motion.div 
+                            initial={{ opacity: 0, scale: 0.85 }}
+                            animate={{ opacity: 1, scale: 1 }}
+                            exit={{ opacity: 0, scale: 0.85 }}
+                            className="relative w-full max-w-[330px] bg-white rounded-[3rem] p-10 shadow-2xl z-[10002] text-center flex flex-col items-center justify-center"
                         >
-                            entendido
-                        </button>
+                            <div className={`w-22 h-22 rounded-full flex items-center justify-center mx-auto mb-8 ${purchaseResult.success ? 'bg-green-100 text-green-600 shadow-xl shadow-green-100' : 'bg-red-100 text-red-600 shadow-xl shadow-red-100'}`}>
+                                {purchaseResult.success ? (
+                                    <svg className="w-11 h-11" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3} d="M5 13l4 4L19 7" />
+                                    </svg>
+                                ) : (
+                                    <X className="w-11 h-11" strokeWidth={3} />
+                                )}
+                            </div>
+                            
+                            <h3 className={`text-[20px] font-black lowercase mb-3 ${purchaseResult.success ? 'text-green-600' : 'text-red-500'}`}>
+                                {purchaseResult.success ? 'animal resgatado! ✨' : 'ops! saldo insuficiente'}
+                            </h3>
+                            
+                            <p className="text-slate-500 text-[14px] lowercase leading-relaxed mb-10 font-medium">
+                                {purchaseResult.message}
+                            </p>
+
+                            <button
+                                onClick={() => {
+                                    setIsResultModalOpen(false);
+                                    if (purchaseResult.success) navigate('/reproducao');
+                                }}
+                                className={`w-full h-13 rounded-2xl font-black text-[14.5px] lowercase transition-all active:scale-95 shadow-2xl ${
+                                    purchaseResult.success 
+                                        ? 'bg-green-600 text-white shadow-green-500/30' 
+                                        : 'bg-[#000080] text-white shadow-blue-500/30'
+                                }`}
+                            >
+                                {purchaseResult.success ? 'ver minha colheita' : 'ajuste de saldo'}
+                            </button>
+                        </motion.div>
                     </div>
-                </div>
-            )}
+                )}
+            </AnimatePresence>
         </div>
     );
 }
