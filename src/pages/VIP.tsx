@@ -27,6 +27,7 @@ export default function VIP() {
     totalRevenue: 0,
     dailyIncome: 0
   });
+  const [promoCount, setPromoCount] = useState(0);
 
   const [isPurchaseModalOpen, setIsPurchaseModalOpen] = useState(false);
   const [selectedProduct, setSelectedProduct] = useState<Product | null>(null);
@@ -128,6 +129,13 @@ export default function VIP() {
             dailyIncome: rendaColetada
           });
         }
+        // Buscar contagem de promoções ativas
+        const { count } = await supabase
+          .from('promocao_products')
+          .select('*', { count: 'exact', head: true })
+          .eq('status', 'active');
+        
+        setPromoCount(count || 0);
       } finally {
         done();
       }
@@ -162,12 +170,19 @@ export default function VIP() {
               </div>
             </div>
           </div>
-          <button
-            onClick={() => navigate('/promocao')}
-            className="bg-blue-600/50 text-white px-4 py-1 rounded-full text-[10px] font-semibold active:opacity-70 transition-none lowercase"
-          >
-            promoção
-          </button>
+          <div className="relative">
+            <button
+              onClick={() => navigate('/promocao')}
+              className="bg-blue-400 text-white px-4 py-1.5 rounded-full text-[10.5px] font-black active:scale-95 transition-all lowercase shadow-lg shadow-blue-900/20"
+            >
+              promoção
+            </button>
+            {promoCount > 0 && (
+              <span className="absolute -top-1.5 -right-1.5 bg-red-500 text-white text-[9px] font-black w-4.5 h-4.5 rounded-full flex items-center justify-center border-2 border-[#0000A5] shadow-sm animate-bounce">
+                {promoCount}
+              </span>
+            )}
+          </div>
         </div>
 
         <div className="mb-6">
