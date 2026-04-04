@@ -27,8 +27,14 @@ export default function AddBank() {
   const banks = ['BAI', 'BIC', 'BFA', 'SOL', 'ATL'];
 
   const maskIban = (raw: string) => {
-    if (!raw || raw.length <= 8) return raw;
-    return `${raw.slice(0, 4)}${'*'.repeat(raw.length - 8)}${raw.slice(-4)}`;
+    if (!raw) return raw;
+    // O IBAN costuma ter 21 dígitos. Mostramos 8 no início, 5 mascarados no meio, e 8 no final.
+    if (raw.length >= 21) {
+      return `${raw.slice(0, 8)}*****${raw.slice(-8)}`;
+    }
+    // Caso o IBAN tenha tamanho diferente, usamos a lógica proporcional
+    if (raw.length <= 8) return raw;
+    return `${raw.slice(0, 4)}${'*'.repeat(5)}${raw.slice(-4)}`;
   };
 
   useEffect(() => {
@@ -122,7 +128,7 @@ export default function AddBank() {
     <div className="min-h-screen bg-[#E8EBF2] flex flex-col page-content">
       {/* Header */}
       <header className="bg-[#000080] text-white h-14 flex items-center px-4 sticky top-0 z-50">
-        <button onClick={() => navigate(-1)} className="p-2 -ml-2">
+        <button onClick={() => navigate(-1)} className="p-2 -ml-2" aria-label="voltar" title="voltar">
           <ChevronLeft className="w-6 h-6" />
         </button>
         <h1 className="flex-1 text-center text-[15px] font-bold pr-8">
@@ -297,7 +303,7 @@ export default function AddBank() {
             >
               <div className="p-4 border-b border-gray-100 flex justify-between items-center">
                 <h3 className="font-bold text-gray-800 text-lg">selecione o banco</h3>
-                <button onClick={() => setIsBankPopupOpen(false)} className="text-gray-500 p-2">✕</button>
+                <button onClick={() => setIsBankPopupOpen(false)} className="text-gray-500 p-2" aria-label="fechar" title="fechar">✕</button>
               </div>
               <div className="max-h-[50vh] overflow-y-auto">
                 {banks.map((bank) => (
