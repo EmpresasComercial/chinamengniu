@@ -104,6 +104,7 @@ export default function Profile() {
 
   const menuItems = [
     { name: 'Convidar amigos', icon: Rocket, path: '/convidar' },
+    { name: 'Recarregar USDT', icon: CircleDollarSign, path: '/recarregar-usdt' },
     { name: 'Minha equipe', icon: Users, path: '/equipe' },
     { name: 'Registros de conta', icon: BarChart3, path: '/detalhes' },
     { name: 'Trocar saldo', icon: CircleDollarSign, path: '/transferencia-de-fundos' },
@@ -178,39 +179,20 @@ export default function Profile() {
         </div>
 
         {/* Action Buttons */}
-        <div className="grid grid-cols-3 gap-2 mt-6">
+        <div className="grid grid-cols-2 gap-3 mt-6">
           <button
             onClick={() => navigate('/recarregar')}
-            className="bg-[#D6F174] text-black font-bold h-[45px] rounded-lg px-2 flex items-center justify-between shadow-sm"
+            className="bg-[#D6F174] text-black font-bold h-[45px] rounded-lg px-3 flex items-center justify-center gap-2 shadow-sm active:scale-95 transition-transform"
           >
+            <img src="/deposit1-Dk3ugVyJ.png" alt="Recarregar" className="w-5 h-5 object-contain shrink-0" />
             <span className="text-[12.5px]">recarregar</span>
-            <img src="/deposit1-Dk3ugVyJ.png" alt="Recarregar" className="w-6 h-6 object-contain shrink-0" />
-          </button>
-          <button
-            onClick={async () => {
-              // Pre-check USDT wallet availability before navigating
-              const { data: wallet } = await supabase
-                .from('usdt_empresarial')
-                .select('endereco_carteira')
-                .eq('ativo', true)
-                .single();
-              if (!wallet?.endereco_carteira) {
-                showProfileNotification('Endereço de pagamento em USDT indisponível.');
-                return;
-              }
-              navigate('/recarregar-usdt');
-            }}
-            className="bg-[#00D1FF] text-white font-bold h-[45px] rounded-lg px-2 flex items-center justify-between shadow-sm"
-          >
-            <span className="text-[12.5px]">recarga USDT</span>
-            <img src="/image-svasa.png" alt="USDT" className="w-8 h-8 object-contain shrink-0" />
           </button>
           <button
             onClick={() => navigate('/retirar')}
-            className="bg-[#D6F174] text-black font-bold h-[45px] rounded-lg px-2 flex items-center justify-between shadow-sm"
+            className="bg-[#D6F174] text-black font-bold h-[45px] rounded-lg px-3 flex items-center justify-center gap-2 shadow-sm active:scale-95 transition-transform"
           >
+            <img src="/withdraw1-pLMbG-t2.png" alt="Extrair" className="w-5 h-5 object-contain shrink-0" />
             <span className="text-[12.5px]">extrair</span>
-            <img src="/withdraw1-pLMbG-t2.png" alt="Extrair" className="w-6 h-6 object-contain shrink-0" />
           </button>
         </div>
       </header>
