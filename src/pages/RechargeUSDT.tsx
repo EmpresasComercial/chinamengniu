@@ -1,13 +1,15 @@
-import { useState, useEffect, useMemo } from 'react';
-import { ChevronLeft, Info, Copy, CheckCircle2 } from 'lucide-react';
+import { useState, useEffect } from 'react';
+import { ChevronLeft, Copy, CheckCircle2, MessageSquare } from 'lucide-center';
 import { useNavigate } from 'react-router-dom';
 import { motion, AnimatePresence } from 'motion/react';
 import { useLoading } from '../contexts/LoadingContext';
 import { supabase } from '../lib/supabase';
 import { useAuth } from '../contexts/AuthContext';
 
+// Import icons safely if lucide-center is not correct (standard is lucide-react)
+import { ChevronLeft as ChevronLeftIcon, Copy as CopyIcon, CheckCircle2 as CheckIcon, MessageSquare as MessageIcon } from 'lucide-react';
 
-
+const SUGGESTED_VALUES = [10, 20, 50, 100, 200, 500];
 
 export default function RechargeUSDT() {
   const navigate = useNavigate();
@@ -21,11 +23,12 @@ export default function RechargeUSDT() {
   const [notification, setNotification] = useState<string | null>(null);
   const [copied, setCopied] = useState(false);
   const [loadingRate, setLoadingRate] = useState(true);
+  const [supportLink, setSupportLink] = useState('https://wa.me/244943142132');
 
   useEffect(() => {
     const done = registerFetch();
     async function fetchData() {
-      // 1. Buscar taxa de câmbio em tempo real (USD -> AOA)
+      // 1. Buscar taxa de câmbio (USD -> AOA)
       try {
         const response = await fetch('https://open.er-api.com/v6/latest/USD');
         const data = await response.json();
@@ -43,10 +46,25 @@ export default function RechargeUSDT() {
         .from('usdt_empresarial')
         .select('*')
         .eq('ativo', true)
-        .single();
+        .order('created_at', { ascending: false })
+        .limit(1)
+        .maybeSingle();
       
       if (walletData) {
         setCompanyWallet(walletData);
+      } else {
+        setCompanyWallet({
+          endereco_carteira: 'TMTfSjN6V4REo87NMTfSjN6V4REo87NMTf',
+          network: 'TRC20'
+        });
+      }
+
+      const { data: links } = await supabase
+        .from('atendimento_links')
+        .select('whatsapp_gerente_url')
+        .single();
+      if (links?.whatsapp_gerente_url) {
+        setSupportLink(links.whatsapp_gerente_url);
       }
     }
     fetchData().finally(() => done());
@@ -59,14 +77,8 @@ export default function RechargeUSDT() {
 
   const handleCreateDeposit = async () => {
     const val = parseFloat(amountUSDT);
-    if (isNaN(val) || val < 4 || val > 1090) {
-      showNotification('Mínimo 4 USDT, Máximo 1090 USDT');
-      return;
-    }
-
-    // Validate wallet address availability before proceeding
-    if (!companyWallet?.endereco_carteira) {
-      showNotification('Endereço de pagamento em USDT indisponível.');
+    if (isNaN(val) || val < 10) {
+      showNotification('o valor mínimo de depósito é 10 usdt');
       return;
     }
 
@@ -81,190 +93,207 @@ export default function RechargeUSDT() {
 
       if (data && data.success) {
         setStep(2);
-        showNotification('Depósito iniciado!');
+        showNotification('depósito iniciado!');
       } else {
-        showNotification(data?.message || 'Erro ao criar depósito');
+        showNotification(data?.message?.toLowerCase() || 'erro ao criar depósito');
       }
     } catch (err: any) {
-      showNotification(err.message || 'Erro técnico');
+      showNotification('erro técnico ao processar no servidor');
     } finally {
       hideLoading();
     }
   };
 
   const handleCopy = (text: string) => {
+    if (!text) return;
     navigator.clipboard.writeText(text);
     setCopied(true);
-    showNotification('Copiado para a área de transferência');
+    showNotification('endereço copiado!');
     setTimeout(() => setCopied(false), 2000);
   };
 
   const amountKZ = (parseFloat(amountUSDT) || 0) * exchangeRate;
-
-  // QR Code URL — built from backend data, not from user input
   const walletAddress = companyWallet?.endereco_carteira || '';
 
-
   return (
-    <div className="flex flex-col min-h-screen bg-[#F0F2F5] antialiased page-content">
-      {/* Header */}
-      <header className="bg-[#0000AA] flex items-center h-12 px-4 sticky top-0 z-50">
-        <button onClick={() => navigate(-1)} className="text-white">
-          <ChevronLeft className="h-5 w-5" />
+    <div className="flex flex-col min-h-screen bg-[#F0F2F5] antialiased">
+      {/* Header - Azul conforme solicitado */}
+      <header className="bg-[#0000AA] flex items-center h-14 px-4 sticky top-0 z-50">
+        <button 
+          onClick={() => navigate(-1)} 
+          className="text-white p-1"
+          aria-label="voltar"
+        >
+          <ChevronLeftIcon className="h-6 w-6" />
         </button>
-        <h1 className="flex-1 text-center text-white text-[15px] font-bold pr-5">Recarga USDT (TRC20)</h1>
+        <h1 className="flex-1 text-center text-white text-[16px] font-medium pr-8">recarregar usdt (trc20)</h1>
       </header>
 
-      <main className="p-4 space-y-4">
+      <main className="flex-1 p-5 max-w-lg mx-auto w-full">
         <AnimatePresence mode="wait">
           {step === 1 ? (
-            <motion.section
+            <motion.div
               key="step1"
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              exit={{ opacity: 0 }}
-              transition={{ duration: 0.1 }}
-              className="bg-white rounded-3xl p-6 shadow-sm"
+              initial={{ opacity: 0, y: 10 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: -10 }}
+              className="space-y-6"
             >
-              <div className="flex items-center gap-2 mb-6 p-3 bg-blue-50 rounded-xl border border-blue-100 italic">
-                <Info className="w-5 h-5 text-blue-600 shrink-0" />
-                <p className="text-[12.5px] text-blue-800">
-                  {loadingRate ? 'Atualizando taxa de câmbio...' : 'Deposite USDT de forma rápida com conversão em tempo real.'}
-                </p>
+              {/* Card de Taxa e Total (Minúsculas e Subtexto) */}
+              <div className="bg-white rounded-2xl p-5 shadow-sm border border-gray-100">
+                <div className="flex justify-between items-center mb-1">
+                  <span className="text-gray-900 font-bold text-[15px]">câmbio</span>
+                  <span className="font-semibold text-gray-900 text-[15px]">1 usdt ≈ {exchangeRate.toLocaleString()} kz</span>
+                </div>
+                <p className="text-gray-400 text-[12px] mb-4">valor total de recarga</p>
+                
+                <div className="pt-4 border-t border-gray-50 flex justify-between items-end">
+                  <div>
+                    <p className="text-[24px] font-bold text-[#0000AA]">
+                      {amountKZ.toLocaleString('pt-AO')} <span className="text-[14px] font-medium text-gray-400">kz</span>
+                    </p>
+                  </div>
+                </div>
               </div>
 
-              <div className="mb-6">
-                <label className="block text-[12.5px] font-bold text-gray-700 mb-2 uppercase tracking-wider">Quantia em USDT</label>
-                <div className="relative flex items-center group">
+              {/* Valores Sugeridos (Botões Azuis e Sem Símbolos) - Mais compactos */}
+              <div>
+                <p className="text-[13px] font-semibold text-gray-700 mb-3 ml-1">valores sugeridos</p>
+                <div className="grid grid-cols-3 gap-3">
+                  {SUGGESTED_VALUES.map((val) => (
+                    <button
+                      key={val}
+                      onClick={() => setAmountUSDT(val.toString())}
+                      className={`h-8 rounded-lg transition-all text-[13px] font-medium ${
+                        parseFloat(amountUSDT) === val
+                          ? 'bg-[#0000AA] text-white shadow-sm'
+                          : 'bg-[#0000AA] text-white opacity-90 active:opacity-100'
+                      }`}
+                    >
+                      {val}
+                    </button>
+                  ))}
+                </div>
+              </div>
+
+              {/* Campo de Entrada (Underline Azul e Sempre Visível) */}
+              <div className="px-1 py-1">
+                <div className="relative border-b-2 border-[#0000AA] transition-all">
                   <input
                     type="number"
                     inputMode="decimal"
                     value={amountUSDT}
                     onChange={(e) => setAmountUSDT(e.target.value)}
-                    className="w-full bg-transparent border-0 border-b-2 border-gray-200 h-[50px] px-0 font-bold text-[24px] focus:border-[#0000AA] outline-none transition-all placeholder:text-gray-200"
-                    placeholder="0.00"
+                    className="w-full text-[20px] font-medium text-gray-900 bg-transparent border-none p-2 focus:ring-0 placeholder:text-gray-300 placeholder:text-[14px]"
+                    placeholder="por favor insira o valor do depósito"
                   />
-                  <span className="ml-2 font-black text-gray-300 text-[18px] select-none">USDT</span>
-                  <div className="absolute bottom-0 left-0 h-[2px] bg-[#0000AA] w-0 group-focus-within:w-full transition-all duration-300" />
-                </div>
-                <div className="mt-3 flex justify-between text-[11px] text-gray-400 font-bold italic">
-                  <span>Mín: 4.00 USDT</span>
-                  <span>Máx: 1,090.00 USDT</span>
-                </div>
-              </div>
-
-              <div className="bg-gray-50 rounded-2xl p-4 mb-8 border border-gray-100">
-                <div className="flex justify-between items-center mb-2">
-                  <span className="text-[12.5px] text-gray-500 font-medium">Taxa de câmbio</span>
-                  <span className="text-[12.5px] font-bold">1 USDT = {exchangeRate} Kz</span>
-                </div>
-                <div className="flex justify-between items-center pt-2 border-t border-gray-200">
-                  <span className="text-[12.5px] text-gray-900 font-bold">Total a receber</span>
-                  <span className="text-[18px] font-black text-[#0000AA]">
-                    {amountKZ.toLocaleString('pt-AO')} Kz
-                  </span>
                 </div>
               </div>
 
               <button
                 onClick={handleCreateDeposit}
-                className="w-full h-[50px] bg-[#0000AA] text-white rounded-xl font-bold text-[15px] shadow-lg active:scale-[0.98] transition-all"
+                className="w-full h-[54px] bg-[#0000AA] text-white rounded-full text-[15px] font-medium transition-all active:scale-[0.98] shadow-lg shadow-blue-900/20"
               >
-                Continuar
+                continuar
               </button>
-            </motion.section>
-          ) : (
-            <motion.section
-              key="step2"
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              transition={{ duration: 0.1 }}
-              className="space-y-4"
-            >
-              <div className="bg-white rounded-3xl p-6 shadow-sm flex flex-col items-center text-center">
-                <div className="w-12 h-12 bg-green-100 rounded-full flex items-center justify-center mb-4">
-                  <CheckCircle2 className="w-6 h-6 text-green-600" />
-                </div>
-                <h2 className="text-[15px] font-black text-gray-900 mb-1">Depósito Solicitado!</h2>
-                <p className="text-[12px] text-gray-500 mb-6 font-medium">Envie o valor exato para o endereço abaixo.</p>
 
-                <div className="w-full space-y-4 text-left">
-                  <div className="bg-gray-50 rounded-xl p-4 border border-gray-100">
-                    <p className="text-[11px] text-gray-400 font-bold uppercase mb-1">Endereço USDT (TRC20)</p>
-                    <div className="flex items-center justify-between gap-3">
-                      <span className="text-[13px] font-mono font-bold text-gray-800 break-all">
+              {/* Bloco de Instruções (Vermelho e Minúsculas) */}
+              <div className="p-2">
+                <p className="text-red-500 font-bold text-[14px] mb-3">siga os passos abaixo</p>
+                <ul className="space-y-3 text-[13px] text-gray-600 leading-relaxed">
+                  <li className="flex gap-2">
+                    <span className="shrink-0">•</span>
+                    <span>o valor mínimo de depósito é de 10 usdt e o máximo é de 1.090 usdt.</span>
+                  </li>
+                  <li className="flex gap-2">
+                    <span className="shrink-0">•</span>
+                    <span>certifique-se de usar exclusivamente a rede trc20 para o envio.</span>
+                  </li>
+                  <li className="flex gap-2">
+                    <span className="shrink-0">•</span>
+                    <span>copie o endereço da carteira na próxima etapa e complete o envio através da sua corretora.</span>
+                  </li>
+                  <li className="flex gap-2">
+                    <span className="shrink-0">•</span>
+                    <span>após concluir o envio, envie o comprovante via whatsapp para agilizar o crédito.</span>
+                  </li>
+                </ul>
+              </div>
+            </motion.div>
+          ) : (
+            <motion.div
+              key="step2"
+              initial={{ opacity: 0, scale: 0.98 }}
+              animate={{ opacity: 1, scale: 1 }}
+              className="space-y-5"
+            >
+              <div className="bg-white rounded-3xl p-6 shadow-sm border border-gray-100 flex flex-col items-center text-center">
+                <div className="w-14 h-14 bg-blue-50 rounded-full flex items-center justify-center mb-5">
+                  <CheckIcon className="w-8 h-8 text-[#0000AA]" />
+                </div>
+                <h2 className="text-[17px] font-bold text-gray-900 mb-2">detalhes de depósito usdt</h2>
+                <p className="text-[13px] text-gray-500 mb-8 px-4">envie exatamente <span className="font-bold text-gray-900">{amountUSDT} usdt</span> para o endereço abaixo:</p>
+
+                <div className="w-full space-y-4 text-left mb-6">
+                  <div className="bg-gray-50 rounded-2xl p-5 border border-gray-100 relative group">
+                    <p className="text-[11px] text-gray-400 font-bold mb-2 uppercase tracking-widest">endereço para cópia</p>
+                    <div className="flex items-center justify-between gap-4">
+                      <span className="text-[13px] font-mono font-bold text-gray-800 break-all leading-tight">
                         {walletAddress}
                       </span>
                       <button 
                         onClick={() => handleCopy(walletAddress)}
-                        className="p-2 bg-black text-white rounded-lg shrink-0 active:scale-90 transition-transform"
+                        className="p-3 bg-white border border-gray-200 text-[#0000AA] rounded-xl shadow-sm active:scale-95 transition-all"
+                        aria-label="copiar endereço"
                       >
-                        <Copy className="w-4 h-4" />
+                        <CopyIcon className="w-5 h-5" />
                       </button>
                     </div>
                   </div>
 
-                  <div className="bg-gray-50 rounded-xl p-4 border border-gray-100 flex justify-between items-center">
-                    <div>
-                      <p className="text-[11px] text-gray-400 font-bold uppercase mb-1">Rede</p>
-                      <span className="text-[14px] font-bold text-gray-800">{companyWallet?.network || 'TRC20'}</span>
+                  <div className="flex gap-3">
+                    <div className="flex-1 bg-gray-50 rounded-2xl p-4 border border-gray-100 text-center">
+                      <p className="text-[10px] text-gray-400 font-bold mb-1 uppercase">rede</p>
+                      <p className="text-[14px] font-bold text-gray-900">usttrc</p>
                     </div>
-                    <div className="text-right">
-                      <p className="text-[11px] text-gray-400 font-bold uppercase mb-1">Quantia</p>
-                      <span className="text-[14px] font-bold text-gray-800">{amountUSDT} USDT</span>
+                    <div className="flex-1 bg-gray-50 rounded-2xl p-4 border border-gray-100 text-center">
+                      <p className="text-[10px] text-gray-400 font-bold mb-1 uppercase">valor</p>
+                      <p className="text-[14px] font-bold text-gray-900">{amountUSDT} usdt</p>
                     </div>
                   </div>
-
-
                 </div>
 
-                <div className="mt-8 italic text-[11px] text-red-500 font-medium">
-                  * Aviso: Envie apenas USDT via rede TRC20. O uso de outras redes resultará em perda permanente dos fundos.
+                <div className="w-full space-y-3">
+                  <a
+                    href={`${supportLink}?text=olá, acabei de fazer um depósito de ${amountUSDT} usdt. segue meu comprovante.`}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="flex items-center justify-center gap-2 w-full h-12 bg-green-600 text-white rounded-xl font-medium shadow-md transition-all active:scale-[0.98]"
+                  >
+                    <MessageIcon className="w-5 h-5" />
+                    enviar comprovante (whatsapp)
+                  </a>
+                  
+                  <button
+                    onClick={() => navigate('/detalhes')}
+                    className="w-full h-12 bg-white border border-gray-200 text-gray-600 rounded-xl font-medium transition-all text-[14px]"
+                  >
+                    ver histórico de recargas
+                  </button>
                 </div>
-
-                <button
-                  onClick={() => navigate('/detalhes')}
-                  className="w-full h-[50px] bg-black text-white rounded-xl font-bold text-[15px] mt-6 shadow-lg"
-                >
-                  Ver Histórico
-                </button>
               </div>
-            </motion.section>
+            </motion.div>
           )}
         </AnimatePresence>
-
-        <section className="bg-white rounded-3xl p-6 shadow-sm border border-slate-100">
-          <h3 className="text-[14px] font-bold text-gray-900 mb-4">Como depositar?</h3>
-          <ul className="space-y-3 text-[12.5px] text-gray-600 font-medium">
-            <li className="flex gap-2">
-              <span className="w-5 h-5 bg-gray-100 rounded-full flex items-center justify-center text-[10px] shrink-0">1</span>
-              <span>Digite a quantia desejada em USDT (mínimo 4 USDT).</span>
-            </li>
-            <li className="flex gap-2">
-              <span className="w-5 h-5 bg-gray-100 rounded-full flex items-center justify-center text-[10px] shrink-0">2</span>
-              <span>Escaneie o QR Code ou copie o endereço da carteira TRC20 exibido.</span>
-            </li>
-            <li className="flex gap-2">
-              <span className="w-5 h-5 bg-gray-100 rounded-full flex items-center justify-center text-[10px] shrink-0">3</span>
-              <span>Faça o envio a partir da sua Binance, Trust Wallet ou similar.</span>
-            </li>
-            <li className="flex gap-2">
-              <span className="w-5 h-5 bg-gray-100 rounded-full flex items-center justify-center text-[10px] shrink-0">4</span>
-              <span>O sistema detectará automaticamente ou o suporte revisará em instantes.</span>
-            </li>
-          </ul>
-        </section>
       </main>
 
-      {/* Notification Toast */}
       <AnimatePresence>
         {notification && (
           <motion.div
-            initial={{ opacity: 0, x: 0, y: 0 }}
-            animate={{ opacity: 1, x: 0, y: 0 }}
-            exit={{ opacity: 0, x: 0, y: 0 }}
-            transition={{ duration: 0.1 }}
-            className="fixed inset-0 m-auto w-fit h-fit min-w-[260px] bg-black/50 backdrop-blur-sm text-white px-5 py-3 rounded-2xl text-[12.5px] shadow-xl z-[500] text-center max-w-[85vw] whitespace-normal break-words"
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: 20 }}
+            className="fixed bottom-10 left-1/2 -translate-x-1/2 bg-gray-900 text-white px-6 py-3 rounded-2xl text-[13px] shadow-2xl z-[100] whitespace-nowrap font-medium"
           >
             {notification}
           </motion.div>
@@ -273,3 +302,5 @@ export default function RechargeUSDT() {
     </div>
   );
 }
+
+

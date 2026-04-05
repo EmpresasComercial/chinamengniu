@@ -182,14 +182,14 @@ export default function Profile() {
         <div className="grid grid-cols-2 gap-3 mt-6">
           <button
             onClick={() => navigate('/recarregar')}
-            className="bg-[#D6F174] text-black font-bold h-[45px] rounded-lg px-3 flex items-center justify-center gap-2 shadow-sm active:scale-95 transition-transform"
+            className="bg-[#D6F174] text-black font-bold h-[54px] rounded-full px-6 flex items-center justify-center gap-2 shadow-sm active:scale-95 transition-transform"
           >
             <img src="/deposit1-Dk3ugVyJ.png" alt="Recarregar" className="w-5 h-5 object-contain shrink-0" />
             <span className="text-[12.5px]">recarregar</span>
           </button>
           <button
             onClick={() => navigate('/retirar')}
-            className="bg-[#D6F174] text-black font-bold h-[45px] rounded-lg px-3 flex items-center justify-center gap-2 shadow-sm active:scale-95 transition-transform"
+            className="bg-[#D6F174] text-black font-bold h-[54px] rounded-full px-6 flex items-center justify-center gap-2 shadow-sm active:scale-95 transition-transform"
           >
             <img src="/withdraw1-pLMbG-t2.png" alt="Extrair" className="w-5 h-5 object-contain shrink-0" />
             <span className="text-[12.5px]">extrair</span>
@@ -241,7 +241,7 @@ export default function Profile() {
             hideLoading();
             navigate('/login');
           }}
-          className="w-full bg-[#0000B8] text-white font-bold h-[45px] mt-8 mb-20 rounded-full text-[15px]"
+          className="w-full bg-[#0000B8] text-white font-bold h-[50px] mt-8 mb-20 rounded-full text-[15px]"
         >
           sair
         </button>
