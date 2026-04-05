@@ -104,15 +104,15 @@ export default function Profile() {
   const fmt = (val: number) => val.toLocaleString('pt-AO', { minimumFractionDigits: 2 });
 
   const menuItems = [
-    { name: 'Extrair', icon: ArrowUpRight, path: '/retirar' },
-    { name: 'Recarregar', icon: PlusCircle, path: '/recarregar' },
-    { name: 'Recarregar USDT', icon: CircleDollarSign, path: '/recarregar-usdt' },
-    { name: 'Convidar amigos', icon: Rocket, path: '/convidar' },
-    { name: 'Minha equipe', icon: Users, path: '/equipe' },
-    { name: 'Registros de conta', icon: BarChart3, path: '/detalhes' },
-    { name: 'Trocar saldo', icon: ArrowRightLeft, path: '/transferencia-de-fundos' },
-    { name: 'Centro de segurança', icon: ShieldCheck, path: '/centro-de-seguranca' },
-    { name: 'Perguntas frequentes', icon: HelpCircle, path: '/central-de-ajuda' },
+    { name: 'extrair', icon: ArrowUpRight, path: '/retirar' },
+    { name: 'recarregar', icon: PlusCircle, path: '/recarregar' },
+    { name: 'recarregar usdt', icon: CircleDollarSign, path: '/recarregar-usdt' },
+    { name: 'convidar amigos', icon: Rocket, path: '/convidar' },
+    { name: 'minha equipe', icon: Users, path: '/equipe' },
+    { name: 'registros de conta', icon: BarChart3, path: '/detalhes' },
+    { name: 'trocar saldo', icon: ArrowRightLeft, path: '/transferencia-de-fundos' },
+    { name: 'centro de segurança', icon: ShieldCheck, path: '/centro-de-seguranca' },
+    { name: 'perguntas frequentes', icon: HelpCircle, path: '/central-de-ajuda' },
   ];
 
   return (
@@ -133,15 +133,15 @@ export default function Profile() {
           <div>
             <div className="flex items-center space-x-2">
               <span className="font-bold text-[15px] truncate max-w-[150px]">
-                {profile?.phone ? `+244 ${profile.phone}` : 'Carregando...'}
+                {profile?.phone ? `+244 ${profile.phone}` : 'carregando...'}
               </span>
               <span className="bg-yellow-500 text-[10px] px-2 rounded-full text-black font-bold">
-                {profile?.state || 'VIP0'}
+                {profile?.state || 'vip0'}
               </span>
             </div>
             <div className="flex items-center mt-1">
               <span className="text-[12.5px] text-yellow-400 font-bold tracking-wider">
-                ID: {profile?.invite_code || '---'}
+                id: {profile?.invite_code || '---'}
               </span>
               <button
                 onClick={handleCopyUID}
@@ -156,7 +156,7 @@ export default function Profile() {
 
         <div className="mt-8 flex flex-col items-start px-4">
           <div className="flex items-center gap-2 mb-1 text-white/90">
-            <p className="text-[11px] font-medium tracking-wide">Balanço contabilizado</p>
+            <p className="text-[11px] font-medium tracking-wide">balanço contabilizado</p>
             <button 
               onClick={() => setShowBalance(!showBalance)}
               className="opacity-70 active:opacity-100 transition-opacity"
@@ -172,15 +172,15 @@ export default function Profile() {
         {/* Linha 2: conta de reprodução + retirada total + comissão total equipe */}
         <div className="grid grid-cols-3 gap-1 mt-6">
           <div className="text-center">
-            <p className="text-[9px] opacity-80 whitespace-nowrap">Conta de reprodução</p>
+            <p className="text-[9px] opacity-80 whitespace-nowrap">conta de reprodução</p>
             <p className="font-bold text-[13px] mt-1 whitespace-nowrap">{fmt(financialData.contaReproducao)} Kz</p>
           </div>
           <div className="text-center border-l border-white/10">
-            <p className="text-[9px] opacity-80 whitespace-nowrap">Retirada total</p>
+            <p className="text-[9px] opacity-80 whitespace-nowrap">retirada total</p>
             <p className="font-bold text-[13px] mt-1 whitespace-nowrap">{fmt(financialData.retiradaTotal)} Kz</p>
           </div>
           <div className="text-center border-l border-white/10">
-            <p className="text-[9px] opacity-80 whitespace-nowrap">Comissão total equipe</p>
+            <p className="text-[9px] opacity-80 whitespace-nowrap">comissão total equipe</p>
             <p className="font-bold text-[13px] mt-1 whitespace-nowrap">{fmt(financialData.comissaoTotalEquipe)} Kz</p>
           </div>
         </div>
@@ -192,15 +192,15 @@ export default function Profile() {
         <div className="absolute right-[-20px] top-4 w-24 h-24 rounded-full bg-white/5 border-2 border-white/10"></div>
         <div className="grid grid-cols-3 gap-1 text-center py-4 border-t border-white/10 px-1">
           <div>
-            <p className="text-[9px] opacity-70 whitespace-nowrap">Recarga total</p>
+            <p className="text-[9px] opacity-70 whitespace-nowrap">recarga total</p>
             <p className="font-bold text-[13px] whitespace-nowrap">{fmt(Number(profile?.reloaded_amount || 0))} Kz</p>
           </div>
           <div className="border-l border-white/10 px-1">
-            <p className="text-[9px] opacity-70 whitespace-nowrap">Ganhos de hoje</p>
+            <p className="text-[9px] opacity-70 whitespace-nowrap">ganhos de hoje</p>
             <p className="font-bold text-[13px] whitespace-nowrap">{fmt(financialData.ganhoHoje)} Kz</p>
           </div>
           <div className="border-l border-white/10 px-1">
-            <p className="text-[9px] opacity-70 whitespace-nowrap">Comissão de hoje</p>
+            <p className="text-[9px] opacity-70 whitespace-nowrap">comissão de hoje</p>
             <p className="font-bold text-[13px] whitespace-nowrap">{fmt(financialData.comissaoHoje)} Kz</p>
           </div>
         </div>
@@ -254,7 +254,7 @@ export default function Profile() {
           }}
           className="w-full bg-[#0000B8] text-white font-bold h-[50px] mt-8 mb-20 rounded-full text-[15px] shadow-lg shadow-blue-900/20 active:scale-[0.98] transition-all"
         >
-          Sair
+          sair
         </motion.button>
       </section>
 

@@ -38,8 +38,9 @@ export default function Home() {
   }, []);
 
   useEffect(() => {
-    const handler = (e: Event) => {
-      e.preventDefault();
+    const handler = (e: any) => {
+      // NOTE: We don't call e.preventDefault() so the browser's own native 
+      // bottom bar/mini-infobar appears automatically when ready.
       setDeferredPrompt(e);
     };
 
@@ -59,24 +60,29 @@ export default function Home() {
     e.stopPropagation();
 
     if (deferredPrompt) {
-      // Android Chrome: acionar prompt nativo
-      deferredPrompt.prompt();
-      const { outcome } = await deferredPrompt.userChoice;
-      if (outcome === 'accepted') {
-        setNotification('Instalação iniciada!');
-        setTimeout(() => setNotification(null), 2500);
+      // Android Chrome: acionar prompt nativo capturado
+      try {
+        deferredPrompt.prompt();
+        const { outcome } = await deferredPrompt.userChoice;
+        if (outcome === 'accepted') {
+          setNotification('instalação iniciada!');
+          setTimeout(() => setNotification(null), 2500);
+        }
+        setDeferredPrompt(null);
+      } catch (err) {
+        setNotification('por favor, utilize o menu do navegador para instalar');
+        setTimeout(() => setNotification(null), 3500);
       }
-      setDeferredPrompt(null);
     } else if (isIos() && !isInStandaloneMode()) {
-      // iOS Safari: mostrar guia visual
+      // iOS Safari: mostrar guia visual (iOS não tem beforeinstallprompt)
       setIsIosModalOpen(true);
     } else if (isInStandaloneMode()) {
-      setNotification('Aplicativo já está instalado!');
+      setNotification('aplicativo já está instalado!');
       setTimeout(() => setNotification(null), 2500);
     } else {
-      // Android sem prompt: app pode já estar instalado ou contexto não elegível
-      setNotification('Para instalar, use o menu do navegador → "Adicionar ao ecrã inicial"');
-      setTimeout(() => setNotification(null), 3500);
+      // Caso o evento ainda não tenha disparado ou já tenha sido usado
+      setNotification('por favor, use o menu do navegador → "adicionar ao ecrã inicial"');
+      setTimeout(() => setNotification(null), 4000);
     }
   }, [deferredPrompt, isIos, isInStandaloneMode]);
 
@@ -224,7 +230,7 @@ export default function Home() {
               onClick={handleInstallApp}
               className="text-[#0000AA] font-black text-[22px] mb-1 underline decoration-2 underline-offset-4 cursor-pointer active:opacity-70 transition-none"
             >
-              Baixe o aplicativo
+              baixe o aplicativo
             </h3>
             <p className="text-[#0000AA]/60 text-[11px] font-bold uppercase tracking-tight">mengniu company premium</p>
           </div>
@@ -235,14 +241,14 @@ export default function Home() {
               className="flex-1 bg-[#0000AA] text-white px-4 rounded-2xl text-[12.5px] font-black shadow-lg shadow-blue-900/10 h-[44px] flex items-center justify-center active:scale-[0.96] transition-none whitespace-nowrap"
             >
               <img src="/deposit1-Dk3ugVyJ.png" alt="Recarregar" className="w-5 h-5 mr-1.5 object-contain" />
-              Recarregar
+              recarregar
             </button>
             <button
               onClick={(e) => { e.stopPropagation(); navigate('/retirar'); }}
               className="flex-1 bg-white text-[#0000AA] border border-blue-100 px-4 rounded-2xl text-[12.5px] font-black shadow-lg shadow-blue-900/5 h-[44px] flex items-center justify-center active:scale-[0.96] transition-none whitespace-nowrap"
             >
               <img src="/withdraw1-pLMbG-t2.png" alt="Extrair" className="w-5 h-5 mr-1.5 object-contain" />
-              Extrair
+              extrair
             </button>
           </div>
 

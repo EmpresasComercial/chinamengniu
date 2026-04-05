@@ -15,7 +15,10 @@ export default defineConfig(({ mode }) => {
       tailwindcss(),
       VitePWA({
         registerType: 'autoUpdate',
-        includeAssets: ['pwa-icon.png', 'favicon.ico', 'robots.txt', 'apple-touch-icon.png'],
+        devOptions: {
+          enabled: true
+        },
+        includeAssets: ['pwa-icon.png'],
         manifest: {
           name: 'Mengniu Company',
           short_name: 'Mengniu',
@@ -23,6 +26,8 @@ export default defineConfig(({ mode }) => {
           theme_color: '#000080',
           background_color: '#ffffff',
           display: 'standalone',
+          scope: '/',
+          start_url: '/',
           icons: [
             {
               src: 'pwa-icon.png',
