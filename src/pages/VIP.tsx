@@ -267,7 +267,7 @@ export default function VIP() {
                     setSelectedProduct(vip);
                     setIsPurchaseModalOpen(true);
                   }}
-                  className="bg-[#0000AA] hover:bg-blue-800 text-white px-5 py-1.5 rounded-[8px] text-[11.5px] font-bold lowercase active:scale-95 transition-none shadow-md shadow-blue-900/10"
+                  className="bg-[#0000AA] hover:bg-blue-800 text-white px-5 h-7 flex items-center justify-center rounded-[8px] text-[11px] font-bold lowercase active:scale-95 transition-none shadow-md shadow-blue-900/10"
                 >
                   comprar
                 </button>

@@ -97,7 +97,7 @@ export default function VIPDetails() {
             </div>
             <div className="flex justify-between items-center border-b border-slate-100 pb-2">
               <span className="text-slate-500 text-[12px] font-medium"> rendimentos/diários</span>
-              <span className="text-slate-900 font-bold text-[14px]">4%</span>
+              <span className="text-slate-900 font-bold text-[14px]">{product?.price > 0 ? ((product.daily_income / product.price) * 100).toFixed(2) : '0.00'}%</span>
             </div>
             <div className="flex justify-between items-center border-b border-slate-100 pb-2">
               <span className="text-slate-500 text-[12px] font-medium">preço de adoção</span>
