@@ -182,17 +182,17 @@ export default function Profile() {
         <div className="grid grid-cols-2 gap-3 mt-6">
           <button
             onClick={() => navigate('/recarregar')}
-            className="bg-[#D6F174] text-black font-extrabold h-[70px] rounded-full px-6 flex items-center justify-center gap-2 shadow-sm active:scale-95 transition-transform"
+            className="bg-[#D6F174] text-black font-bold h-[50px] rounded-full px-6 flex items-center justify-center gap-2 shadow-sm active:scale-95 transition-transform"
           >
-            <img src="/deposit1-Dk3ugVyJ.png" alt="Recarregar" className="w-6 h-6 object-contain shrink-0" />
-            <span className="text-[15px]">recarregar</span>
+            <img src="/deposit1-Dk3ugVyJ.png" alt="Recarregar" className="w-5 h-5 object-contain shrink-0" />
+            <span className="text-[14px]">recarregar</span>
           </button>
           <button
             onClick={() => navigate('/retirar')}
-            className="bg-[#D6F174] text-black font-extrabold h-[70px] rounded-full px-6 flex items-center justify-center gap-2 shadow-sm active:scale-95 transition-transform"
+            className="bg-[#D6F174] text-black font-bold h-[50px] rounded-full px-6 flex items-center justify-center gap-2 shadow-sm active:scale-95 transition-transform"
           >
-            <img src="/withdraw1-pLMbG-t2.png" alt="Extrair" className="w-6 h-6 object-contain shrink-0" />
-            <span className="text-[15px]">extrair</span>
+            <img src="/withdraw1-pLMbG-t2.png" alt="Extrair" className="w-5 h-5 object-contain shrink-0" />
+            <span className="text-[14px]">extrair</span>
           </button>
         </div>
       </header>
@@ -241,7 +241,7 @@ export default function Profile() {
             hideLoading();
             navigate('/login');
           }}
-          className="w-full bg-[#0000B8] text-white font-extrabold h-[70px] mt-8 mb-20 rounded-full text-[17px] shadow-lg"
+          className="w-full bg-[#0000B8] text-white font-bold h-[50px] mt-8 mb-20 rounded-full text-[15px]"
         >
           sair
         </button>
