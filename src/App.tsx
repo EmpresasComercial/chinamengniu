@@ -80,6 +80,14 @@ export default function App() {
                   </PublicOnlyRoute>
                 }
               />
+              <Route
+                path="/register"
+                element={
+                  <PublicOnlyRoute>
+                    <Register />
+                  </PublicOnlyRoute>
+                }
+              />
 
               {/* ── ROTAS PRIVADAS (exigem utilizador autenticado) ── */}
               <Route element={<ProtectedRoute />}>

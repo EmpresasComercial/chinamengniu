@@ -15,10 +15,10 @@ export default function Register() {
   const [feedback, setFeedback] = useState<string | null>(null);
   const [isSupportModalOpen, setIsSupportModalOpen] = useState(false);
   const [links, setLinks] = useState({
-    whatsapp_gerente_url: 'https://wa.me/1234567890',
-    whatsapp_grupo_vendas_url: 'https://wa.me/1234567890',
-    link_app_atualizado: '#',
-    splash_message: 'carregando avisos...'
+    whatsapp_gerente_url: '',
+    whatsapp_grupo_vendas_url: '',
+    link_app_atualizado: '',
+    splash_message: 'carregando...'
   });
 
   const [formData, setFormData] = useState({
@@ -29,7 +29,7 @@ export default function Register() {
   });
 
   useEffect(() => {
-    const code = searchParams.get('invite');
+    const code = searchParams.get('join');
     if (code) {
       // Sanitização rigorosa: apenas caracteres alfanuméricos
       const sanitizedCode = code.replace(/[^\w]/g, '').slice(0, 20);
@@ -47,10 +47,10 @@ export default function Register() {
 
         if (!error && data) {
           setLinks({
-            whatsapp_gerente_url: data.whatsapp_gerente_url || 'https://wa.me/1234567890',
-            whatsapp_grupo_vendas_url: data.whatsapp_grupo_vendas_url || 'https://wa.me/1234567890',
-            link_app_atualizado: data.link_app_atualizado || '#',
-            splash_message: data.splash_message || 'recarregue hoje mesmo, após a adtação'
+            whatsapp_gerente_url: data.whatsapp_gerente_url || '',
+            whatsapp_grupo_vendas_url: data.whatsapp_grupo_vendas_url || '',
+            link_app_atualizado: data.link_app_atualizado || '',
+            splash_message: data.splash_message || ''
           });
         }
       } catch (err) {

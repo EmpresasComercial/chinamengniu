@@ -25,17 +25,30 @@ export default function Invite() {
   }, []);
 
   const inviteCode = profile?.invite_code || '...';
-  const baseLink = links.link_app_atualizado && links.link_app_atualizado !== '#' 
-    ? links.link_app_atualizado 
-    : `${window.location.origin}/#/register`;
+  
+  let baseLink = window.location.origin;
+  if (links.link_app_atualizado && links.link_app_atualizado !== '#') {
+    let customLink = links.link_app_atualizado.trim();
+    // Se digitou apenas o domínio (ex: mengniufarming.online)
+    if (!customLink.startsWith('http')) {
+      customLink = `https://${customLink.startsWith('www.') ? '' : 'www.'}${customLink}`;
+    }
+    // Adiciona o /#/register se o link ainda não tiver
+    if (!customLink.includes('/register') && !customLink.includes('/registrar')) {
+      customLink = customLink.endsWith('/') ? `${customLink}#/register` : `${customLink}/#/register`;
+    }
+    baseLink = customLink;
+  } else {
+    baseLink = `${baseLink}/#/register`;
+  }
 
   const inviteLink = baseLink.includes('(codigo)')
     ? baseLink.replace('(codigo)', inviteCode)
-    : baseLink.includes('invite=')
+    : baseLink.includes('join=') || baseLink.includes('invite=')
       ? baseLink
       : baseLink.includes('?')
-        ? `${baseLink}&invite=${inviteCode}`
-        : `${baseLink}?invite=${inviteCode}`;
+        ? `${baseLink}&join=${inviteCode}`
+        : `${baseLink}?join=${inviteCode}`;
 
   const showToast = (message: string) => {
     setToastMessage(message);
@@ -51,12 +64,12 @@ export default function Invite() {
   };
 
   const shareOnWhatsApp = () => {
-    const msg = encodeURIComponent(`🐄 Junte-se à Mengniu Company!\n\nUse o meu código de convite: *${inviteCode}*\nOu aceda ao link: ${inviteLink}`);
+    const msg = encodeURIComponent(`🐄 registe-se !\n\nUse o meu código de convite: *${inviteCode}*\nOu aceda ao link: ${inviteLink}`);
     window.open(`https://wa.me/?text=${msg}`, '_blank');
   };
 
   const shareOnTelegram = () => {
-    const msg = encodeURIComponent(`🐄 Junte-se à Mengniu Company! Código: ${inviteCode} | Link: ${inviteLink}`);
+    const msg = encodeURIComponent(`🐄 registe-se: ${inviteCode} | Link: ${inviteLink}`);
     window.open(`https://t.me/share/url?url=${encodeURIComponent(inviteLink)}&text=${msg}`, '_blank');
   };
 
