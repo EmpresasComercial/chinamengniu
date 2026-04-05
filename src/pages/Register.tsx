@@ -325,7 +325,7 @@ export default function Register() {
                   <div className="w-9 h-9 bg-[#25D366]/10 rounded-[6px] flex items-center justify-center mr-3">
                     <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/6/6b/WhatsApp.svg/512px-WhatsApp.svg.png" className="w-5 h-5" alt="whatsapp" />
                   </div>
-                  <p className="text-slate-900 font-bold text-[12.5px] text-left">entrar no grupo de venda de whatsapp</p>
+                  <p className="text-slate-900 font-bold text-[12.5px] text-left">entrar no grupo whatsapp</p>
                 </button>
 
                 <button
@@ -335,7 +335,7 @@ export default function Register() {
                   <div className="w-9 h-9 bg-[#25D366]/10 rounded-[6px] flex items-center justify-center mr-3">
                     <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/6/6b/WhatsApp.svg/512px-WhatsApp.svg.png" className="w-5 h-5" alt="whatsapp" />
                   </div>
-                  <p className="text-slate-900 font-bold text-[12.5px] text-left">contactar o gerente pelo whatsapp</p>
+                  <p className="text-slate-900 font-bold text-[12.5px] text-left">contactar gerente whatsapp</p>
                 </button>
               </div>
             </motion.div>

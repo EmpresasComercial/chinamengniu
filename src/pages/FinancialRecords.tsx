@@ -9,10 +9,10 @@ import { useLoading } from '../contexts/LoadingContext';
 type FilterType = 'retiradas' | 'recarregamentos' | 'tarefas_diarias' | 'bonus_transacoes';
 
 const FILTER_OPTIONS: { id: FilterType; label: string; table: string }[] = [
-  { id: 'retiradas', label: 'Conta de Retiradas', table: 'retirada_clientes' },
-  { id: 'recarregamentos', label: 'Recarregamentos Feitos', table: 'depositos_clientes' },
-  { id: 'tarefas_diarias', label: 'Tarefas Diárias', table: 'tarefas_diarias' },
-  { id: 'bonus_transacoes', label: 'Bónus e Comissões', table: 'bonus_transacoes' },
+  { id: 'retiradas', label: 'conta de retiradas', table: 'retirada_clientes' },
+  { id: 'recarregamentos', label: 'recarregamentos feitos', table: 'depositos_clientes' },
+  { id: 'tarefas_diarias', label: 'tarefas diárias', table: 'tarefas_diarias' },
+  { id: 'bonus_transacoes', label: 'bónus e comissões', table: 'bonus_transacoes' },
 ];
 
 const statusColor: Record<string, string> = {
@@ -122,7 +122,7 @@ export default function FinancialRecords() {
         return (
           <div key={item.id} className="border border-gray-100 rounded-xl p-4 flex justify-between items-center">
             <div className="flex flex-col gap-1">
-              <p className="text-[13px] font-bold text-gray-800">Tarefa diária</p>
+              <p className="text-[13px] font-bold text-gray-800">tarefa diária</p>
               <p className="text-[11px] text-gray-500">
                 {item.data_atribuicao ? new Date(item.data_atribuicao).toLocaleDateString('pt-AO') : '—'}
               </p>

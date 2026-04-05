@@ -1,13 +1,10 @@
 import { useState, useEffect } from 'react';
-import { ChevronLeft, Copy, CheckCircle2, MessageSquare } from 'lucide-center';
+import { ChevronLeft, Copy, CheckCircle2, MessageSquare } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import { motion, AnimatePresence } from 'motion/react';
 import { useLoading } from '../contexts/LoadingContext';
 import { supabase } from '../lib/supabase';
 import { useAuth } from '../contexts/AuthContext';
-
-// Import icons safely if lucide-center is not correct (standard is lucide-react)
-import { ChevronLeft as ChevronLeftIcon, Copy as CopyIcon, CheckCircle2 as CheckIcon, MessageSquare as MessageIcon } from 'lucide-react';
 
 const SUGGESTED_VALUES = [10, 20, 50, 100, 200, 500];
 
@@ -124,7 +121,7 @@ export default function RechargeUSDT() {
           className="text-white p-1"
           aria-label="voltar"
         >
-          <ChevronLeftIcon className="h-6 w-6" />
+          <ChevronLeft className="h-6 w-6" />
         </button>
         <h1 className="flex-1 text-center text-white text-[16px] font-medium pr-8">recarregar usdt (trc20)</h1>
       </header>
@@ -229,7 +226,7 @@ export default function RechargeUSDT() {
             >
               <div className="bg-white rounded-3xl p-6 shadow-sm border border-gray-100 flex flex-col items-center text-center">
                 <div className="w-14 h-14 bg-blue-50 rounded-full flex items-center justify-center mb-5">
-                  <CheckIcon className="w-8 h-8 text-[#0000AA]" />
+                  <CheckCircle2 className="w-8 h-8 text-[#0000AA]" />
                 </div>
                 <h2 className="text-[17px] font-bold text-gray-900 mb-2">detalhes de depósito usdt</h2>
                 <p className="text-[13px] text-gray-500 mb-8 px-4">envie exatamente <span className="font-bold text-gray-900">{amountUSDT} usdt</span> para o endereço abaixo:</p>
@@ -246,7 +243,7 @@ export default function RechargeUSDT() {
                         className="p-3 bg-white border border-gray-200 text-[#0000AA] rounded-xl shadow-sm active:scale-95 transition-all"
                         aria-label="copiar endereço"
                       >
-                        <CopyIcon className="w-5 h-5" />
+                        <Copy className="w-5 h-5" />
                       </button>
                     </div>
                   </div>
@@ -270,7 +267,7 @@ export default function RechargeUSDT() {
                     rel="noopener noreferrer"
                     className="flex items-center justify-center gap-2 w-full h-12 bg-green-600 text-white rounded-xl font-medium shadow-md transition-all active:scale-[0.98]"
                   >
-                    <MessageIcon className="w-5 h-5" />
+                    <MessageSquare className="w-5 h-5" />
                     enviar comprovante (whatsapp)
                   </a>
                   

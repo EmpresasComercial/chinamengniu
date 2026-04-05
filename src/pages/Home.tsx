@@ -1,6 +1,7 @@
 import React, { useEffect, useState, useCallback } from 'react';
 import { Bell, Headset, X, Share, MoreVertical } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
+import { motion, AnimatePresence } from 'motion/react';
 import { useLoading } from '../contexts/LoadingContext';
 import { useAuth } from '../contexts/AuthContext';
 import { supabase } from '../lib/supabase';
@@ -112,16 +113,8 @@ export default function Home() {
 
   const handleLinkClick = useCallback((url: string, e: React.MouseEvent) => {
     e.preventDefault();
-    showLoading();
-    setTimeout(() => {
-      hideLoading();
-      setNotification('Redirecionando para o WhatsApp...');
-      setTimeout(() => {
-        setNotification(null);
-        window.open(url, '_blank');
-      }, 2000);
-    }, 500);
-  }, [showLoading, hideLoading]);
+    window.open(url, '_blank');
+  }, []);
 
   const handleCopyInvite = useCallback((e: React.MouseEvent) => {
     e.preventDefault();
@@ -197,7 +190,7 @@ export default function Home() {
               <img src="/coin-DnOWIML3.png" alt="Apresentação da Empresa" className="w-8 h-8 object-contain" />
             </div>
             <span className="text-[12.5px] font-black text-slate-900 leading-[1.1]">
-              Apresentação da<br />Empresa
+              apresentação da<br />empresa
             </span>
           </div>
           <div
@@ -330,8 +323,8 @@ export default function Home() {
                   <span className="text-[#0000AA] font-black text-[15px]">1</span>
                 </div>
                 <div className="flex-1 pt-1">
-                  <p className="text-slate-900 font-bold text-[13px] mb-0.5">Toque no botão de partilhar</p>
-                  <p className="text-slate-500 text-[11px]">Na barra inferior do Safari, toque no ícone <span className="font-bold text-[#0000AA]">Partilhar</span> (quadrado com seta para cima)</p>
+                  <p className="text-slate-900 font-bold text-[13px] mb-0.5">toque no botão de partilhar</p>
+                  <p className="text-slate-500 text-[11px]">na barra inferior do safari, toque no ícone <span className="font-bold text-[#0000AA]">partilhar</span> (quadrado com seta para cima)</p>
                 </div>
                 <div className="w-9 h-9 bg-slate-100 rounded-xl flex items-center justify-center shrink-0">
                   <Share className="w-5 h-5 text-[#0000AA]" />
@@ -345,8 +338,8 @@ export default function Home() {
                   <span className="text-[#0000AA] font-black text-[15px]">2</span>
                 </div>
                 <div className="flex-1 pt-1">
-                  <p className="text-slate-900 font-bold text-[13px] mb-0.5">Selecione "Adicionar ao Ecrã Inicial"</p>
-                  <p className="text-slate-500 text-[11px]">Role para baixo nas opções e toque em <span className="font-bold text-[#0000AA]">Adicionar ao Ecrã Inicial</span></p>
+                  <p className="text-slate-900 font-bold text-[13px] mb-0.5">selecione "adicionar ao ecrã inicial"</p>
+                  <p className="text-slate-500 text-[11px]">role para baixo nas opções e toque em <span className="font-bold text-[#0000AA]">adicionar ao ecrã inicial</span></p>
                 </div>
               </div>
 
@@ -357,8 +350,8 @@ export default function Home() {
                   <span className="text-[#0000AA] font-black text-[15px]">3</span>
                 </div>
                 <div className="flex-1 pt-1">
-                  <p className="text-slate-900 font-bold text-[13px] mb-0.5">Confirme a instalação</p>
-                  <p className="text-slate-500 text-[11px]">Toque em <span className="font-bold text-[#0000AA]">Adicionar</span> no canto superior direito para concluir</p>
+                  <p className="text-slate-900 font-bold text-[13px] mb-0.5">confirme a instalação</p>
+                  <p className="text-slate-500 text-[11px]">toque em <span className="font-bold text-[#0000AA]">adicionar</span> no canto superior direito para concluir</p>
                 </div>
               </div>
             </div>
@@ -373,62 +366,72 @@ export default function Home() {
         </div>
       )}
 
-      {isSupportModalOpen && (
-        <div className="fixed inset-0 z-[100] flex items-center justify-center p-4">
-          <div 
-            onClick={() => setIsSupportModalOpen(false)}
-            className="absolute inset-0 bg-black/60 backdrop-blur-[2px]"
-          />
-          <div className="relative w-[90%] max-w-sm bg-white rounded-[8px] p-5 shadow-2xl z-[101]">
-            <div className="flex justify-between items-center mb-5">
-              <div className="flex items-center gap-2">
-                <Headset className="w-5 h-5 text-[#0000AA]" />
-                <h3 className="text-[#0000AA] font-bold text-[15px]">atendimento ao cliente</h3>
+      <AnimatePresence>
+        {isSupportModalOpen && (
+          <div className="fixed inset-0 z-[100] flex items-center justify-center p-4">
+            <motion.div
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              onClick={() => setIsSupportModalOpen(false)}
+              className="absolute inset-0 bg-black/60 backdrop-blur-[2px]"
+            />
+            <motion.div
+              initial={{ opacity: 0, scale: 0.9 }}
+              animate={{ opacity: 1, scale: 1 }}
+              exit={{ opacity: 0, scale: 0.9 }}
+              className="relative w-[90%] max-w-sm bg-white rounded-[8px] p-5 shadow-2xl z-[101]"
+            >
+              <div className="flex justify-between items-center mb-5">
+                <div className="flex items-center gap-2">
+                  <Headset className="w-5 h-5 text-[#0000AA]" />
+                  <h3 className="text-[#0000AA] font-bold text-[15px]">atendimento ao cliente</h3>
+                </div>
+                <button
+                  onClick={() => setIsSupportModalOpen(false)}
+                  className="p-1.5 bg-slate-100 rounded-[6px]"
+                  title="fechar"
+                >
+                  <X className="w-4 h-4 text-slate-500" />
+                </button>
               </div>
-              <button 
-                onClick={() => setIsSupportModalOpen(false)} 
-                className="p-1.5 bg-slate-100 rounded-[6px]"
-                title="fechar"
-              >
-                <X className="w-4 h-4 text-slate-500" />
-              </button>
-            </div>
 
-            <div className="flex flex-col gap-2.5">
-              <button
-                onClick={(e) => { handleLinkClick(links.whatsapp_grupo_vendas_url, e); setIsSupportModalOpen(false); }}
-                className="w-full h-[48px] bg-slate-50 rounded-[8px] flex items-center px-3 active:bg-slate-100 transition-none"
-              >
-                <div className="w-9 h-9 bg-[#25D366]/10 rounded-[6px] flex items-center justify-center mr-3">
-                  <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/6/6b/WhatsApp.svg/512px-WhatsApp.svg.png" className="w-5 h-5" alt="whatsapp" />
-                </div>
-                <p className="text-slate-900 font-bold text-[12.5px] text-left">entrar no grupo de venda de whatsapp</p>
-              </button>
+              <div className="flex flex-col gap-2.5">
+                <button
+                  onClick={(e) => { handleLinkClick(links.whatsapp_grupo_vendas_url, e); setIsSupportModalOpen(false); }}
+                  className="w-full h-[48px] bg-slate-50 rounded-[8px] flex items-center px-3 active:bg-slate-100 transition-none"
+                >
+                  <div className="w-9 h-9 bg-[#25D366]/10 rounded-[6px] flex items-center justify-center mr-3">
+                    <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/6/6b/WhatsApp.svg/512px-WhatsApp.svg.png" className="w-5 h-5" alt="whatsapp" />
+                  </div>
+                  <p className="text-slate-900 font-bold text-[12.5px] text-left">entrar no grupo whatsapp</p>
+                </button>
 
-              <button
-                onClick={(e) => { handleLinkClick(links.whatsapp_gerente_url, e); setIsSupportModalOpen(false); }}
-                className="w-full h-[48px] bg-slate-50 rounded-[8px] flex items-center px-3 active:bg-slate-100 transition-none"
-              >
-                <div className="w-9 h-9 bg-[#25D366]/10 rounded-[6px] flex items-center justify-center mr-3">
-                  <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/6/6b/WhatsApp.svg/512px-WhatsApp.svg.png" className="w-5 h-5" alt="whatsapp" />
-                </div>
-                <p className="text-slate-900 font-bold text-[12.5px] text-left">contactar o gerente pelo whatsapp</p>
-              </button>
+                <button
+                  onClick={(e) => { handleLinkClick(links.whatsapp_gerente_url, e); setIsSupportModalOpen(false); }}
+                  className="w-full h-[48px] bg-slate-50 rounded-[8px] flex items-center px-3 active:bg-slate-100 transition-none"
+                >
+                  <div className="w-9 h-9 bg-[#25D366]/10 rounded-[6px] flex items-center justify-center mr-3">
+                    <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/6/6b/WhatsApp.svg/512px-WhatsApp.svg.png" className="w-5 h-5" alt="whatsapp" />
+                  </div>
+                  <p className="text-slate-900 font-bold text-[12.5px] text-left">contactar gerente whatsapp</p>
+                </button>
 
-              <button
-                onClick={(e) => { handleCopyInvite(e); setIsSupportModalOpen(false); }}
-                className="w-full h-[48px] bg-slate-50 rounded-[8px] flex items-center justify-center gap-2 active:bg-slate-100 transition-none"
-              >
-                <p className="text-slate-700 font-bold text-[12.5px]">copiar link</p>
-                <svg className="w-4 h-4 text-[#0000AA]" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth="2">
-                  <rect x="9" y="9" width="13" height="13" rx="2" ry="2" />
-                  <path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1" />
-                </svg>
-              </button>
-            </div>
+                <button
+                  onClick={(e) => { handleCopyInvite(e); setIsSupportModalOpen(false); }}
+                  className="w-full h-[48px] bg-slate-50 rounded-[8px] flex items-center justify-center gap-2 active:bg-slate-100 transition-none"
+                >
+                  <p className="text-slate-700 font-bold text-[12.5px]">copiar link</p>
+                  <svg className="w-4 h-4 text-[#0000AA]" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth="2">
+                    <rect x="9" y="9" width="13" height="13" rx="2" ry="2" />
+                    <path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1" />
+                  </svg>
+                </button>
+              </div>
+            </motion.div>
           </div>
-        </div>
-      )}
+        )}
+      </AnimatePresence>
 
       {notification && (
         <div className="fixed inset-0 m-auto w-fit h-fit min-w-[260px] bg-black/50 backdrop-blur-sm text-white px-5 py-3 rounded-2xl text-[12.5px] shadow-xl z-[500] text-center max-w-[85vw] whitespace-normal break-words">

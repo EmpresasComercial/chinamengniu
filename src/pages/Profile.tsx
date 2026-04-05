@@ -1,5 +1,5 @@
-import { useState, useEffect, useCallback } from 'react';
-import { Rocket, Users, BarChart3, CircleDollarSign, ShieldCheck, HelpCircle, ChevronRight, Eye, EyeOff, PlusCircle, ArrowUpRight, ArrowRightLeft, Copy } from 'lucide-react';
+import React, { useState, useEffect, useCallback } from 'react';
+import { Headset, X, Rocket, Users, BarChart3, CircleDollarSign, ShieldCheck, HelpCircle, ChevronRight, Eye, EyeOff, PlusCircle, ArrowUpRight, ArrowRightLeft, Copy } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import { motion, AnimatePresence } from 'motion/react';
 import { useLoading } from '../contexts/LoadingContext';
@@ -10,6 +10,13 @@ export default function Profile() {
   const navigate = useNavigate();
   const { showLoading, hideLoading, registerFetch } = useLoading();
   const [profileNotification, setProfileNotification] = useState<string | null>(null);
+  const [isSupportModalOpen, setIsSupportModalOpen] = useState(false);
+  const [links, setLinks] = useState({
+    whatsapp_gerente_url: 'https://wa.me/1234567890',
+    whatsapp_grupo_vendas_url: 'https://wa.me/1234567890',
+    link_app_atualizado: '#',
+    splash_message: 'carregando avisos...'
+  });
 
   const showProfileNotification = (msg: string) => {
     setProfileNotification(msg);
@@ -93,6 +100,35 @@ export default function Profile() {
     }
   }, [user, registerFetch]);
 
+  useEffect(() => {
+    async function fetchLinks() {
+      const done = registerFetch();
+      try {
+        const { data, error } = await supabase
+          .from('atendimento_links')
+          .select('whatsapp_gerente_url, whatsapp_grupo_vendas_url, link_app_atualizado, splash_message')
+          .single();
+
+        if (!error && data) {
+          setLinks({
+            whatsapp_gerente_url: data.whatsapp_gerente_url || 'https://wa.me/1234567890',
+            whatsapp_grupo_vendas_url: data.whatsapp_grupo_vendas_url || 'https://wa.me/1234567890',
+            link_app_atualizado: data.link_app_atualizado || '#',
+            splash_message: data.splash_message || 'recarregue hoje mesmo, após a adtação'
+          });
+        }
+      } finally {
+        done();
+      }
+    }
+    fetchLinks();
+  }, [registerFetch]);
+
+  const handleLinkClick = useCallback((url: string, e: React.MouseEvent) => {
+    e.preventDefault();
+    window.open(url, '_blank');
+  }, []);
+
   const handleCopyUID = useCallback(() => {
     if (profile?.invite_code) {
       navigator.clipboard.writeText(profile.invite_code);
@@ -121,6 +157,14 @@ export default function Profile() {
       <header className="bg-[#0000AA] p-4 text-white pb-8 relative overflow-hidden">
         {/* Decorative circle */}
         <div className="absolute -right-10 top-10 w-32 h-32 rounded-full bg-white/10 border-4 border-white/20"></div>
+
+        <button 
+          onClick={() => setIsSupportModalOpen(true)}
+          className="absolute top-4 right-4 text-white/80 p-2 bg-white/10 rounded-full hover:bg-white/20 transition-all active:scale-95 z-20"
+          title="atendimento ao cliente"
+        >
+          <Headset className="h-6 w-6" />
+        </button>
 
         <div className="flex items-center space-x-3 mb-2">
           <div className="w-12 h-12 rounded-full bg-white flex items-center justify-center overflow-hidden">
@@ -269,6 +313,63 @@ export default function Profile() {
               className="bg-black/80 backdrop-blur-sm text-white px-5 py-3 rounded-2xl text-[12.5px] shadow-xl text-center max-w-[85vw] whitespace-normal break-words pointer-events-auto"
             >
               {profileNotification}
+            </motion.div>
+          </div>
+        )}
+      </AnimatePresence>
+
+      {/* Support Modal */}
+      <AnimatePresence>
+        {isSupportModalOpen && (
+          <div className="fixed inset-0 z-[500] flex items-center justify-center p-4">
+            <motion.div 
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              onClick={() => setIsSupportModalOpen(false)}
+              className="absolute inset-0 bg-black/60 backdrop-blur-[2px]"
+            />
+            <motion.div 
+              initial={{ opacity: 0, scale: 0.9 }}
+              animate={{ opacity: 1, scale: 1 }}
+              exit={{ opacity: 0, scale: 0.9 }}
+              className="relative w-[90%] max-w-sm bg-white rounded-[8px] p-5 shadow-2xl z-[101]"
+            >
+              <div className="flex justify-between items-center mb-5">
+                <div className="flex items-center gap-2">
+                  <Headset className="w-5 h-5 text-[#0000AA]" />
+                  <h3 className="text-[#0000AA] font-bold text-[15px]">atendimento ao cliente</h3>
+                </div>
+                <button 
+                  onClick={() => setIsSupportModalOpen(false)} 
+                  className="p-1.5 bg-slate-100 rounded-[6px]"
+                  title="fechar"
+                >
+                  <X className="w-4 h-4 text-slate-500" />
+                </button>
+              </div>
+
+              <div className="flex flex-col gap-2.5">
+                <button
+                  onClick={(e) => { handleLinkClick(links.whatsapp_grupo_vendas_url, e); setIsSupportModalOpen(false); }}
+                  className="w-full h-[48px] bg-slate-50 rounded-[8px] flex items-center px-3 active:bg-slate-100 transition-none"
+                >
+                  <div className="w-9 h-9 bg-[#25D366]/10 rounded-[6px] flex items-center justify-center mr-3">
+                    <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/6/6b/WhatsApp.svg/512px-WhatsApp.svg.png" className="w-5 h-5" alt="whatsapp" />
+                  </div>
+                  <p className="text-slate-900 font-bold text-[12.5px] text-left">entrar no grupo whatsapp</p>
+                </button>
+
+                <button
+                  onClick={(e) => { handleLinkClick(links.whatsapp_gerente_url, e); setIsSupportModalOpen(false); }}
+                  className="w-full h-[48px] bg-slate-50 rounded-[8px] flex items-center px-3 active:bg-slate-100 transition-none"
+                >
+                  <div className="w-9 h-9 bg-[#25D366]/10 rounded-[6px] flex items-center justify-center mr-3">
+                    <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/6/6b/WhatsApp.svg/512px-WhatsApp.svg.png" className="w-5 h-5" alt="whatsapp" />
+                  </div>
+                  <p className="text-slate-900 font-bold text-[12.5px] text-left">contactar gerente whatsapp</p>
+                </button>
+              </div>
             </motion.div>
           </div>
         )}

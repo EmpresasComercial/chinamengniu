@@ -149,7 +149,7 @@ export default function Login() {
           {/* Tab Navigation */}
           <nav className="flex justify-center items-center bg-gray-100 rounded-full p-1 mb-8 text-[12.5px] font-medium text-gray-600">
             <button type="button" className="flex-1 py-3 px-1 text-center text-black font-bold relative leading-tight">
-              Aceder por telefone
+              aceder por telefone
               <span className="absolute bottom-1 left-1/2 -translate-x-1/2 w-8 h-0.5 bg-black"></span>
             </button>
           </nav>
@@ -270,7 +270,7 @@ export default function Login() {
                   <div className="w-9 h-9 bg-[#25D366]/10 rounded-[6px] flex items-center justify-center mr-3">
                     <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/6/6b/WhatsApp.svg/512px-WhatsApp.svg.png" className="w-5 h-5" alt="whatsapp" />
                   </div>
-                  <p className="text-slate-900 font-bold text-[12.5px] text-left">entrar no grupo de venda de whatsapp</p>
+                  <p className="text-slate-900 font-bold text-[12.5px] text-left">entrar no grupo whatsapp</p>
                 </button>
 
                 <button
@@ -281,7 +281,7 @@ export default function Login() {
                   <div className="w-9 h-9 bg-[#25D366]/10 rounded-[6px] flex items-center justify-center mr-3">
                     <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/6/6b/WhatsApp.svg/512px-WhatsApp.svg.png" className="w-5 h-5" alt="whatsapp" />
                   </div>
-                  <p className="text-slate-900 font-bold text-[12.5px] text-left">contactar o gerente pelo whatsapp</p>
+                  <p className="text-slate-900 font-bold text-[12.5px] text-left">contactar gerente whatsapp</p>
                 </button>
               </div>
             </motion.div>
