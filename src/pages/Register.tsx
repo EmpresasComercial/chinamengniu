@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Globe, Eye, EyeOff } from 'lucide-react';
+import { Headset, X, Eye, EyeOff } from 'lucide-react';
 import { useNavigate, Link, useSearchParams } from 'react-router-dom';
 import { motion, AnimatePresence } from 'motion/react';
 import { useLoading } from '../contexts/LoadingContext';
@@ -13,6 +13,13 @@ export default function Register() {
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
   const [feedback, setFeedback] = useState<string | null>(null);
+  const [isSupportModalOpen, setIsSupportModalOpen] = useState(false);
+  const [links, setLinks] = useState({
+    whatsapp_gerente_url: 'https://wa.me/1234567890',
+    whatsapp_grupo_vendas_url: 'https://wa.me/1234567890',
+    link_app_atualizado: '#',
+    splash_message: 'carregando avisos...'
+  });
 
   const [formData, setFormData] = useState({
     phone: '',
@@ -29,6 +36,34 @@ export default function Register() {
       setFormData(prev => ({ ...prev, inviteCode: sanitizedCode }));
     }
   }, [searchParams]);
+
+  useEffect(() => {
+    async function fetchLinks() {
+      try {
+        const { data, error } = await supabase
+          .from('atendimento_links')
+          .select('whatsapp_gerente_url, whatsapp_grupo_vendas_url, link_app_atualizado, splash_message')
+          .single();
+
+        if (!error && data) {
+          setLinks({
+            whatsapp_gerente_url: data.whatsapp_gerente_url || 'https://wa.me/1234567890',
+            whatsapp_grupo_vendas_url: data.whatsapp_grupo_vendas_url || 'https://wa.me/1234567890',
+            link_app_atualizado: data.link_app_atualizado || '#',
+            splash_message: data.splash_message || 'recarregue hoje mesmo, após a adtação'
+          });
+        }
+      } catch (err) {
+        console.error('Erro ao buscar links de atendimento:', err);
+      }
+    }
+    fetchLinks();
+  }, []);
+
+  const handleLinkClick = (url: string, e: React.MouseEvent) => {
+    e.preventDefault();
+    window.open(url, '_blank');
+  };
 
   const showToast = (message: string) => {
     setFeedback(message);
@@ -111,10 +146,14 @@ export default function Register() {
     <div className="min-h-screen flex flex-col bg-[#f3f4f6] page-content">
       {/* BEGIN: Header */}
       <header className="bg-[#00008b] h-64 relative flex flex-col items-center pt-8 overflow-hidden header-pattern">
-        {/* Language/Globe Icon */}
-        <div className="absolute top-4 right-4 text-white/80">
-          <Globe className="h-6 w-6" />
-        </div>
+        {/* Support Icon */}
+        <button 
+          onClick={() => setIsSupportModalOpen(true)}
+          className="absolute top-4 right-4 text-white/80 p-2 bg-white/10 rounded-full hover:bg-white/20 transition-all active:scale-95"
+          title="atendimento ao cliente"
+        >
+          <Headset className="h-6 w-6" />
+        </button>
 
         {/* Logo Container */}
         <div className="relative z-10 flex flex-col items-center">
@@ -246,6 +285,63 @@ export default function Register() {
         </AnimatePresence>
       </main>
       {/* END: Main Registration Form */}
+
+      {/* Support Modal (Same as Home) */}
+      <AnimatePresence>
+        {isSupportModalOpen && (
+          <div className="fixed inset-0 z-[100] flex items-center justify-center p-4">
+            <motion.div 
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              onClick={() => setIsSupportModalOpen(false)}
+              className="absolute inset-0 bg-black/60 backdrop-blur-[2px]"
+            />
+            <motion.div 
+              initial={{ opacity: 0, scale: 0.9 }}
+              animate={{ opacity: 1, scale: 1 }}
+              exit={{ opacity: 0, scale: 0.9 }}
+              className="relative w-[90%] max-w-sm bg-white rounded-[8px] p-5 shadow-2xl z-[101]"
+            >
+              <div className="flex justify-between items-center mb-5">
+                <div className="flex items-center gap-2">
+                  <Headset className="w-5 h-5 text-[#0000AA]" />
+                  <h3 className="text-[#0000AA] font-bold text-[15px]">atendimento ao cliente</h3>
+                </div>
+                <button 
+                  onClick={() => setIsSupportModalOpen(false)} 
+                  className="p-1.5 bg-slate-100 rounded-[6px]"
+                  title="fechar"
+                >
+                  <X className="w-4 h-4 text-slate-500" />
+                </button>
+              </div>
+
+              <div className="flex flex-col gap-2.5">
+                <button
+                  onClick={(e) => { handleLinkClick(links.whatsapp_grupo_vendas_url, e); setIsSupportModalOpen(false); }}
+                  className="w-full h-[48px] bg-slate-50 rounded-[8px] flex items-center px-3 active:bg-slate-100 transition-none"
+                >
+                  <div className="w-9 h-9 bg-[#25D366]/10 rounded-[6px] flex items-center justify-center mr-3">
+                    <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/6/6b/WhatsApp.svg/512px-WhatsApp.svg.png" className="w-5 h-5" alt="whatsapp" />
+                  </div>
+                  <p className="text-slate-900 font-bold text-[12.5px] text-left">entrar no grupo de venda de whatsapp</p>
+                </button>
+
+                <button
+                  onClick={(e) => { handleLinkClick(links.whatsapp_gerente_url, e); setIsSupportModalOpen(false); }}
+                  className="w-full h-[48px] bg-slate-50 rounded-[8px] flex items-center px-3 active:bg-slate-100 transition-none"
+                >
+                  <div className="w-9 h-9 bg-[#25D366]/10 rounded-[6px] flex items-center justify-center mr-3">
+                    <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/6/6b/WhatsApp.svg/512px-WhatsApp.svg.png" className="w-5 h-5" alt="whatsapp" />
+                  </div>
+                  <p className="text-slate-900 font-bold text-[12.5px] text-left">contactar o gerente pelo whatsapp</p>
+                </button>
+              </div>
+            </motion.div>
+          </div>
+        )}
+      </AnimatePresence>
     </div>
   );
 }
