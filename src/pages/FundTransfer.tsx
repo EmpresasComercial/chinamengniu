@@ -98,7 +98,7 @@ export default function FundTransfer() {
       showToast('o valor máximo de conversão é 100.000 Kz', 'error'); return;
     }
     if (amount > balanceCorrete) {
-      showToast('saldo de reprodução insuficiente', 'error'); return;
+      showToast('saldo de extração insuficiente', 'error'); return;
     }
 
     showLoading();
@@ -147,9 +147,9 @@ export default function FundTransfer() {
 
         {/* ── MODO: CÓDIGO DE PRESENTE ── */}
         {mode === 'gift' && (
-          <motion.div initial={{ opacity: 0, y: 5 }} animate={{ opacity: 1, y: 0 }} className="bg-white rounded-3xl p-5 border border-slate-50">
+          <motion.div initial={{ opacity: 0, y: 5 }} animate={{ opacity: 1, y: 0 }} className="bg-white rounded-xl p-5 border border-slate-50">
             <div className="flex flex-col items-center text-center mb-6">
-              <div className="bg-[#000080]/5 w-11 h-11 rounded-full flex items-center justify-center mb-2">
+              <div className="bg-[#000080]/5 w-11 h-11 rounded-xl flex items-center justify-center mb-2">
                 <Gift className="h-5 w-5 text-[#000080]" />
               </div>
               <h2 className="text-[16px] font-black text-[#000080] lowercase">resgatar código</h2>
@@ -170,23 +170,23 @@ export default function FundTransfer() {
 
             <button
               onClick={handleRedeemCode}
-              className="w-full h-10 bg-[#000080] text-white rounded-2xl text-[13px] font-normal active:scale-[0.98] transition-all lowercase"
+              className="w-full h-10 bg-[#000080] text-white rounded-xl text-[13px] font-normal active:scale-[0.98] transition-all lowercase"
             >
               confirmar resgate
             </button>
           </motion.div>
         )}
 
-        {/* ── MODO: CONVERSÃO DE REPRODUÇÃO → BALANCE ── */}
+        {/* ── MODO: CONVERSÃO DE EXTRAÇÃO → BALANCE ── */}
         {mode === 'transfer' && (
           <motion.div initial={{ opacity: 0, y: 5 }} animate={{ opacity: 1, y: 0 }}>
             {/* Seção Estatística Compacta */}
-            <div className="bg-white rounded-3xl p-4 mb-4 flex justify-between items-center">
+            <div className="bg-white rounded-xl p-4 mb-4 flex justify-between items-center">
               <div className="text-center flex-1">
-                <p className="text-[9px] text-slate-400 lowercase font-bold mb-0.5">saldo de reprodução</p>
+                <p className="text-[9px] text-slate-400 lowercase font-bold mb-0.5">saldo de extração</p>
                 <p className="text-[16px] font-black text-[#000080]">{fmt(balanceCorrete)} kz</p>
               </div>
-              <div className="w-10 h-10 bg-[#000080] rounded-full flex items-center justify-center shrink-0 mx-2">
+              <div className="w-10 h-10 bg-[#000080] rounded-xl flex items-center justify-center shrink-0 mx-2">
                 <ArrowRightLeft className="w-5 h-5 text-white" />
               </div>
               <div className="text-center flex-1">
@@ -195,14 +195,14 @@ export default function FundTransfer() {
               </div>
             </div>
 
-            <div className="bg-white rounded-3xl p-5">
+            <div className="bg-white rounded-xl p-5">
               {/* Atalhos Rápidos (Compactos e Azuis) */}
               <div className="flex justify-between gap-1 mb-8">
                 {[1000, 5000, 10000, 50000].map(v => (
                   <button
                     key={v}
                     onClick={() => setAmountInput(String(v))}
-                    className="flex-1 bg-[#000080] text-white rounded-md h-[24px] text-[9.5px] font-bold hover:bg-[#0000AA] active:scale-95 transition-all"
+                    className="flex-1 bg-[#000080] text-white rounded-md h-[24px] text-[9.5px] font-normal hover:bg-[#0000AA] active:scale-95 transition-all"
                   >
                     {v.toLocaleString('pt-AO')}
                   </button>
@@ -226,7 +226,7 @@ export default function FundTransfer() {
               <button
                 onClick={handleTransfer}
                 disabled={parsedAmount < 1000 || parsedAmount > 100000 || parsedAmount > balanceCorrete}
-                className={`w-full h-11 rounded-2xl text-[14px] font-normal transition-all
+                className={`w-full h-11 rounded-xl text-[14px] font-normal transition-all
                   ${parsedAmount >= 1000 && parsedAmount <= 100000 && parsedAmount <= balanceCorrete
                     ? 'bg-[#000080] text-white active:scale-[0.98]'
                     : 'bg-slate-50 text-slate-300 cursor-not-allowed border border-slate-100'}`}
@@ -263,7 +263,7 @@ export default function FundTransfer() {
                 animate={{ y: 0 }}
                 exit={{ y: '100%' }}
                 transition={{ type: 'spring', damping: 28, stiffness: 320 }}
-                className="bg-white w-full rounded-t-[2rem] px-5 pt-4 pb-10"
+                className="bg-white w-full rounded-t-xl px-5 pt-4 pb-10"
               >
                 {/* Pill */}
                 <div className="w-10 h-1 bg-gray-200 rounded-full mx-auto mb-6" />
@@ -273,7 +273,7 @@ export default function FundTransfer() {
                 </h2>
 
                 <div className="flex flex-col gap-2 mb-8">
-                  {/* Opção 1: Conversão Reprodução (Radio à direita) */}
+                  {/* Opção 1: Conversão Extração (Radio à direita) */}
                   <button
                     onClick={() => {
                       showLoading();
@@ -281,8 +281,8 @@ export default function FundTransfer() {
                     }}
                     className="w-full flex items-center justify-between p-4 rounded-xl border border-gray-100 bg-gray-50 active:bg-gray-100 transition-all group"
                   >
-                    <span className="text-[14px] font-bold text-gray-800 lowercase">conversão reprodução</span>
-                    <div className="w-5 h-5 rounded-full border-2 border-gray-300 flex items-center justify-center group-active:border-[#0000AA] group-active:bg-[#0000AA] transition-colors">
+                    <span className="text-[14px] font-bold text-gray-800 lowercase">conversão extração</span>
+                    <div className="w-5 h-5 rounded-xl border-2 border-gray-300 flex items-center justify-center group-active:border-[#0000AA] group-active:bg-[#0000AA] transition-colors">
                       <svg className="w-3 h-3 text-white opacity-0 group-active:opacity-100" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="4">
                         <path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" />
                       </svg>
@@ -298,7 +298,7 @@ export default function FundTransfer() {
                     className="w-full flex items-center justify-between p-4 rounded-xl border border-gray-100 bg-gray-50 active:bg-gray-100 transition-all group"
                   >
                     <span className="text-[14px] font-bold text-gray-800 lowercase">resgate de presente</span>
-                    <div className="w-5 h-5 rounded-full border-2 border-gray-300 flex items-center justify-center group-active:border-[#0000AA] group-active:bg-[#0000AA] transition-colors">
+                    <div className="w-5 h-5 rounded-xl border-2 border-gray-300 flex items-center justify-center group-active:border-[#0000AA] group-active:bg-[#0000AA] transition-colors">
                       <svg className="w-3 h-3 text-white opacity-0 group-active:opacity-100" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="4">
                         <path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" />
                       </svg>
@@ -332,7 +332,7 @@ export default function FundTransfer() {
             initial={{ opacity: 0, scale: 0.9, x: '-50%', y: '-10%' }}
             animate={{ opacity: 1, scale: 1, x: 0, y: 0 }}
             exit={{ opacity: 0, scale: 0.9, x: '-50%', y: '-10%' }}
-            className={`fixed inset-0 m-auto w-fit h-fit min-w-[260px] ${feedback.type === 'error' ? 'bg-red-600/80' : 'bg-black/50'} backdrop-blur-sm text-white px-5 py-3 rounded-2xl text-[12.5px] shadow-xl z-[500] text-center max-w-[85vw] whitespace-normal break-words`}
+            className={`fixed inset-0 m-auto w-fit h-fit min-w-[260px] ${feedback.type === 'error' ? 'bg-red-600/80' : 'bg-black/50'} backdrop-blur-sm text-white px-5 py-3 rounded-xl text-[12.5px]  z-[500] text-center max-w-[85vw] whitespace-normal break-words`}
           >
             {feedback.message}
           </motion.div>

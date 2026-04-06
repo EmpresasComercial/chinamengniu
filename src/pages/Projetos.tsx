@@ -18,7 +18,7 @@ interface Product {
   bought_count?: number;
 }
 
-export default function VIP() {
+export default function Projetos() {
   const navigate = useNavigate();
   const { showLoading, hideLoading, registerFetch } = useLoading();
   const { profile, user, refreshProfile } = useAuth();
@@ -61,7 +61,7 @@ export default function VIP() {
       if (data?.success === false) {
         setPurchaseResult({ 
           success: false, 
-          message: data.message || 'erro ao processar adoção' 
+          message: data.message || 'erro ao processar investimento' 
         });
         setIsResultModalOpen(true);
         return;
@@ -69,7 +69,7 @@ export default function VIP() {
 
       setPurchaseResult({ 
         success: true, 
-        message: data?.message || 'adoção realizada com sucesso!' 
+        message: data?.message || 'investimento realizado com sucesso!' 
       });
       setIsResultModalOpen(true);
       await refreshProfile();
@@ -152,7 +152,7 @@ export default function VIP() {
               <img
                 alt="user level icon"
                 className="w-full h-full object-contain p-1"
-                src={products[0]?.image_url || "https://api.mengniu.wang/upload/img/6978d793f60d.webp"}
+                src={products[0]?.image_url || "/NewmontCorporationfff83c6b-57f6-428e-alogob.png"}
                 referrerPolicy="no-referrer"
               />
             </div>
@@ -173,12 +173,12 @@ export default function VIP() {
           <div className="relative">
             <button
               onClick={() => navigate('/promocao')}
-              className="bg-blue-400 text-white px-4 py-1.5 rounded-full text-[10.5px] font-black active:scale-95 transition-all lowercase shadow-lg shadow-blue-900/20"
+              className="bg-blue-400 text-white px-4 py-1.5 rounded-xl text-[10.5px] font-normal active:scale-95 transition-all lowercase"
             >
               promoção
             </button>
             {promoCount > 0 && (
-              <span className="absolute -top-1.5 -right-1.5 bg-red-500 text-white text-[9px] font-black w-4.5 h-4.5 rounded-full flex items-center justify-center border-2 border-[#0000A5] shadow-sm animate-bounce">
+              <span className="absolute -top-1.5 -right-1.5 bg-red-500 text-white text-[9px] font-black w-4.5 h-4.5 rounded-full flex items-center justify-center border-2 border-[#0000A5]  animate-bounce">
                 {promoCount}
               </span>
             )}
@@ -227,7 +227,7 @@ export default function VIP() {
           {products.map((vip) => (
             <div
               key={vip.id}
-              className="flex bg-white p-3 rounded-xl border border-slate-100 shadow-sm relative min-h-[140px]"
+              className="flex bg-white p-3 rounded-xl border border-slate-100  relative min-h-[140px]"
             >
               {/* Product Image */}
               <div className="w-[100px] shrink-0 flex items-center justify-center bg-slate-50/50 rounded-lg p-2 mr-3 border border-slate-50/50">
@@ -258,7 +258,7 @@ export default function VIP() {
               {/* Buy Button & Position Tag */}
               <div className="absolute right-3 bottom-3 flex flex-col items-end">
                 {profile?.state === vip.name && (
-                  <span className="absolute -top-7 right-0 bg-blue-50 text-[#0000AA] px-2 py-0.5 rounded-full text-[9px] font-black lowercase leading-none whitespace-nowrap">
+                  <span className="absolute -top-7 right-0 bg-blue-50 text-[#0000AA] px-2 py-0.5 rounded-xl text-[9px] font-normal lowercase leading-none whitespace-nowrap">
                     posição atual
                   </span>
                 )}
@@ -267,7 +267,7 @@ export default function VIP() {
                     setSelectedProduct(vip);
                     setIsPurchaseModalOpen(true);
                   }}
-                  className="bg-[#0000AA] hover:bg-blue-800 text-white px-5 h-7 flex items-center justify-center rounded-[8px] text-[11px] font-bold lowercase active:scale-95 transition-none shadow-md shadow-blue-900/10"
+                  className="bg-[#0000AA] hover:bg-blue-800 text-white px-5 h-7 flex items-center justify-center rounded-xl text-[11px] font-normal lowercase active:scale-95 transition-none"
                 >
                   comprar
                 </button>
@@ -283,10 +283,10 @@ export default function VIP() {
             onClick={() => setIsPurchaseModalOpen(false)}
             className="absolute inset-0 bg-black/60 backdrop-blur-[2px]"
           />
-          <div className="relative w-full max-w-[280px] bg-white rounded-3xl p-5 shadow-2xl z-[101] text-center">
-            <h3 className="text-[#000080] font-black text-[16px] lowercase mb-3">confirmar adoção</h3>
+          <div className="relative w-full max-w-[280px] bg-white rounded-xl p-5  z-[101] text-center">
+            <h3 className="text-[#000080] font-black text-[16px] lowercase mb-3">confirmar investimento</h3>
             <p className="text-slate-600 text-[13px] lowercase leading-relaxed mb-6 px-1">
-              tens a certeza que desejas comprar o animal <span className="font-bold text-[#000080]">{selectedProduct.name.toLowerCase()}</span> no preço de <span className="font-bold text-[#FF0000]">{selectedProduct.price.toLocaleString('pt-AO')} kz</span>?
+              tens a certeza que desejas investir no projeto <span className="font-bold text-[#000080]">{selectedProduct.name.toLowerCase()}</span> no preço de <span className="font-bold text-[#FF0000]">{selectedProduct.price.toLocaleString('pt-AO')} kz</span>?
             </p>
             <div className="grid grid-cols-2 gap-3">
               <button 
@@ -297,9 +297,9 @@ export default function VIP() {
               </button>
               <button
                 onClick={handlePurchase}
-                className="h-[38px] bg-[#0000AA] hover:bg-blue-800 text-white font-bold rounded-xl text-[13px] lowercase shadow-md transition-colors"
+                className="h-[38px] bg-[#0000AA] hover:bg-blue-800 text-white font-normal rounded-xl text-[13px] lowercase  transition-colors"
               >
-                adotar
+                investir
               </button>
             </div>
           </div>
@@ -312,7 +312,7 @@ export default function VIP() {
             className="absolute inset-0 bg-black/60 backdrop-blur-[2px]"
             onClick={() => setIsResultModalOpen(false)}
           />
-          <div className="relative w-full max-w-[260px] bg-white rounded-[1.5rem] p-5 shadow-2xl z-[10002] text-center flex flex-col items-center justify-center">
+          <div className="relative w-full max-w-[260px] bg-white rounded-[1.5rem] p-5  z-[10002] text-center flex flex-col items-center justify-center">
             <div className={`w-12 h-12 rounded-full flex items-center justify-center mx-auto mb-3 ${purchaseResult.success ? 'bg-green-100 text-green-600' : 'bg-red-100 text-red-600'}`}>
               {purchaseResult.success ? (
                 <svg className="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -330,7 +330,7 @@ export default function VIP() {
             </p>
             <button
               onClick={() => setIsResultModalOpen(false)}
-              className={`w-full h-9 rounded-xl font-bold text-[13px] lowercase transition-none shadow-md ${
+              className={`w-full h-9 rounded-xl font-bold text-[13px] lowercase transition-none  ${
                 purchaseResult.success 
                   ? 'bg-green-600 hover:bg-green-700 text-white' 
                   : 'bg-[#0000AA] hover:bg-blue-800 text-white'

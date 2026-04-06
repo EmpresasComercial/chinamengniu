@@ -106,7 +106,7 @@ export default function Team() {
       {/* Main Content */}
       <main className="flex-1 px-4 py-4 space-y-4">
         {/* Stats Card */}
-        <section className="bg-white rounded-[1.5rem] p-5 shadow-sm">
+        <section className="bg-white rounded-[1.5rem] p-5 ">
           <div className="grid grid-cols-2 gap-y-6 text-center">
             <div className="flex flex-col">
               <span className="text-[10px] text-[#4A5568] font-medium mb-1">Receita total(Kz)</span>
@@ -128,7 +128,7 @@ export default function Team() {
         </section>
 
         {/* Tab Switcher */}
-        <nav className="bg-white rounded-full py-3 px-1 flex items-center justify-around shadow-sm text-[12.5px] font-medium">
+        <nav className="bg-white rounded-full py-3 px-1 flex items-center justify-around  text-[12.5px] font-medium">
           <button
             onClick={() => handleTabChange('members')}
             className="flex flex-col items-center focus:outline-none"
@@ -164,7 +164,7 @@ export default function Team() {
               <ChevronDown className="h-3 w-3 ml-1" />
 
               {showLevelPicker && (
-                <div className="absolute top-full right-0 mt-2 bg-white shadow-xl rounded-lg py-2 w-24 z-[100] border border-gray-100">
+                <div className="absolute top-full right-0 mt-2 bg-white  rounded-lg py-2 w-24 z-[100] border border-gray-100">
                   {[1, 2, 3].map(lvl => (
                     <div
                       key={lvl}
@@ -186,7 +186,7 @@ export default function Team() {
           {/* List Container */}
           <div className="space-y-2">
             {/* Table Header */}
-            <div className="bg-white rounded-lg py-3 px-4 grid grid-cols-3 text-center text-[12.5px] font-medium text-gray-700 shadow-sm">
+            <div className="bg-white rounded-lg py-3 px-4 grid grid-cols-3 text-center text-[12.5px] font-medium text-gray-700 ">
               <div>conta</div>
               <div>nota</div>
               <div>{activeTab === 'members' ? 'período' : 'investimento'}</div>
@@ -195,7 +195,7 @@ export default function Team() {
             {/* Members List */}
             {filteredMembers.length > 0 ? (
               filteredMembers.map((member, idx) => (
-                <div key={idx} className="bg-white rounded-lg py-4 px-4 grid grid-cols-3 text-center text-[11px] text-gray-600 shadow-sm items-center">
+                <div key={idx} className="bg-white rounded-lg py-4 px-4 grid grid-cols-3 text-center text-[11px] text-gray-600  items-center">
                   <div className="font-mono">
                     {member.phone || '---'}
                   </div>
@@ -212,7 +212,7 @@ export default function Team() {
               ))
             ) : (
               /* Empty State */
-              <div className="bg-white rounded-[1.5rem] flex flex-col items-center justify-center p-8 shadow-sm min-h-[250px]">
+              <div className="bg-white rounded-[1.5rem] flex flex-col items-center justify-center p-8  min-h-[250px]">
                 <div className="relative w-32 h-32 mb-4">
                   <img
                     alt="vazio"

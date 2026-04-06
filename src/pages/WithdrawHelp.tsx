@@ -15,7 +15,7 @@ export default function WithdrawHelp() {
 
       {/* Main Content */}
       <main className="p-4 flex-grow">
-        <article className="bg-white rounded-[2rem] p-6 shadow-sm min-h-[400px]">
+        <article className="bg-white rounded-xl p-6  min-h-[400px]">
           {/* Card Title */}
           <h1 className="text-[15px] font-bold text-[#001f3f] mb-6">
             como retirar ganhos

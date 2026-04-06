@@ -116,9 +116,9 @@ export default function RechargeDetail() {
 
       <main className="p-4 space-y-4">
         {/* Top Card */}
-        <section className="bg-white rounded-3xl p-6 shadow-sm flex flex-col items-center">
+        <section className="bg-white rounded-xl p-6  flex flex-col items-center">
           {/* Attention Message */}
-          <div className="mb-8 p-4 bg-red-50 rounded-2xl border border-red-100 w-full">
+          <div className="mb-8 p-4 bg-red-50 rounded-xl border border-red-100 w-full">
             <p className="text-[13px] text-gray-800 leading-relaxed text-center">
               <span className="text-red-500 font-black">atenção:</span> o banco selecionado é o banco <span className="font-black text-[#0000AA] uppercase">{bank.nome_do_banco}</span>, use este banco para fazer o pagamento!
             </p>
@@ -162,14 +162,14 @@ export default function RechargeDetail() {
           {/* Confirmation Button */}
           <button
             onClick={handleConfirm}
-            className="bg-[#0000AA] text-white w-full h-[45px] rounded-full text-[15px] font-semibold shadow-lg relative"
+            className="bg-[#0000AA] text-white w-full h-[45px] rounded-xl text-[15px] font-normal  relative"
           >
             {confirmed ? 'confirmado!' : 'clique confirme'}
           </button>
         </section>
 
         {/* Instructions Card */}
-        <section className="bg-white rounded-3xl p-6 shadow-sm">
+        <section className="bg-white rounded-xl p-6 ">
           <h3 className="text-[15px] font-bold text-gray-900 mb-6">instruções de recarga bancária</h3>
           <div className="space-y-4 text-[12.5px] leading-relaxed text-gray-700">
             <p>1. o valor mínimo para depósito bancário é de <span className="text-red-500 font-bold">9000</span> kzs e o máximo é de <span className="text-red-500 font-bold">7.000.000</span> kzs.</p>
@@ -187,7 +187,7 @@ export default function RechargeDetail() {
             initial={{ opacity: 0, scale: 0.8, x: 0, y: 0 }}
             animate={{ opacity: 1, scale: 1, x: 0, y: 0 }}
             exit={{ opacity: 0, scale: 0.8, x: 0, y: 0 }}
-            className="fixed inset-0 m-auto w-fit h-fit min-w-[260px] bg-black/50 backdrop-blur-sm text-white px-5 py-3 rounded-2xl text-[12.5px] shadow-xl z-[500] text-center max-w-[85vw] whitespace-normal break-words"
+            className="fixed inset-0 m-auto w-fit h-fit min-w-[260px] bg-black/50 backdrop-blur-sm text-white px-5 py-3 rounded-xl text-[12.5px]  z-[500] text-center max-w-[85vw] whitespace-normal break-words"
           >
             {notification}
           </motion.div>

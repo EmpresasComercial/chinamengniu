@@ -13,7 +13,7 @@ interface LoadingContextType {
 const LoadingContext = createContext<LoadingContextType | undefined>(undefined);
 
 // Páginas que carregam dados mais pesados – avisa o utilizador
-const HEAVY_ROUTES = ['/equipe', '/detalhes', '/recarregar', '/retirar', '/reproducao'];
+const HEAVY_ROUTES = ['/equipe', '/detalhes', '/recarregar', '/retirar', '/extracao'];
 
 export const LoadingProvider = ({ children }: { children: ReactNode }) => {
   const [isLoading, setIsLoadingState] = useState(false);
@@ -131,7 +131,7 @@ export const LoadingProvider = ({ children }: { children: ReactNode }) => {
       {/* Global Toast Error / Warnings */}
       {errorMessage && (
         <div className="fixed inset-0 pointer-events-none z-[10000] flex items-center justify-center p-4">
-          <div className="bg-black/80 backdrop-blur-sm text-white px-5 py-3 rounded-2xl text-[12.5px] shadow-xl text-center max-w-[85vw] whitespace-normal break-words leading-relaxed pointer-events-auto fade-in">
+          <div className="bg-black/80 backdrop-blur-sm text-white px-5 py-3 rounded-xl text-[12.5px]  text-center max-w-[85vw] whitespace-normal break-words leading-relaxed pointer-events-auto fade-in">
             {errorMessage}
           </div>
         </div>

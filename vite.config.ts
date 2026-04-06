@@ -18,11 +18,11 @@ export default defineConfig(({ mode }) => {
         devOptions: {
           enabled: true
         },
-        includeAssets: ['pwa-icon.png'],
+        includeAssets: ['NewmontCorporationfff83c6b-57f6-428e-alogob.png'],
         manifest: {
-          name: 'Mengniu Company',
-          short_name: 'Mengniu',
-          description: 'Mengniu Company Premium Application',
+          name: 'Newmont Corporation',
+          short_name: 'Newmont',
+          description: 'Newmont Corporation Premium Application',
           theme_color: '#000080',
           background_color: '#ffffff',
           display: 'standalone',
@@ -30,12 +30,12 @@ export default defineConfig(({ mode }) => {
           start_url: '/',
           icons: [
             {
-              src: 'pwa-icon.png',
+              src: 'NewmontCorporationfff83c6b-57f6-428e-alogob.png',
               sizes: '192x192',
               type: 'image/png'
             },
             {
-              src: 'pwa-icon.png',
+              src: 'NewmontCorporationfff83c6b-57f6-428e-alogob.png',
               sizes: '512x512',
               type: 'image/png',
               purpose: 'any maskable'

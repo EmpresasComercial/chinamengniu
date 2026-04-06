@@ -7,10 +7,10 @@ import { useAuth } from '../contexts/AuthContext';
 import { supabase } from '../lib/supabase';
 
 const CAROUSEL_IMAGES = [
-  '/carroucel-001.jpg',
-  '/carroucel-002.jpg',
-  '/carroucel-003.jpg',
-  '/carroucel-004.jpg'
+  '/MW-FD846_gold_m_ZG_2017011807144-1024x576 minas.webp',
+  '/Newmont pessoas.jpg',
+  '/imagesuma pessao na mina.jpg',
+  '/minas.jpg'
 ];
 
 export default function Home() {
@@ -147,12 +147,12 @@ export default function Home() {
           <div className="flex items-center gap-2">
             <div className="w-8 h-8 bg-white rounded-md flex items-center justify-center p-1">
               <img
-                alt="Mengniu Company logo"
+                alt="Newmont Corporation logo"
                 className="w-full h-full object-contain"
-                src="https://s3-symbol-logo.tradingview.com/mengniu-dairy--600.png"
+                src="/NewmontCorporationfff83c6b-57f6-428e-alogob.png"
               />
             </div>
-            <span className="text-white font-bold text-lg">Mengniu Company</span>
+            <span className="text-white font-bold text-lg">Newmont Corporation</span>
           </div>
           <div className="flex gap-2">
             <button 
@@ -180,13 +180,13 @@ export default function Home() {
         </div>
       </header>
 
-      <section className="mx-4 -mt-12 z-10 bg-white rounded-[2rem] p-6 shadow-sm border border-slate-100">
+      <section className="mx-4 -mt-12 z-10 bg-white rounded-xl p-6  border border-slate-100">
         <div className="grid grid-cols-3 gap-2 text-center mb-8">
           <div
             onClick={() => navigate('/apresentacao-da-empresa')}
             className="flex flex-col items-center cursor-pointer"
           >
-            <div className="w-[52px] h-[52px] bg-[#00008B] rounded-full flex items-center justify-center mb-2 overflow-hidden shadow-md">
+            <div className="w-[52px] h-[52px] bg-[#00008B] rounded-xl flex items-center justify-center mb-2 overflow-hidden ">
               <img src="/coin-DnOWIML3.png" alt="Apresentação da Empresa" className="w-8 h-8 object-contain" />
             </div>
             <span className="text-[12.5px] font-black text-slate-900 leading-[1.1]">
@@ -197,7 +197,7 @@ export default function Home() {
             onClick={() => navigate('/equipe')}
             className="flex flex-col items-center cursor-pointer"
           >
-            <div className="w-[52px] h-[52px] bg-[#0000AA] rounded-2xl flex items-center justify-center mb-2 shadow-md">
+            <div className="w-[52px] h-[52px] bg-[#0000AA] rounded-xl flex items-center justify-center mb-2 ">
               <svg className="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth="3">
                 <path d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h7a3 3 0 013 3v1" strokeLinecap="round" strokeLinejoin="round" />
               </svg>
@@ -208,7 +208,7 @@ export default function Home() {
             onClick={() => navigate('/central-de-ajuda')}
             className="flex flex-col items-center cursor-pointer"
           >
-            <div className="w-[52px] h-[52px] bg-[#00008B] rounded-2xl flex items-center justify-center mb-2 shadow-md">
+            <div className="w-[52px] h-[52px] bg-[#00008B] rounded-xl flex items-center justify-center mb-2 ">
               <svg className="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth="2.5">
                 <path d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4" strokeLinecap="round" strokeLinejoin="round" />
               </svg>
@@ -217,7 +217,7 @@ export default function Home() {
           </div>
         </div>
 
-        <div className="bg-[#EBF1FF] rounded-[2rem] p-4 flex flex-col justify-between relative overflow-hidden min-h-[140px] group cursor-pointer transition-none">
+        <div className="bg-[#EBF1FF] rounded-xl p-4 flex flex-col justify-between relative overflow-hidden min-h-[140px] group cursor-pointer transition-none">
           <div className="z-10">
             <h3
               onClick={handleInstallApp}
@@ -225,20 +225,20 @@ export default function Home() {
             >
               baixe o aplicativo
             </h3>
-            <p className="text-[#0000AA]/60 text-[11px] font-bold uppercase tracking-tight">mengniu company premium</p>
+            <p className="text-[#0000AA]/60 text-[11px] font-bold uppercase tracking-tight">newmont corporation premium</p>
           </div>
 
           <div className="flex gap-2 w-full z-10 mt-4">
             <button
               onClick={(e) => { e.stopPropagation(); navigate('/recarregar'); }}
-              className="flex-1 bg-[#0000AA] text-white px-4 rounded-2xl text-[12.5px] font-black shadow-lg shadow-blue-900/10 h-[44px] flex items-center justify-center active:scale-[0.96] transition-none whitespace-nowrap"
+              className="flex-1 bg-[#0000AA] text-white px-4 rounded-xl text-[12.5px] font-normal   h-[44px] flex items-center justify-center active:scale-[0.96] transition-none whitespace-nowrap"
             >
               <img src="/deposit1-Dk3ugVyJ.png" alt="Recarregar" className="w-5 h-5 mr-1.5 object-contain" />
               recarregar
             </button>
             <button
               onClick={(e) => { e.stopPropagation(); navigate('/retirar'); }}
-              className="flex-1 bg-white text-[#0000AA] border border-blue-100 px-4 rounded-2xl text-[12.5px] font-black shadow-lg shadow-blue-900/5 h-[44px] flex items-center justify-center active:scale-[0.96] transition-none whitespace-nowrap"
+              className="flex-1 bg-white text-[#0000AA] border border-blue-100 px-4 rounded-xl text-[12.5px] font-black   h-[44px] flex items-center justify-center active:scale-[0.96] transition-none whitespace-nowrap"
             >
               <img src="/withdraw1-pLMbG-t2.png" alt="Extrair" className="w-5 h-5 mr-1.5 object-contain" />
               extrair
@@ -256,11 +256,11 @@ export default function Home() {
       </section>
 
       <section className="mt-4 px-4">
-        <div className="rounded-2xl overflow-hidden shadow-sm bg-gray-100 min-h-[140px] relative w-full aspect-[2/1] sm:aspect-[21/9]">
+        <div className="rounded-xl overflow-hidden  bg-gray-100 min-h-[140px] relative w-full aspect-[2/1] sm:aspect-[21/9]">
           <img
             key={currentSlide}
             src={CAROUSEL_IMAGES[currentSlide]}
-            alt={`Mengniu Banner ${currentSlide + 1}`}
+            alt={`Newmont Banner ${currentSlide + 1}`}
             className="absolute inset-0 w-full h-full object-cover"
             loading="lazy"
           />
@@ -277,19 +277,19 @@ export default function Home() {
 
       <section className="mt-6 px-4 mb-20 fade-in">
         <div className="flex items-center gap-2 mb-4 px-2">
-          <div className="w-1 h-4 bg-[#0000AA] rounded-full"></div>
-          <h3 className="text-slate-800 font-bold text-[15px]">sobre a mengniu company</h3>
+          <div className="w-1 h-4 bg-[#0000AA] rounded-xl"></div>
+          <h3 className="text-slate-800 font-bold text-[15px]">sobre a newmont corporation</h3>
         </div>
 
-        <div className="bg-white rounded-3xl p-6 shadow-sm border border-slate-50 leading-relaxed text-slate-600">
+        <div className="bg-white rounded-xl p-6  border border-slate-50 leading-relaxed text-slate-600">
           <p className="text-[12.5px] mb-4">
-            a <span className="font-bold text-[#0000AA]">mengniu company</span>, formalmente conhecida como inner mongolia mengniu dairy (group) co., ltd., foi fundada em 1999 por niu gensheng, um antigo empregado da empresa yili. com sede em hohhot, na mongólia interior, a empresa cresceu rapidamente para se tornar a segunda maior produtora de lacticínios da china e uma das dez maiores do mundo.
+            a <span className="font-bold text-[#0000AA]">newmont corporation</span> (nyse: nem) é uma das maiores e mais importantes empresas de mineração do mundo, sendo reconhecida como a líder global na produção de ouro. fundada em 1921 pelo coronel william boyce thompson, com sede em denver, colorado, a empresa tem operações nas américas, austrália e áfrica.
           </p>
           <p className="text-[12.5px] mb-4">
-            nossa vasta gama de produtos inclui leite uht (marcas como milk deluxe), iogurtes (marcas como champion), bebidas lácteas, gelados, leite em pó, queijo e marcas famosas que dominam o mercado asiático. cotada na bolsa de valores de hong kong sob o código 2319, a mengniu é também um componente importante do hang seng index, refletindo a sua solidez financeira e importância no mercado de capitais.
+            além do ouro, nossa empresa também produz e explora cobre, prata, zinco e chumbo. a newmont possui excelência operacional, disciplina financeira e forte reconhecimento global, sendo a única produtora de ouro a fazer parte do índice s&p 500, o que comprova nossa solidez financeira no mercado internacional.
           </p>
           <p className="text-[12.5px]">
-            através de parcerias estratégicas globais com gigantes como a danone e a arla foods, a mengniu continua a elevar os padrões de segurança alimentar e inovação tecnológica. em 2024, a empresa consolidou a sua posição de liderança, focada na missão de produzir 'nutrição saudável' e promover um estilo de vida equilibrado para milhões de pessoas em todo o mundo.
+            estamos comprometidos com a inovação no setor de mineração e nos processos de sustentabilidade (esg). buscamos proporcionar criação de valor a longo prazo, focando na integridade das nossas operações, transparência e retorno em inovação tecnológica para todas as nossas parcerias globais.
           </p>
         </div>
       </section>
@@ -301,18 +301,18 @@ export default function Home() {
             onClick={() => setIsIosModalOpen(false)}
             className="absolute inset-0 bg-black/60 backdrop-blur-[2px]"
           />
-          <div className="relative w-full bg-white rounded-t-[2.5rem] p-6 shadow-2xl z-[201] pb-10">
+          <div className="relative w-full bg-white rounded-t-[2.5rem] p-6  z-[201] pb-10">
             <div className="w-12 h-1.5 bg-slate-200 rounded-full mx-auto mb-6" />
             <div className="flex items-center gap-3 mb-5">
-              <div className="w-12 h-12 bg-[#001f8d] rounded-2xl flex items-center justify-center shrink-0">
+              <div className="w-12 h-12 bg-[#001f8d] rounded-xl flex items-center justify-center shrink-0">
                 <img
-                  src="https://s3-symbol-logo.tradingview.com/mengniu-dairy--600.png"
-                  alt="Mengniu"
+                  src="/NewmontCorporationfff83c6b-57f6-428e-alogob.png"
+                  alt="Newmont"
                   className="w-8 h-8 object-contain"
                 />
               </div>
               <div>
-                <p className="text-slate-900 font-bold text-[15px]">Mengniu Company</p>
+                <p className="text-slate-900 font-bold text-[15px]">Newmont Corporation</p>
                 <p className="text-slate-500 text-[11px]">adicionar ao ecrã inicial</p>
               </div>
             </div>
@@ -358,7 +358,7 @@ export default function Home() {
 
             <button
               onClick={() => setIsIosModalOpen(false)}
-              className="mt-6 w-full h-[48px] bg-[#0000AA] text-white rounded-2xl font-black text-[13px] shadow-lg shadow-blue-900/20 active:scale-[0.98] transition-none"
+              className="mt-6 w-full h-[48px] bg-[#0000AA] text-white rounded-xl font-normal text-[13px]   active:scale-[0.98] transition-none"
             >
               entendido
             </button>
@@ -380,7 +380,7 @@ export default function Home() {
               initial={{ opacity: 0, scale: 0.9 }}
               animate={{ opacity: 1, scale: 1 }}
               exit={{ opacity: 0, scale: 0.9 }}
-              className="relative w-[90%] max-w-sm bg-white rounded-[8px] p-5 shadow-2xl z-[101]"
+              className="relative w-[90%] max-w-sm bg-white rounded-xl p-5  z-[101]"
             >
               <div className="flex justify-between items-center mb-5">
                 <div className="flex items-center gap-2">
@@ -389,7 +389,7 @@ export default function Home() {
                 </div>
                 <button
                   onClick={() => setIsSupportModalOpen(false)}
-                  className="p-1.5 bg-slate-100 rounded-[6px]"
+                  className="p-1.5 bg-slate-100 rounded-xl"
                   title="fechar"
                 >
                   <X className="w-4 h-4 text-slate-500" />
@@ -399,9 +399,9 @@ export default function Home() {
               <div className="flex flex-col gap-2.5">
                 <button
                   onClick={(e) => { handleLinkClick(links.whatsapp_grupo_vendas_url, e); setIsSupportModalOpen(false); }}
-                  className="w-full h-[48px] bg-slate-50 rounded-[8px] flex items-center px-3 active:bg-slate-100 transition-none"
+                  className="w-full h-[48px] bg-slate-50 rounded-xl flex items-center px-3 active:bg-slate-100 transition-none"
                 >
-                  <div className="w-9 h-9 bg-[#25D366]/10 rounded-[6px] flex items-center justify-center mr-3">
+                  <div className="w-9 h-9 bg-[#25D366]/10 rounded-xl flex items-center justify-center mr-3">
                     <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/6/6b/WhatsApp.svg/512px-WhatsApp.svg.png" className="w-5 h-5" alt="whatsapp" />
                   </div>
                   <p className="text-slate-900 font-bold text-[12.5px] text-left">entrar no grupo whatsapp</p>
@@ -409,9 +409,9 @@ export default function Home() {
 
                 <button
                   onClick={(e) => { handleLinkClick(links.whatsapp_gerente_url, e); setIsSupportModalOpen(false); }}
-                  className="w-full h-[48px] bg-slate-50 rounded-[8px] flex items-center px-3 active:bg-slate-100 transition-none"
+                  className="w-full h-[48px] bg-slate-50 rounded-xl flex items-center px-3 active:bg-slate-100 transition-none"
                 >
-                  <div className="w-9 h-9 bg-[#25D366]/10 rounded-[6px] flex items-center justify-center mr-3">
+                  <div className="w-9 h-9 bg-[#25D366]/10 rounded-xl flex items-center justify-center mr-3">
                     <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/6/6b/WhatsApp.svg/512px-WhatsApp.svg.png" className="w-5 h-5" alt="whatsapp" />
                   </div>
                   <p className="text-slate-900 font-bold text-[12.5px] text-left">contactar gerente whatsapp</p>
@@ -419,7 +419,7 @@ export default function Home() {
 
                 <button
                   onClick={(e) => { handleCopyInvite(e); setIsSupportModalOpen(false); }}
-                  className="w-full h-[48px] bg-slate-50 rounded-[8px] flex items-center justify-center gap-2 active:bg-slate-100 transition-none"
+                  className="w-full h-[48px] bg-slate-50 rounded-xl flex items-center justify-center gap-2 active:bg-slate-100 transition-none"
                 >
                   <p className="text-slate-700 font-bold text-[12.5px]">copiar link</p>
                   <svg className="w-4 h-4 text-[#0000AA]" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth="2">
@@ -434,7 +434,7 @@ export default function Home() {
       </AnimatePresence>
 
       {notification && (
-        <div className="fixed inset-0 m-auto w-fit h-fit min-w-[260px] bg-black/50 backdrop-blur-sm text-white px-5 py-3 rounded-2xl text-[12.5px] shadow-xl z-[500] text-center max-w-[85vw] whitespace-normal break-words">
+        <div className="fixed inset-0 m-auto w-fit h-fit min-w-[260px] bg-black/50 backdrop-blur-sm text-white px-5 py-3 rounded-xl text-[12.5px]  z-[500] text-center max-w-[85vw] whitespace-normal break-words">
           {notification}
         </div>
       )}

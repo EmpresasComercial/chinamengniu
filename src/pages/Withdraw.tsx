@@ -126,14 +126,14 @@ export default function Withdraw() {
     <div className="min-h-screen bg-[#d1d5db] page-content">
       {/* header */}
       <header className="bg-[#0000cc] text-white px-4 py-3 flex items-center sticky top-0 z-50">
-        <button onClick={() => navigate(-1)} className="flex-none cursor-pointer">
+        <button onClick={() => navigate(-1)} className="flex-none cursor-pointer" title="voltar" aria-label="voltar">
           <ChevronLeft className="h-6 w-6" />
         </button>
         <h1 className="flex-grow text-center text-[15px] font-bold mr-6">retirar</h1>
       </header>
 
       <main className="p-4 space-y-4 max-w-md mx-auto">
-        <div className="bg-white rounded-2xl p-4 shadow-sm">
+        <div className="bg-white rounded-xl p-4 ">
           <div className="flex justify-between items-start mb-4">
             <p className="text-[12.5px] text-red-500 italic">abrir limite em até 24 horas.</p>
             <div className="text-blue-800">
@@ -181,35 +181,32 @@ export default function Withdraw() {
           </div>
 
           <div className="mb-6">
-            <label className="block text-[12.5px] font-bold text-gray-700 mb-1">faixa de limite de saque 1.000 Kz - 1.000.000,00 Kz</label>
             <input
               value={amount}
               onChange={(e) => setAmount(e.target.value.replace(/[^\d.]/g, ''))}
-              className="w-full border-b border-gray-200 focus:border-[#0000cc] focus:ring-0 text-[12.5px] py-2 px-0 text-gray-700 outline-none"
-              placeholder="faixa de limite de saque 1.000 - 1.000.000,00 Kz"
+              className="w-full border-b-[1.5px] border-[#0000b3] focus:border-[#0000b3] focus:ring-0 text-[12.5px] py-2 px-0 text-gray-700 outline-none"
+              placeholder="por favor, insira o valor a retirar (1000 - 1000000)"
               type="text"
             />
           </div>
 
           <div className="mb-6">
-            <label className="block text-[12.5px] font-bold text-gray-700 mb-1">endereço para retirada</label>
             <input
               value={selectedBank ? maskIban(selectedBank.iban) : ''}
               readOnly
-              className="w-full border-b border-gray-200 focus:border-[#0000cc] focus:ring-0 text-[12.5px] py-2 px-0 text-gray-400 outline-none bg-gray-50"
-              placeholder="vincule um banco para ver o iban"
+              className="w-full border-b-[1.5px] border-[#0000b3] focus:border-[#0000b3] focus:ring-0 text-[12.5px] py-2 px-0 text-gray-400 outline-none bg-gray-50"
+              placeholder="por favor, vincule um banco para ver o iban"
               type="text"
             />
           </div>
 
           <div className="mb-6 relative">
-            <label className="block text-[12.5px] font-bold text-gray-700 mb-1">senha segura</label>
             <div className="relative">
               <input
                 value={password}
-                onChange={(e) => setPassword(e.target.value)}
-                className="w-full border-b border-gray-200 focus:border-[#0000cc] focus:ring-0 text-[12.5px] py-2 px-0 text-gray-700 outline-none"
-                placeholder="senha segura"
+                onChange={(e) => setPassword(e.target.value.replace(/\s/g, ''))}
+                className="w-full border-b-[1.5px] border-[#0000b3] focus:border-[#0000b3] focus:ring-0 text-[12.5px] py-2 px-0 text-gray-700 outline-none"
+                placeholder="por favor, insira a senha segura"
                 type={showPassword ? "text" : "password"}
               />
               <div
@@ -238,7 +235,7 @@ export default function Withdraw() {
 
           <button
             onClick={handleConfirm}
-            className="w-full h-[45px] bg-[#0000cc] text-white rounded-full text-[15px] font-bold tracking-wide hover:bg-blue-800 transition-colors"
+            className="w-full h-[45px] bg-[#0000cc] text-white rounded-xl text-[15px] font-normal tracking-wide hover:bg-blue-800 transition-colors"
           >
             confirmar
           </button>
@@ -251,7 +248,7 @@ export default function Withdraw() {
               animate={{ opacity: 1, x: 0, y: 0 }}
               exit={{ opacity: 0, x: 0, y: 0 }}
               transition={{ duration: 0.1 }}
-              className="fixed inset-0 m-auto w-fit h-fit min-w-[260px] bg-black/50 backdrop-blur-sm text-white px-5 py-3 rounded-2xl text-[12.5px] shadow-xl z-[500] text-center max-w-[85vw] whitespace-normal break-words"
+              className="fixed inset-0 m-auto w-fit h-fit min-w-[260px] bg-black/50 backdrop-blur-sm text-white px-5 py-3 rounded-xl text-[12.5px]  z-[500] text-center max-w-[85vw] whitespace-normal break-words"
             >
               {feedback}
             </motion.div>
@@ -260,7 +257,7 @@ export default function Withdraw() {
 
         <div>
           <h4 className="text-[15px] font-bold text-gray-700 mb-3">instruções para retirada</h4>
-          <div className="bg-white rounded-2xl p-4 text-[12.5px] leading-relaxed text-gray-600 space-y-3 shadow-sm">
+          <div className="bg-white rounded-xl p-4 text-[12.5px] leading-relaxed text-gray-600 space-y-3 ">
             <p>suporte para retiradas usando transferência bancária (iban).</p>
             <p>as retiradas geralmente levam de 24 a 48 minutos para chegar.</p>
             <p>o valor mínimo de saque é 1.000 Kz, limite máximo 1.000.000,00 Kz.</p>

@@ -137,7 +137,7 @@ export default function RechargeUSDT() {
               className="space-y-6"
             >
               {/* Card de Taxa e Total (Minúsculas e Subtexto) */}
-              <div className="bg-white rounded-2xl p-5 shadow-sm border border-gray-100">
+              <div className="bg-white rounded-xl p-5  border border-gray-100">
                 <div className="flex justify-between items-center mb-1">
                   <span className="text-gray-900 font-bold text-[15px]">câmbio</span>
                   <span className="font-semibold text-gray-900 text-[15px]">1 usdt ≈ {exchangeRate.toLocaleString()} kz</span>
@@ -163,7 +163,7 @@ export default function RechargeUSDT() {
                       onClick={() => setAmountUSDT(val.toString())}
                       className={`h-8 rounded-lg transition-all text-[13px] font-medium ${
                         parseFloat(amountUSDT) === val
-                          ? 'bg-[#0000AA] text-white shadow-sm'
+                          ? 'bg-[#0000AA] text-white '
                           : 'bg-[#0000AA] text-white opacity-90 active:opacity-100'
                       }`}
                     >
@@ -189,7 +189,7 @@ export default function RechargeUSDT() {
 
               <button
                 onClick={handleCreateDeposit}
-                className="w-full h-[54px] bg-[#0000AA] text-white rounded-full text-[15px] font-medium transition-all active:scale-[0.98] shadow-lg shadow-blue-900/20"
+                className="w-full h-[54px] bg-[#0000AA] text-white rounded-xl text-[15px] font-normal transition-all active:scale-[0.98]"
               >
                 continuar
               </button>
@@ -224,15 +224,15 @@ export default function RechargeUSDT() {
               animate={{ opacity: 1, scale: 1 }}
               className="space-y-5"
             >
-              <div className="bg-white rounded-3xl p-6 shadow-sm border border-gray-100 flex flex-col items-center text-center">
-                <div className="w-14 h-14 bg-blue-50 rounded-full flex items-center justify-center mb-5">
+              <div className="bg-white rounded-xl p-6  border border-gray-100 flex flex-col items-center text-center">
+                <div className="w-14 h-14 bg-blue-50 rounded-xl flex items-center justify-center mb-5">
                   <CheckCircle2 className="w-8 h-8 text-[#0000AA]" />
                 </div>
                 <h2 className="text-[17px] font-bold text-gray-900 mb-2">detalhes de depósito usdt</h2>
                 <p className="text-[13px] text-gray-500 mb-8 px-4">envie exatamente <span className="font-bold text-gray-900">{amountUSDT} usdt</span> para o endereço abaixo:</p>
 
                 <div className="w-full space-y-4 text-left mb-6">
-                  <div className="bg-gray-50 rounded-2xl p-5 border border-gray-100 relative group">
+                  <div className="bg-gray-50 rounded-xl p-5 border border-gray-100 relative group">
                     <p className="text-[11px] text-gray-400 font-bold mb-2 uppercase tracking-widest">endereço para cópia</p>
                     <div className="flex items-center justify-between gap-4">
                       <span className="text-[13px] font-mono font-bold text-gray-800 break-all leading-tight">
@@ -240,7 +240,7 @@ export default function RechargeUSDT() {
                       </span>
                       <button 
                         onClick={() => handleCopy(walletAddress)}
-                        className="p-3 bg-white border border-gray-200 text-[#0000AA] rounded-xl shadow-sm active:scale-95 transition-all"
+                        className="p-3 bg-white border border-gray-200 text-[#0000AA] rounded-xl  active:scale-95 transition-all"
                         aria-label="copiar endereço"
                       >
                         <Copy className="w-5 h-5" />
@@ -249,11 +249,11 @@ export default function RechargeUSDT() {
                   </div>
 
                   <div className="flex gap-3">
-                    <div className="flex-1 bg-gray-50 rounded-2xl p-4 border border-gray-100 text-center">
+                    <div className="flex-1 bg-gray-50 rounded-xl p-4 border border-gray-100 text-center">
                       <p className="text-[10px] text-gray-400 font-bold mb-1 uppercase">rede</p>
                       <p className="text-[14px] font-bold text-gray-900">usttrc</p>
                     </div>
-                    <div className="flex-1 bg-gray-50 rounded-2xl p-4 border border-gray-100 text-center">
+                    <div className="flex-1 bg-gray-50 rounded-xl p-4 border border-gray-100 text-center">
                       <p className="text-[10px] text-gray-400 font-bold mb-1 uppercase">valor</p>
                       <p className="text-[14px] font-bold text-gray-900">{amountUSDT} usdt</p>
                     </div>
@@ -265,7 +265,7 @@ export default function RechargeUSDT() {
                     href={`${supportLink}?text=olá, acabei de fazer um depósito de ${amountUSDT} usdt. segue meu comprovante.`}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="flex items-center justify-center gap-2 w-full h-12 bg-green-600 text-white rounded-xl font-medium shadow-md transition-all active:scale-[0.98]"
+                    className="flex items-center justify-center gap-2 w-full h-12 bg-green-600 text-white rounded-xl font-medium  transition-all active:scale-[0.98]"
                   >
                     <MessageSquare className="w-5 h-5" />
                     enviar comprovante (whatsapp)
@@ -290,7 +290,7 @@ export default function RechargeUSDT() {
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: 20 }}
-            className="fixed bottom-10 left-1/2 -translate-x-1/2 bg-gray-900 text-white px-6 py-3 rounded-2xl text-[13px] shadow-2xl z-[100] whitespace-nowrap font-medium"
+            className="fixed bottom-10 left-1/2 -translate-x-1/2 bg-gray-900 text-white px-6 py-3 rounded-xl text-[13px]  z-[100] whitespace-nowrap font-medium"
           >
             {notification}
           </motion.div>

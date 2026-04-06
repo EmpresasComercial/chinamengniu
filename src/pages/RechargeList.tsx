@@ -68,14 +68,14 @@ export default function RechargeList() {
 
       <main className="p-4">
         {/* Main Card */}
-        <section className="bg-white rounded-[2rem] p-6 shadow-sm flex flex-col">
+        <section className="bg-white rounded-xl p-6  flex flex-col">
           {/* Amount Selection */}
           <div className="flex justify-between mb-8">
             {[10000, 50000, 100000, 500000].map((val) => (
               <button
                 key={val}
                 onClick={() => setAmount(val.toString())}
-                className={`w-[22%] py-2 rounded-[4px] text-[12.5px] font-bold transition-all ${amount === val.toString() 
+                className={`w-[22%] py-2 rounded-xl text-[12.5px] font-bold transition-all ${amount === val.toString() 
                   ? 'bg-[#0000AA] text-white' 
                   : 'bg-[#F0F2F5] text-gray-700 active:bg-gray-200'
                 }`}
@@ -132,7 +132,7 @@ export default function RechargeList() {
                         checked={selectedBankId === b.id}
                         onChange={() => setSelectedBankId(b.id)}
                       />
-                      <div className={`w-5 h-5 rounded-[4px] border-2 flex items-center justify-center transition-all ${selectedBankId === b.id ? 'border-[#0000AA] bg-[#0000AA]' : 'border-gray-300'}`}>
+                      <div className={`w-5 h-5 rounded-xl border-2 flex items-center justify-center transition-all ${selectedBankId === b.id ? 'border-[#0000AA] bg-[#0000AA]' : 'border-gray-300'}`}>
                         {selectedBankId === b.id && <Check className="w-3.5 h-3.5 text-white" strokeWidth={3} />}
                       </div>
                     </div>
@@ -147,7 +147,7 @@ export default function RechargeList() {
           {/* Action Button */}
           <button
             onClick={handleAdvance}
-            className={`w-full h-[45px] rounded-full text-[15px] font-semibold shadow-lg transition-colors ${!isFormValid ? 'bg-gray-400' : 'bg-[#0000AA] text-white'
+            className={`w-full h-[45px] rounded-full text-[15px] font-semibold  transition-colors ${!isFormValid ? 'bg-gray-400' : 'bg-[#0000AA] text-white'
               }`}
           >
             avança proxima
@@ -160,7 +160,7 @@ export default function RechargeList() {
                 animate={{ opacity: 1, x: 0, y: 0 }}
                 exit={{ opacity: 0, x: 0, y: 0 }}
                 transition={{ duration: 0.1 }}
-                className="fixed inset-0 m-auto w-fit h-fit min-w-[260px] bg-black/50 backdrop-blur-sm text-white px-5 py-3 rounded-2xl text-[12.5px] shadow-xl z-[500] text-center max-w-[85vw] whitespace-normal break-words"
+                className="fixed inset-0 m-auto w-fit h-fit min-w-[260px] bg-black/50 backdrop-blur-sm text-white px-5 py-3 rounded-xl text-[12.5px]  z-[500] text-center max-w-[85vw] whitespace-normal break-words"
               >
                 {validationError}
               </motion.div>

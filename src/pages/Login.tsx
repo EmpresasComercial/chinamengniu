@@ -132,39 +132,31 @@ export default function Login() {
 
           {/* Logo Section */}
           <div className="flex flex-col items-center">
-            <div className="w-16 h-16 bg-white rounded-xl flex items-center justify-center p-2 mb-2 shadow-lg">
+            <div className="w-16 h-16 bg-white rounded-xl flex items-center justify-center p-2 mb-2 ">
               <img
-                alt="Mengniu Company logo"
+                alt="Newmont Corporation logo"
                 className="w-full h-full object-contain"
-                src="https://s3-symbol-logo.tradingview.com/mengniu-dairy--600.png"
+                src="/NewmontCorporationfff83c6b-57f6-428e-alogob.png"
               />
             </div>
-            <h1 className="text-white text-2xl font-bold tracking-wide">Mengniu Company</h1>
+            <h1 className="text-white text-2xl font-bold tracking-wide">Newmont Corporation</h1>
           </div>
         </header>
         {/* END: TopHeader */}
 
         {/* BEGIN: LoginCard */}
-        <section className="flex-1 bg-white mx-4 -mt-6 rounded-t-[32px] rounded-b-[32px] card-shadow p-6 mb-10 flex flex-col">
-          {/* Tab Navigation */}
-          <nav className="flex justify-center items-center bg-gray-100 rounded-full p-1 mb-8 text-[12.5px] font-medium text-gray-600">
-            <button type="button" className="flex-1 py-3 px-1 text-center text-black font-bold relative leading-tight">
-              aceder por telefone
-              <span className="absolute bottom-1 left-1/2 -translate-x-1/2 w-8 h-0.5 bg-black"></span>
-            </button>
-          </nav>
+        <section className="flex-1 bg-white mx-4 -mt-6 rounded-xl p-6 mb-10 flex flex-col">
 
           {/* Form Fields */}
           <form onSubmit={handleSubmit} className="space-y-4 flex-grow">
             {/* Phone Input */}
             <div className="space-y-1">
-              <label className="block text-[12.5px] font-medium text-gray-700" htmlFor="phone">telefone</label>
-              <div className="flex items-center border-b border-gray-200 py-2 focus-within:border-blue-600 transition-colors">
+              <div className="flex items-center border-b-[1.5px] border-[#0000b3] py-2 transition-colors">
                 <span className="text-gray-900 font-medium mr-3 text-[12.5px]">+244</span>
                 <input
                   className="w-full border-none focus:ring-0 p-0 text-[12.5px] placeholder-gray-400 text-gray-800"
                   id="phone"
-                  placeholder="telefone"
+                  placeholder="por favor, insira o telefone"
                   type="tel"
                   value={phone}
                   onChange={(e) => setPhone(e.target.value.replace(/[^\p{L}\p{N}]/gu, ''))}
@@ -174,12 +166,11 @@ export default function Login() {
 
             {/* Password Input */}
             <div className="space-y-2">
-              <label className="block text-[12.5px] font-semibold text-gray-800" htmlFor="password">senha</label>
-              <div className="flex items-center border-b border-gray-200 py-2 focus-within:border-blue-600 transition-colors">
+              <div className="flex items-center border-b-[1.5px] border-[#0000b3] py-2 transition-colors">
                 <input
                   className="w-full border-none focus:ring-0 p-0 text-[12.5px] placeholder-gray-400 text-gray-800"
                   id="password"
-                  placeholder="senha"
+                  placeholder="por favor, insira a senha"
                   type={showPassword ? "text" : "password"}
                   value={password}
                   onChange={(e) => setPassword(e.target.value.replace(/[^\p{L}\p{N}]/gu, ''))}
@@ -197,7 +188,7 @@ export default function Login() {
             {/* Submit Button */}
             <div className="pt-6">
               <button
-                className="w-full bg-[#0000b3] text-white h-[45px] rounded-full font-semibold text-[15px] hover:bg-blue-800 transition-colors shadow-lg shadow-blue-200"
+                className="w-full bg-[#0000b3] text-white h-[45px] rounded-xl font-normal text-[15px] hover:bg-blue-800 transition-colors"
                 type="submit"
               >
                 conecte-se
@@ -221,7 +212,7 @@ export default function Login() {
               initial={{ opacity: 0, scale: 0.9, x: 0, y: 0 }}
               animate={{ opacity: 1, scale: 1, x: 0, y: 0 }}
               exit={{ opacity: 0, scale: 0.9, x: 0, y: 0 }}
-              className="fixed inset-0 m-auto w-fit h-fit min-w-[260px] bg-black/50 backdrop-blur-sm text-white px-5 py-3 rounded-2xl text-[12.5px] shadow-xl z-[500] text-center max-w-[85vw] whitespace-normal break-words"
+              className="fixed inset-0 m-auto w-fit h-fit min-w-[260px] bg-black/50 backdrop-blur-sm text-white px-5 py-3 rounded-xl text-[12.5px]  z-[500] text-center max-w-[85vw] whitespace-normal break-words"
             >
               {feedback}
             </motion.div>
@@ -245,7 +236,7 @@ export default function Login() {
               initial={{ opacity: 0, scale: 0.9 }}
               animate={{ opacity: 1, scale: 1 }}
               exit={{ opacity: 0, scale: 0.9 }}
-              className="relative w-[90%] max-w-sm bg-white rounded-[8px] p-5 shadow-2xl z-[101]"
+              className="relative w-[90%] max-w-sm bg-white rounded-xl p-5  z-[101]"
             >
               <div className="flex justify-between items-center mb-5">
                 <div className="flex items-center gap-2">
@@ -254,7 +245,7 @@ export default function Login() {
                 </div>
                 <button 
                   onClick={() => setIsSupportModalOpen(false)} 
-                  className="p-1.5 bg-slate-100 rounded-[6px]"
+                  className="p-1.5 bg-slate-100 rounded-xl"
                   title="fechar"
                 >
                   <X className="w-4 h-4 text-slate-500" />
@@ -265,9 +256,9 @@ export default function Login() {
                 <button
                   type="button"
                   onClick={(e) => { handleLinkClick(links.whatsapp_grupo_vendas_url, e); setIsSupportModalOpen(false); }}
-                  className="w-full h-[48px] bg-slate-50 rounded-[8px] flex items-center px-3 active:bg-slate-100 transition-none"
+                  className="w-full h-[48px] bg-slate-50 rounded-xl flex items-center px-3 active:bg-slate-100 transition-none"
                 >
-                  <div className="w-9 h-9 bg-[#25D366]/10 rounded-[6px] flex items-center justify-center mr-3">
+                  <div className="w-9 h-9 bg-[#25D366]/10 rounded-xl flex items-center justify-center mr-3">
                     <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/6/6b/WhatsApp.svg/512px-WhatsApp.svg.png" className="w-5 h-5" alt="whatsapp" />
                   </div>
                   <p className="text-slate-900 font-bold text-[12.5px] text-left">entrar no grupo whatsapp</p>
@@ -276,9 +267,9 @@ export default function Login() {
                 <button
                   type="button"
                   onClick={(e) => { handleLinkClick(links.whatsapp_gerente_url, e); setIsSupportModalOpen(false); }}
-                  className="w-full h-[48px] bg-slate-50 rounded-[8px] flex items-center px-3 active:bg-slate-100 transition-none"
+                  className="w-full h-[48px] bg-slate-50 rounded-xl flex items-center px-3 active:bg-slate-100 transition-none"
                 >
-                  <div className="w-9 h-9 bg-[#25D366]/10 rounded-[6px] flex items-center justify-center mr-3">
+                  <div className="w-9 h-9 bg-[#25D366]/10 rounded-xl flex items-center justify-center mr-3">
                     <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/6/6b/WhatsApp.svg/512px-WhatsApp.svg.png" className="w-5 h-5" alt="whatsapp" />
                   </div>
                   <p className="text-slate-900 font-bold text-[12.5px] text-left">contactar gerente whatsapp</p>

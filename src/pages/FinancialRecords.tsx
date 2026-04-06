@@ -183,7 +183,7 @@ export default function FinancialRecords() {
 
       {/* Main Content */}
       <main className="p-4 flex-1">
-        <div className="bg-white rounded-[2rem] p-4 shadow-sm flex flex-col min-h-[400px]">
+        <div className="bg-white rounded-xl p-4  flex flex-col min-h-[400px]">
 
           {/* Active Tab Label + Filter Icon */}
           <div className="flex items-center justify-between mb-5">
@@ -240,7 +240,7 @@ export default function FinancialRecords() {
               animate={{ scale: 1, opacity: 1 }}
               exit={{ scale: 0.9, opacity: 0 }}
               transition={{ type: 'spring', damping: 25, stiffness: 200 }}
-              className="fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[90%] max-w-sm bg-white rounded-[1.5rem] z-[70] overflow-hidden shadow-2xl"
+              className="fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[90%] max-w-sm bg-white rounded-[1.5rem] z-[70] overflow-hidden "
             >
               <div className="p-5 border-b border-gray-100 flex justify-between items-center">
                 <h3 className="font-bold text-gray-800 text-[16px]">filtrar por</h3>

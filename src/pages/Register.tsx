@@ -157,32 +157,31 @@ export default function Register() {
 
         {/* Logo Container */}
         <div className="relative z-10 flex flex-col items-center">
-          <div className="w-16 h-16 bg-white rounded-xl flex items-center justify-center mb-2 shadow-lg p-2">
+          <div className="w-16 h-16 bg-white rounded-xl flex items-center justify-center mb-2  p-2">
             <img
-              alt="Mengniu Company logo"
+              alt="Newmont Corporation logo"
               className="w-full h-full object-contain"
-              src="https://s3-symbol-logo.tradingview.com/mengniu-dairy--600.png"
+              src="/NewmontCorporationfff83c6b-57f6-428e-alogob.png"
             />
           </div>
-          <h1 className="text-white text-2xl font-semibold tracking-tight">Mengniu Company</h1>
+          <h1 className="text-white text-2xl font-semibold tracking-tight">Newmont Corporation</h1>
         </div>
       </header>
       {/* END: Header */}
 
       {/* BEGIN: Main Registration Form */}
       <main className="flex-grow -mt-12 px-6 pb-12 relative z-20">
-        <section className="bg-white rounded-t-[40px] rounded-b-xl shadow-xl p-8 max-w-md mx-auto">
+        <section className="bg-white rounded-xl p-8 max-w-md mx-auto">
           <form onSubmit={handleSubmit} className="space-y-4">
             {/* Field: Phone Number */}
             <div className="space-y-1">
-              <label className="block text-[12.5px] font-medium text-gray-700" htmlFor="phone">telefone</label>
-              <div className="border-b border-gray-200 py-2 flex items-center focus-within:border-[#00008b] transition-colors">
+              <div className="flex items-center border-b-[1.5px] border-[#0000b3] py-2 transition-colors">
                 <span className="text-gray-800 mr-2 font-medium text-[12.5px]">+244</span>
                 <input
                   className="w-full border-none p-0 focus:ring-0 text-gray-800 placeholder-gray-400 text-[12.5px]"
                   id="phone"
                   name="phone"
-                  placeholder="telefone"
+                  placeholder="por favor, insira o telefone"
                   type="tel"
                   value={formData.phone}
                   onChange={handleChange}
@@ -192,13 +191,12 @@ export default function Register() {
 
             {/* Field: Password */}
             <div className="space-y-1">
-              <label className="block text-[12.5px] font-medium text-gray-700" htmlFor="password">senha</label>
-              <div className="border-b border-gray-200 py-2 flex items-center focus-within:border-[#00008b] transition-colors">
+              <div className="flex items-center border-b-[1.5px] border-[#0000b3] py-2 transition-colors">
                 <input
                   className="w-full border-none p-0 focus:ring-0 text-gray-800 placeholder-gray-400 text-[12.5px]"
                   id="password"
                   name="password"
-                  placeholder="senha"
+                  placeholder="por favor, insira a senha"
                   type={showPassword ? "text" : "password"}
                   value={formData.password}
                   onChange={handleChange}
@@ -215,13 +213,12 @@ export default function Register() {
 
             {/* Field: Confirm Password */}
             <div className="space-y-1">
-              <label className="block text-[12.5px] font-medium text-gray-700" htmlFor="confirm-password">confirmar senha</label>
-              <div className="border-b border-gray-200 py-2 flex items-center focus-within:border-[#00008b] transition-colors">
+              <div className="flex items-center border-b-[1.5px] border-[#0000b3] py-2 transition-colors">
                 <input
                   className="w-full border-none p-0 focus:ring-0 text-gray-800 placeholder-gray-400 text-[12.5px]"
                   id="confirm-password"
                   name="confirmPassword"
-                  placeholder="confirmar senha"
+                  placeholder="por favor, confirme a senha"
                   type={showConfirmPassword ? "text" : "password"}
                   value={formData.confirmPassword}
                   onChange={handleChange}
@@ -238,12 +235,12 @@ export default function Register() {
 
             {/* Field: Invite Code */}
             <div className="space-y-1">
-              <label className="block text-[12.5px] font-medium text-gray-700" htmlFor="invite-code">código de convite</label>
-              <div className="border-b border-gray-200 py-2 focus-within:border-[#00008b] transition-colors">
+              <div className="flex items-center border-b-[1.5px] border-[#0000b3] py-2 transition-colors">
                 <input
-                  className="w-full border-none p-0 focus:ring-0 text-gray-800 text-[12.5px] font-medium"
+                  className="w-full border-none p-0 focus:ring-0 text-gray-800 text-[12.5px] font-medium placeholder-gray-400"
                   id="invite-code"
                   name="inviteCode"
+                  placeholder="por favor, insira o código de convite"
                   type="text"
                   value={formData.inviteCode}
                   onChange={handleChange}
@@ -254,7 +251,7 @@ export default function Register() {
             {/* Submit Button */}
             <div className="pt-4">
               <button
-                className="w-full bg-[#0000aa] text-white h-[45px] rounded-full font-medium text-[15px] shadow-md transition-all active:scale-95"
+                className="w-full bg-[#0000aa] text-white h-[45px] rounded-xl font-normal text-[15px] transition-all active:scale-95"
                 type="submit"
               >
                 registrar
@@ -277,7 +274,7 @@ export default function Register() {
               initial={{ opacity: 0, scale: 0.9, x: 0, y: 0 }}
               animate={{ opacity: 1, scale: 1, x: 0, y: 0 }}
               exit={{ opacity: 0, scale: 0.9, x: 0, y: 0 }}
-              className="fixed inset-0 m-auto w-fit h-fit min-w-[260px] bg-black/50 backdrop-blur-sm text-white px-5 py-3 rounded-2xl text-[12.5px] shadow-xl z-[500] text-center max-w-[85vw] whitespace-normal break-words"
+              className="fixed inset-0 m-auto w-fit h-fit min-w-[260px] bg-black/50 backdrop-blur-sm text-white px-5 py-3 rounded-xl text-[12.5px]  z-[500] text-center max-w-[85vw] whitespace-normal break-words"
             >
               {feedback}
             </motion.div>
@@ -301,7 +298,7 @@ export default function Register() {
               initial={{ opacity: 0, scale: 0.9 }}
               animate={{ opacity: 1, scale: 1 }}
               exit={{ opacity: 0, scale: 0.9 }}
-              className="relative w-[90%] max-w-sm bg-white rounded-[8px] p-5 shadow-2xl z-[101]"
+              className="relative w-[90%] max-w-sm bg-white rounded-xl p-5  z-[101]"
             >
               <div className="flex justify-between items-center mb-5">
                 <div className="flex items-center gap-2">
@@ -310,7 +307,7 @@ export default function Register() {
                 </div>
                 <button 
                   onClick={() => setIsSupportModalOpen(false)} 
-                  className="p-1.5 bg-slate-100 rounded-[6px]"
+                  className="p-1.5 bg-slate-100 rounded-xl"
                   title="fechar"
                 >
                   <X className="w-4 h-4 text-slate-500" />
@@ -320,9 +317,9 @@ export default function Register() {
               <div className="flex flex-col gap-2.5">
                 <button
                   onClick={(e) => { handleLinkClick(links.whatsapp_grupo_vendas_url, e); setIsSupportModalOpen(false); }}
-                  className="w-full h-[48px] bg-slate-50 rounded-[8px] flex items-center px-3 active:bg-slate-100 transition-none"
+                  className="w-full h-[48px] bg-slate-50 rounded-xl flex items-center px-3 active:bg-slate-100 transition-none"
                 >
-                  <div className="w-9 h-9 bg-[#25D366]/10 rounded-[6px] flex items-center justify-center mr-3">
+                  <div className="w-9 h-9 bg-[#25D366]/10 rounded-xl flex items-center justify-center mr-3">
                     <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/6/6b/WhatsApp.svg/512px-WhatsApp.svg.png" className="w-5 h-5" alt="whatsapp" />
                   </div>
                   <p className="text-slate-900 font-bold text-[12.5px] text-left">entrar no grupo whatsapp</p>
@@ -330,9 +327,9 @@ export default function Register() {
 
                 <button
                   onClick={(e) => { handleLinkClick(links.whatsapp_gerente_url, e); setIsSupportModalOpen(false); }}
-                  className="w-full h-[48px] bg-slate-50 rounded-[8px] flex items-center px-3 active:bg-slate-100 transition-none"
+                  className="w-full h-[48px] bg-slate-50 rounded-xl flex items-center px-3 active:bg-slate-100 transition-none"
                 >
-                  <div className="w-9 h-9 bg-[#25D366]/10 rounded-[6px] flex items-center justify-center mr-3">
+                  <div className="w-9 h-9 bg-[#25D366]/10 rounded-xl flex items-center justify-center mr-3">
                     <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/6/6b/WhatsApp.svg/512px-WhatsApp.svg.png" className="w-5 h-5" alt="whatsapp" />
                   </div>
                   <p className="text-slate-900 font-bold text-[12.5px] text-left">contactar gerente whatsapp</p>

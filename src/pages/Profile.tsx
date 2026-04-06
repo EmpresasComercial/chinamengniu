@@ -171,7 +171,7 @@ export default function Profile() {
             <img
               alt="logo"
               className="w-full h-full object-contain p-1"
-              src="https://s3-symbol-logo.tradingview.com/mengniu-dairy--600.png"
+              src="/NewmontCorporationfff83c6b-57f6-428e-alogob.png"
             />
           </div>
           <div>
@@ -213,10 +213,10 @@ export default function Profile() {
           </p>
         </div>
 
-        {/* Linha 2: conta de reprodução + retirada total + comissão total equipe */}
+        {/* Linha 2: conta de extração + retirada total + comissão total equipe */}
         <div className="grid grid-cols-3 gap-1 mt-6">
           <div className="text-center">
-            <p className="text-[9px] opacity-80 whitespace-nowrap">conta de reprodução</p>
+            <p className="text-[9px] opacity-80 whitespace-nowrap">conta de extração</p>
             <p className="font-bold text-[13px] mt-1 whitespace-nowrap">{fmt(financialData.contaReproducao)} Kz</p>
           </div>
           <div className="text-center border-l border-white/10">
@@ -252,7 +252,7 @@ export default function Profile() {
       </section >
 
       {/* Action List Section */}
-      <section className="bg-[#EAEBED] rounded-t-3xl -mt-4 relative z-10 px-4 pt-6 flex-grow">
+      <section className="bg-[#EAEBED] rounded-t-xl -mt-4 relative z-10 px-4 pt-6 flex-grow">
         <motion.div 
           initial="hidden"
           animate="visible"
@@ -296,7 +296,7 @@ export default function Profile() {
             hideLoading();
             navigate('/login');
           }}
-          className="w-full bg-[#0000B8] text-white font-bold h-[50px] mt-8 mb-20 rounded-full text-[15px] shadow-lg shadow-blue-900/20 active:scale-[0.98] transition-all"
+          className="w-full bg-[#0000B8] text-white font-normal h-[50px] mt-8 mb-20 rounded-xl text-[15px]   active:scale-[0.98] transition-all"
         >
           sair
         </motion.button>
@@ -310,7 +310,7 @@ export default function Profile() {
               initial={{ opacity: 0, scale: 0.9 }}
               animate={{ opacity: 1, scale: 1 }}
               exit={{ opacity: 0, scale: 0.9 }}
-              className="bg-black/80 backdrop-blur-sm text-white px-5 py-3 rounded-2xl text-[12.5px] shadow-xl text-center max-w-[85vw] whitespace-normal break-words pointer-events-auto"
+              className="bg-black/80 backdrop-blur-sm text-white px-5 py-3 rounded-xl text-[12.5px]  text-center max-w-[85vw] whitespace-normal break-words pointer-events-auto"
             >
               {profileNotification}
             </motion.div>
@@ -333,7 +333,7 @@ export default function Profile() {
               initial={{ opacity: 0, scale: 0.9 }}
               animate={{ opacity: 1, scale: 1 }}
               exit={{ opacity: 0, scale: 0.9 }}
-              className="relative w-[90%] max-w-sm bg-white rounded-[8px] p-5 shadow-2xl z-[101]"
+              className="relative w-[90%] max-w-sm bg-white rounded-xl p-5  z-[101]"
             >
               <div className="flex justify-between items-center mb-5">
                 <div className="flex items-center gap-2">
@@ -342,7 +342,7 @@ export default function Profile() {
                 </div>
                 <button 
                   onClick={() => setIsSupportModalOpen(false)} 
-                  className="p-1.5 bg-slate-100 rounded-[6px]"
+                  className="p-1.5 bg-slate-100 rounded-xl"
                   title="fechar"
                 >
                   <X className="w-4 h-4 text-slate-500" />
@@ -352,9 +352,9 @@ export default function Profile() {
               <div className="flex flex-col gap-2.5">
                 <button
                   onClick={(e) => { handleLinkClick(links.whatsapp_grupo_vendas_url, e); setIsSupportModalOpen(false); }}
-                  className="w-full h-[48px] bg-slate-50 rounded-[8px] flex items-center px-3 active:bg-slate-100 transition-none"
+                  className="w-full h-[48px] bg-slate-50 rounded-xl flex items-center px-3 active:bg-slate-100 transition-none"
                 >
-                  <div className="w-9 h-9 bg-[#25D366]/10 rounded-[6px] flex items-center justify-center mr-3">
+                  <div className="w-9 h-9 bg-[#25D366]/10 rounded-xl flex items-center justify-center mr-3">
                     <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/6/6b/WhatsApp.svg/512px-WhatsApp.svg.png" className="w-5 h-5" alt="whatsapp" />
                   </div>
                   <p className="text-slate-900 font-bold text-[12.5px] text-left">entrar no grupo whatsapp</p>
@@ -362,9 +362,9 @@ export default function Profile() {
 
                 <button
                   onClick={(e) => { handleLinkClick(links.whatsapp_gerente_url, e); setIsSupportModalOpen(false); }}
-                  className="w-full h-[48px] bg-slate-50 rounded-[8px] flex items-center px-3 active:bg-slate-100 transition-none"
+                  className="w-full h-[48px] bg-slate-50 rounded-xl flex items-center px-3 active:bg-slate-100 transition-none"
                 >
-                  <div className="w-9 h-9 bg-[#25D366]/10 rounded-[6px] flex items-center justify-center mr-3">
+                  <div className="w-9 h-9 bg-[#25D366]/10 rounded-xl flex items-center justify-center mr-3">
                     <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/6/6b/WhatsApp.svg/512px-WhatsApp.svg.png" className="w-5 h-5" alt="whatsapp" />
                   </div>
                   <p className="text-slate-900 font-bold text-[12.5px] text-left">contactar gerente whatsapp</p>

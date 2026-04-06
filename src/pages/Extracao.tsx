@@ -6,7 +6,7 @@ import { supabase } from '../lib/supabase';
 import { useAuth } from '../contexts/AuthContext';
 import { motion, AnimatePresence } from 'motion/react';
 
-export default function Reproducao() {
+export default function Extracao() {
   const navigate = useNavigate();
   const { showLoading, hideLoading, registerFetch } = useLoading();
   const { user } = useAuth();
@@ -158,11 +158,11 @@ export default function Reproducao() {
         <img
           alt="Banner Cow"
           className="w-full h-auto object-cover"
-          src="/vaca-6978d793f60d.webp"
+          src="/minas.jpg"
           loading="lazy"
         />
         <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/60 to-transparent p-4">
-          <h2 className="text-[15px] font-bold lowercase tracking-tight">alimentação inteligente</h2>
+          <h2 className="text-[15px] font-bold lowercase tracking-tight">extração inteligente</h2>
           <p className="text-[10px] text-gray-200">criação inteligente, segura e robusta</p>
         </div>
 
@@ -170,9 +170,9 @@ export default function Reproducao() {
         <div className="absolute top-3 left-3 bg-white/20 backdrop-blur-sm rounded-full px-3 py-1 flex items-center gap-2">
           <div className="w-6 h-6 bg-white rounded-full flex items-center justify-center overflow-hidden p-1">
             <img
-              alt="Mengniu Company logo"
-              className="w-full h-full object-contain"
-              src="https://s3-symbol-logo.tradingview.com/mengniu-dairy--600.png"
+              alt="Newmont Corporation logo"
+              className="w-12 h-12 object-contain"
+              src="/NewmontCorporationfff83c6b-57f6-428e-alogob.png"
               referrerPolicy="no-referrer"
             />
           </div>
@@ -186,7 +186,7 @@ export default function Reproducao() {
       {/* Stats Grid */}
       <section className="grid grid-cols-2 gap-y-4 mb-6 px-1">
         <div>
-          <p className="text-[10px] text-gray-300">conta de reprodução</p>
+          <p className="text-[10px] text-gray-300">conta de extração</p>
           <p className="text-[15px] font-bold">{stats.reproductionBalance.toLocaleString('pt-AO', { minimumFractionDigits: 2 })} Kz</p>
         </div>
         <div>
@@ -202,7 +202,7 @@ export default function Reproducao() {
           <p className="text-[12.5px] font-semibold">{stats.activeCowsCount}/{stats.totalPurchasesCount}</p>
         </div>
         <div className="col-span-2 mt-2">
-          <p className="text-[10px] text-gray-300">horário de reinicialização da alimentação</p>
+          <p className="text-[10px] text-gray-300">horário de reinicialização da atividade</p>
           <p className="text-[15px] font-bold lowercase">
             {hasCollectedToday ? 'coleta concluída hoje' : 'aguardando coleta diária'}
           </p>
@@ -213,7 +213,7 @@ export default function Reproducao() {
       <section className="grid grid-cols-2 gap-3 mb-8">
         <button
           onClick={() => navigate('/transferencia-de-fundos')}
-          className="bg-[#D2F076] text-black rounded-lg p-4 flex items-center justify-between text-left font-black lowercase leading-[1] h-[45px] shadow-lg shadow-black/20"
+          className="bg-[#D2F076] text-black rounded-lg p-4 flex items-center justify-between text-left font-black lowercase leading-[1] h-[45px]"
         >
           <span className="text-[12px]">trocar saldo</span>
           <ArrowLeftRight className="w-5 h-5" />
@@ -221,7 +221,7 @@ export default function Reproducao() {
         <button
           onClick={handleStartCollection}
           disabled={hasCollectedToday}
-          className={`rounded-lg p-4 flex items-center justify-between text-left font-black lowercase leading-[1] h-[45px] shadow-lg shadow-black/20 transition-all ${hasCollectedToday ? 'bg-gray-400 cursor-not-allowed text-gray-200' : 'bg-[#D2F076] text-black active:scale-95'
+          className={`rounded-lg p-4 flex items-center justify-between text-left font-black lowercase leading-[1] h-[45px]   transition-all ${hasCollectedToday ? 'bg-gray-400 cursor-not-allowed text-gray-200' : 'bg-[#D2F076] text-black active:scale-95'
             }`}
         >
           <span className="text-[12px]">{hasCollectedToday ? 'coletado' : 'comece agora'}</span>
@@ -244,7 +244,7 @@ export default function Reproducao() {
                   <div className="w-[50px] h-[50px] mb-2 flex items-center justify-center relative">
                     <img
                       alt={item.nome_produto}
-                      className="w-full h-full object-contain drop-shadow-sm animate-walk mix-blend-multiply"
+                      className="w-full h-full object-contain  animate-walk mix-blend-multiply"
                       src={item.image_url}
                       referrerPolicy="no-referrer"
                     />
@@ -280,7 +280,7 @@ export default function Reproducao() {
             initial={{ opacity: 0, scale: 0.9, x: 0, y: 0 }}
             animate={{ opacity: 1, scale: 1, x: 0, y: 0 }}
             exit={{ opacity: 0, scale: 0.9, x: 0, y: 0 }}
-            className="fixed inset-0 m-auto w-fit h-fit min-w-[260px] bg-black/50 backdrop-blur-sm text-white px-5 py-3 rounded-2xl text-[12.5px] shadow-xl z-[500] text-center max-w-[85vw] whitespace-normal break-words"
+            className="fixed inset-0 m-auto w-fit h-fit min-w-[260px] bg-black/50 backdrop-blur-sm text-white px-5 py-3 rounded-xl text-[12.5px]  z-[500] text-center max-w-[85vw] whitespace-normal break-words"
           >
             {feedback}
           </motion.div>

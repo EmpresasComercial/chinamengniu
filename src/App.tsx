@@ -11,8 +11,8 @@ const Register = React.lazy(() => import('./pages/Register'));
 
 // Páginas privadas (requerem autenticação)
 const Home = React.lazy(() => import('./pages/Home'));
-const VIP = React.lazy(() => import('./pages/VIP'));
-const Reproducao = React.lazy(() => import('./pages/Reproducao'));
+const Projetos = React.lazy(() => import('./pages/Projetos'));
+const Extracao = React.lazy(() => import('./pages/Extracao'));
 const Profile = React.lazy(() => import('./pages/Profile'));
 const Team = React.lazy(() => import('./pages/Team'));
 const RechargeList = React.lazy(() => import('./pages/RechargeList'));
@@ -21,7 +21,7 @@ const FinancialRecords = React.lazy(() => import('./pages/FinancialRecords'));
 const SecurityCenter = React.lazy(() => import('./pages/SecurityCenter'));
 const ChangePassword = React.lazy(() => import('./pages/ChangePassword'));
 const Withdraw = React.lazy(() => import('./pages/Withdraw'));
-const VIPDetails = React.lazy(() => import('./pages/VIPDetails'));
+const ProjetoDetalhes = React.lazy(() => import('./pages/ProjetoDetalhes'));
 const CompanyPresentation = React.lazy(() => import('./pages/CompanyPresentation'));
 const FundTransfer = React.lazy(() => import('./pages/FundTransfer'));
 const HelpCenter = React.lazy(() => import('./pages/HelpCenter'));
@@ -95,8 +95,8 @@ export default function App() {
                 {/* Rotas com Layout (barra de navegação) */}
                 <Route element={<Layout />}>
                   <Route path="/" element={<Home />} />
-                  <Route path="/vip" element={<VIP />} />
-                  <Route path="/reproducao" element={<Reproducao />} />
+                  <Route path="/projetos" element={<Projetos />} />
+                  <Route path="/extracao" element={<Extracao />} />
                   <Route path="/perfil" element={<Profile />} />
                 </Route>
 
@@ -108,7 +108,7 @@ export default function App() {
                 <Route path="/centro-de-seguranca" element={<SecurityCenter />} />
                 <Route path="/alterar-a-senha" element={<ChangePassword />} />
                 <Route path="/retirar" element={<Withdraw />} />
-                <Route path="/vip-detalhes" element={<VIPDetails />} />
+                <Route path="/projeto-detalhes" element={<ProjetoDetalhes />} />
                 <Route path="/apresentacao-da-empresa" element={<CompanyPresentation />} />
                 <Route path="/transferencia-de-fundos" element={<FundTransfer />} />
                 <Route path="/central-de-ajuda" element={<HelpCenter />} />

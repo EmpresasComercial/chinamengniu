@@ -140,9 +140,9 @@ export default function AddBank() {
       <main className="flex-1 p-4">
         {existingAccount ? (
           /* — Conta já vinculada — */
-          <div className="bg-white rounded-3xl shadow-sm p-6 mt-4 space-y-6">
+          <div className="bg-white rounded-xl  p-6 mt-4 space-y-6">
             <div className="flex items-center gap-3 mb-2">
-              <div className="w-12 h-12 bg-[#000080]/10 rounded-full flex items-center justify-center">
+              <div className="w-12 h-12 bg-[#000080]/10 rounded-xl flex items-center justify-center">
                 <CreditCard className="w-6 h-6 text-[#000080]" />
               </div>
               <div>
@@ -174,35 +174,35 @@ export default function AddBank() {
           </div>
         ) : (
           /* — Formulário de adição — */
-          <div className="bg-white rounded-3xl shadow-sm p-6 mt-4">
+          <div className="bg-white rounded-xl  p-6 mt-4">
             <form onSubmit={handleSubmit} className="space-y-6">
-              <div className="relative border-b border-gray-200 py-2">
+              <div className="relative border-b-[1.5px] border-[#0000b3] py-2">
                 <input
                   type="text"
-                  placeholder="nome completo"
+                  placeholder="por favor, insira o nome completo"
                   value={fullName}
-                  onChange={(e) => setFullName(e.target.value)}
+                  onChange={(e) => setFullName(e.target.value.replace(/[^\p{L}\s]/gu, ''))}
                   className="w-full border-none focus:ring-0 p-0 text-gray-700 placeholder-gray-400 text-[15px] bg-transparent"
                 />
               </div>
 
-              <div className="relative border-b border-gray-200 py-2">
+              <div className="relative border-b-[1.5px] border-[#0000b3] py-2">
                 <input
                   type="text"
-                  placeholder="endereço bancário (iban)"
+                  placeholder="por favor, insira o endereço bancário (iban)"
                   value={iban}
-                  onChange={(e) => setIban(e.target.value)}
+                  onChange={(e) => setIban(e.target.value.replace(/[^\p{L}\p{N}]/gu, '').toUpperCase())}
                   className="w-full border-none focus:ring-0 p-0 text-gray-700 placeholder-gray-400 text-[15px] bg-transparent"
                 />
               </div>
 
               <div
-                className="relative border-b border-gray-200 py-2 cursor-pointer flex justify-between items-center"
+                className="relative border-b-[1.5px] border-[#0000b3] py-2 cursor-pointer flex justify-between items-center"
                 onClick={() => setIsBankPopupOpen(true)}
               >
                 <input
                   type="text"
-                  placeholder="nome do banco"
+                  placeholder="por favor, selecione o nome do banco"
                   value={selectedBank}
                   readOnly
                   className="w-full border-none focus:ring-0 p-0 text-gray-700 placeholder-gray-400 text-[15px] bg-transparent cursor-pointer"
@@ -213,7 +213,7 @@ export default function AddBank() {
               <div className="pt-8 pb-2">
                 <button
                   type="submit"
-                  className="w-full h-[45px] bg-[#000080] text-white font-medium rounded-full text-[15px] hover:opacity-90 transition-opacity"
+                  className="w-full h-[45px] bg-[#000080] text-white font-normal rounded-xl text-[15px] hover:opacity-90 transition-opacity"
                 >
                   salvar
                 </button>
@@ -230,7 +230,7 @@ export default function AddBank() {
             initial={{ opacity: 0, scale: 0.9, x: 0, y: 0 }}
             animate={{ opacity: 1, scale: 1, x: 0, y: 0 }}
             exit={{ opacity: 0, scale: 0.9, x: 0, y: 0 }}
-            className="fixed inset-0 m-auto w-fit h-fit min-w-[260px] bg-black/50 backdrop-blur-sm text-white px-5 py-3 rounded-2xl text-[12.5px] shadow-xl z-[500] text-center max-w-[85vw] whitespace-normal break-words"
+            className="fixed inset-0 m-auto w-fit h-fit min-w-[260px] bg-black/50 backdrop-blur-sm text-white px-5 py-3 rounded-xl text-[12.5px]  z-[500] text-center max-w-[85vw] whitespace-normal break-words"
           >
             {validationError}
           </motion.div>
@@ -253,7 +253,7 @@ export default function AddBank() {
               animate={{ y: 0 }}
               exit={{ y: '100%' }}
               transition={{ type: 'spring', damping: 25, stiffness: 200 }}
-              className="fixed bottom-0 left-0 right-0 bg-white rounded-t-3xl z-[70] p-6"
+              className="fixed bottom-0 left-0 right-0 bg-white rounded-t-xl z-[70] p-6"
             >
               <div className="flex flex-col items-center text-center space-y-4">
                 <div className="w-14 h-14 bg-red-100 rounded-full flex items-center justify-center">
@@ -299,7 +299,7 @@ export default function AddBank() {
               animate={{ y: 0 }}
               exit={{ y: '100%' }}
               transition={{ type: 'spring', damping: 25, stiffness: 200 }}
-              className="fixed bottom-0 left-0 right-0 bg-white rounded-t-3xl z-[70] overflow-hidden"
+              className="fixed bottom-0 left-0 right-0 bg-white rounded-t-xl z-[70] overflow-hidden"
             >
               <div className="p-4 border-b border-gray-100 flex justify-between items-center">
                 <h3 className="font-bold text-gray-800 text-lg">selecione o banco</h3>

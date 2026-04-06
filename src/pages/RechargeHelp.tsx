@@ -8,7 +8,7 @@ export default function RechargeHelp() {
     <div className="min-h-screen flex flex-col bg-[#e8ebf5] antialiased page-content">
       {/* Header */}
       <header className="bg-[#000080] h-12 flex items-center px-4 sticky top-0 z-50">
-        <button onClick={() => navigate(-1)} className="text-white">
+        <button onClick={() => navigate(-1)} className="text-white" title="voltar">
           <ChevronLeft className="h-6 w-6 stroke-[2.5]" />
         </button>
       </header>
@@ -16,13 +16,13 @@ export default function RechargeHelp() {
       {/* Main Content */}
       <main className="flex-grow p-4">
         {/* Content Card */}
-        <section className="bg-white rounded-[2rem] p-6 shadow-sm min-h-[500px]">
+        <section className="bg-white rounded-xl p-6  min-h-[500px]">
           {/* Title Section */}
           <h1 className="text-[15px] font-bold mb-4 text-[#001a4d]">como recarregar sua conta</h1>
 
           {/* Subtitle */}
           <h2 className="text-[12.5px] font-medium mb-4 text-[#1a365d] opacity-80">
-            como investir na Mengniu Company
+            como investir na Newmont Corporation
           </h2>
 
           {/* Instructions List */}

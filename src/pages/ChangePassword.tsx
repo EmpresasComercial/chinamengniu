@@ -97,7 +97,7 @@ export default function ChangePassword() {
       {/* Header */}
       <header className="bg-[#0000A5] h-12 flex items-center px-4 shrink-0">
         <div className="flex items-center w-full">
-          <button onClick={() => navigate(-1)} className="text-white">
+          <button onClick={() => navigate(-1)} className="text-white" title="voltar" aria-label="voltar">
             <ChevronLeft className="h-5 w-5" />
           </button>
           <h1 className="flex-grow text-center text-white text-[15px] font-bold mr-5">
@@ -108,20 +108,22 @@ export default function ChangePassword() {
 
       {/* Form Area */}
       <main className="flex-grow p-4">
-        <section className="bg-white rounded-2xl shadow-sm p-6 mt-2">
+        <section className="bg-white rounded-xl  p-6 mt-2">
           <form onSubmit={handleSubmit} className="space-y-6">
             {/* Input: Senha Antiga */}
-            <div className="relative border-b border-gray-200 pb-2">
+            <div className="relative border-b-[1.5px] border-[#0000b3] pb-2">
               <input
                 value={oldPassword}
                 onChange={(e) => setOldPassword(e.target.value.replace(/[^\p{L}\p{N}]/gu, ''))}
                 className="w-full border-none p-0 text-[12.5px] text-gray-700 placeholder-gray-400 focus:ring-0 bg-transparent"
-                placeholder="senha antiga"
+                placeholder="por favor, insira a senha antiga"
                 type={showOldPassword ? "text" : "password"}
               />
               <button
                 className="absolute right-0 top-0 text-gray-400"
                 type="button"
+                title="mostrar/ocultar senha"
+                aria-label="mostrar ou ocultar senha"
                 onClick={() => setShowOldPassword(!showOldPassword)}
               >
                 {showOldPassword ? <EyeOff className="h-5 w-5" /> : <Eye className="h-5 w-5" />}
@@ -129,17 +131,19 @@ export default function ChangePassword() {
             </div>
 
             {/* Input: Nova Senha */}
-            <div className="relative border-b border-gray-200 pb-2">
+            <div className="relative border-b-[1.5px] border-[#0000b3] pb-2">
               <input
                 value={newPassword}
                 onChange={(e) => setNewPassword(e.target.value.replace(/[^\p{L}\p{N}]/gu, ''))}
                 className="w-full border-none p-0 text-[12.5px] text-gray-700 placeholder-gray-400 focus:ring-0 bg-transparent"
-                placeholder="nova senha"
+                placeholder="por favor, insira a nova senha"
                 type={showNewPassword ? "text" : "password"}
               />
               <button
                 className="absolute right-0 top-0 text-gray-400"
                 type="button"
+                title="mostrar/ocultar senha"
+                aria-label="mostrar ou ocultar senha"
                 onClick={() => setShowNewPassword(!showNewPassword)}
               >
                 {showNewPassword ? <EyeOff className="h-5 w-5" /> : <Eye className="h-5 w-5" />}
@@ -147,17 +151,19 @@ export default function ChangePassword() {
             </div>
 
             {/* Input: Confirme sua senha */}
-            <div className="relative border-b border-gray-200 pb-2">
+            <div className="relative border-b-[1.5px] border-[#0000b3] pb-2">
               <input
                 value={confirmPassword}
                 onChange={(e) => setConfirmPassword(e.target.value.replace(/[^\p{L}\p{N}]/gu, ''))}
                 className="w-full border-none p-0 text-[12.5px] text-gray-700 placeholder-gray-400 focus:ring-0 bg-transparent"
-                placeholder="confirme sua senha"
+                placeholder="por favor, confirme a nova senha"
                 type={showConfirmPassword ? "text" : "password"}
               />
               <button
                 className="absolute right-0 top-0 text-gray-400"
                 type="button"
+                title="mostrar/ocultar senha"
+                aria-label="mostrar ou ocultar senha"
                 onClick={() => setShowConfirmPassword(!showConfirmPassword)}
               >
                 {showConfirmPassword ? <EyeOff className="h-5 w-5" /> : <Eye className="h-5 w-5" />}
@@ -167,7 +173,7 @@ export default function ChangePassword() {
             {/* Action Button */}
             <div className="pt-4 pb-2">
               <button
-                className="w-full h-[45px] bg-[#0000A5] text-white rounded-full text-[15px] font-medium hover:opacity-90 transition-opacity"
+                className="w-full h-[45px] bg-[#0000A5] text-white rounded-xl text-[15px] font-normal hover:opacity-90 transition-opacity"
                 type="submit"
               >
                 confirmar
@@ -183,7 +189,7 @@ export default function ChangePassword() {
             animate={{ opacity: 1, x: 0, y: 0 }}
             exit={{ opacity: 0, x: 0, y: 0 }}
             transition={{ duration: 0.1 }}
-            className="fixed inset-0 m-auto w-fit h-fit min-w-[260px] bg-black/50 backdrop-blur-sm text-white px-5 py-3 rounded-2xl text-[12.5px] shadow-xl z-[500] text-center max-w-[85vw] whitespace-normal break-words"
+            className="fixed inset-0 m-auto w-fit h-fit min-w-[260px] bg-black/50 backdrop-blur-sm text-white px-5 py-3 rounded-xl text-[12.5px]  z-[500] text-center max-w-[85vw] whitespace-normal break-words"
           >
             {validationError}
           </motion.div>

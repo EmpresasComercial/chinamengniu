@@ -26,7 +26,7 @@ export default function HelpCenter() {
         </div>
 
         {/* Help Options Card */}
-        <section className="bg-white rounded-3xl shadow-sm overflow-hidden">
+        <section className="bg-white rounded-xl  overflow-hidden">
           {/* List Item: Como retirar ganhos */}
           <button
             onClick={() => navigate('/ajuda-retirar')}

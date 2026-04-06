@@ -18,7 +18,7 @@ export default function PromotionDetails() {
 
     const handlePurchase = async () => {
         if (!product) {
-            setPurchaseResult({ success: false, message: 'animal indisponível' });
+            setPurchaseResult({ success: false, message: 'projeto indisponível' });
             setIsResultModalOpen(true);
             return;
         }
@@ -82,13 +82,13 @@ export default function PromotionDetails() {
             <header className="relative z-20 px-4 pt-6 pb-4 flex items-center">
                 <button
                     onClick={() => navigate(-1)}
-                    className="w-10 h-10 bg-[#000080] rounded-2xl flex items-center justify-center shadow-lg shadow-blue-900/20 active:scale-90 transition-transform"
+                    className="w-10 h-10 bg-[#000080] rounded-xl flex items-center justify-center   active:scale-90 transition-transform"
                     title="voltar"
                 >
                     <ChevronLeft className="w-6 h-6 text-white" />
                 </button>
                 <div className="flex-grow text-center pr-10">
-                    <h1 className="text-[14.5px] font-black tracking-tight text-[#000080] bg-white/70 backdrop-blur-sm inline-block px-5 py-2 rounded-full border border-blue-100/50 lowercase shadow-sm">
+                    <h1 className="text-[14.5px] font-black tracking-tight text-[#000080] bg-white/70 backdrop-blur-sm inline-block px-5 py-2 rounded-full border border-blue-100/50 lowercase ">
                         detalhes da farm ✨
                     </h1>
                 </div>
@@ -98,18 +98,18 @@ export default function PromotionDetails() {
                 <motion.div 
                     initial={{ opacity: 0, scale: 0.94 }}
                     animate={{ opacity: 1, scale: 1 }}
-                    className="bg-white rounded-[3rem] border border-blue-50 p-8 shadow-[0_20px_50px_rgba(0,0,128,0.12)] relative overflow-hidden"
+                    className="bg-white rounded-xl border border-blue-50 p-8 0_20px_50px_rgba(0,0,128,0.12)] relative overflow-hidden"
                 >
                     {/* Background decoration */}
-                    <div className="absolute top-0 right-0 w-56 h-56 bg-blue-50/60 rounded-full blur-[90px] -mr-28 -mt-28" />
+                    <div className="absolute top-0 right-0 w-56 h-56 bg-blue-50/60 rounded-xl blur-[90px] -mr-28 -mt-28" />
                     
                     <div className="flex flex-col items-center relative z-10 text-center">
-                        <div className="bg-[#000080] text-white text-[10px] font-black px-4 py-1.5 rounded-2xl lowercase mb-7 shadow-lg shadow-blue-900/10 tracking-widest uppercase">
+                        <div className="bg-[#000080] text-white text-[10px] font-normal px-4 py-1.5 rounded-xl lowercase mb-7   tracking-widest uppercase">
                              oferta vip limitada
                         </div>
 
-                        <div className="w-36 h-36 bg-gradient-to-br from-indigo-50/50 to-blue-50/50 rounded-[3rem] flex items-center justify-center p-5 border border-blue-50 shadow-inner mb-7">
-                            <img src={product.image_url} className="w-full h-full object-contain drop-shadow-2xl" alt={product.name} />
+                        <div className="w-36 h-36 bg-gradient-to-br from-indigo-50/50 to-blue-50/50 rounded-xl flex items-center justify-center p-5 border border-blue-50  mb-7">
+                            <img src={product.image_url} className="w-full h-full object-contain " alt={product.name} />
                         </div>
 
                         <h2 className="text-[26px] font-black text-slate-800 lowercase mb-1 leading-none tracking-tighter">
@@ -127,7 +127,7 @@ export default function PromotionDetails() {
                         </div>
 
                         <div className="w-full space-y-4 mb-12">
-                            <div className="bg-slate-50/70 rounded-3xl p-5 flex justify-between items-center border border-slate-100/30">
+                            <div className="bg-slate-50/70 rounded-xl p-5 flex justify-between items-center border border-slate-100/30">
                                 <div className="flex flex-col items-start">
                                     <span className="text-[11px] text-slate-400 font-bold lowercase tracking-tighter leading-none mb-1.5">rendimento diário</span>
                                     <span className="text-green-600 font-black text-[18px] leading-none">{product.daily_income.toLocaleString('pt-AO')} kz</span>
@@ -137,7 +137,7 @@ export default function PromotionDetails() {
                                 </div>
                             </div>
 
-                            <div className="bg-slate-50/70 rounded-3xl p-5 flex justify-between items-center border border-slate-100/30">
+                            <div className="bg-slate-50/70 rounded-xl p-5 flex justify-between items-center border border-slate-100/30">
                                 <div className="flex flex-col items-start">
                                     <span className="text-[11px] text-slate-400 font-bold lowercase tracking-tighter leading-none mb-1.5">investimento</span>
                                     <span className="text-red-500 font-black text-[18px] leading-none">{product.price.toLocaleString('pt-AO')} kz</span>
@@ -147,7 +147,7 @@ export default function PromotionDetails() {
                                 </div>
                             </div>
 
-                            <div className="bg-slate-50/70 rounded-3xl p-5 flex justify-between items-center border border-slate-100/30">
+                            <div className="bg-slate-50/70 rounded-xl p-5 flex justify-between items-center border border-slate-100/30">
                                 <div className="flex flex-col items-start">
                                     <span className="text-[11px] text-slate-400 font-bold lowercase tracking-tighter leading-none mb-1.5">período</span>
                                     <span className="text-slate-900 font-black text-[18px] leading-none">{product.duration_days} dias</span>
@@ -160,20 +160,20 @@ export default function PromotionDetails() {
 
                         <button
                             onClick={handlePurchase}
-                            className="w-full h-15 bg-gradient-to-r from-[#000080] to-[#0000BB] text-white font-black rounded-3xl shadow-2xl shadow-blue-900/30 active:scale-[0.98] transition-all lowercase text-[15.5px] flex items-center justify-center gap-3.5 group"
+                            className="w-full h-15 bg-gradient-to-r from-[#000080] to-[#0000BB] text-white font-black rounded-xl   active:scale-[0.98] transition-all lowercase text-[15.5px] flex items-center justify-center gap-3.5 group"
                         >
                             <Zap className="w-5 h-5 fill-white group-hover:scale-125 transition-transform" />
-                            garantir este animal na oferta
+                            garantir este projeto na oferta
                         </button>
 
                         <p className="mt-10 text-center text-slate-400 text-[11px] leading-relaxed lowercase font-medium opacity-70">
-                            esta oferta faz parte da promoção exclusiva mengniu. certifique-se de possuir o valor disponível em seu balance.
+                            esta oferta faz parte da promoção exclusiva newmont. certifique-se de possuir o valor disponível em seu balance.
                         </p>
                     </div>
                 </motion.div>
             </main>
 
-            {/* Modal de Resultado seguindo padrão Mengniu */}
+            {/* Modal de Resultado seguindo padrão Newmont */}
             <AnimatePresence>
                 {isResultModalOpen && purchaseResult && (
                     <div className="fixed inset-0 z-[10001] flex items-center justify-center p-5">
@@ -188,9 +188,9 @@ export default function PromotionDetails() {
                             initial={{ opacity: 0, scale: 0.85 }}
                             animate={{ opacity: 1, scale: 1 }}
                             exit={{ opacity: 0, scale: 0.85 }}
-                            className="relative w-full max-w-[330px] bg-white rounded-[3rem] p-10 shadow-2xl z-[10002] text-center flex flex-col items-center justify-center"
+                            className="relative w-full max-w-[330px] bg-white rounded-xl p-10  z-[10002] text-center flex flex-col items-center justify-center"
                         >
-                            <div className={`w-22 h-22 rounded-full flex items-center justify-center mx-auto mb-8 ${purchaseResult.success ? 'bg-green-100 text-green-600 shadow-xl shadow-green-100' : 'bg-red-100 text-red-600 shadow-xl shadow-red-100'}`}>
+                            <div className={`w-22 h-22 rounded-full flex items-center justify-center mx-auto mb-8 ${purchaseResult.success ? 'bg-green-100 text-green-600  ' : 'bg-red-100 text-red-600  '}`}>
                                 {purchaseResult.success ? (
                                     <svg className="w-11 h-11" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3} d="M5 13l4 4L19 7" />
@@ -201,7 +201,7 @@ export default function PromotionDetails() {
                             </div>
                             
                             <h3 className={`text-[20px] font-black lowercase mb-3 ${purchaseResult.success ? 'text-green-600' : 'text-red-500'}`}>
-                                {purchaseResult.success ? 'animal resgatado! ✨' : 'ops! saldo insuficiente'}
+                                {purchaseResult.success ? 'projeto resgatado! ✨' : 'ops! saldo insuficiente'}
                             </h3>
                             
                             <p className="text-slate-500 text-[14px] lowercase leading-relaxed mb-10 font-medium">
@@ -211,12 +211,12 @@ export default function PromotionDetails() {
                             <button
                                 onClick={() => {
                                     setIsResultModalOpen(false);
-                                    if (purchaseResult.success) navigate('/reproducao');
+                                    if (purchaseResult.success) navigate('/extracao');
                                 }}
-                                className={`w-full h-13 rounded-2xl font-black text-[14.5px] lowercase transition-all active:scale-95 shadow-2xl ${
+                                className={`w-full h-13 rounded-xl font-black text-[14.5px] lowercase transition-all active:scale-95  ${
                                     purchaseResult.success 
-                                        ? 'bg-green-600 text-white shadow-green-500/30' 
-                                        : 'bg-[#000080] text-white shadow-blue-500/30'
+                                        ? 'bg-green-600 text-white ' 
+                                        : 'bg-[#000080] text-white '
                                 }`}
                             >
                                 {purchaseResult.success ? 'ver minha colheita' : 'ajuste de saldo'}

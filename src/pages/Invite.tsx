@@ -29,7 +29,7 @@ export default function Invite() {
   let baseLink = window.location.origin;
   if (links.link_app_atualizado && links.link_app_atualizado !== '#') {
     let customLink = links.link_app_atualizado.trim();
-    // Se digitou apenas o domínio (ex: mengniufarming.online)
+    // Se digitou apenas o domínio (ex: newmont.online)
     if (!customLink.startsWith('http')) {
       customLink = `https://${customLink.startsWith('www.') ? '' : 'www.'}${customLink}`;
     }
@@ -76,10 +76,10 @@ export default function Invite() {
   return (
     <div className="min-h-screen bg-[#E8EBF2] page-content">
       {/* Header and Main Blue Card */}
-      <section className="bg-[#0000CC] pb-6 rounded-b-[40px] shadow-lg relative">
+      <section className="bg-[#0000CC] pb-6 rounded-b-xl  relative">
         {/* Header Navigation */}
         <header className="flex items-center px-4 h-14 text-white">
-          <button onClick={() => navigate(-1)} className="p-2 -ml-2">
+          <button onClick={() => navigate(-1)} className="p-2 -ml-2" title="voltar" aria-label="voltar">
             <ChevronLeft className="w-6 h-6" />
           </button>
           <h1 className="flex-grow text-center text-[15px] font-bold pr-8">convidar amigos</h1>
@@ -132,7 +132,7 @@ export default function Invite() {
           {/* Social Media Icons Row */}
           <div className="flex items-center justify-center gap-6">
             {/* Telegram */}
-            <button onClick={shareOnTelegram} className="w-10 h-10 bg-white rounded-full flex items-center justify-center shadow-md">
+            <button onClick={shareOnTelegram} title="telegram" aria-label="partilhar no telegram" className="w-10 h-10 bg-white rounded-full flex items-center justify-center ">
               <img
                 alt="Telegram"
                 className="w-6 h-6 object-contain"
@@ -140,8 +140,11 @@ export default function Invite() {
               />
             </button>
             {/* WhatsApp */}
-            <button onClick={shareOnWhatsApp} className="w-10 h-10 bg-white rounded-full flex items-center justify-center shadow-md">
-              <img
+            <button
+            onClick={shareOnWhatsApp}
+            className="w-10 h-10 rounded-full bg-white flex items-center justify-center "
+            title="whatsapp"
+          >    <img
                 alt="WhatsApp"
                 className="w-7 h-7 object-contain"
                 src="https://upload.wikimedia.org/wikipedia/commons/thumb/6/6b/WhatsApp.svg/512px-WhatsApp.svg.png"
@@ -156,13 +159,13 @@ export default function Invite() {
         {/* Team Button */}
         <button
           onClick={() => navigate('/equipe')}
-          className="w-full h-[45px] bg-[#000099] text-white rounded-full text-[15px] font-medium shadow-lg mb-6"
+          className="w-full h-[45px] bg-[#000099] text-white rounded-xl text-[15px] font-normal  mb-6"
         >
           minha equipe
         </button>
 
         {/* Bottom Info Card */}
-        <div className="bg-white rounded-3xl p-8 shadow-sm">
+        <div className="bg-white rounded-xl p-8 ">
           <div className="space-y-6 text-[13px] text-gray-800">
             <p className="text-center font-bold text-[#000099]">
               receba um desconto quando seu amigo recarregar o celular.
@@ -171,7 +174,7 @@ export default function Invite() {
             <div className="space-y-2">
               <p className="font-bold text-[#333]">nota</p>
               <p className="leading-relaxed text-gray-600">
-                após seus subordinados fazer a adoção ser bem-sucedida, receber automaticamente a recompensa de investimento. a operação é simples e não leva muito tempo; basta copiar e partilhar.
+                após seus subordinados realizarem o investimento, receba automaticamente a recompensa de investimento. a operação é simples e não leva muito tempo; basta copiar e partilhar.
               </p>
             </div>
 
@@ -196,7 +199,7 @@ export default function Invite() {
               initial={{ opacity: 0, scale: 0.9 }}
               animate={{ opacity: 1, scale: 1 }}
               exit={{ opacity: 0, scale: 0.9 }}
-              className="bg-black/80 backdrop-blur-sm text-white px-5 py-3 rounded-2xl text-[12.5px] shadow-xl text-center max-w-[85vw] whitespace-normal break-words pointer-events-auto"
+              className="bg-black/80 backdrop-blur-sm text-white px-5 py-3 rounded-xl text-[12.5px]  text-center max-w-[85vw] whitespace-normal break-words pointer-events-auto"
             >
               {toastMessage}
             </motion.div>
