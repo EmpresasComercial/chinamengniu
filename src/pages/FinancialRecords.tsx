@@ -9,10 +9,10 @@ import { useLoading } from '../contexts/LoadingContext';
 type FilterType = 'retiradas' | 'recarregamentos' | 'tarefas_diarias' | 'bonus_transacoes';
 
 const FILTER_OPTIONS: { id: FilterType; label: string; table: string }[] = [
-  { id: 'retiradas', label: 'conta de retiradas', table: 'retirada_clientes' },
-  { id: 'recarregamentos', label: 'recarregamentos feitos', table: 'depositos_clientes' },
-  { id: 'tarefas_diarias', label: 'tarefas diárias', table: 'tarefas_diarias' },
-  { id: 'bonus_transacoes', label: 'bónus e comissões', table: 'bonus_transacoes' },
+  { id: 'retiradas', label: 'Histórico de Levantamentos', table: 'retirada_clientes' },
+  { id: 'recarregamentos', label: 'Histórico de Depósitos', table: 'depositos_clientes' },
+  { id: 'tarefas_diarias', label: 'Rendimentos Diários', table: 'tarefas_diarias' },
+  { id: 'bonus_transacoes', label: 'Bónus e Comissões', table: 'bonus_transacoes' },
 ];
 
 const statusColor: Record<string, string> = {
@@ -83,16 +83,16 @@ export default function FinancialRecords() {
         return (
           <div key={item.id} className="border border-gray-100 rounded-xl p-4 flex justify-between items-center">
             <div className="flex flex-col gap-1">
-              <p className="text-[13px] font-bold text-gray-800">{item.nome_do_banco}</p>
-              <p className="text-[11px] text-gray-500">
+              <p className="text-[12.5px] font-bold text-gray-800">{item.nome_do_banco}</p>
+              <p className="text-[10px] text-gray-500">
                 {item.data_da_retirada ? new Date(item.data_da_retirada).toLocaleDateString('pt-AO') : '—'}
                 {item.hora_da_retirada ? ' · ' + item.hora_da_retirada.slice(0, 5) : ''}
               </p>
-              <p className="text-[10px] text-gray-400">{item.metodo || 'Transferência'}</p>
+              <p className="text-[10px] text-gray-400">{item.metodo || 'Transferência Bancária'}</p>
             </div>
             <div className="text-right flex flex-col items-end gap-1.5">
-              <p className="text-[14px] font-black text-red-500">-{Number(item.valor_solicitado).toLocaleString('pt-AO')} Kz</p>
-              <span className={`text-[10px] px-2 py-0.5 rounded-full font-semibold ${statusColor[item.estado_da_retirada] || 'bg-gray-100 text-gray-500'}`}>
+              <p className="text-[12.5px] font-black text-red-500">-{Number(item.valor_solicitado).toLocaleString('pt-AO')} Kz</p>
+              <span className={`text-[9px] px-2 py-0.5 rounded-full font-bold uppercase tracking-wider ${statusColor[item.estado_da_retirada] || 'bg-gray-100 text-gray-500'}`}>
                 {item.estado_da_retirada}
               </span>
             </div>
@@ -103,15 +103,15 @@ export default function FinancialRecords() {
         return (
           <div key={item.id} className="border border-gray-100 rounded-xl p-4 flex justify-between items-center">
             <div className="flex flex-col gap-1">
-              <p className="text-[13px] font-bold text-gray-800">{item.nome_do_banco}</p>
-              <p className="text-[11px] text-gray-500">
+              <p className="text-[12.5px] font-bold text-gray-800">{item.nome_do_banco || 'Depósito Bancário'}</p>
+              <p className="text-[10px] text-gray-500">
                 {item.created_at ? new Date(item.created_at).toLocaleDateString('pt-AO') : '—'}
               </p>
-              <p className="text-[10px] text-gray-400 font-mono truncate max-w-[160px]">{item.chave_de_transacao || '—'}</p>
+              <p className="text-[10px] text-gray-400 font-mono truncate max-w-[160px] opacity-60">{item.chave_de_transacao || '—'}</p>
             </div>
             <div className="text-right flex flex-col items-end gap-1.5">
-              <p className="text-[14px] font-black text-[#0000A5]">+{Number(item.valor_deposito).toLocaleString('pt-AO')} Kz</p>
-              <span className={`text-[10px] px-2 py-0.5 rounded-full font-semibold ${statusColor[item.estado_de_pagamento] || 'bg-gray-100 text-gray-500'}`}>
+              <p className="text-[12.5px] font-black text-[#0000A5]">+{Number(item.valor_deposito).toLocaleString('pt-AO')} Kz</p>
+              <span className={`text-[9px] px-2 py-0.5 rounded-full font-bold uppercase tracking-wider ${statusColor[item.estado_de_pagamento] || 'bg-gray-100 text-gray-500'}`}>
                 {item.estado_de_pagamento}
               </span>
             </div>
@@ -122,14 +122,14 @@ export default function FinancialRecords() {
         return (
           <div key={item.id} className="border border-gray-100 rounded-xl p-4 flex justify-between items-center">
             <div className="flex flex-col gap-1">
-              <p className="text-[13px] font-bold text-gray-800">tarefa diária</p>
-              <p className="text-[11px] text-gray-500">
+              <p className="text-[12.5px] font-bold text-gray-800">Tarefa Diária Concluída</p>
+              <p className="text-[10px] text-gray-500">
                 {item.data_atribuicao ? new Date(item.data_atribuicao).toLocaleDateString('pt-AO') : '—'}
               </p>
             </div>
             <div className="text-right flex flex-col items-end gap-1.5">
-              <p className="text-[14px] font-black text-green-600">+{Number(item.renda_coletada).toLocaleString('pt-AO')} Kz</p>
-              <span className={`text-[10px] px-2 py-0.5 rounded-full font-semibold ${statusColor[item.status] || 'bg-gray-100 text-gray-500'}`}>
+              <p className="text-[12.5px] font-black text-green-600">+{Number(item.renda_coletada).toLocaleString('pt-AO')} Kz</p>
+              <span className={`text-[9px] px-2 py-0.5 rounded-full font-bold uppercase tracking-wider ${statusColor[item.status] || 'bg-gray-100 text-gray-500'}`}>
                 {item.status}
               </span>
             </div>
@@ -145,18 +145,18 @@ export default function FinancialRecords() {
           <div key={item.id} className="border border-gray-100 rounded-xl p-4">
             <div className="flex justify-between items-start gap-3">
               <div className="flex flex-col gap-1 flex-1 min-w-0">
-                <p className="text-[13px] font-bold text-gray-800 leading-snug">
-                  {item.origem_bonus || 'Bónus'}
+                <p className="text-[12.5px] font-bold text-gray-800 leading-snug">
+                  {item.origem_bonus || 'Bónus de Investimento'}
                 </p>
-                <p className="text-[11px] text-gray-500">
+                <p className="text-[10px] text-gray-500">
                   {dateStr}{timeStr ? <span className="text-gray-400"> · {timeStr}</span> : null}
                 </p>
               </div>
               <div className="text-right flex flex-col items-end gap-1.5 flex-shrink-0">
-                <p className={`text-[14px] font-black ${isTransfer ? 'text-[#0000A5]' : 'text-green-600'}`}>
+                <p className={`text-[12.5px] font-black ${isTransfer ? 'text-[#0000A5]' : 'text-green-600'}`}>
                   +{Number(item.valor_recebido).toLocaleString('pt-AO', { minimumFractionDigits: 2 })} Kz
                 </p>
-                <span className={`text-[10px] px-2 py-0.5 rounded-full font-semibold ${statusColor[item.status] || 'bg-gray-100 text-gray-500'}`}>
+                <span className={`text-[9px] px-2 py-0.5 rounded-full font-bold uppercase tracking-wider ${statusColor[item.status] || 'bg-gray-100 text-gray-500'}`}>
                   {item.status}
                 </span>
               </div>
@@ -174,10 +174,10 @@ export default function FinancialRecords() {
     <div className="flex flex-col min-h-screen bg-[#E2E4EB] page-content">
       {/* Header */}
       <header className="bg-[#0000A5] text-white flex items-center justify-between px-4 py-3 sticky top-0 z-50">
-        <button onClick={() => navigate(-1)} className="w-10" aria-label="voltar" title="voltar">
+        <button onClick={() => navigate(-1)} className="w-10" aria-label="Voltar" title="Voltar">
           <ChevronLeft className="w-5 h-5" />
         </button>
-        <h1 className="text-[15px] font-bold tracking-wide">registros de conta</h1>
+        <h1 className="text-[15px] font-bold tracking-wide">Registos de Conta</h1>
         <div className="w-10" />
       </header>
 
@@ -210,11 +210,11 @@ export default function FinancialRecords() {
           ) : records.length === 0 ? (
             <div className="flex flex-col items-center justify-center py-10">
               <img
-                alt="vazio"
+                alt="Vazio"
                 className="w-24 h-24 object-contain opacity-50 mb-3"
                 src="/empty-image-CHCN_UjN.png"
               />
-              <p className="text-gray-400 text-[12.5px]">nenhum registo encontrado</p>
+              <p className="text-gray-400 text-[12.5px]">Nenhum registo encontrado</p>
             </div>
           ) : (
             <div className="space-y-3">
@@ -243,7 +243,7 @@ export default function FinancialRecords() {
               className="fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[90%] max-w-sm bg-white rounded-[1.5rem] z-[70] overflow-hidden "
             >
               <div className="p-5 border-b border-gray-100 flex justify-between items-center">
-                <h3 className="font-bold text-gray-800 text-[16px]">filtrar por</h3>
+                <h3 className="font-bold text-gray-800 text-[15px]">Filtrar por</h3>
                 <button 
                   onClick={() => setShowFilterPopup(false)} 
                   className="text-gray-400 p-1 hover:bg-gray-100 rounded-full transition-colors"

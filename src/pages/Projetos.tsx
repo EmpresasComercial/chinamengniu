@@ -1,5 +1,5 @@
-import { useState, useEffect, useCallback, useMemo } from 'react';
-import { Send, X } from 'lucide-react';
+import { useState, useEffect, useCallback } from 'react';
+import { X } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import { useLoading } from '../contexts/LoadingContext';
 import { useAuth } from '../contexts/AuthContext';
@@ -144,134 +144,57 @@ export default function Projetos() {
   }, [user, registerFetch]);
 
   return (
-    <div className="flex flex-col min-h-screen bg-[#0000A5] page-content uppercase-none">
-      <header className="p-4 text-white">
-        <div className="flex items-center justify-between mb-4">
-          <div className="flex items-center gap-3">
-            <div className="w-16 h-16 rounded-full overflow-hidden bg-white border-2 border-white flex items-center justify-center">
-              <img
-                alt="user level icon"
-                className="w-full h-full object-contain p-1"
-                src={products[0]?.image_url || "/NewmontCorporationfff83c6b-57f6-428e-alogob.png"}
-                referrerPolicy="no-referrer"
-              />
-            </div>
-            <div>
-              <h1 className="text-[15px] font-bold lowercase">{profile?.state || 'vip0'}</h1>
-              <div className="flex text-[11px] gap-0.5 mt-0.5">
-                {[1, 2, 3, 4, 5].map((star) => {
-                  const currentLevel = parseInt((profile?.state || 'VIP0').replace(/\D/g, '')) || 0;
-                  return (
-                    <span key={star} className={star <= currentLevel ? "text-yellow-400" : "text-gray-400"}>
-                      {star <= currentLevel ? '★' : '☆'}
-                    </span>
-                  );
-                })}
-              </div>
-            </div>
-          </div>
-          <div className="relative">
-            <button
-              onClick={() => navigate('/promocao')}
-              className="bg-blue-400 text-white px-4 py-1.5 rounded-xl text-[10.5px] font-normal active:scale-95 transition-all lowercase"
-            >
-              promoção
-            </button>
-            {promoCount > 0 && (
-              <span className="absolute -top-1.5 -right-1.5 bg-red-500 text-white text-[9px] font-black w-4.5 h-4.5 rounded-full flex items-center justify-center border-2 border-[#0000A5]  animate-bounce">
-                {promoCount}
-              </span>
-            )}
-          </div>
-        </div>
+    <div className="flex flex-col min-h-screen bg-slate-50 page-content">
 
-        <div className="mb-6">
-          <div className="flex justify-between items-center text-[10px] mb-1 lowercase">
-            <span>pontuação de crédito:</span>
-            <span>100</span>
-          </div>
-          <div className="w-full bg-white/30 h-1 rounded-full">
-            <div className="bg-white h-1 rounded-full w-full"></div>
-          </div>
-        </div>
-
-        <div className="mb-6 relative overflow-hidden bg-white/10 p-4 rounded-xl">
-          <div className="flex justify-between mb-4">
-            <div>
-              <p className="text-[10px] opacity-80 lowercase">receita total</p>
-              <p className="text-[15px] font-bold">{stats.totalRevenue.toLocaleString('pt-AO', { minimumFractionDigits: 2 })} kz</p>
-            </div>
-            <div className="text-right">
-              <p className="text-[10px] opacity-80 lowercase">renda diária</p>
-              <p className="text-[15px] font-bold">{stats.dailyIncome.toLocaleString('pt-AO', { minimumFractionDigits: 2 })} kz</p>
-            </div>
-          </div>
-          <div className="text-center pt-2 border-t border-white/10">
-            <p className="text-[10px] opacity-80 lowercase">tempo de expiração: permanente</p>
-          </div>
-          <div className="absolute -right-4 -bottom-4 w-24 h-24 border-[12px] border-white/10 rounded-full"></div>
-        </div>
-
-        <div
-          onClick={() => navigate('/convidar')}
-          className="bg-[#D4ED71] text-black flex items-center justify-between p-4 rounded-lg mb-2 cursor-pointer"
-        >
-          <span className="font-semibold text-[15px] text-[#000080] lowercase">convidar amigos</span>
-          <Send className="w-6 h-6" />
-        </div>
-      </header>
-
-      <main className="bg-[#EBF1FF] rounded-t-[1.5rem] flex-grow text-black p-6 mb-20">
-        <h2 className="text-[15px] font-bold text-[#000080] mb-4 lowercase">sistema de empregos</h2>
+      <main className="bg-slate-50 flex-grow text-black px-4 pt-6 pb-20">
+        <h2 className="text-[18px] font-black text-slate-800 mb-6 lowercase">lista de produtos</h2>
         <div className="space-y-3">
           {products.map((vip) => (
             <div
               key={vip.id}
-              className="flex bg-white p-3 rounded-xl border border-slate-100  relative min-h-[140px]"
+              className="bg-white p-4 rounded-2xl border border-slate-100 flex gap-4 relative shadow-sm mb-4"
             >
               {/* Product Image */}
-              <div className="w-[100px] shrink-0 flex items-center justify-center bg-slate-50/50 rounded-lg p-2 mr-3 border border-slate-50/50">
-                <img src={vip.image_url} alt={vip.name} className="max-h-[100px] object-contain" />
+              <div className="w-[120px] shrink-0 h-[100px] flex items-center justify-center rounded-xl overflow-hidden self-center">
+                <img 
+                  src={vip.image_url} 
+                  alt={vip.name} 
+                  className="w-full h-full object-cover" 
+                />
               </div>
 
               {/* Product Details */}
-              <div className="flex flex-col flex-1 py-1 pr-16">
-                <div className="flex items-center gap-1 mb-1">
-                  <h3 className="text-[15px] font-black text-[#000080] lowercase leading-tight">
-                    {vip.name.toLowerCase()}
-                  </h3>
+              <div className="flex-1 space-y-1">
+                <h3 className="text-[16px] font-black text-slate-900 uppercase pr-8">
+                  {vip.name}
+                </h3>
+                
+                <div className="space-y-0.5 text-[11px] text-slate-500 font-medium lowercase">
+                  <p>preço: <span className="text-slate-900 font-bold uppercase tracking-tighter">aoa{vip.price.toFixed(2)}</span></p>
+                  <p>período de validade: <span className="text-slate-900 font-bold uppercase tracking-tighter">{vip.duration_days} dias</span></p>
+                  <p>renda diária: <span className="text-slate-900 font-bold uppercase tracking-tighter">aoa{vip.daily_income.toFixed(2)}</span></p>
+                  <p>rendimento horário: <span className="text-slate-900 font-bold uppercase tracking-tighter">aoa{(vip.daily_income / 24).toFixed(2)}</span></p>
+                  <p>limite de quantidade: <span className="text-slate-900 font-bold uppercase tracking-tighter">{vip.purchase_limit}</span></p>
                 </div>
-                <p className="text-[11px] text-slate-500 lowercase leading-snug mb-2 font-medium">
-                  {vip.description || `ganhe comissão válida por ${vip.duration_days} dias`}<br/>
-                  (limite de {vip.purchase_limit} compras)
-                </p>
-                <div className="space-y-1 mt-auto">
-                  <p className="text-[12px] font-bold text-slate-700 lowercase leading-none">
-                    kz: <span className="text-[#FF0000]">{vip.price.toLocaleString('pt-AO')}</span>
-                  </p>
-                  <p className="text-[12px] font-bold text-slate-700 lowercase leading-none">
-                    renda diária: <span className="text-green-600">{vip.daily_income.toLocaleString('pt-AO')}</span>
-                  </p>
+
+                <div className="pt-2 flex justify-end">
+                  <button
+                    onClick={() => {
+                      setSelectedProduct(vip);
+                      setIsPurchaseModalOpen(true);
+                    }}
+                    className="bg-blue-600 hover:bg-blue-700 text-white px-6 h-9 flex items-center justify-center rounded-xl text-[12px] font-bold active:scale-95 transition-all shadow-md shadow-blue-600/20"
+                  >
+                    investidor
+                  </button>
                 </div>
               </div>
 
-              {/* Buy Button & Position Tag */}
-              <div className="absolute right-3 bottom-3 flex flex-col items-end">
-                {profile?.state === vip.name && (
-                  <span className="absolute -top-7 right-0 bg-blue-50 text-[#0000AA] px-2 py-0.5 rounded-xl text-[9px] font-normal lowercase leading-none whitespace-nowrap">
-                    posição atual
-                  </span>
-                )}
-                <button
-                  onClick={() => {
-                    setSelectedProduct(vip);
-                    setIsPurchaseModalOpen(true);
-                  }}
-                  className="bg-[#0000AA] hover:bg-blue-800 text-white px-5 h-7 flex items-center justify-center rounded-xl text-[11px] font-normal lowercase active:scale-95 transition-none"
-                >
-                  comprar
-                </button>
-              </div>
+              {profile?.state === vip.name && (
+                <div className="absolute top-4 right-4">
+                  <div className="w-2.5 h-2.5 bg-green-500 rounded-full animate-pulse shadow-[0_0_8px_rgba(34,197,94,0.6)]" />
+                </div>
+              )}
             </div>
           ))}
         </div>

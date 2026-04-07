@@ -1,5 +1,5 @@
 import React from 'react';
-import { Home, CheckCircle2, User, Box } from 'lucide-react';
+import { Home, Pickaxe, User, Box } from 'lucide-react';
 import { Link, useLocation } from 'react-router-dom';
 
 export default function BottomNav() {
@@ -8,7 +8,7 @@ export default function BottomNav() {
   const navItems = [
     { name: 'home', path: '/', icon: Home },
     { name: 'projetos', path: '/projetos', icon: Box },
-    { name: 'extração', path: '/extracao', icon: CheckCircle2 },
+    { name: 'minerar', path: '/extracao', icon: Pickaxe },
     { name: 'perfil', path: '/perfil', icon: User },
   ];
 

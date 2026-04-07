@@ -60,24 +60,24 @@ export default function Login() {
 
     // Validation Logic
     if (!phone) {
-      showToast('por favor, celular');
+      showToast('Por favor, introduza o seu número de telefone.');
       return;
     }
 
     // Validate phone format: starts with 9 and has 9 digits
     const phoneRegex = /^9\d{8}$/;
     if (!phoneRegex.test(phone)) {
-      showToast('celular deve começar com 9 e ter 9 dígitos');
+      showToast('O telefone deve iniciar por 9 e conter 9 dígitos.');
       return;
     }
 
     if (!password) {
-      showToast('por favor, insira sua senha');
+      showToast('Por favor, introduza a sua palavra-passe.');
       return;
     }
 
     if (isLocked) {
-      showToast('muitas tentativas. aguarde 30 segundos.');
+      showToast('Muitas tentativas. Acesso bloqueado por 30 segundos.');
       return;
     }
 
@@ -105,10 +105,10 @@ export default function Login() {
       }
 
       setLoginAttempts(0);
-      showToast('login sucedido');
+      showToast('autenticação realizada com sucesso.');
       setTimeout(() => navigate('/'), 1000);
     } catch (err: any) {
-      showToast('não login sucedido');
+      showToast('Falha na autenticação. Tente novamente mais tarde.');
     } finally {
       hideLoading();
     }
@@ -132,14 +132,15 @@ export default function Login() {
 
           {/* Logo Section */}
           <div className="flex flex-col items-center">
-            <div className="w-16 h-16 bg-white rounded-xl flex items-center justify-center p-2 mb-2 ">
+            <div className="w-16 h-16 bg-white rounded-2xl flex items-center justify-center p-2.5 mb-3 shadow-xl">
               <img
                 alt="Newmont Corporation logo"
                 className="w-full h-full object-contain"
                 src="/NewmontCorporationfff83c6b-57f6-428e-alogob.png"
               />
             </div>
-            <h1 className="text-white text-2xl font-bold tracking-wide">Newmont Corporation</h1>
+            <h1 className="text-white text-2xl font-bold tracking-tight lowercase">newmont corporation</h1>
+            <p className="text-white/60 text-[10px] font-bold uppercase tracking-widest mt-0.5 lowercase">mining excellence</p>
           </div>
         </header>
         {/* END: TopHeader */}
@@ -152,11 +153,11 @@ export default function Login() {
             {/* Phone Input */}
             <div className="space-y-1">
               <div className="flex items-center border-b-[1.5px] border-[#0000b3] py-2 transition-colors">
-                <span className="text-gray-900 font-medium mr-3 text-[12.5px]">+244</span>
+                <span className="text-gray-900 font-bold mr-3 text-[12.5px]">+244</span>
                 <input
                   className="w-full border-none focus:ring-0 p-0 text-[12.5px] placeholder-gray-400 text-gray-800"
                   id="phone"
-                  placeholder="por favor, insira o telefone"
+                  placeholder="número de telefone"
                   type="tel"
                   value={phone}
                   onChange={(e) => setPhone(e.target.value.replace(/[^\p{L}\p{N}]/gu, ''))}
@@ -170,7 +171,7 @@ export default function Login() {
                 <input
                   className="w-full border-none focus:ring-0 p-0 text-[12.5px] placeholder-gray-400 text-gray-800"
                   id="password"
-                  placeholder="por favor, insira a senha"
+                  placeholder="senha de acesso"
                   type={showPassword ? "text" : "password"}
                   value={password}
                   onChange={(e) => setPassword(e.target.value.replace(/[^\p{L}\p{N}]/gu, ''))}
@@ -178,7 +179,7 @@ export default function Login() {
                 <button
                   type="button"
                   onClick={() => setShowPassword(!showPassword)}
-                  className="text-gray-600 focus:outline-none btn-small"
+                  className="text-gray-400 focus:outline-none btn-small"
                 >
                   {showPassword ? <EyeOff className="h-5 w-5" /> : <Eye className="h-5 w-5" />}
                 </button>
@@ -188,17 +189,17 @@ export default function Login() {
             {/* Submit Button */}
             <div className="pt-6">
               <button
-                className="w-full bg-[#0000b3] text-white h-[45px] rounded-xl font-normal text-[15px] hover:bg-blue-800 transition-colors"
+                className="w-full bg-[#0000aa] text-white h-[45px] rounded-xl font-bold text-[12.5px] transition-all active:scale-95 shadow-lg shadow-blue-900/20 lowercase"
                 type="submit"
               >
-                conecte-se
+                acessar conta
               </button>
             </div>
 
             {/* Footer Links */}
-            <div className="flex flex-col items-center space-y-4 pt-4">
-              <p className="text-[12.5px] text-gray-500">
-                não tem conta? <Link className="text-blue-700 font-medium ml-1" to="/registrar">registrar</Link>
+            <div className="flex flex-col items-center space-y-4 pt-6">
+              <p className="text-[12.5px] text-gray-500 lowercase">
+                não tem uma conta? <Link className="text-blue-700 font-bold ml-1 hover:underline" to="/registrar">criar agora</Link>
               </p>
             </div>
           </form>
@@ -241,7 +242,7 @@ export default function Login() {
               <div className="flex justify-between items-center mb-5">
                 <div className="flex items-center gap-2">
                   <Headset className="w-5 h-5 text-[#0000AA]" />
-                  <h3 className="text-[#0000AA] font-bold text-[15px]">atendimento ao cliente</h3>
+                  <h3 className="text-[#0000AA] font-bold text-[12.5px] lowercase">suporte ao investidor</h3>
                 </div>
                 <button 
                   onClick={() => setIsSupportModalOpen(false)} 
@@ -252,27 +253,27 @@ export default function Login() {
                 </button>
               </div>
 
-              <div className="flex flex-col gap-2.5">
+              <div className="flex flex-col gap-3">
                 <button
                   type="button"
                   onClick={(e) => { handleLinkClick(links.whatsapp_grupo_vendas_url, e); setIsSupportModalOpen(false); }}
-                  className="w-full h-[48px] bg-slate-50 rounded-xl flex items-center px-3 active:bg-slate-100 transition-none"
+                  className="w-full h-[45px] bg-slate-50 rounded-xl flex items-center px-4 active:bg-slate-100 transition-all border border-slate-100"
                 >
                   <div className="w-9 h-9 bg-[#25D366]/10 rounded-xl flex items-center justify-center mr-3">
                     <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/6/6b/WhatsApp.svg/512px-WhatsApp.svg.png" className="w-5 h-5" alt="whatsapp" />
                   </div>
-                  <p className="text-slate-900 font-bold text-[12.5px] text-left">entrar no grupo whatsapp</p>
+                  <p className="text-slate-900 font-bold text-[12.5px] text-left lowercase">canal oficial whatsapp</p>
                 </button>
 
                 <button
                   type="button"
                   onClick={(e) => { handleLinkClick(links.whatsapp_gerente_url, e); setIsSupportModalOpen(false); }}
-                  className="w-full h-[48px] bg-slate-50 rounded-xl flex items-center px-3 active:bg-slate-100 transition-none"
+                  className="w-full h-[45px] bg-slate-50 rounded-xl flex items-center px-4 active:bg-slate-100 transition-all border border-slate-100"
                 >
                   <div className="w-9 h-9 bg-[#25D366]/10 rounded-xl flex items-center justify-center mr-3">
                     <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/6/6b/WhatsApp.svg/512px-WhatsApp.svg.png" className="w-5 h-5" alt="whatsapp" />
                   </div>
-                  <p className="text-slate-900 font-bold text-[12.5px] text-left">contactar gerente whatsapp</p>
+                  <p className="text-slate-900 font-bold text-[12.5px] text-left lowercase">gerência de atendimento</p>
                 </button>
               </div>
             </motion.div>

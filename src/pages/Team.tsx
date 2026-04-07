@@ -108,20 +108,20 @@ export default function Team() {
         {/* Stats Card */}
         <section className="bg-white rounded-[1.5rem] p-5 ">
           <div className="grid grid-cols-2 gap-y-6 text-center">
-            <div className="flex flex-col">
-              <span className="text-[10px] text-[#4A5568] font-medium mb-1">Receita total(Kz)</span>
+            <div className="flex flex-col lowercase">
+              <span className="text-[10px] text-[#4A5568] font-medium mb-1">receita total(kz)</span>
               <span className="text-[15px] font-bold text-[#0000A0]">{stats.totalRevenue.toLocaleString('pt-AO')}</span>
             </div>
-            <div className="flex flex-col">
-              <span className="text-[10px] text-[#4A5568] font-medium mb-1">Ganhos de hoje(Kz)</span>
+            <div className="flex flex-col lowercase">
+              <span className="text-[10px] text-[#4A5568] font-medium mb-1">ganhos de hoje(kz)</span>
               <span className="text-[15px] font-bold text-[#0000A0]">{stats.todayEarnings.toLocaleString('pt-AO')}</span>
             </div>
-            <div className="flex flex-col">
-              <span className="text-[10px] text-[#4A5568] font-medium mb-1">Número total de pessoas</span>
+            <div className="flex flex-col lowercase">
+              <span className="text-[10px] text-[#4A5568] font-medium mb-1">número total de pessoas</span>
               <span className="text-[15px] font-bold text-[#0000A0]">{stats.totalPeople}</span>
             </div>
-            <div className="flex flex-col">
-              <span className="text-[10px] text-[#4A5568] font-medium mb-1">Novos cadastros hoje</span>
+            <div className="flex flex-col lowercase">
+              <span className="text-[10px] text-[#4A5568] font-medium mb-1">novos cadastros hoje</span>
               <span className="text-[15px] font-bold text-[#0000A0]">{stats.todayRegistrations}</span>
             </div>
           </div>
@@ -168,14 +168,14 @@ export default function Team() {
                   {[1, 2, 3].map(lvl => (
                     <div
                       key={lvl}
-                      className={`px-4 py-2 hover:bg-gray-50 ${selectedLevel === lvl ? 'text-blue-600 font-bold' : ''}`}
+                      className={`px-4 py-2 hover:bg-gray-50 lowercase ${selectedLevel === lvl ? 'text-blue-600 font-bold' : ''}`}
                       onClick={(e) => {
                         e.stopPropagation();
                         setSelectedLevel(lvl);
                         setShowLevelPicker(false);
                       }}
                     >
-                      Nível {lvl}
+                      nível {lvl}
                     </div>
                   ))}
                 </div>
@@ -205,7 +205,7 @@ export default function Team() {
                   <div className={activeTab === 'members' ? "text-[10px]" : "text-[10px] font-bold text-blue-700"}>
                     {activeTab === 'members'
                       ? new Date(member.created_at || member.registration_date || new Date()).toLocaleDateString()
-                      : `${Number(member.reloaded_amount || member.total_recharge || member.recharge_amount || 0).toLocaleString('pt-AO')} Kz`
+                      : `${Number(member.reloaded_amount || member.total_recharge || member.recharge_amount || 0).toLocaleString('pt-AO')} kz`
                     }
                   </div>
                 </div>

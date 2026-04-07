@@ -51,7 +51,7 @@ export default function RechargeDetail() {
   const handleCopy = (text: string, field: string) => {
     navigator.clipboard.writeText(text);
     setCopiedField(field);
-    showNotification(`Copiado: ${field === 'amount' ? 'Valor' : 'IBAN'}`);
+    showNotification(`Sucesso: ${field === 'amount' ? 'Montante' : 'IBAN'} copiado para a área de transferência.`);
     setTimeout(() => setCopiedField(null), 2000);
   };
 
@@ -93,13 +93,13 @@ export default function RechargeDetail() {
     // Handle the RPC response (typically returns JSON with success/message)
     if (!rpcError && (rpcData?.success || rpcData)) {
       setConfirmed(true);
-      showNotification('bem-sucedido');
+      showNotification('Depósito solicitado com sucesso.');
       setTimeout(() => {
         setConfirmed(false);
         navigate('/detalhes');
       }, 3000);
     } else {
-      const errorMsg = rpcError?.message || rpcData?.message || 'não sucedido,Tente novamente.';
+      const errorMsg = rpcError?.message || rpcData?.message || 'Falha no processamento. Por favor, tente novamente.';
       showNotification(errorMsg);
     }
   };
@@ -108,10 +108,10 @@ export default function RechargeDetail() {
     <div className="flex flex-col min-h-screen bg-[#E6E8F0] antialiased page-content">
       {/* Header */}
       <header className="bg-[#0000AA] flex items-center h-12 px-4 sticky top-0 z-50">
-        <button onClick={() => navigate(-1)} className="text-white">
+        <button onClick={() => navigate(-1)} className="text-white" title="Voltar">
           <ChevronLeft className="h-5 w-5" />
         </button>
-        <h1 className="flex-1 text-center text-white text-[15px] font-bold pr-5">detalhes de pagamento</h1>
+        <h1 className="flex-1 text-center text-white text-[15px] font-bold pr-5 uppercase tracking-wide">Instruções para Depósito</h1>
       </header>
 
       <main className="p-4 space-y-4">
@@ -120,7 +120,7 @@ export default function RechargeDetail() {
           {/* Attention Message */}
           <div className="mb-8 p-4 bg-red-50 rounded-xl border border-red-100 w-full">
             <p className="text-[13px] text-gray-800 leading-relaxed text-center">
-              <span className="text-red-500 font-black">atenção:</span> o banco selecionado é o banco <span className="font-black text-[#0000AA] uppercase">{bank.nome_do_banco}</span>, use este banco para fazer o pagamento!
+              <span className="text-red-500 font-black uppercase">Aviso Importante:</span> Utilize exclusivamente o banco <span className="font-black text-[#0000AA] uppercase">{bank.nome_do_banco}</span> para concluir esta transação financeira.
             </p>
           </div>
 
@@ -128,33 +128,33 @@ export default function RechargeDetail() {
           <div className="w-full space-y-4 mb-6">
             <div className="flex justify-between items-center bg-gray-50 rounded-xl p-3 border border-gray-100">
               <div className="flex flex-col">
-                <span className="text-[12.5px] text-gray-500 font-semibold uppercase tracking-wider">valor a pagar</span>
-                <span className="text-[15px] font-bold text-gray-900">{formatAmount(amount)} KZs</span>
+                <span className="text-[12px] text-gray-400 font-bold uppercase tracking-wider">Montante em Kz</span>
+                <span className="text-[16px] font-black text-gray-900">{formatAmount(amount)}</span>
               </div>
               <button
                 onClick={() => handleCopy(amount, 'amount')}
-                className="bg-black text-white text-[12.5px] px-3 py-1 rounded-full font-medium relative btn-small"
+                className="bg-[#0000AA] text-white text-[11px] px-4 py-1.5 rounded-xl font-bold uppercase active:scale-95 transition-all"
               >
-                {copiedField === 'amount' ? 'copiado!' : 'copiar'}
+                {copiedField === 'amount' ? 'Copiado' : 'Copiar'}
               </button>
             </div>
 
             <div className="flex justify-between items-center bg-gray-50 rounded-xl p-3 border border-gray-100">
               <div className="flex flex-col overflow-hidden mr-2">
-                <span className="text-[12.5px] text-gray-500 font-semibold uppercase tracking-wider"> iban</span>
-                <span className="text-[14px] font-bold text-gray-900 break-all">{bank.iban}</span>
+                <span className="text-[12px] text-gray-400 font-bold uppercase tracking-wider">IBAN de Destino</span>
+                <span className="text-[14px] font-black text-gray-900 break-all">{bank.iban}</span>
               </div>
               <button
                 onClick={() => handleCopy(bank.iban, 'iban')}
-                className="bg-black text-white text-[12.5px] px-3 py-1 rounded-full font-medium flex-shrink-0 btn-small"
+                className="bg-[#0000AA] text-white text-[11px] px-4 py-1.5 rounded-xl font-bold uppercase active:scale-95 transition-all flex-shrink-0"
               >
-                {copiedField === 'iban' ? 'copiado!' : 'copiar'}
+                {copiedField === 'iban' ? 'Copiado' : 'Copiar'}
               </button>
             </div>
 
             <div className="flex flex-col bg-gray-50 rounded-xl p-3 border border-gray-100">
-              <span className="text-[12.5px] text-gray-500 font-semibold uppercase tracking-wider">nome</span>
-              <span className="text-[15px] font-bold text-gray-900">{bank.nome_favorecido || 'DEEPBANK LDA'}</span>
+              <span className="text-[12px] text-gray-400 font-bold uppercase tracking-wider">Beneficiário</span>
+              <span className="text-[15px] font-black text-gray-900">{bank.nome_favorecido || 'DEEPBANK LDA'}</span>
             </div>
           </div>
 
@@ -162,15 +162,15 @@ export default function RechargeDetail() {
           {/* Confirmation Button */}
           <button
             onClick={handleConfirm}
-            className="bg-[#0000AA] text-white w-full h-[45px] rounded-xl text-[15px] font-normal  relative"
+            className="bg-[#0000AA] text-white w-full h-[45px] rounded-xl text-[14px] font-bold uppercase tracking-wide active:scale-[0.98] transition-all shadow-lg shadow-blue-900/20"
           >
-            {confirmed ? 'confirmado!' : 'clique confirme'}
+            {confirmed ? 'PAGAMENTO SOLICITADO' : 'CONFIRMAR ENVIO'}
           </button>
         </section>
 
         {/* Instructions Card */}
         <section className="bg-white rounded-xl p-6 ">
-          <h3 className="text-[15px] font-bold text-gray-900 mb-6">instruções de recarga bancária</h3>
+          <h3 className="text-[14px] font-black text-gray-900 mb-6 uppercase tracking-tight">Diretrizes para Depósito Bancário</h3>
           <div className="space-y-4 text-[12.5px] leading-relaxed text-gray-700">
             <p>1. o valor mínimo para depósito bancário é de <span className="text-red-500 font-bold">9000</span> kzs e o máximo é de <span className="text-red-500 font-bold">7.000.000</span> kzs.</p>
             <p>2. após copiar a referência bancária tu podes usar softwares de pagamentos como <span className="text-red-500 font-bold">multicaixa express</span>, <span className="text-red-500 font-bold">bai directo</span>, <span className="text-red-500 font-bold">banke atlantico</span> entre outros softwares de pagamentos ou dirija-se a um <span className="text-red-500 font-bold">atm</span>.</p>

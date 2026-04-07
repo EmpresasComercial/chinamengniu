@@ -20,6 +20,7 @@ export default function Extracao() {
     totalPurchasesCount: 0
   });
   const [feedback, setFeedback] = useState<string | null>(null);
+  const [isCollecting, setIsCollecting] = useState(false);
 
   const showToast = (message: string) => {
     setFeedback(message);
@@ -128,31 +129,33 @@ export default function Extracao() {
 
   const handleStartCollection = useCallback(async () => {
     if (hasCollectedToday) {
-      showToast('você já realizou a coleta hoje!');
+      showToast('A extração diária já foi realizada com sucesso.');
       return;
     }
 
+    setIsCollecting(true);
     showLoading();
     try {
       const { data, error } = await supabase.rpc('claim_daily_income');
 
       if (error) {
-        showToast(`erro: ${error.message}`);
+        showToast(`erro operacional: ${error.message}`);
       } else if (data && data.success) {
-        showToast('coleta bem-sucedida!');
+        showToast('rendimento extraído com sucesso.');
         fetchDailyStats();
       } else {
-        showToast(data?.message || 'coleta não sucedida tente novamente.');
+        showToast(data?.message || 'falha na extração. tente novamente.');
       }
     } catch (err) {
-      showToast('conexão instavel.');
+      showToast('instabilidade na rede de dados detectada.');
     } finally {
+      setIsCollecting(false);
       hideLoading();
     }
   }, [hasCollectedToday, showLoading, hideLoading, fetchDailyStats]);
 
   return (
-    <div className="flex flex-col min-h-screen bg-[#0000AA] text-white p-4 page-content">
+    <div className="flex flex-col min-h-screen bg-[#0000AA] text-white pt-4 px-4 pb-0 page-content">
       {/* Banner Card */}
       <section className="relative rounded-xl overflow-hidden mb-4">
         <img
@@ -162,8 +165,8 @@ export default function Extracao() {
           loading="lazy"
         />
         <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/60 to-transparent p-4">
-          <h2 className="text-[15px] font-bold lowercase tracking-tight">extração inteligente</h2>
-          <p className="text-[10px] text-gray-200">criação inteligente, segura e robusta</p>
+          <h2 className="text-[15px] font-bold tracking-tight lowercase">extração de recursos</h2>
+          <p className="text-[10px] text-gray-200 lowercase">monitorização inteligente e segura em tempo real</p>
         </div>
 
         {/* VIP Badge */}
@@ -177,7 +180,7 @@ export default function Extracao() {
             />
           </div>
           <div className="flex flex-col">
-            <span className="text-[10px] font-bold">VIP0</span>
+            <span className="text-[10px] font-bold lowercase">vip0</span>
             <div className="flex text-[8px] text-yellow-400">☆☆☆☆☆</div>
           </div>
         </div>
@@ -186,25 +189,25 @@ export default function Extracao() {
       {/* Stats Grid */}
       <section className="grid grid-cols-2 gap-y-4 mb-6 px-1">
         <div>
-          <p className="text-[10px] text-gray-300">conta de extração</p>
-          <p className="text-[15px] font-bold">{stats.reproductionBalance.toLocaleString('pt-AO', { minimumFractionDigits: 2 })} Kz</p>
+          <p className="text-[10px] text-gray-300 uppercase tracking-wider lowercase">conta de extração</p>
+          <p className="text-[15px] font-bold">{stats.reproductionBalance.toLocaleString('pt-AO', { minimumFractionDigits: 2 })} kz</p>
         </div>
         <div>
-          <p className="text-[10px] text-gray-300">ativos de lucro</p>
-          <p className="text-[15px] font-bold">{stats.totalProfit.toLocaleString('pt-AO', { minimumFractionDigits: 2 })} Kz</p>
+          <p className="text-[10px] text-gray-300 uppercase tracking-wider lowercase">ativos de lucro</p>
+          <p className="text-[15px] font-bold">{stats.totalProfit.toLocaleString('pt-AO', { minimumFractionDigits: 2 })} kz</p>
         </div>
         <div>
-          <p className="text-[10px] text-gray-300">renda diária</p>
-          <p className="text-[12.5px] font-semibold">{stats.dailyIncomeTotal.toLocaleString('pt-AO', { minimumFractionDigits: 2 })} Kz</p>
+          <p className="text-[10px] text-gray-300 uppercase tracking-wider lowercase">renda diária</p>
+          <p className="text-[12.5px] font-semibold">{stats.dailyIncomeTotal.toLocaleString('pt-AO', { minimumFractionDigits: 2 })} kz</p>
         </div>
         <div>
-          <p className="text-[10px] text-gray-300">usado / número total de vezes</p>
-          <p className="text-[12.5px] font-semibold">{stats.activeCowsCount}/{stats.totalPurchasesCount}</p>
+          <p className="text-[10px] text-gray-300 uppercase tracking-wider lowercase">ciclos de atividade</p>
+          <p className="text-[12.5px] font-semibold">{stats.activeCowsCount} ativos / {stats.totalPurchasesCount} total</p>
         </div>
         <div className="col-span-2 mt-2">
-          <p className="text-[10px] text-gray-300">horário de reinicialização da atividade</p>
+          <p className="text-[10px] text-gray-300 uppercase tracking-wider lowercase">estado do ciclo diário</p>
           <p className="text-[15px] font-bold lowercase">
-            {hasCollectedToday ? 'coleta concluída hoje' : 'aguardando coleta diária'}
+            {hasCollectedToday ? 'extração concluída hoje' : 'aguardando operação diária'}
           </p>
         </div>
       </section>
@@ -213,28 +216,26 @@ export default function Extracao() {
       <section className="grid grid-cols-2 gap-3 mb-8">
         <button
           onClick={() => navigate('/transferencia-de-fundos')}
-          className="bg-[#D2F076] text-black rounded-lg p-4 flex items-center justify-between text-left font-black lowercase leading-[1] h-[45px]"
+          className="bg-[#D2F076] text-white rounded-lg p-4 flex items-center justify-between text-left font-black leading-[1] h-[45px]"
         >
-          <span className="text-[12px]">trocar saldo</span>
-          <ArrowLeftRight className="w-5 h-5" />
+          <span className="text-[11px] uppercase tracking-tighter lowercase flex-1 text-center">converter saldo</span>
+          <ArrowLeftRight className="w-4 h-4 ml-2" />
         </button>
         <button
           onClick={handleStartCollection}
-          disabled={hasCollectedToday}
-          className={`rounded-lg p-4 flex items-center justify-between text-left font-black lowercase leading-[1] h-[45px]   transition-all ${hasCollectedToday ? 'bg-gray-400 cursor-not-allowed text-gray-200' : 'bg-[#D2F076] text-black active:scale-95'
+          disabled={hasCollectedToday || isCollecting}
+          className={`rounded-lg p-4 flex items-center justify-between text-left font-black leading-[1] h-[45px] transition-all ${hasCollectedToday || isCollecting ? 'bg-gray-400 cursor-not-allowed text-gray-200' : 'bg-[#D2F076] text-white active:scale-95'
             }`}
         >
-          <span className="text-[12px]">{hasCollectedToday ? 'coletado' : 'comece agora'}</span>
-          <Play className={`w-5 h-5 ${hasCollectedToday ? 'text-gray-300' : 'fill-current'}`} />
+          <span className="text-[11px] uppercase tracking-tighter lowercase flex-1 text-center">
+            {isCollecting ? 'processando...' : hasCollectedToday ? 'extraído' : 'minerar'}
+          </span>
+          <Play className={`w-4 h-4 ml-2 ${hasCollectedToday || isCollecting ? 'text-gray-300' : 'fill-current'}`} />
         </button>
       </section>
 
-      {/* History Section */}
-      <section className="bg-[#EBF1FF] rounded-t-[2.5rem] p-8 -mx-4 flex-grow min-h-[400px]">
-        <div className="flex justify-between items-center mb-6">
-          <h3 className="text-[#000080] font-black text-[15px] lowercase tracking-wider">registros históricos</h3>
-          <button className="text-blue-600 text-[11px] font-bold lowercase underline">veja mais</button>
-        </div>
+      {/* Seção de Ativos Adquiridos */}
+      <section className="bg-white rounded-t-[12px] p-8 -mx-4 flex-grow min-h-[400px]">
 
         <div className="flex flex-col">
           {purchases.length > 0 ? (

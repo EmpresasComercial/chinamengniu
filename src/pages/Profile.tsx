@@ -140,15 +140,15 @@ export default function Profile() {
   const fmt = (val: number) => val.toLocaleString('pt-AO', { minimumFractionDigits: 2 });
 
   const menuItems = [
-    { name: 'extrair', icon: ArrowUpRight, path: '/retirar' },
-    { name: 'recarregar', icon: PlusCircle, path: '/recarregar' },
-    { name: 'recarregar usdt', icon: CircleDollarSign, path: '/recarregar-usdt' },
-    { name: 'convidar amigos', icon: Rocket, path: '/convidar' },
-    { name: 'minha equipe', icon: Users, path: '/equipe' },
-    { name: 'registros de conta', icon: BarChart3, path: '/detalhes' },
-    { name: 'trocar saldo', icon: ArrowRightLeft, path: '/transferencia-de-fundos' },
+    { name: 'solicitar levantamento', icon: ArrowUpRight, path: '/retirar' },
+    { name: 'efetuar depósito', icon: PlusCircle, path: '/recarregar' },
+    { name: 'recarga via usdt', icon: CircleDollarSign, path: '/recarregar-usdt' },
+    { name: 'programa de convite', icon: Rocket, path: '/convidar' },
+    { name: 'gestão de equipe', icon: Users, path: '/equipe' },
+    { name: 'histórico de transações', icon: BarChart3, path: '/detalhes' },
+    { name: 'transferência de fundos', icon: ArrowRightLeft, path: '/transferencia-de-fundos' },
     { name: 'centro de segurança', icon: ShieldCheck, path: '/centro-de-seguranca' },
-    { name: 'perguntas frequentes', icon: HelpCircle, path: '/central-de-ajuda' },
+    { name: 'centro de ajuda & faq', icon: HelpCircle, path: '/central-de-ajuda' },
   ];
 
   return (
@@ -176,10 +176,10 @@ export default function Profile() {
           </div>
           <div>
             <div className="flex items-center space-x-2">
-              <span className="font-bold text-[15px] truncate max-w-[150px]">
+              <span className="font-bold text-[12.5px] truncate max-w-[150px]">
                 {profile?.phone ? `+244 ${profile.phone}` : 'carregando...'}
               </span>
-              <span className="bg-yellow-500 text-[10px] px-2 rounded-full text-black font-bold">
+              <span className="bg-yellow-500 text-[10px] px-2 rounded-full text-black font-bold lowercase">
                 {profile?.state || 'vip0'}
               </span>
             </div>
@@ -199,33 +199,33 @@ export default function Profile() {
         </div>
 
         <div className="mt-8 flex flex-col items-start px-4">
-          <div className="flex items-center gap-2 mb-1 text-white/90">
-            <p className="text-[11px] font-medium tracking-wide">balanço contabilizado</p>
+          <div className="flex items-center gap-2 mb-1 text-white/90 lowercase">
+            <p className="text-[12px] font-bold tracking-wider uppercase opacity-80">saldo disponível</p>
             <button 
               onClick={() => setShowBalance(!showBalance)}
               className="opacity-70 active:opacity-100 transition-opacity"
             >
-              {showBalance ? <Eye className="w-[14px] h-[14px]" /> : <EyeOff className="w-[14px] h-[14px]" />}
+              {showBalance ? <Eye className="w-[16px] h-[16px]" /> : <EyeOff className="w-[16px] h-[16px]" />}
             </button>
           </div>
-          <p className="text-[32px] font-bold -mt-1">
-            {showBalance ? `${fmt(Number(profile?.balance || 0))} Kz` : '*******'}
+          <p className="text-[34px] font-bold -mt-1 tracking-tight">
+            {showBalance ? `${fmt(Number(profile?.balance || 0))} Kz` : '••••••••'}
           </p>
         </div>
 
         {/* Linha 2: conta de extração + retirada total + comissão total equipe */}
-        <div className="grid grid-cols-3 gap-1 mt-6">
+        <div className="grid grid-cols-3 gap-1 mt-6 lowercase">
           <div className="text-center">
-            <p className="text-[9px] opacity-80 whitespace-nowrap">conta de extração</p>
-            <p className="font-bold text-[13px] mt-1 whitespace-nowrap">{fmt(financialData.contaReproducao)} Kz</p>
+            <p className="text-[10px] uppercase font-bold opacity-70 whitespace-nowrap tracking-tighter">conta extração</p>
+            <p className="font-bold text-[14px] mt-1 whitespace-nowrap lowercase">{fmt(financialData.contaReproducao)} kz</p>
           </div>
-          <div className="text-center border-l border-white/10">
-            <p className="text-[9px] opacity-80 whitespace-nowrap">retirada total</p>
-            <p className="font-bold text-[13px] mt-1 whitespace-nowrap">{fmt(financialData.retiradaTotal)} Kz</p>
+          <div className="text-center border-l border-white/20">
+            <p className="text-[10px] uppercase font-bold opacity-70 whitespace-nowrap tracking-tighter">retirada total</p>
+            <p className="font-bold text-[14px] mt-1 whitespace-nowrap lowercase">{fmt(financialData.retiradaTotal)} kz</p>
           </div>
-          <div className="text-center border-l border-white/10">
-            <p className="text-[9px] opacity-80 whitespace-nowrap">comissão total equipe</p>
-            <p className="font-bold text-[13px] mt-1 whitespace-nowrap">{fmt(financialData.comissaoTotalEquipe)} Kz</p>
+          <div className="text-center border-l border-white/20">
+            <p className="text-[10px] uppercase font-bold opacity-70 whitespace-nowrap tracking-tighter">comissão equipe</p>
+            <p className="font-bold text-[14px] mt-1 whitespace-nowrap lowercase">{fmt(financialData.comissaoTotalEquipe)} kz</p>
           </div>
         </div>
 
@@ -234,18 +234,18 @@ export default function Profile() {
       {/* Stats Section */}
       <section className="bg-[#0000AA] px-4 pb-6 text-white relative">
         <div className="absolute right-[-20px] top-4 w-24 h-24 rounded-full bg-white/5 border-2 border-white/10"></div>
-        <div className="grid grid-cols-3 gap-1 text-center py-4 border-t border-white/10 px-1">
+        <div className="grid grid-cols-3 gap-1 text-center py-4 border-t border-white/10 px-1 lowercase">
           <div>
-            <p className="text-[9px] opacity-70 whitespace-nowrap">recarga total</p>
-            <p className="font-bold text-[13px] whitespace-nowrap">{fmt(Number(profile?.reloaded_amount || 0))} Kz</p>
+            <p className="text-[10px] uppercase font-bold opacity-60 whitespace-nowrap tracking-tighter">recarga total</p>
+            <p className="font-bold text-[14px] whitespace-nowrap">{fmt(Number(profile?.reloaded_amount || 0))} kz</p>
           </div>
           <div className="border-l border-white/10 px-1">
-            <p className="text-[9px] opacity-70 whitespace-nowrap">ganhos de hoje</p>
-            <p className="font-bold text-[13px] whitespace-nowrap">{fmt(financialData.ganhoHoje)} Kz</p>
+            <p className="text-[10px] uppercase font-bold opacity-60 whitespace-nowrap tracking-tighter">ganhos hoje</p>
+            <p className="font-bold text-[14px] whitespace-nowrap">{fmt(financialData.ganhoHoje)} kz</p>
           </div>
           <div className="border-l border-white/10 px-1">
-            <p className="text-[9px] opacity-70 whitespace-nowrap">comissão de hoje</p>
-            <p className="font-bold text-[13px] whitespace-nowrap">{fmt(financialData.comissaoHoje)} Kz</p>
+            <p className="text-[10px] uppercase font-bold opacity-60 whitespace-nowrap tracking-tighter">comissão hoje</p>
+            <p className="font-bold text-[14px] whitespace-nowrap">{fmt(financialData.comissaoHoje)} kz</p>
           </div>
         </div>
 
@@ -296,9 +296,9 @@ export default function Profile() {
             hideLoading();
             navigate('/login');
           }}
-          className="w-full bg-[#0000B8] text-white font-normal h-[50px] mt-8 mb-20 rounded-xl text-[15px]   active:scale-[0.98] transition-all"
+          className="w-full bg-[#0000AA] text-white font-bold h-[45px] mt-8 mb-24 rounded-xl text-[12.5px] active:scale-[0.98] transition-all shadow-lg shadow-blue-900/20 lowercase"
         >
-          sair
+          encerrar sessão
         </motion.button>
       </section>
 
@@ -338,7 +338,7 @@ export default function Profile() {
               <div className="flex justify-between items-center mb-5">
                 <div className="flex items-center gap-2">
                   <Headset className="w-5 h-5 text-[#0000AA]" />
-                  <h3 className="text-[#0000AA] font-bold text-[15px]">atendimento ao cliente</h3>
+                  <h3 className="text-[#0000AA] font-bold text-[12.5px] lowercase">suporte ao investidor</h3>
                 </div>
                 <button 
                   onClick={() => setIsSupportModalOpen(false)} 
@@ -352,22 +352,22 @@ export default function Profile() {
               <div className="flex flex-col gap-2.5">
                 <button
                   onClick={(e) => { handleLinkClick(links.whatsapp_grupo_vendas_url, e); setIsSupportModalOpen(false); }}
-                  className="w-full h-[48px] bg-slate-50 rounded-xl flex items-center px-3 active:bg-slate-100 transition-none"
+                  className="w-full h-[45px] bg-slate-50 rounded-xl flex items-center px-3 active:bg-slate-100 transition-none border border-slate-100"
                 >
                   <div className="w-9 h-9 bg-[#25D366]/10 rounded-xl flex items-center justify-center mr-3">
                     <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/6/6b/WhatsApp.svg/512px-WhatsApp.svg.png" className="w-5 h-5" alt="whatsapp" />
                   </div>
-                  <p className="text-slate-900 font-bold text-[12.5px] text-left">entrar no grupo whatsapp</p>
+                  <p className="text-slate-900 font-bold text-[12.5px] text-left lowercase">canal oficial whatsapp</p>
                 </button>
 
                 <button
                   onClick={(e) => { handleLinkClick(links.whatsapp_gerente_url, e); setIsSupportModalOpen(false); }}
-                  className="w-full h-[48px] bg-slate-50 rounded-xl flex items-center px-3 active:bg-slate-100 transition-none"
+                  className="w-full h-[45px] bg-slate-50 rounded-xl flex items-center px-3 active:bg-slate-100 transition-none border border-slate-100"
                 >
                   <div className="w-9 h-9 bg-[#25D366]/10 rounded-xl flex items-center justify-center mr-3">
                     <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/6/6b/WhatsApp.svg/512px-WhatsApp.svg.png" className="w-5 h-5" alt="whatsapp" />
                   </div>
-                  <p className="text-slate-900 font-bold text-[12.5px] text-left">contactar gerente whatsapp</p>
+                  <p className="text-slate-900 font-bold text-[12.5px] text-left lowercase">gerência de atendimento</p>
                 </button>
               </div>
             </motion.div>

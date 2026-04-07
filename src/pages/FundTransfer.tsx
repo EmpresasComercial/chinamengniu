@@ -56,7 +56,7 @@ export default function FundTransfer() {
   };
 
   const handleRedeemCode = async () => {
-    if (!code) { showToast('por favor, insira o seu código', 'error'); return; }
+    if (!code) { showToast('Por favor, introduza o seu código promocional.', 'error'); return; }
     showLoading();
     try {
       const { data, error } = await supabase.rpc('redeem_gift_code', { p_code: code });
@@ -68,7 +68,7 @@ export default function FundTransfer() {
         showToast(data.message.toLowerCase(), 'error');
       }
     } catch {
-      showToast('erro ao processar o código. tente novamente.', 'error');
+      showToast('Erro ao processar o código. Por favor, tente novamente.', 'error');
     } finally {
       hideLoading();
     }
@@ -77,7 +77,7 @@ export default function FundTransfer() {
   const handleTransfer = async () => {
     const amount = Number(amountInput);
     if (isNaN(amount) || amount <= 0) {
-      showToast('por favor, insira um valor válido', 'error'); return;
+      showToast('Por favor, introduza um montante válido.', 'error'); return;
     }
 
     const now = new Date();
@@ -85,20 +85,20 @@ export default function FundTransfer() {
     const hour = now.getHours();
 
     if (day < 1 || day > 5) {
-      showToast('conversões apenas de segunda a sexta-feira', 'error'); return;
+      showToast('As conversões são permitidas apenas de Segunda a Sexta-feira.', 'error'); return;
     }
     if (hour < 10 || hour >= 22) {
-      showToast('conversões apenas entre as 10:00 e 22:00', 'error'); return;
+      showToast('As conversões estão disponíveis apenas entre as 10:00 e as 22:00.', 'error'); return;
     }
 
     if (amount < 1000) {
-      showToast('o valor mínimo de conversão é 1.000 Kz', 'error'); return;
+      showToast('O montante mínimo para conversão é de 1.000 Kz.', 'error'); return;
     }
     if (amount > 100000) {
-      showToast('o valor máximo de conversão é 100.000 Kz', 'error'); return;
+      showToast('O montante máximo permitido por operação é de 100.000 Kz.', 'error'); return;
     }
     if (amount > balanceCorrete) {
-      showToast('saldo de extração insuficiente', 'error'); return;
+      showToast('Saldo de extração insuficiente para esta operação.', 'error'); return;
     }
 
     showLoading();
@@ -106,7 +106,7 @@ export default function FundTransfer() {
       const { data, error } = await supabase.rpc('transfer_reproducao_to_balance', { p_amount: amount });
       if (error) throw error;
       if (data.success) {
-        showToast(`conversão de ${amount.toLocaleString('pt-AO')} Kz realizada com sucesso!`, 'success');
+        showToast(`Conversão de ${amount.toLocaleString('pt-AO')} Kz efetuada com sucesso.`, 'success');
         setBalanceCorrete(prev => prev - amount);
         setBalanceMain(prev => prev + amount);
         setAmountInput('');
@@ -114,7 +114,7 @@ export default function FundTransfer() {
         showToast(data.message.toLowerCase(), 'error');
       }
     } catch {
-      showToast('erro ao transferir. tente novamente.', 'error');
+      showToast('Falha na transferência de fundos. Tente novamente.', 'error');
     } finally {
       hideLoading();
     }
@@ -137,8 +137,8 @@ export default function FundTransfer() {
           <ChevronLeft className="h-5 w-5 text-white" />
         </button>
         <div className="flex-grow text-center">
-          <h1 className="text-white text-[14px] font-bold pr-8 font-serif lowercase">
-            {mode === 'gift' ? 'resgate de presente' : mode === 'transfer' ? 'conversão de fundos' : 'trocar saldo'}
+          <h1 className="text-white text-[14px] font-bold pr-8">
+            {mode === 'gift' ? 'Resgate de Recompensa' : mode === 'transfer' ? 'Conversão de Ativos' : 'Converter Ativos'}
           </h1>
         </div>
       </header>
@@ -152,7 +152,7 @@ export default function FundTransfer() {
               <div className="bg-[#000080]/5 w-11 h-11 rounded-xl flex items-center justify-center mb-2">
                 <Gift className="h-5 w-5 text-[#000080]" />
               </div>
-              <h2 className="text-[16px] font-black text-[#000080] lowercase">resgatar código</h2>
+              <h2 className="text-[16px] font-black text-[#000080]">Resgatar Recompensa</h2>
             </div>
 
             <div className="mb-6">
@@ -160,7 +160,7 @@ export default function FundTransfer() {
                 <input
                   className="w-full border-none focus:ring-0 p-0 text-slate-800 bg-transparent text-[15px] outline-none placeholder:text-slate-200"
                   id="gift-code"
-                  placeholder="por favor, insira o valor da conversão"
+                  placeholder="Introduza o código da recompensa"
                   type="text"
                   value={code}
                   onChange={(e) => setCode(e.target.value.toUpperCase())}
@@ -170,9 +170,9 @@ export default function FundTransfer() {
 
             <button
               onClick={handleRedeemCode}
-              className="w-full h-10 bg-[#000080] text-white rounded-xl text-[13px] font-normal active:scale-[0.98] transition-all lowercase"
+              className="w-full h-10 bg-[#000080] text-white rounded-xl text-[13px] font-bold active:scale-[0.98] transition-all"
             >
-              confirmar resgate
+              Confirmar Resgate
             </button>
           </motion.div>
         )}
@@ -183,15 +183,15 @@ export default function FundTransfer() {
             {/* Seção Estatística Compacta */}
             <div className="bg-white rounded-xl p-4 mb-4 flex justify-between items-center">
               <div className="text-center flex-1">
-                <p className="text-[9px] text-slate-400 lowercase font-bold mb-0.5">saldo de extração</p>
-                <p className="text-[16px] font-black text-[#000080]">{fmt(balanceCorrete)} kz</p>
+                <p className="text-[9px] text-slate-400 font-bold mb-0.5 uppercase tracking-wider">Saldo de Extração</p>
+                <p className="text-[16px] font-black text-[#000080]">{fmt(balanceCorrete)} Kz</p>
               </div>
               <div className="w-10 h-10 bg-[#000080] rounded-xl flex items-center justify-center shrink-0 mx-2">
                 <ArrowRightLeft className="w-5 h-5 text-white" />
               </div>
               <div className="text-center flex-1">
-                <p className="text-[9px] text-slate-400 lowercase font-bold mb-0.5">novo principal</p>
-                <p className="text-[16px] font-black text-green-600">{(balanceMain + parsedAmount).toLocaleString('pt-AO')} kz</p>
+                <p className="text-[9px] text-slate-400 font-bold mb-0.5 uppercase tracking-wider">Saldo Principal Projetado</p>
+                <p className="text-[16px] font-black text-green-600">{(balanceMain + parsedAmount).toLocaleString('pt-AO')} Kz</p>
               </div>
             </div>
 
@@ -214,7 +214,7 @@ export default function FundTransfer() {
                 <div className="border-b-2 border-[#000080] w-full pb-1 focus-within:border-blue-400 transition-colors">
                   <input
                     className="w-full border-none focus:ring-0 p-0 text-slate-800 bg-transparent text-[18px] outline-none text-left placeholder:text-slate-200"
-                    placeholder="por favor, insira o valor da conversão"
+                    placeholder="Introduza o montante a converter"
                     type="text"
                     inputMode="numeric"
                     value={amountInput}
@@ -226,18 +226,18 @@ export default function FundTransfer() {
               <button
                 onClick={handleTransfer}
                 disabled={parsedAmount < 1000 || parsedAmount > 100000 || parsedAmount > balanceCorrete}
-                className={`w-full h-11 rounded-xl text-[14px] font-normal transition-all
+                className={`w-full h-11 rounded-xl text-[14px] font-bold transition-all
                   ${parsedAmount >= 1000 && parsedAmount <= 100000 && parsedAmount <= balanceCorrete
                     ? 'bg-[#000080] text-white active:scale-[0.98]'
                     : 'bg-slate-50 text-slate-300 cursor-not-allowed border border-slate-100'}`}
               >
-                confirmar conversão
+                Confirmar Conversão
               </button>
             </div>
 
             {/* Instruções Detalhas (Flat e Compactas) */}
             <section className="mt-5 px-1 pb-10">
-              <h4 className="text-red-500 font-bold text-[13px] uppercase tracking-tighter mb-2 pl-0.5">instrução</h4>
+              <h4 className="text-red-500 font-bold text-[13px] uppercase tracking-tighter mb-2 pl-0.5">Diretrizes de Conversão</h4>
               <div className="space-y-1.5 text-[10px] text-slate-400 leading-normal lowercase">
                 <p>1. as conversões ocorrem apenas de <strong className="text-slate-500">segunda a sexta-feira</strong>, das <strong className="text-slate-500">10:00 às 22:00</strong>.</p>
                 <p>2. valor <strong className="text-slate-500">mínimo</strong> de <strong className="text-slate-500">1.000 kz</strong> e <strong className="text-slate-500">máximo</strong> de <strong className="text-slate-500">100.000 kz</strong>.</p>
@@ -268,8 +268,8 @@ export default function FundTransfer() {
                 {/* Pill */}
                 <div className="w-10 h-1 bg-gray-200 rounded-full mx-auto mb-6" />
 
-                <h2 className="text-[16px] font-black text-gray-800 text-center mb-6 lowercase">
-                  selecione o método
+                <h2 className="text-[16px] font-black text-gray-800 text-center mb-6">
+                  Selecione o Método
                 </h2>
 
                 <div className="flex flex-col gap-2 mb-8">
@@ -281,7 +281,7 @@ export default function FundTransfer() {
                     }}
                     className="w-full flex items-center justify-between p-4 rounded-xl border border-gray-100 bg-gray-50 active:bg-gray-100 transition-all group"
                   >
-                    <span className="text-[14px] font-bold text-gray-800 lowercase">conversão extração</span>
+                    <span className="text-[14px] font-bold text-gray-800">Conversão de Extração</span>
                     <div className="w-5 h-5 rounded-xl border-2 border-gray-300 flex items-center justify-center group-active:border-[#0000AA] group-active:bg-[#0000AA] transition-colors">
                       <svg className="w-3 h-3 text-white opacity-0 group-active:opacity-100" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="4">
                         <path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" />
@@ -297,7 +297,7 @@ export default function FundTransfer() {
                     }}
                     className="w-full flex items-center justify-between p-4 rounded-xl border border-gray-100 bg-gray-50 active:bg-gray-100 transition-all group"
                   >
-                    <span className="text-[14px] font-bold text-gray-800 lowercase">resgate de presente</span>
+                    <span className="text-[14px] font-bold text-gray-800">Resgate de Recompensa</span>
                     <div className="w-5 h-5 rounded-xl border-2 border-gray-300 flex items-center justify-center group-active:border-[#0000AA] group-active:bg-[#0000AA] transition-colors">
                       <svg className="w-3 h-3 text-white opacity-0 group-active:opacity-100" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="4">
                         <path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" />
@@ -316,7 +316,7 @@ export default function FundTransfer() {
                         <path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" />
                       </svg>
                     </div>
-                    <span className="text-[11px] font-bold lowercase">cancelar</span>
+                    <span className="text-[11px] font-bold">Fechar Operação</span>
                   </button>
                 </div>
               </motion.div>

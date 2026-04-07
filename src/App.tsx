@@ -53,11 +53,11 @@ export default function App() {
         <LoadingProvider>
           <RouteTransitionLoader />
           <Suspense fallback={
-            <div className="fixed inset-0 z-[9999] flex flex-col items-center justify-center bg-black/5 backdrop-blur-[1px]">
+            <div className="fixed inset-0 z-[9999] flex flex-col items-center justify-center bg-black/5 backdrop-blur-[1px] lowercase">
               <div className="spinner spinner-dark !w-7 !h-7 !border-[3px]"></div>
               <div className="mt-4 text-[12.5px] text-gray-500 font-serif text-center px-6">
-                Carregando...<br />
-                <span className="text-[10px] opacity-60">A página poderá demorar a carregar dependendo da sua conexão.</span>
+                carregando...<br />
+                <span className="text-[10px] opacity-60">a página poderá demorar a carregar dependendo da sua conexão.</span>
               </div>
             </div>
           }>

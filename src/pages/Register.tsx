@@ -74,28 +74,28 @@ export default function Register() {
     e.preventDefault();
 
     if (!formData.phone) {
-      showToast('por favor, insira celular');
+      showToast('Por favor, introduza o seu número de telefone.');
       return;
     }
     const phoneRegex = /^9\d{8}$/;
     if (!phoneRegex.test(formData.phone)) {
-      showToast('celular começar com 9 e ter 9 dígitos');
+      showToast('O telefone deve iniciar por 9 e conter 9 dígitos.');
       return;
     }
     if (!formData.password) {
-      showToast('por favor, insira sua senha');
+      showToast('Por favor, insira a sua palavra-passe.');
       return;
     }
     if (!formData.confirmPassword) {
-      showToast('por favor, confirme sua senha');
+      showToast('Por favor, confirme a sua palavra-passe.');
       return;
     }
     if (formData.password !== formData.confirmPassword) {
-      showToast('as senhas não coincidem');
+      showToast('As palavras-passe não coincidem.');
       return;
     }
     if (!formData.inviteCode) {
-      showToast('por favor, insira código');
+      showToast('Por favor, introduza o código de convite.');
       return;
     }
 
@@ -128,10 +128,10 @@ export default function Register() {
         return;
       }
 
-      showToast('registro bem-sucedido');
+      showToast('registo efetuado com sucesso. bem-vindo à newmont!');
       setTimeout(() => navigate('/login'), 1500);
     } catch (err: any) {
-      showToast('registro não sucedido');
+      showToast('Falha ao processar o registo. Tente novamente.');
     } finally {
       hideLoading();
     }
@@ -157,14 +157,15 @@ export default function Register() {
 
         {/* Logo Container */}
         <div className="relative z-10 flex flex-col items-center">
-          <div className="w-16 h-16 bg-white rounded-xl flex items-center justify-center mb-2  p-2">
+          <div className="w-16 h-16 bg-white rounded-2xl flex items-center justify-center mb-3 shadow-xl p-2.5">
             <img
               alt="Newmont Corporation logo"
               className="w-full h-full object-contain"
               src="/NewmontCorporationfff83c6b-57f6-428e-alogob.png"
             />
           </div>
-          <h1 className="text-white text-2xl font-semibold tracking-tight">Newmont Corporation</h1>
+          <h1 className="text-white text-2xl font-bold tracking-tight lowercase">newmont corporation</h1>
+          <p className="text-white/60 text-[10px] font-bold uppercase tracking-widest mt-0.5 lowercase">mining excellence</p>
         </div>
       </header>
       {/* END: Header */}
@@ -176,12 +177,12 @@ export default function Register() {
             {/* Field: Phone Number */}
             <div className="space-y-1">
               <div className="flex items-center border-b-[1.5px] border-[#0000b3] py-2 transition-colors">
-                <span className="text-gray-800 mr-2 font-medium text-[12.5px]">+244</span>
+                <span className="text-gray-800 mr-2 font-bold text-[12.5px]">+244</span>
                 <input
                   className="w-full border-none p-0 focus:ring-0 text-gray-800 placeholder-gray-400 text-[12.5px]"
                   id="phone"
                   name="phone"
-                  placeholder="por favor, insira o telefone"
+                  placeholder="número de telefone"
                   type="tel"
                   value={formData.phone}
                   onChange={handleChange}
@@ -196,13 +197,13 @@ export default function Register() {
                   className="w-full border-none p-0 focus:ring-0 text-gray-800 placeholder-gray-400 text-[12.5px]"
                   id="password"
                   name="password"
-                  placeholder="por favor, insira a senha"
+                  placeholder="senha de acesso"
                   type={showPassword ? "text" : "password"}
                   value={formData.password}
                   onChange={handleChange}
                 />
                 <button
-                  className="text-gray-500 hover:text-gray-700 btn-small"
+                  className="text-gray-400 hover:text-gray-600 btn-small"
                   type="button"
                   onClick={() => setShowPassword(!showPassword)}
                 >
@@ -218,13 +219,13 @@ export default function Register() {
                   className="w-full border-none p-0 focus:ring-0 text-gray-800 placeholder-gray-400 text-[12.5px]"
                   id="confirm-password"
                   name="confirmPassword"
-                  placeholder="por favor, confirme a senha"
+                  placeholder="confirmar senha"
                   type={showConfirmPassword ? "text" : "password"}
                   value={formData.confirmPassword}
                   onChange={handleChange}
                 />
                 <button
-                  className="text-gray-500 hover:text-gray-700 btn-small"
+                  className="text-gray-400 hover:text-gray-600 btn-small"
                   type="button"
                   onClick={() => setShowConfirmPassword(!showConfirmPassword)}
                 >
@@ -237,10 +238,10 @@ export default function Register() {
             <div className="space-y-1">
               <div className="flex items-center border-b-[1.5px] border-[#0000b3] py-2 transition-colors">
                 <input
-                  className="w-full border-none p-0 focus:ring-0 text-gray-800 text-[12.5px] font-medium placeholder-gray-400"
+                  className="w-full border-none p-0 focus:ring-0 text-gray-800 text-[12.5px] font-bold placeholder-gray-400"
                   id="invite-code"
                   name="inviteCode"
-                  placeholder="por favor, insira o código de convite"
+                  placeholder="código de convite"
                   type="text"
                   value={formData.inviteCode}
                   onChange={handleChange}
@@ -249,19 +250,19 @@ export default function Register() {
             </div>
 
             {/* Submit Button */}
-            <div className="pt-4">
+            <div className="pt-6">
               <button
-                className="w-full bg-[#0000aa] text-white h-[45px] rounded-xl font-normal text-[15px] transition-all active:scale-95"
+                className="w-full bg-[#0000aa] text-white h-[45px] rounded-xl font-bold text-[12.5px] transition-all active:scale-95 shadow-lg shadow-blue-900/20 lowercase"
                 type="submit"
               >
-                registrar
+                criar conta
               </button>
             </div>
 
             {/* Footer Links */}
-            <div className="text-center space-y-4 pt-4">
-              <p className="text-[12.5px] text-gray-500">
-                você já possui uma conta? <Link className="text-[#00008b] font-semibold" to="/login">conecte-se</Link>
+            <div className="text-center space-y-4 pt-6">
+              <p className="text-[12.5px] text-gray-500 lowercase">
+                já possui uma conta? <Link className="text-[#00008b] font-bold hover:underline" to="/login">conectar-se</Link>
               </p>
             </div>
           </form>
@@ -303,7 +304,7 @@ export default function Register() {
               <div className="flex justify-between items-center mb-5">
                 <div className="flex items-center gap-2">
                   <Headset className="w-5 h-5 text-[#0000AA]" />
-                  <h3 className="text-[#0000AA] font-bold text-[15px]">atendimento ao cliente</h3>
+                  <h3 className="text-[#0000AA] font-bold text-[12.5px] lowercase">suporte ao investidor</h3>
                 </div>
                 <button 
                   onClick={() => setIsSupportModalOpen(false)} 
@@ -314,25 +315,25 @@ export default function Register() {
                 </button>
               </div>
 
-              <div className="flex flex-col gap-2.5">
+              <div className="flex flex-col gap-3">
                 <button
                   onClick={(e) => { handleLinkClick(links.whatsapp_grupo_vendas_url, e); setIsSupportModalOpen(false); }}
-                  className="w-full h-[48px] bg-slate-50 rounded-xl flex items-center px-3 active:bg-slate-100 transition-none"
+                  className="w-full h-[45px] bg-slate-50 rounded-xl flex items-center px-4 active:bg-slate-100 transition-all border border-slate-100"
                 >
                   <div className="w-9 h-9 bg-[#25D366]/10 rounded-xl flex items-center justify-center mr-3">
                     <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/6/6b/WhatsApp.svg/512px-WhatsApp.svg.png" className="w-5 h-5" alt="whatsapp" />
                   </div>
-                  <p className="text-slate-900 font-bold text-[12.5px] text-left">entrar no grupo whatsapp</p>
+                  <p className="text-slate-900 font-bold text-[12.5px] text-left lowercase">canal oficial whatsapp</p>
                 </button>
 
                 <button
                   onClick={(e) => { handleLinkClick(links.whatsapp_gerente_url, e); setIsSupportModalOpen(false); }}
-                  className="w-full h-[48px] bg-slate-50 rounded-xl flex items-center px-3 active:bg-slate-100 transition-none"
+                  className="w-full h-[45px] bg-slate-50 rounded-xl flex items-center px-4 active:bg-slate-100 transition-all border border-slate-100"
                 >
                   <div className="w-9 h-9 bg-[#25D366]/10 rounded-xl flex items-center justify-center mr-3">
                     <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/6/6b/WhatsApp.svg/512px-WhatsApp.svg.png" className="w-5 h-5" alt="whatsapp" />
                   </div>
-                  <p className="text-slate-900 font-bold text-[12.5px] text-left">contactar gerente whatsapp</p>
+                  <p className="text-slate-900 font-bold text-[12.5px] text-left lowercase">gerência de atendimento</p>
                 </button>
               </div>
             </motion.div>

@@ -1,5 +1,5 @@
 import React, { useEffect, useState, useCallback } from 'react';
-import { Bell, Headset, X, Share, MoreVertical } from 'lucide-react';
+import { Bell, Headset, X, Copy } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import { motion, AnimatePresence } from 'motion/react';
 import { useLoading } from '../contexts/LoadingContext';
@@ -26,7 +26,6 @@ export default function Home() {
   });
   const [isSupportModalOpen, setIsSupportModalOpen] = useState(false);
   const [deferredPrompt, setDeferredPrompt] = useState<any>(null);
-  const [isIosModalOpen, setIsIosModalOpen] = useState(false);
 
   // Carousel State
   const [currentSlide, setCurrentSlide] = useState(0);
@@ -40,18 +39,11 @@ export default function Home() {
 
   useEffect(() => {
     const handler = (e: any) => {
-      // NOTE: We don't call e.preventDefault() so the browser's own native 
-      // bottom bar/mini-infobar appears automatically when ready.
       setDeferredPrompt(e);
     };
 
     window.addEventListener('beforeinstallprompt', handler);
     return () => window.removeEventListener('beforeinstallprompt', handler);
-  }, []);
-
-  const isIos = useCallback(() => {
-    const ua = window.navigator.userAgent.toLowerCase();
-    return /iphone|ipad|ipod/.test(ua);
   }, []);
 
   const isInStandaloneMode = useCallback(() =>
@@ -61,31 +53,22 @@ export default function Home() {
     e.stopPropagation();
 
     if (deferredPrompt) {
-      // Android Chrome: acionar prompt nativo capturado
       try {
         deferredPrompt.prompt();
         const { outcome } = await deferredPrompt.userChoice;
         if (outcome === 'accepted') {
-          setNotification('instalação iniciada!');
+          setNotification('Operação concluída com sucesso.');
           setTimeout(() => setNotification(null), 2500);
         }
         setDeferredPrompt(null);
       } catch (err) {
-        setNotification('por favor, utilize o menu do navegador para instalar');
-        setTimeout(() => setNotification(null), 3500);
+        // Silently fails to comply with 'no instructions' request
       }
-    } else if (isIos() && !isInStandaloneMode()) {
-      // iOS Safari: mostrar guia visual (iOS não tem beforeinstallprompt)
-      setIsIosModalOpen(true);
     } else if (isInStandaloneMode()) {
-      setNotification('aplicativo já está instalado!');
+      setNotification('O aplicativo já se encontra instalado.');
       setTimeout(() => setNotification(null), 2500);
-    } else {
-      // Caso o evento ainda não tenha disparado ou já tenha sido usado
-      setNotification('por favor, use o menu do navegador → "adicionar ao ecrã inicial"');
-      setTimeout(() => setNotification(null), 4000);
     }
-  }, [deferredPrompt, isIos, isInStandaloneMode]);
+  }, [deferredPrompt, isInStandaloneMode]);
 
   useEffect(() => {
     async function fetchLinks() {
@@ -119,23 +102,23 @@ export default function Home() {
   const handleCopyInvite = useCallback((e: React.MouseEvent) => {
     e.preventDefault();
     const inviteCode = profile?.invite_code || '';
-    
-    const baseLink = links.link_app_atualizado && links.link_app_atualizado !== '#' 
-      ? links.link_app_atualizado 
+
+    const baseLink = links.link_app_atualizado && links.link_app_atualizado !== '#'
+      ? links.link_app_atualizado
       : `${window.location.origin}/#/register`;
 
     const inviteLink = baseLink.includes('(codigo)')
       ? baseLink.replace('(codigo)', inviteCode)
-      : baseLink.includes('invite=') 
-        ? baseLink 
+      : baseLink.includes('invite=')
+        ? baseLink
         : baseLink.includes('?') ? `${baseLink}&invite=${inviteCode}` : `${baseLink}?invite=${inviteCode}`;
 
     if (inviteCode) {
       navigator.clipboard.writeText(inviteLink);
-      setNotification('Link de convite copiado!');
+      setNotification('Link de convite copiado com sucesso.');
       setTimeout(() => setNotification(null), 2500);
     } else {
-      setNotification('Erro ao gerar link. Tente novamente.');
+      setNotification('Falha ao gerar link de convite. Tente novamente.');
       setTimeout(() => setNotification(null), 2500);
     }
   }, [profile?.invite_code, links.link_app_atualizado]);
@@ -152,13 +135,13 @@ export default function Home() {
                 src="/NewmontCorporationfff83c6b-57f6-428e-alogob.png"
               />
             </div>
-            <span className="text-white font-bold text-lg">Newmont Corporation</span>
+            <span className="text-white font-bold text-lg lowercase">newmont corporation</span>
           </div>
           <div className="flex gap-2">
-            <button 
+            <button
               onClick={() => setIsSupportModalOpen(true)}
               className="w-10 h-10 rounded-full bg-white/20 backdrop-blur-sm flex items-center justify-center border border-white/10"
-              title="suporte"
+              title="Atendimento"
             >
               <Headset className="w-6 h-6 text-white" strokeWidth={2.5} />
             </button>
@@ -189,31 +172,31 @@ export default function Home() {
             <div className="w-[52px] h-[52px] bg-[#00008B] rounded-xl flex items-center justify-center mb-2 overflow-hidden ">
               <img src="/coin-DnOWIML3.png" alt="Apresentação da Empresa" className="w-8 h-8 object-contain" />
             </div>
-            <span className="text-[12.5px] font-black text-slate-900 leading-[1.1]">
-              apresentação da<br />empresa
+            <span className="text-[12.5px] font-bold text-slate-900 leading-[1.1] lowercase">
+              apresentação<br />institucional
             </span>
           </div>
           <div
             onClick={() => navigate('/equipe')}
             className="flex flex-col items-center cursor-pointer"
           >
-            <div className="w-[52px] h-[52px] bg-[#0000AA] rounded-xl flex items-center justify-center mb-2 ">
+            <div className="w-[52px] h-[52px] bg-[#0000AA] rounded-xl flex items-center justify-center mb-2 shadow-sm">
               <svg className="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth="3">
                 <path d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h7a3 3 0 013 3v1" strokeLinecap="round" strokeLinejoin="round" />
               </svg>
             </div>
-            <span className="text-[12.5px] font-black text-slate-900">equipe</span>
+            <span className="text-[12.5px] font-bold text-slate-900 lowercase">equipe</span>
           </div>
           <div
             onClick={() => navigate('/central-de-ajuda')}
             className="flex flex-col items-center cursor-pointer"
           >
-            <div className="w-[52px] h-[52px] bg-[#00008B] rounded-xl flex items-center justify-center mb-2 ">
+            <div className="w-[52px] h-[52px] bg-[#00008B] rounded-xl flex items-center justify-center mb-2 shadow-sm">
               <svg className="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth="2.5">
                 <path d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4" strokeLinecap="round" strokeLinejoin="round" />
               </svg>
             </div>
-            <span className="text-[12.5px] font-black text-slate-900">ajuda</span>
+            <span className="text-[12.5px] font-bold text-slate-900 lowercase">suporte</span>
           </div>
         </div>
 
@@ -221,27 +204,27 @@ export default function Home() {
           <div className="z-10">
             <h3
               onClick={handleInstallApp}
-              className="text-[#0000AA] font-black text-[22px] mb-1 underline decoration-2 underline-offset-4 cursor-pointer active:opacity-70 transition-none"
+              className="text-[#0000AA] font-bold text-[22px] mb-1 underline decoration-2 underline-offset-4 cursor-pointer active:opacity-70 transition-none lowercase"
             >
-              baixe o aplicativo
+              baixar aplicativo
             </h3>
-            <p className="text-[#0000AA]/60 text-[11px] font-bold uppercase tracking-tight">newmont corporation premium</p>
+            <p className="text-[#0000AA]/60 text-[11px] font-bold uppercase tracking-widest lowercase">newmont corporation premium</p>
           </div>
 
           <div className="flex gap-2 w-full z-10 mt-4">
             <button
               onClick={(e) => { e.stopPropagation(); navigate('/recarregar'); }}
-              className="flex-1 bg-[#0000AA] text-white px-4 rounded-xl text-[12.5px] font-normal   h-[44px] flex items-center justify-center active:scale-[0.96] transition-none whitespace-nowrap"
+              className="flex-1 bg-[#0000AA] text-white px-4 rounded-xl text-[12.5px] font-semibold h-[44px] flex items-center justify-center active:scale-[0.96] transition-all shadow-md shadow-blue-900/10 lowercase"
             >
               <img src="/deposit1-Dk3ugVyJ.png" alt="Recarregar" className="w-5 h-5 mr-1.5 object-contain" />
-              recarregar
+              efetuar depósito
             </button>
             <button
               onClick={(e) => { e.stopPropagation(); navigate('/retirar'); }}
-              className="flex-1 bg-white text-[#0000AA] border border-blue-100 px-4 rounded-xl text-[12.5px] font-black   h-[44px] flex items-center justify-center active:scale-[0.96] transition-none whitespace-nowrap"
+              className="flex-1 bg-white text-[#0000AA] border border-blue-100 px-4 rounded-xl text-[12.5px] font-semibold h-[44px] flex items-center justify-center active:scale-[0.96] transition-all shadow-sm lowercase"
             >
               <img src="/withdraw1-pLMbG-t2.png" alt="Extrair" className="w-5 h-5 mr-1.5 object-contain" />
-              extrair
+              levantamento
             </button>
           </div>
 
@@ -277,11 +260,11 @@ export default function Home() {
 
       <section className="mt-6 px-4 mb-20 fade-in">
         <div className="flex items-center gap-2 mb-4 px-2">
-          <div className="w-1 h-4 bg-[#0000AA] rounded-xl"></div>
-          <h3 className="text-slate-800 font-bold text-[15px]">sobre a newmont corporation</h3>
+          <div className="w-1.5 h-5 bg-[#0000AA] rounded-full"></div>
+          <h3 className="text-slate-900 font-bold text-[15px] lowercase">sobre a newmont corporation</h3>
         </div>
 
-        <div className="bg-white rounded-xl p-6  border border-slate-50 leading-relaxed text-slate-600">
+        <div className="bg-white rounded-xl p-6 border border-slate-100 leading-relaxed text-slate-700 shadow-sm lowercase">
           <p className="text-[12.5px] mb-4">
             a <span className="font-bold text-[#0000AA]">newmont corporation</span> (nyse: nem) é uma das maiores e mais importantes empresas de mineração do mundo, sendo reconhecida como a líder global na produção de ouro. fundada em 1921 pelo coronel william boyce thompson, com sede em denver, colorado, a empresa tem operações nas américas, austrália e áfrica.
           </p>
@@ -294,77 +277,6 @@ export default function Home() {
         </div>
       </section>
 
-      {/* Modal de instruções iOS */}
-      {isIosModalOpen && (
-        <div className="fixed inset-0 z-[200] flex items-end justify-center p-0">
-          <div
-            onClick={() => setIsIosModalOpen(false)}
-            className="absolute inset-0 bg-black/60 backdrop-blur-[2px]"
-          />
-          <div className="relative w-full bg-white rounded-t-[2.5rem] p-6  z-[201] pb-10">
-            <div className="w-12 h-1.5 bg-slate-200 rounded-full mx-auto mb-6" />
-            <div className="flex items-center gap-3 mb-5">
-              <div className="w-12 h-12 bg-[#001f8d] rounded-xl flex items-center justify-center shrink-0">
-                <img
-                  src="/NewmontCorporationfff83c6b-57f6-428e-alogob.png"
-                  alt="Newmont"
-                  className="w-8 h-8 object-contain"
-                />
-              </div>
-              <div>
-                <p className="text-slate-900 font-bold text-[15px]">Newmont Corporation</p>
-                <p className="text-slate-500 text-[11px]">adicionar ao ecrã inicial</p>
-              </div>
-            </div>
-
-            <div className="flex flex-col gap-4">
-              <div className="flex items-start gap-4">
-                <div className="w-9 h-9 bg-[#EBF1FF] rounded-xl flex items-center justify-center shrink-0">
-                  <span className="text-[#0000AA] font-black text-[15px]">1</span>
-                </div>
-                <div className="flex-1 pt-1">
-                  <p className="text-slate-900 font-bold text-[13px] mb-0.5">toque no botão de partilhar</p>
-                  <p className="text-slate-500 text-[11px]">na barra inferior do safari, toque no ícone <span className="font-bold text-[#0000AA]">partilhar</span> (quadrado com seta para cima)</p>
-                </div>
-                <div className="w-9 h-9 bg-slate-100 rounded-xl flex items-center justify-center shrink-0">
-                  <Share className="w-5 h-5 text-[#0000AA]" />
-                </div>
-              </div>
-
-              <div className="h-px bg-slate-100" />
-
-              <div className="flex items-start gap-4">
-                <div className="w-9 h-9 bg-[#EBF1FF] rounded-xl flex items-center justify-center shrink-0">
-                  <span className="text-[#0000AA] font-black text-[15px]">2</span>
-                </div>
-                <div className="flex-1 pt-1">
-                  <p className="text-slate-900 font-bold text-[13px] mb-0.5">selecione "adicionar ao ecrã inicial"</p>
-                  <p className="text-slate-500 text-[11px]">role para baixo nas opções e toque em <span className="font-bold text-[#0000AA]">adicionar ao ecrã inicial</span></p>
-                </div>
-              </div>
-
-              <div className="h-px bg-slate-100" />
-
-              <div className="flex items-start gap-4">
-                <div className="w-9 h-9 bg-[#EBF1FF] rounded-xl flex items-center justify-center shrink-0">
-                  <span className="text-[#0000AA] font-black text-[15px]">3</span>
-                </div>
-                <div className="flex-1 pt-1">
-                  <p className="text-slate-900 font-bold text-[13px] mb-0.5">confirme a instalação</p>
-                  <p className="text-slate-500 text-[11px]">toque em <span className="font-bold text-[#0000AA]">adicionar</span> no canto superior direito para concluir</p>
-                </div>
-              </div>
-            </div>
-
-            <button
-              onClick={() => setIsIosModalOpen(false)}
-              className="mt-6 w-full h-[48px] bg-[#0000AA] text-white rounded-xl font-normal text-[13px]   active:scale-[0.98] transition-none"
-            >
-              entendido
-            </button>
-          </div>
-        </div>
-      )}
 
       <AnimatePresence>
         {isSupportModalOpen && (
@@ -385,7 +297,7 @@ export default function Home() {
               <div className="flex justify-between items-center mb-5">
                 <div className="flex items-center gap-2">
                   <Headset className="w-5 h-5 text-[#0000AA]" />
-                  <h3 className="text-[#0000AA] font-bold text-[15px]">atendimento ao cliente</h3>
+                  <h3 className="text-[#0000AA] font-bold text-[12.5px] lowercase">suporte ao investidor</h3>
                 </div>
                 <button
                   onClick={() => setIsSupportModalOpen(false)}
@@ -396,36 +308,33 @@ export default function Home() {
                 </button>
               </div>
 
-              <div className="flex flex-col gap-2.5">
+              <div className="flex flex-col gap-3">
                 <button
                   onClick={(e) => { handleLinkClick(links.whatsapp_grupo_vendas_url, e); setIsSupportModalOpen(false); }}
-                  className="w-full h-[48px] bg-slate-50 rounded-xl flex items-center px-3 active:bg-slate-100 transition-none"
+                  className="w-full h-[45px] bg-slate-50 rounded-xl flex items-center px-4 active:bg-slate-100 transition-all border border-slate-100"
                 >
                   <div className="w-9 h-9 bg-[#25D366]/10 rounded-xl flex items-center justify-center mr-3">
                     <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/6/6b/WhatsApp.svg/512px-WhatsApp.svg.png" className="w-5 h-5" alt="whatsapp" />
                   </div>
-                  <p className="text-slate-900 font-bold text-[12.5px] text-left">entrar no grupo whatsapp</p>
+                  <p className="text-slate-900 font-bold text-[12.5px] text-left lowercase">canal oficial whatsapp</p>
                 </button>
 
                 <button
                   onClick={(e) => { handleLinkClick(links.whatsapp_gerente_url, e); setIsSupportModalOpen(false); }}
-                  className="w-full h-[48px] bg-slate-50 rounded-xl flex items-center px-3 active:bg-slate-100 transition-none"
+                  className="w-full h-[45px] bg-slate-50 rounded-xl flex items-center px-4 active:bg-slate-100 transition-all border border-slate-100"
                 >
                   <div className="w-9 h-9 bg-[#25D366]/10 rounded-xl flex items-center justify-center mr-3">
                     <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/6/6b/WhatsApp.svg/512px-WhatsApp.svg.png" className="w-5 h-5" alt="whatsapp" />
                   </div>
-                  <p className="text-slate-900 font-bold text-[12.5px] text-left">contactar gerente whatsapp</p>
+                  <p className="text-slate-900 font-bold text-[12.5px] text-left lowercase">gerência de atendimento</p>
                 </button>
 
                 <button
                   onClick={(e) => { handleCopyInvite(e); setIsSupportModalOpen(false); }}
-                  className="w-full h-[48px] bg-slate-50 rounded-xl flex items-center justify-center gap-2 active:bg-slate-100 transition-none"
+                  className="w-full h-[45px] bg-slate-50 rounded-xl flex items-center justify-center gap-2 active:bg-slate-100 transition-all border border-slate-100"
                 >
-                  <p className="text-slate-700 font-bold text-[12.5px]">copiar link</p>
-                  <svg className="w-4 h-4 text-[#0000AA]" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth="2">
-                    <rect x="9" y="9" width="13" height="13" rx="2" ry="2" />
-                    <path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1" />
-                  </svg>
+                  <p className="text-slate-700 font-bold text-[12.5px] lowercase">copiar link de convite</p>
+                  <Copy className="w-4 h-4 text-[#0000AA]" />
                 </button>
               </div>
             </motion.div>
