@@ -27,7 +27,6 @@ export default function Projetos() {
     totalRevenue: 0,
     dailyIncome: 0
   });
-  const [promoCount, setPromoCount] = useState(0);
 
   const [isPurchaseModalOpen, setIsPurchaseModalOpen] = useState(false);
   const [selectedProduct, setSelectedProduct] = useState<Product | null>(null);
@@ -129,13 +128,6 @@ export default function Projetos() {
             dailyIncome: rendaColetada
           });
         }
-        // Buscar contagem de promoções ativas
-        const { count } = await supabase
-          .from('promocao_products')
-          .select('*', { count: 'exact', head: true })
-          .eq('status', 'active');
-        
-        setPromoCount(count || 0);
       } finally {
         done();
       }

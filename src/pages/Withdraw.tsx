@@ -8,7 +8,7 @@ import { motion, AnimatePresence } from 'motion/react';
 
 interface BankAccount {
   id: string;
-  banco_nome: string;
+  nome_banco: string;
   iban: string;
 }
 
@@ -202,7 +202,7 @@ export default function Withdraw() {
                       {maskIban(selectedBank?.iban)}
                     </p>
                     <p className="text-[11px] font-bold text-[#001f8d] mt-1.5 lowercase">
-                      {selectedBank?.banco_nome}
+                      {selectedBank?.nome_banco}
                     </p>
                   </div>
                 </div>

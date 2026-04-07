@@ -113,8 +113,8 @@ export default function FundTransfer() {
       } else {
         showToast(data.message.toLowerCase(), 'error');
       }
-    } catch {
-      showToast('Falha na transferência de fundos. Tente novamente.', 'error');
+    } catch (err: any) {
+      showToast(err?.message || 'Falha na transferência de fundos. Tente novamente.', 'error');
     } finally {
       hideLoading();
     }
