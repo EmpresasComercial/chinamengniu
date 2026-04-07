@@ -64,13 +64,12 @@ export default function Invite() {
   };
 
   const shareOnWhatsApp = () => {
-    const msg = encodeURIComponent(`🐄 registe-se !\n\nUse o meu código de convite: *${inviteCode}*\nOu aceda ao link: ${inviteLink}`);
+    const msg = encodeURIComponent(inviteLink);
     window.open(`https://wa.me/?text=${msg}`, '_blank');
   };
 
   const shareOnTelegram = () => {
-    const msg = encodeURIComponent(`🐄 registe-se: ${inviteCode} | Link: ${inviteLink}`);
-    window.open(`https://t.me/share/url?url=${encodeURIComponent(inviteLink)}&text=${msg}`, '_blank');
+    window.open(`https://t.me/share/url?url=${encodeURIComponent(inviteLink)}`, '_blank');
   };
 
   return (

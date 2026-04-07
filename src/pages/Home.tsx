@@ -109,9 +109,9 @@ export default function Home() {
 
     const inviteLink = baseLink.includes('(codigo)')
       ? baseLink.replace('(codigo)', inviteCode)
-      : baseLink.includes('invite=')
+      : baseLink.includes('join=')
         ? baseLink
-        : baseLink.includes('?') ? `${baseLink}&invite=${inviteCode}` : `${baseLink}?invite=${inviteCode}`;
+        : baseLink.includes('?') ? `${baseLink}&join=${inviteCode}` : `${baseLink}?join=${inviteCode}`;
 
     if (inviteCode) {
       navigator.clipboard.writeText(inviteLink);
