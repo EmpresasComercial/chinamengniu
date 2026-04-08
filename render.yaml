@@ -1,7 +1,6 @@
 services:
-  - type: web
+  - type: static
     name: ai-app
-    runtime: static
     buildCommand: npm install && npm run build
     staticPublishPath: dist
     pullRequestPreviewsEnabled: false
