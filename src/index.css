@@ -127,7 +127,7 @@
 
 /* Gradiente de fundo das páginas de login/registo */
 .bg-main-gradient {
-  background: linear-gradient(180deg, #000080 0%, #0000a0 40%, #f3f4f6 40%, #f3f4f6 100%);
+  background: linear-gradient(180deg, #6D28D9 0%, #7C3AED 40%, #f3f4f6 40%, #f3f4f6 100%);
   min-height: 100vh;
 }
 
@@ -219,8 +219,8 @@
 }
 
 .spinner-dark {
-  border-color: rgba(0, 0, 160, 0.2);
-  border-top-color: #0000a0;
+  border-color: rgba(109, 40, 217, 0.2);
+  border-top-color: #6D28D9;
 }
 
 /* ──────────────────────────────────────

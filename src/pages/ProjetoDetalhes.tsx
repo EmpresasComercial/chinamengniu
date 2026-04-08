@@ -17,7 +17,7 @@ export default function ProjetoDetalhes() {
 
   const handlePurchase = async () => {
     if (!product) {
-      setPurchaseResult({ success: false, message: 'projeto indisponível' });
+      setPurchaseResult({ success: false, message: 'modelo indisponível' });
       setIsResultModalOpen(true);
       return;
     }
@@ -37,12 +37,12 @@ export default function ProjetoDetalhes() {
       }
 
       if (data && data.success === false) {
-        setPurchaseResult({ success: false, message: data.message || 'erro no investimento' });
+        setPurchaseResult({ success: false, message: data.message || 'erro na ativação' });
         setIsResultModalOpen(true);
         return;
       }
 
-      setPurchaseResult({ success: true, message: data?.message || 'investimento bem-sucedido!' });
+      setPurchaseResult({ success: true, message: data?.message || 'ativação bem-sucedida!' });
       setIsResultModalOpen(true);
       await refreshProfile();
     } catch (err) {
@@ -63,7 +63,7 @@ export default function ProjetoDetalhes() {
         >
           <ChevronLeft className="text-2xl" />
         </button>
-        <h1 className="flex-1 text-center text-[15px] font-bold pr-8">detalhe do projeto</h1>
+        <h1 className="flex-1 text-center text-[15px] font-bold pr-8">detalhe da infraestrutura</h1>
       </header>
 
       {/* Main Content Area */}
@@ -103,7 +103,7 @@ export default function ProjetoDetalhes() {
               <span className="text-slate-900 font-bold text-[14px]">{product?.price > 0 ? ((product.daily_income / product.price) * 100).toFixed(2) : '0.00'}%</span>
             </div>
             <div className="flex justify-between items-center border-b border-slate-100 pb-2">
-              <span className="text-slate-500 text-[12px] font-medium">preço de investimento</span>
+              <span className="text-slate-500 text-[12px] font-medium">preço de ativação</span>
               <span className="text-slate-900 font-bold text-[14px]">{product?.price?.toLocaleString('pt-AO')} Kz</span>
             </div>
             <div className="flex justify-between items-center pb-1">
@@ -117,13 +117,13 @@ export default function ProjetoDetalhes() {
             onClick={handlePurchase}
             className="w-full h-[45px] bg-[#0000AA] hover:bg-blue-800 text-white font-normal rounded-xl   transition-none active:scale-[0.98]"
           >
-            clique para comprar
+            clique para ativar
           </button>
         </div>
 
         {/* Footer Spacing */}
         <div className="py-6 px-4 text-center text-slate-400 text-[11px] leading-relaxed">
-          certifique que possui saldo suficiente para comprar este contrato, caso contrário, por favor entre em contacto com o seu gestor para fazer depósito/transferência para recarregar a sua conta Newmont Corporation!
+          certifique que possui saldo suficiente para ativar este modelo, caso contrário, por favor entre em contacto com o seu gestor para fazer depósito/transferência para recarregar a sua conta AI!
         </div>
       </main>
 

@@ -8,7 +8,7 @@ import { supabase } from '../lib/supabase';
 
 const CAROUSEL_IMAGES = [
   '/MW-FD846_gold_m_ZG_2017011807144-1024x576 minas.webp',
-  '/Newmont pessoas.jpg',
+  '/ai-pessoas.jpg',
   '/imagesuma pessao na mina.jpg',
   '/minas.jpg'
 ];
@@ -125,17 +125,17 @@ export default function Home() {
 
   return (
     <div className="flex flex-col min-h-screen bg-[#f0f2f5] page-content">
-      <header className="bg-gradient-to-b from-[#001f8d] to-[#001561] pt-4 pb-16 px-4 relative">
+      <header className="bg-gradient-to-b from-[#6D28D9] to-[#5B21B6] pt-4 pb-16 px-4 relative">
         <div className="flex justify-between items-center mb-4">
           <div className="flex items-center gap-2">
             <div className="w-8 h-8 bg-white rounded-md flex items-center justify-center p-1">
               <img
-                alt="Newmont Corporation logo"
+                alt="AI logo"
                 className="w-full h-full object-contain"
-                src="/NewmontCorporationfff83c6b-57f6-428e-alogob.png"
+                src="/file_loga IAc78c7243befa67a31cf49487.png"
               />
             </div>
-            <span className="text-white font-bold text-lg lowercase">newmont corporation</span>
+            <span className="text-white font-bold text-lg lowercase">ai</span>
           </div>
           <div className="flex gap-2">
             <button
@@ -169,7 +169,7 @@ export default function Home() {
             onClick={() => navigate('/apresentacao-da-empresa')}
             className="flex flex-col items-center cursor-pointer"
           >
-            <div className="w-[52px] h-[52px] bg-[#00008B] rounded-xl flex items-center justify-center mb-2 overflow-hidden ">
+            <div className="w-[52px] h-[52px] bg-[#6D28D9] rounded-xl flex items-center justify-center mb-2 overflow-hidden ">
               <img src="/coin-DnOWIML3.png" alt="Apresentação da Empresa" className="w-8 h-8 object-contain" />
             </div>
             <span className="text-[12.5px] font-bold text-slate-900 leading-[1.1] lowercase">
@@ -180,7 +180,7 @@ export default function Home() {
             onClick={() => navigate('/equipe')}
             className="flex flex-col items-center cursor-pointer"
           >
-            <div className="w-[52px] h-[52px] bg-[#0000AA] rounded-xl flex items-center justify-center mb-2 shadow-sm">
+            <div className="w-[52px] h-[52px] bg-[#6D28D9] rounded-xl flex items-center justify-center mb-2 shadow-sm">
               <svg className="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth="3">
                 <path d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h7a3 3 0 013 3v1" strokeLinecap="round" strokeLinejoin="round" />
               </svg>
@@ -191,7 +191,7 @@ export default function Home() {
             onClick={() => navigate('/central-de-ajuda')}
             className="flex flex-col items-center cursor-pointer"
           >
-            <div className="w-[52px] h-[52px] bg-[#00008B] rounded-xl flex items-center justify-center mb-2 shadow-sm">
+            <div className="w-[52px] h-[52px] bg-[#6D28D9] rounded-xl flex items-center justify-center mb-2 shadow-sm">
               <svg className="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth="2.5">
                 <path d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4" strokeLinecap="round" strokeLinejoin="round" />
               </svg>
@@ -204,26 +204,26 @@ export default function Home() {
           <div className="z-10">
             <h3
               onClick={handleInstallApp}
-              className="text-[#0000AA] font-bold text-[22px] mb-1 underline decoration-2 underline-offset-4 cursor-pointer active:opacity-70 transition-none lowercase"
+              className="text-[#6D28D9] font-bold text-[22px] mb-1 underline decoration-2 underline-offset-4 cursor-pointer active:opacity-70 transition-none lowercase"
             >
               baixar aplicativo
             </h3>
-            <p className="text-[#0000AA]/60 text-[11px] font-bold uppercase tracking-widest lowercase">newmont corporation premium</p>
+            <p className="text-[#6D28D9]/60 text-[11px] font-bold uppercase tracking-widest lowercase">ai premium</p>
           </div>
 
           <div className="flex gap-2 w-full z-10 mt-4">
             <button
               onClick={(e) => { e.stopPropagation(); navigate('/recarregar'); }}
-              className="flex-1 bg-[#0000AA] text-white px-4 rounded-xl text-[12.5px] font-semibold h-[44px] flex items-center justify-center active:scale-[0.96] transition-all shadow-md shadow-blue-900/10 lowercase"
+              className="flex-1 bg-[#6D28D9] text-white px-4 rounded-xl text-[12.5px] font-semibold h-[44px] flex items-center justify-center active:scale-[0.96] transition-all shadow-md shadow-purple-900/10 lowercase"
             >
               <img src="/deposit1-Dk3ugVyJ.png" alt="Recarregar" className="w-5 h-5 mr-1.5 object-contain" />
               efetuar depósito
             </button>
             <button
               onClick={(e) => { e.stopPropagation(); navigate('/retirar'); }}
-              className="flex-1 bg-white text-[#0000AA] border border-blue-100 px-4 rounded-xl text-[12.5px] font-semibold h-[44px] flex items-center justify-center active:scale-[0.96] transition-all shadow-sm lowercase"
+              className="flex-1 bg-white text-[#6D28D9] border border-purple-100 px-4 rounded-xl text-[12.5px] font-semibold h-[44px] flex items-center justify-center active:scale-[0.96] transition-all shadow-sm lowercase"
             >
-              <img src="/withdraw1-pLMbG-t2.png" alt="Extrair" className="w-5 h-5 mr-1.5 object-contain" />
+              <img src="/withdraw1-pLMbG-t2.png" alt="Coletar" className="w-5 h-5 mr-1.5 object-contain" />
               levantamento
             </button>
           </div>
@@ -243,7 +243,7 @@ export default function Home() {
           <img
             key={currentSlide}
             src={CAROUSEL_IMAGES[currentSlide]}
-            alt={`Newmont Banner ${currentSlide + 1}`}
+            alt={`AI Banner ${currentSlide + 1}`}
             className="absolute inset-0 w-full h-full object-cover"
             loading="lazy"
           />
@@ -261,18 +261,18 @@ export default function Home() {
       <section className="mt-6 px-4 mb-20 fade-in">
         <div className="flex items-center gap-2 mb-4 px-2">
           <div className="w-1.5 h-5 bg-[#0000AA] rounded-full"></div>
-          <h3 className="text-slate-900 font-bold text-[15px] lowercase">sobre a newmont corporation</h3>
+          <h3 className="text-slate-900 font-bold text-[15px] lowercase">sobre a ai</h3>
         </div>
 
         <div className="bg-white rounded-xl p-6 border border-slate-100 leading-relaxed text-slate-700 shadow-sm lowercase">
           <p className="text-[12.5px] mb-4">
-            a <span className="font-bold text-[#0000AA]">newmont corporation</span> (nyse: nem) é uma das maiores e mais importantes empresas de mineração do mundo, sendo reconhecida como a líder global na produção de ouro. fundada em 1921 pelo coronel william boyce thompson, com sede em denver, colorado, a empresa tem operações nas américas, austrália e áfrica.
+            a <span className="font-bold text-[#0000AA]">ai</span> (nyse: nem) é uma das maiores e mais importantes empresas de tecnologia do mundo, sendo reconhecida como a líder global em inteligência artificial. fundada em 1921, com sede global, a empresa tem operações em todo o mundo.
           </p>
           <p className="text-[12.5px] mb-4">
-            além do ouro, nossa empresa também produz e explora cobre, prata, zinco e chumbo. a newmont possui excelência operacional, disciplina financeira e forte reconhecimento global, sendo a única produtora de ouro a fazer parte do índice s&p 500, o que comprova nossa solidez financeira no mercado internacional.
+            além da ia, nossa empresa também produz e explora novas tecnologias para o futuro. a ai possui excelência operacional, disciplina financeira e forte reconhecimento global, o que comprova nossa solidez financeira no mercado internacional.
           </p>
           <p className="text-[12.5px]">
-            estamos comprometidos com a inovação no setor de mineração e nos processos de sustentabilidade (esg). buscamos proporcionar criação de valor a longo prazo, focando na integridade das nossas operações, transparência e retorno em inovação tecnológica para todas as nossas parcerias globais.
+            estamos comprometidos com a inovação no setor de inteligência artificial e nos processos de sustentabilidade digital. buscamos proporcionar criação de valor a longo prazo, focando na integridade das nossas operações, transparência e retorno em inovação tecnológica para todas as nossas parcerias globais.
           </p>
         </div>
       </section>
@@ -296,8 +296,8 @@ export default function Home() {
             >
               <div className="flex justify-between items-center mb-5">
                 <div className="flex items-center gap-2">
-                  <Headset className="w-5 h-5 text-[#0000AA]" />
-                  <h3 className="text-[#0000AA] font-bold text-[12.5px] lowercase">suporte ao investidor</h3>
+                  <Headset className="w-5 h-5 text-[#6D28D9]" />
+                  <h3 className="text-[#6D28D9] font-bold text-[12.5px] lowercase">suporte técnico</h3>
                 </div>
                 <button
                   onClick={() => setIsSupportModalOpen(false)}

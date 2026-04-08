@@ -29,7 +29,7 @@ export default function Invite() {
   let baseLink = window.location.origin;
   if (links.link_app_atualizado && links.link_app_atualizado !== '#') {
     let customLink = links.link_app_atualizado.trim();
-    // Se digitou apenas o domínio (ex: newmont.online)
+    // Se digitou apenas o domínio (ex: ai.online)
     if (!customLink.startsWith('http')) {
       customLink = `https://${customLink.startsWith('www.') ? '' : 'www.'}${customLink}`;
     }
@@ -173,16 +173,16 @@ export default function Invite() {
             <div className="space-y-2">
               <p className="font-bold text-[#333]">nota</p>
               <p className="leading-relaxed text-gray-600">
-                após seus subordinados realizarem o investimento, receba automaticamente a recompensa de investimento. a operação é simples e não leva muito tempo; basta copiar e partilhar.
+                após seus subordinados realizarem a ativação, receba automaticamente a recompensa de ativação. a operação é simples e não leva muito tempo; basta copiar e partilhar.
               </p>
             </div>
 
             <div className="space-y-2 pt-2">
               <p className="font-bold text-[#333]">reembolso de recarga</p>
               <div className="text-gray-600 space-y-1">
-                <p>• quando o subordinado de nível 1 compra um produto pela primeira vez, você ganha <strong>10%</strong> do valor investido.</p>
-                <p>• quando o subordinado de nível 2 compra um produto pela primeira vez, você ganha <strong>5%</strong> do valor investido.</p>
-                <p>• quando o subordinado de nível 3 compra um produto pela primeira vez, você ganha <strong>2%</strong> do valor investido.</p>
+                <p>• quando o subordinado de nível 1 compra um produto pela primeira vez, você ganha <strong>10%</strong> do valor de ativação.</p>
+                <p>• quando o subordinado de nível 2 compra um produto pela primeira vez, você ganha <strong>5%</strong> do valor de ativação.</p>
+                <p>• quando o subordinado de nível 3 compra um produto pela primeira vez, você ganha <strong>2%</strong> do valor de ativação.</p>
                 <p className="pt-2 text-[12px] opacity-80 text-[#0000a5]">válido pela primeira recarga para todos os níveis, contados a partir da criação: 365 dias.</p>
               </div>
             </div>

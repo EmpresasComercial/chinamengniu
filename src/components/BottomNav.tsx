@@ -1,5 +1,5 @@
 import React from 'react';
-import { Home, Pickaxe, User, Box } from 'lucide-react';
+import { Home, Cpu, User, Box } from 'lucide-react';
 import { Link, useLocation } from 'react-router-dom';
 
 export default function BottomNav() {
@@ -8,7 +8,7 @@ export default function BottomNav() {
   const navItems = [
     { name: 'home', path: '/', icon: Home },
     { name: 'projetos', path: '/projetos', icon: Box },
-    { name: 'minerar', path: '/extracao', icon: Pickaxe },
+    { name: 'ai', path: '/extracao', icon: Cpu },
     { name: 'perfil', path: '/perfil', icon: User },
   ];
 
@@ -20,7 +20,7 @@ export default function BottomNav() {
           <Link
             key={item.name}
             to={item.path}
-            className={`flex flex-col items-center gap-1 ${isActive ? 'text-[#0000A5]' : 'text-gray-400'
+            className={`flex flex-col items-center gap-1 ${isActive ? 'text-[#6D28D9]' : 'text-gray-400'
               }`}
           >
             <item.icon className="w-5 h-5" fill={isActive ? 'currentColor' : 'none'} />

@@ -189,7 +189,7 @@ export default function Team() {
             <div className="bg-white rounded-lg py-3 px-4 grid grid-cols-3 text-center text-[12.5px] font-medium text-gray-700 ">
               <div>conta</div>
               <div>nota</div>
-              <div>{activeTab === 'members' ? 'período' : 'investimento'}</div>
+              <div>{activeTab === 'members' ? 'período' : 'ativação'}</div>
             </div>
 
             {/* Members List */}

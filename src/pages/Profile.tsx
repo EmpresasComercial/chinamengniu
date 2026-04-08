@@ -154,7 +154,7 @@ export default function Profile() {
   return (
     <div className="flex flex-col min-h-screen bg-[#EAEBED] page-content">
       {/* Header Section */}
-      <header className="bg-[#0000AA] p-4 text-white pb-8 relative overflow-hidden">
+      <header className="bg-[#6D28D9] p-4 text-white pb-8 relative overflow-hidden">
         {/* Decorative circle */}
         <div className="absolute -right-10 top-10 w-32 h-32 rounded-full bg-white/10 border-4 border-white/20"></div>
 
@@ -171,7 +171,7 @@ export default function Profile() {
             <img
               alt="logo"
               className="w-full h-full object-contain p-1"
-              src="/NewmontCorporationfff83c6b-57f6-428e-alogob.png"
+              src="/file_loga IAc78c7243befa67a31cf49487.png"
             />
           </div>
           <div>
@@ -213,10 +213,10 @@ export default function Profile() {
           </p>
         </div>
 
-        {/* Linha 2: conta de extração + retirada total + comissão total equipe */}
+        {/* Linha 2: conta de processamento + retirada total + comissão total equipe */}
         <div className="grid grid-cols-3 gap-1 mt-6 lowercase">
           <div className="text-center">
-            <p className="text-[10px] uppercase font-bold opacity-70 whitespace-nowrap tracking-tighter">conta extração</p>
+            <p className="text-[10px] uppercase font-bold opacity-70 whitespace-nowrap tracking-tighter">conta processamento</p>
             <p className="font-bold text-[14px] mt-1 whitespace-nowrap lowercase">{fmt(financialData.contaReproducao)} kz</p>
           </div>
           <div className="text-center border-l border-white/20">
@@ -232,7 +232,7 @@ export default function Profile() {
       </header>
 
       {/* Stats Section */}
-      <section className="bg-[#0000AA] px-4 pb-6 text-white relative">
+      <section className="bg-[#6D28D9] px-4 pb-6 text-white relative">
         <div className="absolute right-[-20px] top-4 w-24 h-24 rounded-full bg-white/5 border-2 border-white/10"></div>
         <div className="grid grid-cols-3 gap-1 text-center py-4 border-t border-white/10 px-1 lowercase">
           <div>
@@ -278,8 +278,8 @@ export default function Profile() {
               className="flex items-center justify-between py-3 border-b border-gray-200 cursor-pointer active:bg-gray-50 transition-colors"
             >
               <div className="flex items-center space-x-3">
-                <item.icon className="w-5 h-5 text-blue-900" />
-                <span className="text-blue-900 text-[12.5px] font-medium">{item.name}</span>
+                <item.icon className="w-5 h-5 text-[#6D28D9]" />
+                <span className="text-[#6D28D9] text-[12.5px] font-medium">{item.name}</span>
               </div>
               <ChevronRight className="w-4 h-4 text-gray-400" />
             </motion.div>
@@ -296,7 +296,7 @@ export default function Profile() {
             hideLoading();
             navigate('/login');
           }}
-          className="w-full bg-[#0000AA] text-white font-bold h-[45px] mt-8 mb-24 rounded-xl text-[12.5px] active:scale-[0.98] transition-all shadow-lg shadow-blue-900/20 lowercase"
+          className="w-full bg-[#6D28D9] text-white font-bold h-[45px] mt-8 mb-24 rounded-xl text-[12.5px] active:scale-[0.98] transition-all shadow-lg shadow-purple-900/20 lowercase"
         >
           encerrar sessão
         </motion.button>
@@ -337,8 +337,8 @@ export default function Profile() {
             >
               <div className="flex justify-between items-center mb-5">
                 <div className="flex items-center gap-2">
-                  <Headset className="w-5 h-5 text-[#0000AA]" />
-                  <h3 className="text-[#0000AA] font-bold text-[12.5px] lowercase">suporte ao investidor</h3>
+                  <Headset className="w-5 h-5 text-[#6D28D9]" />
+                  <h3 className="text-[#6D28D9] font-bold text-[12.5px] lowercase">suporte técnico</h3>
                 </div>
                 <button 
                   onClick={() => setIsSupportModalOpen(false)} 

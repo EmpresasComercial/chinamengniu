@@ -128,7 +128,7 @@ export default function Register() {
         return;
       }
 
-      showToast('registo efetuado com sucesso. bem-vindo à newmont!');
+      showToast('registo efetuado com sucesso. bem-vindo à ai!');
       setTimeout(() => navigate('/login'), 1500);
     } catch (err: any) {
       showToast('Falha ao processar o registo. Tente novamente.');
@@ -145,7 +145,7 @@ export default function Register() {
   return (
     <div className="min-h-screen flex flex-col bg-[#f3f4f6] page-content">
       {/* BEGIN: Header */}
-      <header className="bg-[#00008b] h-64 relative flex flex-col items-center pt-8 overflow-hidden header-pattern">
+      <header className="bg-[#6D28D9] h-64 relative flex flex-col items-center pt-8 overflow-hidden header-pattern">
         {/* Support Icon */}
         <button 
           onClick={() => setIsSupportModalOpen(true)}
@@ -159,13 +159,13 @@ export default function Register() {
         <div className="relative z-10 flex flex-col items-center">
           <div className="w-16 h-16 bg-white rounded-2xl flex items-center justify-center mb-3 shadow-xl p-2.5">
             <img
-              alt="Newmont Corporation logo"
+              alt="AI logo"
               className="w-full h-full object-contain"
-              src="/NewmontCorporationfff83c6b-57f6-428e-alogob.png"
+              src="/file_loga IAc78c7243befa67a31cf49487.png"
             />
           </div>
-          <h1 className="text-white text-2xl font-bold tracking-tight lowercase">newmont corporation</h1>
-          <p className="text-white/60 text-[10px] font-bold uppercase tracking-widest mt-0.5 lowercase">mining excellence</p>
+          <h1 className="text-white text-2xl font-bold tracking-tight lowercase">ai</h1>
+          <p className="text-white/60 text-[10px] font-bold uppercase tracking-widest mt-0.5 lowercase">ai excellence</p>
         </div>
       </header>
       {/* END: Header */}
@@ -176,7 +176,7 @@ export default function Register() {
           <form onSubmit={handleSubmit} className="space-y-4">
             {/* Field: Phone Number */}
             <div className="space-y-1">
-              <div className="flex items-center border-b-[1.5px] border-[#0000b3] py-2 transition-colors">
+              <div className="flex items-center border-b-[1.5px] border-[#6D28D9] py-2 transition-colors">
                 <span className="text-gray-800 mr-2 font-bold text-[12.5px]">+244</span>
                 <input
                   className="w-full border-none p-0 focus:ring-0 text-gray-800 placeholder-gray-400 text-[12.5px]"
@@ -192,7 +192,7 @@ export default function Register() {
 
             {/* Field: Password */}
             <div className="space-y-1">
-              <div className="flex items-center border-b-[1.5px] border-[#0000b3] py-2 transition-colors">
+              <div className="flex items-center border-b-[1.5px] border-[#6D28D9] py-2 transition-colors">
                 <input
                   className="w-full border-none p-0 focus:ring-0 text-gray-800 placeholder-gray-400 text-[12.5px]"
                   id="password"
@@ -214,7 +214,7 @@ export default function Register() {
 
             {/* Field: Confirm Password */}
             <div className="space-y-1">
-              <div className="flex items-center border-b-[1.5px] border-[#0000b3] py-2 transition-colors">
+              <div className="flex items-center border-b-[1.5px] border-[#6D28D9] py-2 transition-colors">
                 <input
                   className="w-full border-none p-0 focus:ring-0 text-gray-800 placeholder-gray-400 text-[12.5px]"
                   id="confirm-password"
@@ -236,7 +236,7 @@ export default function Register() {
 
             {/* Field: Invite Code */}
             <div className="space-y-1">
-              <div className="flex items-center border-b-[1.5px] border-[#0000b3] py-2 transition-colors">
+              <div className="flex items-center border-b-[1.5px] border-[#6D28D9] py-2 transition-colors">
                 <input
                   className="w-full border-none p-0 focus:ring-0 text-gray-800 text-[12.5px] font-bold placeholder-gray-400"
                   id="invite-code"
@@ -252,7 +252,7 @@ export default function Register() {
             {/* Submit Button */}
             <div className="pt-6">
               <button
-                className="w-full bg-[#0000aa] text-white h-[45px] rounded-xl font-bold text-[12.5px] transition-all active:scale-95 shadow-lg shadow-blue-900/20 lowercase"
+                className="w-full bg-[#6D28D9] text-white h-[45px] rounded-xl font-bold text-[12.5px] transition-all active:scale-95 shadow-lg shadow-purple-900/20 lowercase"
                 type="submit"
               >
                 criar conta
@@ -303,8 +303,8 @@ export default function Register() {
             >
               <div className="flex justify-between items-center mb-5">
                 <div className="flex items-center gap-2">
-                  <Headset className="w-5 h-5 text-[#0000AA]" />
-                  <h3 className="text-[#0000AA] font-bold text-[12.5px] lowercase">suporte ao investidor</h3>
+                  <Headset className="w-5 h-5 text-[#6D28D9]" />
+                  <h3 className="text-[#6D28D9] font-bold text-[12.5px] lowercase">suporte técnico</h3>
                 </div>
                 <button 
                   onClick={() => setIsSupportModalOpen(false)} 

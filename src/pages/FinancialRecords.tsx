@@ -146,7 +146,7 @@ export default function FinancialRecords() {
             <div className="flex justify-between items-start gap-3">
               <div className="flex flex-col gap-1 flex-1 min-w-0">
                 <p className="text-[12.5px] font-bold text-gray-800 leading-snug">
-                  {item.origem_bonus || 'Bónus de Investimento'}
+                  {item.origem_bonus || 'Bónus de Ativação'}
                 </p>
                 <p className="text-[10px] text-gray-500">
                   {dateStr}{timeStr ? <span className="text-gray-400"> · {timeStr}</span> : null}

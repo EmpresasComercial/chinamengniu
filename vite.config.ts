@@ -18,11 +18,11 @@ export default defineConfig(({ mode }) => {
         devOptions: {
           enabled: true
         },
-        includeAssets: ['NewmontCorporationfff83c6b-57f6-428e-alogob.png'],
+        includeAssets: ['file_loga IAc78c7243befa67a31cf49487.png'],
         manifest: {
-          name: 'Newmont Corporation',
-          short_name: 'Newmont',
-          description: 'Newmont Corporation Premium Application',
+          name: 'AI',
+          short_name: 'AI',
+          description: 'AI Premium Application',
           theme_color: '#000080',
           background_color: '#ffffff',
           display: 'standalone',
@@ -30,12 +30,12 @@ export default defineConfig(({ mode }) => {
           start_url: '/',
           icons: [
             {
-              src: 'NewmontCorporationfff83c6b-57f6-428e-alogob.png',
+              src: 'ai-logo.png',
               sizes: '192x192',
               type: 'image/png'
             },
             {
-              src: 'NewmontCorporationfff83c6b-57f6-428e-alogob.png',
+              src: 'ai-logo.png',
               sizes: '512x512',
               type: 'image/png',
               purpose: 'any maskable'

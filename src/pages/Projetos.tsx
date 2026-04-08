@@ -60,7 +60,7 @@ export default function Projetos() {
       if (data?.success === false) {
         setPurchaseResult({ 
           success: false, 
-          message: data.message || 'erro ao processar investimento' 
+          message: data.message || 'erro ao processar ativação' 
         });
         setIsResultModalOpen(true);
         return;
@@ -68,7 +68,7 @@ export default function Projetos() {
 
       setPurchaseResult({ 
         success: true, 
-        message: data?.message || 'investimento realizado com sucesso!' 
+        message: data?.message || 'ativação realizada com sucesso!' 
       });
       setIsResultModalOpen(true);
       await refreshProfile();
@@ -139,7 +139,7 @@ export default function Projetos() {
     <div className="flex flex-col min-h-screen bg-slate-50 page-content">
 
       <main className="bg-slate-50 flex-grow text-black px-4 pt-6 pb-20">
-        <h2 className="text-[18px] font-black text-slate-800 mb-6 lowercase">lista de produtos</h2>
+        <h2 className="text-[18px] font-black text-slate-800 mb-6 lowercase">infraestrutura de ia</h2>
         <div className="space-y-3">
           {products.map((vip) => (
             <div
@@ -177,7 +177,7 @@ export default function Projetos() {
                     }}
                     className="bg-blue-600 hover:bg-blue-700 text-white px-6 h-9 flex items-center justify-center rounded-xl text-[12px] font-bold active:scale-95 transition-all shadow-md shadow-blue-600/20"
                   >
-                    investidor
+                    ativar rede
                   </button>
                 </div>
               </div>
@@ -199,9 +199,9 @@ export default function Projetos() {
             className="absolute inset-0 bg-black/60 backdrop-blur-[2px]"
           />
           <div className="relative w-full max-w-[280px] bg-white rounded-xl p-5  z-[101] text-center">
-            <h3 className="text-[#000080] font-black text-[16px] lowercase mb-3">confirmar investimento</h3>
+            <h3 className="text-[#000080] font-black text-[16px] lowercase mb-3">confirmar ativação</h3>
             <p className="text-slate-600 text-[13px] lowercase leading-relaxed mb-6 px-1">
-              tens a certeza que desejas investir no projeto <span className="font-bold text-[#000080]">{selectedProduct.name.toLowerCase()}</span> no preço de <span className="font-bold text-[#FF0000]">{selectedProduct.price.toLocaleString('pt-AO')} kz</span>?
+              tens a certeza que desejas ativar o modelo <span className="font-bold text-[#000080]">{selectedProduct.name.toLowerCase()}</span> no preço de <span className="font-bold text-[#FF0000]">{selectedProduct.price.toLocaleString('pt-AO')} kz</span>?
             </p>
             <div className="grid grid-cols-2 gap-3">
               <button 
@@ -214,7 +214,7 @@ export default function Projetos() {
                 onClick={handlePurchase}
                 className="h-[38px] bg-[#0000AA] hover:bg-blue-800 text-white font-normal rounded-xl text-[13px] lowercase  transition-colors"
               >
-                investir
+                ativar
               </button>
             </div>
           </div>

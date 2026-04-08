@@ -119,7 +119,7 @@ export default function Login() {
       {/* BEGIN: MainContainer */}
       <main className="w-full max-w-[430px] min-h-screen flex flex-col relative overflow-hidden">
         {/* BEGIN: TopHeader */}
-        <header className="w-full h-[220px] flex flex-col items-center justify-center relative header-pattern pt-8">
+        <header className="w-full h-[220px] flex flex-col items-center justify-center relative header-pattern pt-8 bg-[#6D28D9]">
           {/* Support Icon */}
           <button 
             type="button"
@@ -134,13 +134,13 @@ export default function Login() {
           <div className="flex flex-col items-center">
             <div className="w-16 h-16 bg-white rounded-2xl flex items-center justify-center p-2.5 mb-3 shadow-xl">
               <img
-                alt="Newmont Corporation logo"
+                alt="AI logo"
                 className="w-full h-full object-contain"
-                src="/NewmontCorporationfff83c6b-57f6-428e-alogob.png"
+                src="/file_loga IAc78c7243befa67a31cf49487.png"
               />
             </div>
-            <h1 className="text-white text-2xl font-bold tracking-tight lowercase">newmont corporation</h1>
-            <p className="text-white/60 text-[10px] font-bold uppercase tracking-widest mt-0.5 lowercase">mining excellence</p>
+            <h1 className="text-white text-2xl font-bold tracking-tight lowercase">ai</h1>
+            <p className="text-white/60 text-[10px] font-bold uppercase tracking-widest mt-0.5 lowercase">ai excellence</p>
           </div>
         </header>
         {/* END: TopHeader */}
@@ -152,7 +152,7 @@ export default function Login() {
           <form onSubmit={handleSubmit} className="space-y-4 flex-grow">
             {/* Phone Input */}
             <div className="space-y-1">
-              <div className="flex items-center border-b-[1.5px] border-[#0000b3] py-2 transition-colors">
+              <div className="flex items-center border-b-[1.5px] border-[#6D28D9] py-2 transition-colors">
                 <span className="text-gray-900 font-bold mr-3 text-[12.5px]">+244</span>
                 <input
                   className="w-full border-none focus:ring-0 p-0 text-[12.5px] placeholder-gray-400 text-gray-800"
@@ -167,7 +167,7 @@ export default function Login() {
 
             {/* Password Input */}
             <div className="space-y-2">
-              <div className="flex items-center border-b-[1.5px] border-[#0000b3] py-2 transition-colors">
+              <div className="flex items-center border-b-[1.5px] border-[#6D28D9] py-2 transition-colors">
                 <input
                   className="w-full border-none focus:ring-0 p-0 text-[12.5px] placeholder-gray-400 text-gray-800"
                   id="password"
@@ -188,8 +188,8 @@ export default function Login() {
 
             {/* Submit Button */}
             <div className="pt-6">
-              <button
-                className="w-full bg-[#0000aa] text-white h-[45px] rounded-xl font-bold text-[12.5px] transition-all active:scale-95 shadow-lg shadow-blue-900/20 lowercase"
+                <button
+                className="w-full bg-[#6D28D9] text-white h-[45px] rounded-xl font-bold text-[12.5px] transition-all active:scale-95 shadow-lg shadow-purple-900/20 lowercase"
                 type="submit"
               >
                 acessar conta
@@ -241,8 +241,8 @@ export default function Login() {
             >
               <div className="flex justify-between items-center mb-5">
                 <div className="flex items-center gap-2">
-                  <Headset className="w-5 h-5 text-[#0000AA]" />
-                  <h3 className="text-[#0000AA] font-bold text-[12.5px] lowercase">suporte ao investidor</h3>
+                  <Headset className="w-5 h-5 text-[#6D28D9]" />
+                  <h3 className="text-[#6D28D9] font-bold text-[12.5px] lowercase">suporte técnico</h3>
                 </div>
                 <button 
                   onClick={() => setIsSupportModalOpen(false)} 

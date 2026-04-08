@@ -129,7 +129,7 @@ export default function Extracao() {
 
   const handleStartCollection = useCallback(async () => {
     if (hasCollectedToday) {
-      showToast('A extração diária já foi realizada com sucesso.');
+      showToast('O processamento diário já foi realizado com sucesso.');
       return;
     }
 
@@ -141,10 +141,10 @@ export default function Extracao() {
       if (error) {
         showToast(`erro operacional: ${error.message}`);
       } else if (data && data.success) {
-        showToast('rendimento extraído com sucesso.');
+        showToast('rendimento processado com sucesso.');
         fetchDailyStats();
       } else {
-        showToast(data?.message || 'falha na extração. tente novamente.');
+        showToast(data?.message || 'falha no processamento. tente novamente.');
       }
     } catch (err) {
       showToast('instabilidade na rede de dados detectada.');
@@ -165,7 +165,7 @@ export default function Extracao() {
           loading="lazy"
         />
         <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/60 to-transparent p-4">
-          <h2 className="text-[15px] font-bold tracking-tight lowercase">extração de recursos</h2>
+          <h2 className="text-[15px] font-bold tracking-tight lowercase">processamento de redes</h2>
           <p className="text-[10px] text-gray-200 lowercase">monitorização inteligente e segura em tempo real</p>
         </div>
 
@@ -173,9 +173,9 @@ export default function Extracao() {
         <div className="absolute top-3 left-3 bg-white/20 backdrop-blur-sm rounded-full px-3 py-1 flex items-center gap-2">
           <div className="w-6 h-6 bg-white rounded-full flex items-center justify-center overflow-hidden p-1">
             <img
-              alt="Newmont Corporation logo"
+              alt="AI logo"
               className="w-12 h-12 object-contain"
-              src="/NewmontCorporationfff83c6b-57f6-428e-alogob.png"
+              src="/file_loga IAc78c7243befa67a31cf49487.png"
               referrerPolicy="no-referrer"
             />
           </div>
@@ -189,7 +189,7 @@ export default function Extracao() {
       {/* Stats Grid */}
       <section className="grid grid-cols-2 gap-y-4 mb-6 px-1">
         <div>
-          <p className="text-[10px] text-gray-300 uppercase tracking-wider lowercase">conta de extração</p>
+          <p className="text-[10px] text-gray-300 uppercase tracking-wider lowercase">conta de processamento</p>
           <p className="text-[15px] font-bold">{stats.reproductionBalance.toLocaleString('pt-AO', { minimumFractionDigits: 2 })} kz</p>
         </div>
         <div>
@@ -207,7 +207,7 @@ export default function Extracao() {
         <div className="col-span-2 mt-2">
           <p className="text-[10px] text-gray-300 uppercase tracking-wider lowercase">estado do ciclo diário</p>
           <p className="text-[15px] font-bold lowercase">
-            {hasCollectedToday ? 'extração concluída hoje' : 'aguardando operação diária'}
+            {hasCollectedToday ? 'processamento concluído hoje' : 'aguardando operação diária'}
           </p>
         </div>
       </section>
@@ -228,7 +228,7 @@ export default function Extracao() {
             }`}
         >
           <span className="text-[11px] uppercase tracking-tighter lowercase flex-1 text-center">
-            {isCollecting ? 'processando...' : hasCollectedToday ? 'extraído' : 'minerar'}
+            {isCollecting ? 'processando...' : hasCollectedToday ? 'concluído' : 'gerar'}
           </span>
           <Play className={`w-4 h-4 ml-2 ${hasCollectedToday || isCollecting ? 'text-gray-300' : 'fill-current'}`} />
         </button>

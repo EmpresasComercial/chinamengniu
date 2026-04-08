@@ -8,7 +8,7 @@ export default function WithdrawHelp() {
     <div className="min-h-screen flex flex-col bg-[#e5e9f2] antialiased page-content">
       {/* Header */}
       <header className="bg-[#000080] h-14 flex items-center px-4 sticky top-0 z-50">
-        <button onClick={() => navigate(-1)} className="text-white">
+        <button onClick={() => navigate(-1)} className="text-white" title="voltar" aria-label="voltar">
           <ChevronLeft className="h-6 w-6" />
         </button>
       </header>
@@ -28,7 +28,7 @@ export default function WithdrawHelp() {
             </p>
 
             <ul className="list-none space-y-2">
-              <li>1. clique em extrair no seu perfil</li>
+              <li>1. clique em retirar no seu perfil</li>
               <li>2. selecione transferência bancária como método de recebimento</li>
               <li>3. insira o valor do saque, os seus dados bancários (iban), a sua senha de saque e clique em confirmar</li>
             </ul>

@@ -98,7 +98,7 @@ export default function FundTransfer() {
       showToast('O montante máximo permitido por operação é de 100.000 Kz.', 'error'); return;
     }
     if (amount > balanceCorrete) {
-      showToast('Saldo de extração insuficiente para esta operação.', 'error'); return;
+      showToast('Saldo de processamento insuficiente para esta operação.', 'error'); return;
     }
 
     showLoading();
@@ -138,7 +138,7 @@ export default function FundTransfer() {
         </button>
         <div className="flex-grow text-center">
           <h1 className="text-white text-[14px] font-bold pr-8">
-            {mode === 'gift' ? 'Resgate de Recompensa' : mode === 'transfer' ? 'Conversão de Ativos' : 'Converter Ativos'}
+            {mode === 'gift' ? 'Resgate de Recompensa' : mode === 'transfer' ? 'Conversão de Processamento' : 'Converter Ativos'}
           </h1>
         </div>
       </header>
@@ -183,7 +183,7 @@ export default function FundTransfer() {
             {/* Seção Estatística Compacta */}
             <div className="bg-white rounded-xl p-4 mb-4 flex justify-between items-center">
               <div className="text-center flex-1">
-                <p className="text-[9px] text-slate-400 font-bold mb-0.5 uppercase tracking-wider">Saldo de Extração</p>
+                <p className="text-[9px] text-slate-400 font-bold mb-0.5 uppercase tracking-wider">Saldo de Processamento</p>
                 <p className="text-[16px] font-black text-[#000080]">{fmt(balanceCorrete)} Kz</p>
               </div>
               <div className="w-10 h-10 bg-[#000080] rounded-xl flex items-center justify-center shrink-0 mx-2">
@@ -281,7 +281,7 @@ export default function FundTransfer() {
                     }}
                     className="w-full flex items-center justify-between p-4 rounded-xl border border-gray-100 bg-gray-50 active:bg-gray-100 transition-all group"
                   >
-                    <span className="text-[14px] font-bold text-gray-800">Conversão de Extração</span>
+                    <span className="text-[14px] font-bold text-gray-800">Conversão de Processamento</span>
                     <div className="w-5 h-5 rounded-xl border-2 border-gray-300 flex items-center justify-center group-active:border-[#0000AA] group-active:bg-[#0000AA] transition-colors">
                       <svg className="w-3 h-3 text-white opacity-0 group-active:opacity-100" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="4">
                         <path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" />

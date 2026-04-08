@@ -22,7 +22,7 @@ export default function RechargeHelp() {
 
           {/* Subtitle */}
           <h2 className="text-[12.5px] font-medium mb-4 text-[#1a365d] opacity-80">
-            como investir na Newmont Corporation
+            como ativar a AI
           </h2>
 
           {/* Instructions List */}
