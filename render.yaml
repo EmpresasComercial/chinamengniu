@@ -1,7 +1,11 @@
 services:
-  - type: static
+  - type: web
     name: ai
+    env:
+      NODE_ENV: production
     buildCommand: npm install && npm run build
+    startCommand: npm start
+    port: 10000
     staticPublishPath: dist
     pullRequestPreviewsEnabled: false
     headers:
