@@ -1,18 +1,9 @@
 services:
   - type: web
     name: ai
-    env:
-      NODE_ENV: production
+    env: node
     buildCommand: npm install && npm run build
     startCommand: npm start
-    port: 10000
-    staticPublishPath: dist
-    pullRequestPreviewsEnabled: false
-    headers:
-      - path: /*
-        name: Cache-Control
-        value: no-cache
-    routes:
-      - type: rewrite
-        source: /*
-        destination: /index.html
+    envVars:
+      - key: NODE_ENV
+        value: production
