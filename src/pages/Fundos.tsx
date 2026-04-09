@@ -65,7 +65,7 @@ export default function Fundos() {
       <section className="pt-0 mb-6">
         <div 
             className="h-[180px] relative overflow-hidden flex flex-col justify-center px-8 bg-cover bg-center shadow-lg"
-            style={{ backgroundImage: 'url("/fundo-para a pagina fundo.png")' }}
+            style={{ backgroundImage: 'url("/fundo-para a paginafundotualizada.png")' }}
         >
             <div className="relative z-10 flex items-center gap-2 text-white">
                 <span className="text-[34px] font-bold tracking-tight drop-shadow-md">
