@@ -326,3 +326,18 @@
 .lowercase {
   text-transform: lowercase !important;
 }
+
+/* ──────────────────────────────────────
+  PERFIL – ÍCONES E CORES (Fix para lint)
+────────────────────────────────────── */
+.icon-box-yellow { background-color: rgba(250, 204, 21, 0.08) !important; color: #facc15 !important; }
+.icon-box-blue { background-color: rgba(59, 130, 246, 0.08) !important; color: #3b82f6 !important; }
+.icon-box-orange { background-color: rgba(249, 115, 22, 0.08) !important; color: #f97316 !important; }
+.icon-box-red { background-color: rgba(239, 68, 68, 0.08) !important; color: #ef4444 !important; }
+.icon-box-coral { background-color: rgba(248, 113, 113, 0.08) !important; color: #f87171 !important; }
+
+.glow-yellow { background-color: #facc15 !important; }
+.glow-blue { background-color: #3b82f6 !important; }
+.glow-orange { background-color: #f97316 !important; }
+.glow-red { background-color: #ef4444 !important; }
+.glow-coral { background-color: #f87171 !important; }

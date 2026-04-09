@@ -1,62 +1,63 @@
-import { Wallet, ArrowDownRight, ArrowUpRight, BarChart3, ChevronRight, Package } from 'lucide-react';
+import React, { useState, useEffect } from 'react';
+import { 
+  Wallet, ArrowDownRight, ArrowUpRight, 
+  ArrowRightLeft, BadgeDollarSign, ChevronRight,
+  TrendingUp, Landmark, ShieldCheck, History
+} from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
+import { motion, AnimatePresence } from 'motion/react';
 import { useAuth } from '../contexts/AuthContext';
-import { useState, useEffect, useCallback } from 'react';
-import { supabase } from '../lib/supabase';
 import { useLoading } from '../contexts/LoadingContext';
+import { supabase } from '../lib/supabase';
 
 export default function Fundos() {
   const navigate = useNavigate();
-  const { profile, user } = useAuth();
-  const { registerFetch } = useLoading();
-
-  const [financialData, setFinancialData] = useState({
-    contaProcessamento: 0,   // Do perfil: contaReproducao
-    retiradaTotal: 0,        // Do perfil: retiradaTotal
-    comissaoTotalEquipe: 0,  // Do perfil: comissaoTotalEquipe
-  });
-
-  const fetchFinancialData = useCallback(async () => {
-    if (!user) return;
-    const done = registerFetch();
-    try {
-      const tarefasPromise = supabase
-        .from('tarefas_diarias')
-        .select('balance_correte')
-        .eq('user_id', user.id);
-
-      const retiradasPromise = supabase
-        .from('retirada_clientes')
-        .select('valor_solicitado')
-        .eq('user_id', user.id)
-        .eq('estado_da_retirada', 'aprovado');
-
-      const bonusPromise = supabase
-        .from('bonus_transacoes')
-        .select('valor_recebido')
-        .eq('user_id', user.id);
-
-      const [tarefasRes, retiradasRes, bonusRes] = await Promise.all([
-        tarefasPromise,
-        retiradasPromise,
-        bonusPromise
-      ]);
-
-      const contaProcessamento = (tarefasRes.data || []).reduce((s, t) => s + Number(t.balance_correte || 0), 0);
-      const retiradaTotal = (retiradasRes.data || []).reduce((s, r) => s + Number(r.valor_solicitado || 0), 0);
-      const comissaoTotalEquipe = (bonusRes.data || []).reduce((s, b) => s + Number(b.valor_recebido || 0), 0);
-
-      setFinancialData({ contaProcessamento, retiradaTotal, comissaoTotalEquipe });
-    } finally {
-      done();
-    }
-  }, [user, registerFetch]);
+  const { profile } = useAuth();
+  const { showLoading, hideLoading, registerFetch } = useLoading();
+  const [balance, setBalance] = useState(0);
+  const [bonus, setBonus] = useState(0);
+  const [withdrawals, setWithdrawals] = useState(0);
+  const [commissions, setCommissions] = useState(0);
+  const [totalRecharges, setTotalRecharges] = useState(0);
 
   useEffect(() => {
-    fetchFinancialData();
-  }, [fetchFinancialData]);
+    async function fetchFinancials() {
+      if (!profile?.id) return;
+      const done = registerFetch();
+      try {
+        const [
+          { data: tarefas },
+          { data: recharges },
+          { data: retiradas },
+          { data: bônusData }
+        ] = await Promise.all([
+          supabase.from('tarefas_concluidas').select('valor').eq('perfil_id', profile.id),
+          supabase.from('recharges').select('amount').eq('perfil_id', profile.id).eq('status', 'completed'),
+          supabase.from('withdrawals').select('amount').eq('perfil_id', profile.id).eq('status', 'completed'),
+          supabase.from('bonus_records').select('amount').eq('perfil_id', profile.id)
+        ]);
 
-  const balance = profile?.balance || 0;
+        const totalTarefas = tarefas?.reduce((acc, t) => acc + (t.valor || 0), 0) || 0;
+        const totalRec = recharges?.reduce((acc, r) => acc + (r.amount || 0), 0) || 0;
+        const totalRet = retiradas?.reduce((acc, r) => acc + (r.amount || 0), 0) || 0;
+        const totalBon = bônusData?.reduce((acc, b) => acc + (b.amount || 0), 0) || 0;
+
+        setBalance(totalTarefas + totalRec + totalBon - totalRet);
+        setTotalRecharges(totalRec);
+        setWithdrawals(totalRet);
+        setBonus(totalBon);
+        // Comissão é mapeada conforme o perfil (ex: vindo de tarefas ou bônus)
+        setCommissions(totalBon); 
+
+      } catch (err) {
+        console.error('Erro ao carregar dados financeiros:', err);
+      } finally {
+        done();
+      }
+    }
+    fetchFinancials();
+  }, [profile?.id, registerFetch]);
+
   const fmt = (val: number) => val.toLocaleString('pt-AO', { minimumFractionDigits: 2 });
 
   return (
@@ -64,8 +65,7 @@ export default function Fundos() {
       {/* 🔴 Top Banner - Com imagem de fundo e Saldo Disponível */}
       <section className="pt-0 mb-6">
         <div 
-            className="h-[180px] relative overflow-hidden flex flex-col justify-center px-8 bg-cover bg-center shadow-lg"
-            style={{ backgroundImage: 'url("/fundo-para a paginafundotualizada.png")' }}
+            className="h-[180px] relative overflow-hidden flex flex-col justify-center px-8 bg-cover bg-center shadow-lg bg-[url('/fundo-para a paginafundotualizada.png')]"
         >
             <div className="relative z-10 flex items-center gap-2 text-white">
                 <span className="text-[34px] font-bold tracking-tight drop-shadow-md">
@@ -99,74 +99,52 @@ export default function Fundos() {
             <span className="text-[11px] font-medium text-gray-600 lowercase">extrair</span>
           </button>
 
-          <button onClick={() => navigate('/transferencia-de-fundos')} className="flex flex-col items-center gap-2">
+          <button onClick={() => navigate('/recarregar-usdt')} className="flex flex-col items-center gap-2">
             <div className="w-14 h-14 bg-white rounded-xl shadow-sm border border-gray-100 flex items-center justify-center">
-              <BarChart3 className="w-6 h-6 text-gray-700" />
+              <ArrowRightLeft className="w-6 h-6 text-gray-700" />
             </div>
             <span className="text-[11px] font-medium text-gray-600 lowercase">conversões</span>
           </button>
 
-          <button onClick={() => navigate('/detalhes')} className="flex flex-col items-center gap-2">
+          <button onClick={() => navigate('/equipe')} className="flex flex-col items-center gap-2">
             <div className="w-14 h-14 bg-white rounded-xl shadow-sm border border-gray-100 flex items-center justify-center">
-              <Package className="w-6 h-6 text-gray-700" />
+              <BadgeDollarSign className="w-6 h-6 text-gray-700" />
             </div>
             <span className="text-[11px] font-medium text-gray-600 lowercase">vendido</span>
           </button>
         </div>
       </section>
 
-      {/* 📋 List Items conforme mapeamento solicitado */}
-      <section className="px-4 space-y-6">
-        <h2 className="text-[15px] font-bold text-gray-900 ml-1 lowercase">a minha conta</h2>
-        
-        <div className="space-y-3">
-          {/* Item 1: ativos monetários -> Conta Processamento */}
-          <div className="bg-white rounded-xl py-5 px-6 shadow-sm border border-gray-50 flex items-center justify-between">
-            <div className="space-y-2">
-              <p className="text-[11px] text-gray-400 font-bold lowercase">ativos monetários</p>
-              <div className="flex items-baseline gap-1.5">
-                <span className="text-[19px] font-bold text-gray-900">{fmt(financialData.contaProcessamento)}</span>
-                <span className="text-[11px] font-bold text-gray-600 uppercase">AOA</span>
-              </div>
-            </div>
-            <ChevronRight className="w-5 h-5 text-gray-300" />
-          </div>
+      {/* 📊 Seção Ativos da Conta */}
+      <section className="px-5">
+        <div className="flex items-center gap-2 mb-6">
+          <div className="w-1.5 h-4 bg-[#6D28D9] rounded-full"></div>
+          <h2 className="text-[16px] font-bold text-gray-900 lowercase">ativos da conta</h2>
+        </div>
 
-          {/* Item 2: Ativos simbólicos -> Retirada Total */}
-          <div className="bg-white rounded-xl py-5 px-6 shadow-sm border border-gray-50 flex items-center justify-between">
-            <div className="space-y-2">
-              <p className="text-[11px] text-gray-400 font-bold lowercase">Ativos simbólicos</p>
-              <div className="flex items-baseline gap-1.5">
-                <span className="text-[19px] font-bold text-gray-900">{fmt(financialData.retiradaTotal)}</span>
-                <span className="text-[11px] font-bold text-gray-600 uppercase">AOA</span>
+        <div className="space-y-4">
+          {[
+            { label: 'conta processamento', value: totalRecharges, icon: Landmark },
+            { label: 'retirada total', value: withdrawals, icon: ArrowUpRight },
+            { label: 'comissões de equipe', value: commissions, icon: TrendingUp },
+            { label: 'total de recargas', value: totalRecharges, icon: ShieldCheck },
+          ].map((item, idx) => (
+            <div 
+              key={idx}
+              className="bg-white rounded-2xl p-4 flex items-center justify-between shadow-sm border border-gray-50 active:scale-[0.98] transition-all"
+            >
+              <div className="flex items-center gap-3">
+                <div className="w-10 h-10 bg-purple-50 rounded-xl flex items-center justify-center">
+                  <item.icon className="w-5 h-5 text-[#6D28D9]" />
+                </div>
+                <span className="text-[13px] font-bold text-gray-500 lowercase">{item.label}</span>
+              </div>
+              <div className="flex items-center gap-2">
+                <span className="text-[14px] font-black text-gray-900">{fmt(item.value)}</span>
+                <ChevronRight className="w-4 h-4 text-gray-300" />
               </div>
             </div>
-            <ChevronRight className="w-5 h-5 text-gray-300" />
-          </div>
-
-          {/* Item 3: Activos de bónus -> Comissões de Equipe */}
-          <div className="bg-white rounded-xl py-5 px-6 shadow-sm border border-gray-50 flex items-center justify-between">
-            <div className="space-y-2">
-              <p className="text-[11px] text-gray-400 font-bold lowercase">Activos de bónus</p>
-              <div className="flex items-baseline gap-1.5">
-                <span className="text-[19px] font-bold text-gray-900">{fmt(financialData.comissaoTotalEquipe)}</span>
-                <span className="text-[11px] font-bold text-gray-600 uppercase">AOA</span>
-              </div>
-            </div>
-            <ChevronRight className="w-5 h-5 text-gray-300" />
-          </div>
-
-          {/* Item 4: Fundo -> Total de Recargas */}
-          <div className="bg-white rounded-xl py-5 px-6 shadow-sm border border-gray-50 flex items-center justify-between">
-            <div className="space-y-2">
-              <p className="text-[11px] text-gray-400 font-bold lowercase">Fundo</p>
-              <div className="flex items-baseline gap-1.5">
-                <span className="text-[19px] font-bold text-gray-900">≈ {fmt(Number(profile?.reloaded_amount || 0))}</span>
-                <span className="text-[11px] font-bold text-gray-600 uppercase">AOA</span>
-              </div>
-            </div>
-            <ChevronRight className="w-5 h-5 text-gray-300" />
-          </div>
+          ))}
         </div>
       </section>
     </div>

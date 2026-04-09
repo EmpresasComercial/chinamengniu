@@ -1,10 +1,8 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import { 
-  Headset, X, Rocket, Users, BarChart3, CircleDollarSign, 
-  ShieldCheck, HelpCircle, ChevronRight, Eye, EyeOff, 
-  PlusCircle, ArrowUpRight, ArrowRightLeft, Copy,
+  Headset, X, Users, HelpCircle,
   Info, Bell, Download, Lock, UserCheck, FileText, Share2,
-  Scan, LayoutDashboard, Wallet, CreditCard
+  Scan, LayoutDashboard, CreditCard
 } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import { motion, AnimatePresence } from 'motion/react';
@@ -25,7 +23,7 @@ export default function Profile() {
     splash_message: 'carregando avisos...'
   });
 
-  const { profile, signOut, user } = useAuth();
+  const { profile, signOut } = useAuth();
 
   useEffect(() => {
     async function fetchLinks() {
@@ -83,21 +81,21 @@ export default function Profile() {
   }, []);
 
   const funcaoItems = [
-    { name: 'informação', icon: Info, color: '#facc15', path: '/apresentacao-da-empresa' },
-    { name: 'equipe', icon: Users, color: '#3b82f6', path: '/equipe' },
-    { name: 'serviço', icon: Headset, color: '#f97316', path: 'support' },
-    { name: 'Partilha', icon: Share2, color: '#ef4444', path: '/convidar' },
-    { name: 'terraço', icon: LayoutDashboard, color: '#f97316', path: '/fundos' },
-    { name: 'ajuda', icon: HelpCircle, color: '#f87171', path: '/central-de-ajuda' },
-    { name: 'anúncio', icon: Bell, color: '#3b82f6', path: '#' },
-    { name: 'download', icon: Download, color: '#facc15', path: 'install' },
+    { name: 'informação', icon: Info, colorClass: 'yellow', path: '/apresentacao-da-empresa' },
+    { name: 'equipe', icon: Users, colorClass: 'blue', path: '/equipe' },
+    { name: 'serviço', icon: Headset, colorClass: 'orange', path: 'support' },
+    { name: 'Partilha', icon: Share2, colorClass: 'red', path: '/convidar' },
+    { name: 'terraço', icon: LayoutDashboard, colorClass: 'orange', path: '/fundos' },
+    { name: 'ajuda', icon: HelpCircle, colorClass: 'coral', path: '/central-de-ajuda' },
+    { name: 'anúncio', icon: Bell, colorClass: 'blue', path: '#' },
+    { name: 'download', icon: Download, colorClass: 'yellow', path: 'install' },
   ];
 
   const segurancaItems = [
-    { name: 'senha', icon: Lock, color: '#f97316', path: '/alterar-password' },
-    { name: 'banco', icon: CreditCard, color: '#3b82f6', path: '/adicionar-banco' },
-    { name: 'validar', icon: UserCheck, color: '#f97316', path: '#' },
-    { name: 'contrato', icon: FileText, color: '#f87171', path: '/apresentacao-da-empresa' },
+    { name: 'senha', icon: Lock, colorClass: 'orange', path: '/alterar-password' },
+    { name: 'banco', icon: CreditCard, colorClass: 'blue', path: '/adicionar-banco' },
+    { name: 'validar', icon: UserCheck, colorClass: 'orange', path: '#' },
+    { name: 'contrato', icon: FileText, colorClass: 'coral', path: '/apresentacao-da-empresa' },
   ];
 
   return (
@@ -111,7 +109,7 @@ export default function Profile() {
               <Bell className="w-5 h-5 opacity-70" />
               <div className="absolute top-0 right-0 w-2 h-2 bg-red-500 rounded-full border-2 border-white"></div>
            </div>
-           <button onClick={() => setIsSupportModalOpen(true)}>
+           <button onClick={() => setIsSupportModalOpen(true)} title="atendimento">
               <Headset className="w-5 h-5 opacity-70" />
            </button>
         </div>
@@ -154,13 +152,10 @@ export default function Profile() {
                 className="flex flex-col items-center gap-2 active:scale-95 transition-transform"
               >
                 <div className="relative">
-                   <div 
-                      className="w-10 h-10 rounded-xl flex items-center justify-center"
-                      style={{ backgroundColor: `${item.color}15` }}
-                   >
-                     <item.icon className="w-5 h-5" style={{ color: item.color }} />
+                   <div className={`w-10 h-10 rounded-xl flex items-center justify-center icon-box-${item.colorClass}`}>
+                     <item.icon className="w-5 h-5" />
                    </div>
-                   <div className="absolute -inset-1 rounded-xl blur-md opacity-20" style={{ backgroundColor: item.color }}></div>
+                   <div className={`absolute -inset-1 rounded-xl blur-md opacity-20 glow-${item.colorClass}`}></div>
                 </div>
                 <span className="text-[10px] font-bold text-gray-500 whitespace-nowrap">{item.name}</span>
               </button>
@@ -183,13 +178,10 @@ export default function Profile() {
                 className="flex flex-col items-center gap-2 active:scale-95 transition-transform"
               >
                 <div className="relative">
-                   <div 
-                      className="w-10 h-10 rounded-xl flex items-center justify-center"
-                      style={{ backgroundColor: `${item.color}15` }}
-                   >
-                     <item.icon className="w-5 h-5" style={{ color: item.color }} />
+                   <div className={`w-10 h-10 rounded-xl flex items-center justify-center icon-box-${item.colorClass}`}>
+                     <item.icon className="w-5 h-5" />
                    </div>
-                   <div className="absolute -inset-1 rounded-xl blur-md opacity-20" style={{ backgroundColor: item.color }}></div>
+                   <div className={`absolute -inset-1 rounded-xl blur-md opacity-20 glow-${item.colorClass}`}></div>
                 </div>
                 <span className="text-[10px] font-bold text-gray-500 whitespace-nowrap">{item.name}</span>
               </button>
