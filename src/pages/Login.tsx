@@ -115,28 +115,25 @@ export default function Login() {
   };
 
   return (
-    <div className="bg-main-gradient flex justify-center items-start p-0 m-0 min-h-screen w-full page-content">
+    <div className="min-h-screen flex flex-col bg-white page-content">
       {/* BEGIN: MainContainer */}
-      <main className="w-full max-w-[430px] min-h-screen flex flex-col relative overflow-hidden">
+      <main className="w-full max-w-[430px] min-h-screen flex flex-col relative overflow-hidden mx-auto">
         {/* BEGIN: Logo Section */}
-        <div className="flex flex-col items-center pt-12 pb-8">
-          <div className="w-32 h-32 bg-white rounded-3xl flex items-center justify-center p-4 mb-4 shadow-xl">
+        <div className="flex flex-col items-center pt-0 pb-0">
+          <div className="w-40 h-40 bg-white rounded-3xl flex items-center justify-center mb-0 p-0 transform -translate-y-4">
             <img
               alt="AI-GO onrender logo"
-              className="w-full h-full object-contain"
+              className="w-full h-full object-contain scale-150 transition-transform"
               src="/ai-go-onrender.png"
             />
           </div>
-          <h1 className="text-gray-900 text-3xl font-bold tracking-tight">AI-GO onrender</h1>
-          <p className="text-gray-500 text-[12px] font-bold uppercase tracking-widest mt-1">AI-GO onrender excellence</p>
         </div>
         {/* END: Logo Section */}
 
         {/* BEGIN: LoginCard */}
-        <section className="flex-1 bg-white mx-4 rounded-xl p-6 mb-10 flex flex-col">
-
+        <section className="bg-white px-6 py-6 flex flex-col">
           {/* Form Fields */}
-          <form onSubmit={handleSubmit} className="space-y-4 flex-grow">
+          <form onSubmit={handleSubmit} className="space-y-4">
             {/* Phone Input */}
             <div className="space-y-1">
               <div className="flex items-center border-b-[1.5px] border-[#6D28D9] py-2 transition-colors">

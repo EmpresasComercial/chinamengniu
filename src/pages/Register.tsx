@@ -143,18 +143,16 @@ export default function Register() {
   };
 
   return (
-    <div className="min-h-screen flex flex-col bg-[#f3f4f6] page-content">
+    <div className="min-h-screen flex flex-col bg-white page-content">
       {/* BEGIN: Logo Section */}
-      <div className="flex flex-col items-center pt-12 pb-8">
-        <div className="w-32 h-32 bg-white rounded-3xl flex items-center justify-center mb-4 shadow-xl p-4">
+      <div className="flex flex-col items-center pt-0 pb-0">
+        <div className="w-40 h-40 bg-white rounded-3xl flex items-center justify-center mb-0 p-0 transform -translate-y-4">
           <img
             alt="AI-GO onrender logo"
-            className="w-full h-full object-contain"
+            className="w-full h-full object-contain scale-150 transition-transform"
             src="/ai-go-onrender.png"
           />
         </div>
-        <h1 className="text-gray-900 text-3xl font-bold tracking-tight">AI-GO onrender</h1>
-        <p className="text-gray-500 text-[12px] font-bold uppercase tracking-widest mt-1">AI-GO onrender excellence</p>
       </div>
       {/* END: Logo Section */}
 

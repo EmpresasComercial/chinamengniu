@@ -1,5 +1,5 @@
 import { useState, useEffect, useCallback } from 'react';
-import { ArrowLeftRight, Play } from 'lucide-react';
+import { Power, Info, ChevronRight, TrendingUp } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import { useLoading } from '../contexts/LoadingContext';
 import { supabase } from '../lib/supabase';
@@ -13,9 +13,9 @@ export default function Extracao() {
   const [purchases, setPurchases] = useState<any[]>([]);
   const [hasCollectedToday, setHasCollectedToday] = useState(false);
   const [stats, setStats] = useState({
-    reproductionBalance: 0,   // balance_correte
-    totalProfit: 0,           // balance_correte (ativos de lucro)
-    dailyIncomeTotal: 0,      // renda_coletada
+    reproductionBalance: 0,
+    totalProfit: 0,
+    dailyIncomeTotal: 0,
     activeCowsCount: 0,
     totalPurchasesCount: 0
   });
@@ -29,20 +29,13 @@ export default function Extracao() {
 
   const fetchPurchases = useCallback(async () => {
     if (!user) return;
-
-    // Parallel fetch of products and history for faster loading
     const [productsRes, historyRes] = await Promise.all([
-      supabase.from('products').select('name, image_url'),
+      supabase.from('products').select('name, image_url, price, daily_income_percent'),
       supabase.from('historico_compras')
         .select('*')
         .eq('user_id', user.id)
         .order('data_compra', { ascending: false })
     ]);
-
-    if (historyRes.error) {
-      console.error('Error fetching history:', historyRes.error);
-      return;
-    }
 
     if (historyRes.data) {
       const historyData = historyRes.data;
@@ -52,12 +45,16 @@ export default function Extracao() {
       );
 
       const productsData = productsRes.data || [];
-      const productMap = new Map(productsData.map(p => [p.name, p.image_url]));
+      const productMap = new Map(productsData.map(p => [p.name, p]));
 
-      const formattedData = historyData.map((item: any) => ({
-        ...item,
-        image_url: productMap.get(item.nome_produto) || 'https://png.pngtree.com/png-clipart/20240615/original/pngtree-a-black-and-white-cow-with-tranparent-background-png-image_15340862.png'
-      }));
+      const formattedData = historyData.map((item: any) => {
+        const p = productMap.get(item.nome_produto);
+        return {
+          ...item,
+          image_url: p?.image_url || '/ai-go-onrender.png',
+          daily_percent: p?.daily_income_percent || 0.697
+        };
+      });
 
       setPurchases(formattedData);
       setStats(prev => ({
@@ -70,8 +67,6 @@ export default function Extracao() {
 
   const fetchDailyStats = useCallback(async () => {
     if (!user) return;
-
-    // Parallel fetch of tasks and today check
     const todayStr = new Date().toISOString().split('T')[0];
     
     const [todayTaskRes, tasksRes] = await Promise.all([
@@ -96,35 +91,16 @@ export default function Extracao() {
 
   useEffect(() => {
     if (!user) return;
-    // Use registerFetch for each parallel initial load
     const donePurchases = registerFetch();
     const doneStats = registerFetch();
-
     fetchPurchases().finally(() => donePurchases());
     fetchDailyStats().finally(() => doneStats());
 
-    const channel = supabase.channel('realtime_reproducao')
-      .on('postgres_changes', {
-        event: '*',
-        schema: 'public',
-        table: 'tarefas_diarias',
-        filter: `user_id=eq.${user?.id}`
-      }, () => {
-        fetchDailyStats();
-      })
-      .on('postgres_changes', {
-        event: '*',
-        schema: 'public',
-        table: 'historico_compras',
-        filter: `user_id=eq.${user?.id}`
-      }, () => {
-        fetchPurchases();
-      })
+    const channel = supabase.channel('realtime_extracao')
+      .on('postgres_changes', { event: '*', schema: 'public', table: 'tarefas_diarias', filter: `user_id=eq.${user?.id}` }, () => fetchDailyStats())
+      .on('postgres_changes', { event: '*', schema: 'public', table: 'historico_compras', filter: `user_id=eq.${user?.id}` }, () => fetchPurchases())
       .subscribe();
-
-    return () => {
-      supabase.removeChannel(channel);
-    };
+    return () => { supabase.removeChannel(channel); };
   }, [user, fetchPurchases, fetchDailyStats, registerFetch]);
 
   const handleStartCollection = useCallback(async () => {
@@ -132,156 +108,143 @@ export default function Extracao() {
       showToast('O processamento diário já foi realizado com sucesso.');
       return;
     }
-
     setIsCollecting(true);
     showLoading();
     try {
       const { data, error } = await supabase.rpc('claim_daily_income');
-
       if (error) {
         showToast(`erro operacional: ${error.message}`);
       } else if (data && data.success) {
         showToast('rendimento processado com sucesso.');
         fetchDailyStats();
       } else {
-        showToast(data?.message || 'falha no processamento. tente novamente.');
+        showToast(data?.message || 'falha no processamento.');
       }
     } catch (err) {
-      showToast('instabilidade na rede de dados detectada.');
+      showToast('instabilidade detectada.');
     } finally {
       setIsCollecting(false);
       hideLoading();
     }
   }, [hasCollectedToday, showLoading, hideLoading, fetchDailyStats]);
 
+  const fmt = (val: number) => val.toLocaleString('pt-AO', { minimumFractionDigits: 2 });
+
   return (
-    <div className="flex flex-col min-h-screen bg-[#6D28D9] text-white pt-4 px-4 pb-0 page-content">
-      {/* Banner Card */}
-      <section className="relative rounded-xl overflow-hidden mb-4">
-        <img
-          alt="Banner Cow"
-          className="w-full h-auto object-cover"
-          src="/minas.jpg"
-          loading="lazy"
-        />
-        <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/60 to-transparent p-4">
-          <h2 className="text-[15px] font-bold tracking-tight lowercase">processamento de redes</h2>
-          <p className="text-[10px] text-gray-200 lowercase">monitorização inteligente e segura em tempo real</p>
-        </div>
-
-        {/* VIP Badge */}
-        <div className="absolute top-3 left-3 bg-white/20 backdrop-blur-sm rounded-full px-3 py-1 flex items-center gap-2">
-          <div className="w-6 h-6 bg-white rounded-full flex items-center justify-center overflow-hidden p-1">
-            <img
-              alt="AI-GO onrender logo"
-              className="w-12 h-12 object-contain"
-              src="/ai-go-onrender.png"
-              referrerPolicy="no-referrer"
-            />
-          </div>
-          <div className="flex flex-col">
-            <span className="text-[10px] font-bold lowercase">vip0</span>
-            <div className="flex text-[8px] text-yellow-400">☆☆☆☆☆</div>
-          </div>
-        </div>
+    <div className="flex flex-col min-h-screen bg-[#FDFDFD] pb-32 font-sans antialiased page-content">
+      {/* 🟣 Header - Power Area */}
+      <section className="bg-white pt-10 pb-16 relative overflow-hidden flex flex-col items-center">
+         <div className="relative z-10 flex flex-col items-center">
+            {/* Power Ring UI */}
+            <div className="relative w-[210px] h-[210px] flex items-center justify-center">
+               <motion.div 
+                  animate={{ rotate: 360 }}
+                  transition={{ duration: 15, repeat: Infinity, ease: "linear" }}
+                  className="absolute inset-0 border-[1.5px] border-gray-100 rounded-full"
+               ></motion.div>
+               <div className="absolute inset-6 border-[1px] border-gray-50 rounded-full"></div>
+               
+               <div className="relative w-[150px] h-[150px] bg-gray-50/50 rounded-full flex items-center justify-center shadow-inner">
+                  <button 
+                     onClick={handleStartCollection}
+                     disabled={hasCollectedToday || isCollecting}
+                     className={`relative w-[100px] h-[100px] rounded-full flex items-center justify-center transition-all active:scale-95 ${
+                        hasCollectedToday 
+                        ? 'bg-gray-100 text-gray-300' 
+                        : 'bg-white shadow-[0_15px_35px_rgba(0,0,0,0.08)] text-[#6D28D9]'
+                     }`}
+                  >
+                     <Power className="w-10 h-10" />
+                     {!hasCollectedToday && !isCollecting && (
+                        <motion.div 
+                           initial={{ opacity: 0, scale: 0.8 }}
+                           animate={{ opacity: [0, 0.4, 0], scale: [1, 1.4, 1.8] }}
+                           transition={{ repeat: Infinity, duration: 2 }}
+                           className="absolute inset-0 bg-[#6D28D9] rounded-full"
+                        />
+                     )}
+                  </button>
+               </div>
+            </div>
+            
+            <span className="text-gray-300 text-[11px] font-black tracking-[0.3em] mt-6 uppercase">AI-GO 4.7.1</span>
+         </div>
       </section>
 
-      {/* Stats Grid */}
-      <section className="grid grid-cols-2 gap-y-4 mb-6 px-1">
-        <div>
-          <p className="text-[10px] text-gray-300 uppercase tracking-wider lowercase">conta de processamento</p>
-          <p className="text-[15px] font-bold">{stats.reproductionBalance.toLocaleString('pt-AO', { minimumFractionDigits: 2 })} kz</p>
-        </div>
-        <div>
-          <p className="text-[10px] text-gray-300 uppercase tracking-wider lowercase">ativos de lucro</p>
-          <p className="text-[15px] font-bold">{stats.totalProfit.toLocaleString('pt-AO', { minimumFractionDigits: 2 })} kz</p>
-        </div>
-        <div>
-          <p className="text-[10px] text-gray-300 uppercase tracking-wider lowercase">renda diária</p>
-          <p className="text-[12.5px] font-semibold">{stats.dailyIncomeTotal.toLocaleString('pt-AO', { minimumFractionDigits: 2 })} kz</p>
-        </div>
-        <div>
-          <p className="text-[10px] text-gray-300 uppercase tracking-wider lowercase">ciclos de atividade</p>
-          <p className="text-[12.5px] font-semibold">{stats.activeCowsCount} ativos / {stats.totalPurchasesCount} total</p>
-        </div>
-        <div className="col-span-2 mt-2">
-          <p className="text-[10px] text-gray-300 uppercase tracking-wider lowercase">estado do ciclo diário</p>
-          <p className="text-[15px] font-bold lowercase">
-            {hasCollectedToday ? 'processamento concluído hoje' : 'aguardando operação diária'}
-          </p>
-        </div>
+      {/* 📊 Stats Grid - Simplified as per reference */}
+      <section className="px-6 mb-8">
+         <div className="bg-[#F8F9FB] rounded-[32px] p-8 border border-white/50">
+            <div className="flex flex-col items-center mb-10">
+               <span className="text-gray-400 text-[13px] font-black lowercase mb-1">Restando hoje</span>
+               <span className="text-[#EF4444] text-[24px] font-black leading-none">{hasCollectedToday ? 0 : 1}</span>
+            </div>
+
+            <div className="grid grid-cols-2 gap-y-10 gap-x-4">
+               <div>
+                  <p className="text-gray-400 text-[11px] font-bold lowercase mb-2">renda diária</p>
+                  <p className="text-gray-900 text-[15px] font-black">2.76% ~ 2.85%</p>
+               </div>
+               <div className="text-right">
+                  <p className="text-gray-400 text-[11px] font-bold lowercase mb-2">Renda de hoje</p>
+                  <p className="text-gray-900 text-[15px] font-black">{fmt(stats.dailyIncomeTotal)} AI-GO</p>
+               </div>
+               <div>
+                  <p className="text-gray-400 text-[11px] font-bold lowercase mb-2">quantidade</p>
+                  <p className="text-gray-900 text-[15px] font-black">{fmt(stats.reproductionBalance)} AI-GO</p>
+               </div>
+               <div className="text-right">
+                  <p className="text-gray-400 text-[11px] font-bold lowercase mb-2">Lucro histórico</p>
+                  <p className="text-gray-900 text-[15px] font-black">{fmt(stats.totalProfit)} AI-GO</p>
+               </div>
+            </div>
+         </div>
       </section>
 
-      {/* Action Buttons */}
-      <section className="grid grid-cols-2 gap-3 mb-8">
-        <button
-          onClick={() => navigate('/transferencia-de-fundos')}
-          className="bg-[#D2F076] text-white rounded-lg p-4 flex items-center justify-between text-left font-black leading-[1] h-[45px]"
-        >
-          <span className="text-[11px] uppercase tracking-tighter lowercase flex-1 text-center">converter saldo</span>
-          <ArrowLeftRight className="w-4 h-4 ml-2" />
-        </button>
-        <button
-          onClick={handleStartCollection}
-          disabled={hasCollectedToday || isCollecting}
-          className={`rounded-lg p-4 flex items-center justify-between text-left font-black leading-[1] h-[45px] transition-all ${hasCollectedToday || isCollecting ? 'bg-gray-400 cursor-not-allowed text-gray-200' : 'bg-[#D2F076] text-white active:scale-95'
-            }`}
-        >
-          <span className="text-[11px] uppercase tracking-tighter lowercase flex-1 text-center">
-            {isCollecting ? 'processando...' : hasCollectedToday ? 'concluído' : 'gerar'}
-          </span>
-          <Play className={`w-4 h-4 ml-2 ${hasCollectedToday || isCollecting ? 'text-gray-300' : 'fill-current'}`} />
-        </button>
-      </section>
+      {/* 📜 Registo Section */}
+      <section className="px-6 pb-20">
+         <div className="flex items-center gap-2 mb-6">
+            <h3 className="text-gray-900 text-[18px] font-black lowercase">Registo</h3>
+         </div>
 
-      {/* Seção de Ativos Adquiridos */}
-      <section className="bg-white rounded-t-[12px] p-8 -mx-4 flex-grow min-h-[400px]">
-
-        <div className="flex flex-col">
-          {purchases.length > 0 ? (
-            <div className="grid grid-cols-3 gap-x-2 gap-y-8 pt-2">
-              {purchases.map((item) => (
-                <div key={item.id} className="flex flex-col items-center text-center font-serif">
-                  <div className="w-[50px] h-[50px] mb-2 flex items-center justify-center relative">
-                    <img
-                      alt={item.nome_produto}
-                      className="w-full h-full object-contain  animate-walk mix-blend-multiply"
-                      src={item.image_url}
-                      referrerPolicy="no-referrer"
-                    />
+         <div className="space-y-4">
+            {purchases.length > 0 ? (
+               purchases.map((item, idx) => (
+                  <div key={idx} className="bg-white rounded-3xl p-5 flex items-center justify-between shadow-xl shadow-gray-100/50 border border-gray-50/50 select-none active:scale-[0.98] transition-all">
+                     <div className="flex items-center gap-4">
+                        <div className="w-[52px] h-[52px] bg-red-50/50 rounded-2xl flex items-center justify-center p-2.5">
+                           {/* Brand Icon Placeholder as per reference */}
+                           <div className="w-full h-full bg-[#EF4444] rounded-lg flex items-center justify-center">
+                              <TrendingUp className="w-6 h-6 text-white" />
+                           </div>
+                        </div>
+                        <div className="flex flex-col">
+                           <span className="text-[17px] font-black text-[#EF4444] leading-tight">+{fmt(item.preco * (item.daily_percent / 100))} AI-GO</span>
+                           <span className="text-[12px] text-gray-400 font-bold lowercase mt-0.5">quantidade {fmt(item.preco)} AI-GO</span>
+                        </div>
+                     </div>
+                     <div className="text-right">
+                        <span className="text-[14px] font-black text-gray-900">{item.daily_percent}%</span>
+                        <p className="text-[11px] text-gray-400 font-bold lowercase">margens</p>
+                     </div>
                   </div>
-                  <h4 className="font-bold text-[18px] text-black lowercase leading-tight tracking-tight">
-                    {item.nome_produto}
-                  </h4>
-                  <p className="text-[15px] text-black font-medium">
-                    dias/{item.duracao_dias}
-                  </p>
-                </div>
-              ))}
-            </div>
-          ) : (
-            <div className="flex flex-col items-center justify-center pt-10">
-              <div className="w-20 h-20 mb-4 opacity-30">
-                <img
-                  alt="vazio"
-                  className="w-full h-full object-contain"
-                  src="/empty-image-CHCN_UjN.png"
-                />
-              </div>
-              <p className="text-gray-400 text-[12px] font-bold lowercase tracking-widest">nenhum registro</p>
-            </div>
-          )}
-        </div>
+               ))
+            ) : (
+               <div className="py-20 flex flex-col items-center">
+                  <img src="/empty-image-CHCN_UjN.png" alt="vazio" className="w-20 h-20 opacity-10 grayscale mb-4" />
+                  <p className="text-gray-300 text-[12px] font-black lowercase tracking-widest">sem registos disponíveis</p>
+               </div>
+            )}
+         </div>
       </section>
 
-      {/* Feedback Toast */}
+      {/* 🔔 Feedback Toast */}
       <AnimatePresence>
         {feedback && (
           <motion.div
-            initial={{ opacity: 0, scale: 0.9, x: 0, y: 0 }}
-            animate={{ opacity: 1, scale: 1, x: 0, y: 0 }}
-            exit={{ opacity: 0, scale: 0.9, x: 0, y: 0 }}
-            className="fixed inset-0 m-auto w-fit h-fit min-w-[260px] bg-black/50 backdrop-blur-sm text-white px-5 py-3 rounded-xl text-[12.5px]  z-[500] text-center max-w-[85vw] whitespace-normal break-words"
+            initial={{ opacity: 0, scale: 0.9, y: 20 }}
+            animate={{ opacity: 1, scale: 1, y: 0 }}
+            exit={{ opacity: 0, scale: 0.9, y: 20 }}
+            className="fixed bottom-28 left-1/2 -translate-x-1/2 z-[1000] bg-black/80 backdrop-blur-xl text-white px-8 py-3.5 rounded-full text-[13px] font-black shadow-2xl lowercase"
           >
             {feedback}
           </motion.div>

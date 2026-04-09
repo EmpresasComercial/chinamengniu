@@ -139,7 +139,6 @@ export default function Projetos() {
     <div className="flex flex-col min-h-screen bg-slate-50 page-content">
 
       <main className="bg-slate-50 flex-grow text-black px-4 pt-6 pb-20">
-        <h2 className="text-[18px] font-black text-slate-800 mb-6 lowercase">infraestrutura de ia</h2>
         <div className="space-y-3">
           {products.map((vip) => (
             <div
@@ -165,7 +164,6 @@ export default function Projetos() {
                   <p>preço: <span className="text-slate-900 font-bold uppercase tracking-tighter">aoa{vip.price.toFixed(2)}</span></p>
                   <p>período de validade: <span className="text-slate-900 font-bold uppercase tracking-tighter">{vip.duration_days} dias</span></p>
                   <p>renda diária: <span className="text-slate-900 font-bold uppercase tracking-tighter">aoa{vip.daily_income.toFixed(2)}</span></p>
-                  <p>rendimento horário: <span className="text-slate-900 font-bold uppercase tracking-tighter">aoa{(vip.daily_income / 24).toFixed(2)}</span></p>
                   <p>limite de quantidade: <span className="text-slate-900 font-bold uppercase tracking-tighter">{vip.purchase_limit}</span></p>
                 </div>
 

@@ -143,8 +143,7 @@ export default function Home() {
               <img src="/ai-go-onrender.png" alt="logo" className="w-full h-full object-contain p-1" />
             </div>
             <div>
-              <h1 className="text-white font-bold text-[15px] leading-tight lowercase">AI-GO onrender</h1>
-              <p className="text-white/60 text-[10px] uppercase font-bold tracking-widest">intelligent platform</p>
+              <h1 className="text-white font-bold text-[15px] leading-tight">AI-GO onrender</h1>
             </div>
           </div>
           <button onClick={() => setIsSupportModalOpen(true)} className="w-10 h-10 bg-white/10 rounded-xl flex items-center justify-center backdrop-blur-sm active:scale-90 transition-transform" title="atendimento">
