@@ -175,7 +175,7 @@ export default function Projetos() {
                       setSelectedProduct(vip);
                       setIsPurchaseModalOpen(true);
                     }}
-                    className="bg-blue-600 hover:bg-blue-700 text-white px-6 h-9 flex items-center justify-center rounded-xl text-[12px] font-bold active:scale-95 transition-all shadow-md shadow-blue-600/20"
+                    className="bg-[#6D28D9] hover:bg-purple-700 text-white px-6 h-9 flex items-center justify-center rounded-xl text-[12px] font-bold active:scale-95 transition-all shadow-md shadow-purple-600/20"
                   >
                     ativar rede
                   </button>
@@ -199,9 +199,9 @@ export default function Projetos() {
             className="absolute inset-0 bg-black/60 backdrop-blur-[2px]"
           />
           <div className="relative w-full max-w-[280px] bg-white rounded-xl p-5  z-[101] text-center">
-            <h3 className="text-[#000080] font-black text-[16px] lowercase mb-3">confirmar ativação</h3>
+            <h3 className="text-[#6D28D9] font-black text-[16px] lowercase mb-3">confirmar ativação</h3>
             <p className="text-slate-600 text-[13px] lowercase leading-relaxed mb-6 px-1">
-              tens a certeza que desejas ativar o modelo <span className="font-bold text-[#000080]">{selectedProduct.name.toLowerCase()}</span> no preço de <span className="font-bold text-[#FF0000]">{selectedProduct.price.toLocaleString('pt-AO')} kz</span>?
+              tens a certeza que desejas ativar o modelo <span className="font-bold text-[#6D28D9]">{selectedProduct.name.toLowerCase()}</span> no preço de <span className="font-bold text-[#FF0000]">{selectedProduct.price.toLocaleString('pt-AO')} kz</span>?
             </p>
             <div className="grid grid-cols-2 gap-3">
               <button 
@@ -212,7 +212,7 @@ export default function Projetos() {
               </button>
               <button
                 onClick={handlePurchase}
-                className="h-[38px] bg-[#0000AA] hover:bg-blue-800 text-white font-normal rounded-xl text-[13px] lowercase  transition-colors"
+                className="h-[38px] bg-[#6D28D9] hover:bg-purple-800 text-white font-normal rounded-xl text-[13px] lowercase  transition-colors"
               >
                 ativar
               </button>
@@ -248,7 +248,7 @@ export default function Projetos() {
               className={`w-full h-9 rounded-xl font-bold text-[13px] lowercase transition-none  ${
                 purchaseResult.success 
                   ? 'bg-green-600 hover:bg-green-700 text-white' 
-                  : 'bg-[#0000AA] hover:bg-blue-800 text-white'
+                  : 'bg-[#6D28D9] hover:bg-purple-800 text-white'
               }`}
             >
               entendido

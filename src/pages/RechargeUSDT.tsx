@@ -114,8 +114,8 @@ export default function RechargeUSDT() {
 
   return (
     <div className="flex flex-col min-h-screen bg-[#F0F2F5] antialiased">
-      {/* Header - Azul conforme solicitado */}
-      <header className="bg-[#0000AA] flex items-center h-14 px-4 sticky top-0 z-50">
+      {/* Header - Roxo conforme solicitado */}
+      <header className="bg-[#6D28D9] flex items-center h-14 px-4 sticky top-0 z-50">
         <button 
           onClick={() => navigate(-1)} 
           className="text-white p-1"
@@ -146,7 +146,7 @@ export default function RechargeUSDT() {
                 
                 <div className="pt-4 border-t border-gray-50 flex justify-between items-end">
                   <div>
-                    <p className="text-[24px] font-bold text-[#0000AA]">
+                    <p className="text-[24px] font-bold text-[#6D28D9]">
                       {amountKZ.toLocaleString('pt-AO')} <span className="text-[14px] font-medium text-gray-400">kz</span>
                     </p>
                   </div>
@@ -163,8 +163,8 @@ export default function RechargeUSDT() {
                       onClick={() => setAmountUSDT(val.toString())}
                       className={`h-8 rounded-lg transition-all text-[13px] font-medium ${
                         parseFloat(amountUSDT) === val
-                          ? 'bg-[#0000AA] text-white '
-                          : 'bg-[#0000AA] text-white opacity-90 active:opacity-100'
+                          ? 'bg-[#6D28D9] text-white '
+                          : 'bg-[#6D28D9] text-white opacity-90 active:opacity-100'
                       }`}
                     >
                       {val}
@@ -175,7 +175,7 @@ export default function RechargeUSDT() {
 
               {/* Campo de Entrada (Underline Azul e Sempre Visível) */}
               <div className="px-1 py-1">
-                <div className="relative border-b-2 border-[#0000AA] transition-all">
+                <div className="relative border-b-2 border-[#6D28D9] transition-all">
                   <input
                     type="number"
                     inputMode="decimal"
@@ -189,7 +189,7 @@ export default function RechargeUSDT() {
 
               <button
                 onClick={handleCreateDeposit}
-                className="w-full h-[54px] bg-[#0000AA] text-white rounded-xl text-[15px] font-normal transition-all active:scale-[0.98]"
+                className="w-full h-[54px] bg-[#6D28D9] text-white rounded-xl text-[15px] font-normal transition-all active:scale-[0.98]"
               >
                 continuar
               </button>
@@ -226,7 +226,7 @@ export default function RechargeUSDT() {
             >
               <div className="bg-white rounded-xl p-6  border border-gray-100 flex flex-col items-center text-center">
                 <div className="w-14 h-14 bg-blue-50 rounded-xl flex items-center justify-center mb-5">
-                  <CheckCircle2 className="w-8 h-8 text-[#0000AA]" />
+                  <CheckCircle2 className="w-8 h-8 text-[#6D28D9]" />
                 </div>
                 <h2 className="text-[17px] font-bold text-gray-900 mb-2">detalhes de depósito usdt</h2>
                 <p className="text-[13px] text-gray-500 mb-8 px-4">envie exatamente <span className="font-bold text-gray-900">{amountUSDT} usdt</span> para o endereço abaixo:</p>
@@ -240,7 +240,7 @@ export default function RechargeUSDT() {
                       </span>
                       <button 
                         onClick={() => handleCopy(walletAddress)}
-                        className="p-3 bg-white border border-gray-200 text-[#0000AA] rounded-xl  active:scale-95 transition-all"
+                        className="p-3 bg-white border border-gray-200 text-[#6D28D9] rounded-xl  active:scale-95 transition-all"
                         aria-label="copiar endereço"
                       >
                         <Copy className="w-5 h-5" />

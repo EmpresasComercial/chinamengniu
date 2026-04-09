@@ -55,7 +55,7 @@ export default function ProjetoDetalhes() {
   return (
     <div className="min-h-screen bg-[#f3f4f6] page-content">
       {/* Header Section */}
-      <header className="bg-[#0000AA] text-white flex items-center p-4 sticky top-0 z-10 ">
+      <header className="bg-[#6D28D9] text-white flex items-center p-4 sticky top-0 z-10 ">
         <button
           onClick={() => navigate(-1)}
           className="flex items-center justify-center p-1 rounded-full active:bg-white/10 transition-none"
@@ -115,7 +115,7 @@ export default function ProjetoDetalhes() {
           {/* Action Button */}
           <button
             onClick={handlePurchase}
-            className="w-full h-[45px] bg-[#0000AA] hover:bg-blue-800 text-white font-normal rounded-xl   transition-none active:scale-[0.98]"
+            className="w-full h-[45px] bg-[#6D28D9] hover:bg-blue-800 text-white font-normal rounded-xl   transition-none active:scale-[0.98]"
           >
             clique para ativar
           </button>
@@ -161,7 +161,7 @@ export default function ProjetoDetalhes() {
               className={`w-full h-11 rounded-xl font-bold text-[14px] lowercase transition-none active:scale-95  ${
                 purchaseResult.success 
                   ? 'bg-green-600 hover:bg-green-700 text-white' 
-                  : 'bg-[#0000AA] hover:bg-blue-800 text-white'
+                  : 'bg-[#6D28D9] hover:bg-blue-800 text-white'
               }`}
             >
               entendido

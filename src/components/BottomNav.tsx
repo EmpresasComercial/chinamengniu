@@ -1,15 +1,16 @@
 import React from 'react';
-import { Home, Cpu, User, Box } from 'lucide-react';
+import { Home, LayoutGrid, Atom, Wallet, User } from 'lucide-react';
 import { Link, useLocation } from 'react-router-dom';
 
 export default function BottomNav() {
   const location = useLocation();
 
   const navItems = [
-    { name: 'home', path: '/', icon: Home },
-    { name: 'projetos', path: '/projetos', icon: Box },
-    { name: 'ai', path: '/extracao', icon: Cpu },
-    { name: 'perfil', path: '/perfil', icon: User },
+    { name: 'página', path: '/', icon: Home },
+    { name: 'produtos', path: '/projetos', icon: LayoutGrid },
+    { name: 'AI', path: '/extracao', icon: Atom },
+    { name: 'fundos', path: '/fundos', icon: Wallet },
+    { name: 'meu', path: '/perfil', icon: User },
   ];
 
   return (

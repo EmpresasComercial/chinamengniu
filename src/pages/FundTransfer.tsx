@@ -202,7 +202,7 @@ export default function FundTransfer() {
                   <button
                     key={v}
                     onClick={() => setAmountInput(String(v))}
-                    className="flex-1 bg-[#000080] text-white rounded-md h-[24px] text-[9.5px] font-normal hover:bg-[#0000AA] active:scale-95 transition-all"
+                    className="flex-1 bg-[#000080] text-white rounded-md h-[24px] text-[9.5px] font-normal hover:bg-[#6D28D9] active:scale-95 transition-all"
                   >
                     {v.toLocaleString('pt-AO')}
                   </button>
@@ -282,7 +282,7 @@ export default function FundTransfer() {
                     className="w-full flex items-center justify-between p-4 rounded-xl border border-gray-100 bg-gray-50 active:bg-gray-100 transition-all group"
                   >
                     <span className="text-[14px] font-bold text-gray-800">Conversão de Processamento</span>
-                    <div className="w-5 h-5 rounded-xl border-2 border-gray-300 flex items-center justify-center group-active:border-[#0000AA] group-active:bg-[#0000AA] transition-colors">
+                    <div className="w-5 h-5 rounded-xl border-2 border-gray-300 flex items-center justify-center group-active:border-[#6D28D9] group-active:bg-[#6D28D9] transition-colors">
                       <svg className="w-3 h-3 text-white opacity-0 group-active:opacity-100" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="4">
                         <path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" />
                       </svg>
@@ -298,7 +298,7 @@ export default function FundTransfer() {
                     className="w-full flex items-center justify-between p-4 rounded-xl border border-gray-100 bg-gray-50 active:bg-gray-100 transition-all group"
                   >
                     <span className="text-[14px] font-bold text-gray-800">Resgate de Recompensa</span>
-                    <div className="w-5 h-5 rounded-xl border-2 border-gray-300 flex items-center justify-center group-active:border-[#0000AA] group-active:bg-[#0000AA] transition-colors">
+                    <div className="w-5 h-5 rounded-xl border-2 border-gray-300 flex items-center justify-center group-active:border-[#6D28D9] group-active:bg-[#6D28D9] transition-colors">
                       <svg className="w-3 h-3 text-white opacity-0 group-active:opacity-100" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="4">
                         <path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" />
                       </svg>

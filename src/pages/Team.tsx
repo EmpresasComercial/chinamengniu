@@ -96,7 +96,7 @@ export default function Team() {
   return (
     <div className="flex flex-col min-h-screen bg-[#E5E9F2] page-content">
       {/* Header */}
-      <header className="sticky top-0 z-50 bg-[#0000A0] text-white flex items-center h-12 px-4">
+      <header className="sticky top-0 z-50 bg-[#6D28D9] text-white flex items-center h-12 px-4">
         <button onClick={() => navigate(-1)} className="w-8 h-8 flex items-center justify-start" aria-label="voltar" title="voltar">
           <ChevronLeft className="h-5 w-5" />
         </button>
@@ -110,19 +110,19 @@ export default function Team() {
           <div className="grid grid-cols-2 gap-y-6 text-center">
             <div className="flex flex-col lowercase">
               <span className="text-[10px] text-[#4A5568] font-medium mb-1">receita total(kz)</span>
-              <span className="text-[15px] font-bold text-[#0000A0]">{stats.totalRevenue.toLocaleString('pt-AO')}</span>
+              <span className="text-[15px] font-bold text-[#6D28D9]">{stats.totalRevenue.toLocaleString('pt-AO')}</span>
             </div>
             <div className="flex flex-col lowercase">
               <span className="text-[10px] text-[#4A5568] font-medium mb-1">ganhos de hoje(kz)</span>
-              <span className="text-[15px] font-bold text-[#0000A0]">{stats.todayEarnings.toLocaleString('pt-AO')}</span>
+              <span className="text-[15px] font-bold text-[#6D28D9]">{stats.todayEarnings.toLocaleString('pt-AO')}</span>
             </div>
             <div className="flex flex-col lowercase">
               <span className="text-[10px] text-[#4A5568] font-medium mb-1">número total de pessoas</span>
-              <span className="text-[15px] font-bold text-[#0000A0]">{stats.totalPeople}</span>
+              <span className="text-[15px] font-bold text-[#6D28D9]">{stats.totalPeople}</span>
             </div>
             <div className="flex flex-col lowercase">
               <span className="text-[10px] text-[#4A5568] font-medium mb-1">novos cadastros hoje</span>
-              <span className="text-[15px] font-bold text-[#0000A0]">{stats.todayRegistrations}</span>
+              <span className="text-[15px] font-bold text-[#6D28D9]">{stats.todayRegistrations}</span>
             </div>
           </div>
         </section>
@@ -168,7 +168,7 @@ export default function Team() {
                   {[1, 2, 3].map(lvl => (
                     <div
                       key={lvl}
-                      className={`px-4 py-2 hover:bg-gray-50 lowercase ${selectedLevel === lvl ? 'text-blue-600 font-bold' : ''}`}
+                      className={`px-4 py-2 hover:bg-gray-50 lowercase ${selectedLevel === lvl ? 'text-purple-600 font-bold' : ''}`}
                       onClick={(e) => {
                         e.stopPropagation();
                         setSelectedLevel(lvl);

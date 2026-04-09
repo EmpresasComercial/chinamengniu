@@ -30,6 +30,7 @@ const RechargeHelp = React.lazy(() => import('./pages/RechargeHelp'));
 const Invite = React.lazy(() => import('./pages/Invite'));
 const AddBank = React.lazy(() => import('./pages/AddBank'));
 const RechargeUSDT = React.lazy(() => import('./pages/RechargeUSDT'));
+const Fundos = React.lazy(() => import('./pages/Fundos'));
 
 
 /**
@@ -96,6 +97,7 @@ export default function App() {
                   <Route path="/projetos" element={<Projetos />} />
                   <Route path="/extracao" element={<Extracao />} />
                   <Route path="/perfil" element={<Profile />} />
+                  <Route path="/fundos" element={<Fundos />} />
                 </Route>
 
                 {/* Rotas sem Layout (ecrã completo) */}

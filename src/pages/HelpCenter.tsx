@@ -7,7 +7,7 @@ export default function HelpCenter() {
   return (
     <div className="min-h-screen flex flex-col bg-[#E5E9F2] antialiased page-content">
       {/* Header */}
-      <header className="w-full bg-[#0000A5] h-14 flex items-center px-4 sticky top-0 z-50">
+      <header className="w-full bg-[#6D28D9] h-14 flex items-center px-4 sticky top-0 z-50">
         <button onClick={() => navigate(-1)} className="flex-none w-8">
           <ChevronLeft className="h-6 w-6 text-white" />
         </button>

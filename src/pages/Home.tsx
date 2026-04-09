@@ -7,10 +7,8 @@ import { useAuth } from '../contexts/AuthContext';
 import { supabase } from '../lib/supabase';
 
 const CAROUSEL_IMAGES = [
-  '/MW-FD846_gold_m_ZG_2017011807144-1024x576 minas.webp',
-  '/ai-pessoas.jpg',
-  '/imagesuma pessao na mina.jpg',
-  '/minas.jpg'
+  '/ai-go-onrender.png',
+  '/bolso carteira.png'
 ];
 
 export default function Home() {
@@ -132,10 +130,10 @@ export default function Home() {
               <img
                 alt="AI logo"
                 className="w-full h-full object-contain"
-                src="/file_loga IAc78c7243befa67a31cf49487.png"
+                src="/ai-go-onrender.png"
               />
             </div>
-            <span className="text-white font-bold text-lg lowercase">ai</span>
+            <span className="text-white font-bold text-lg">AI-GO onrender</span>
           </div>
           <div className="flex gap-2">
             <button
@@ -208,7 +206,7 @@ export default function Home() {
             >
               baixar aplicativo
             </h3>
-            <p className="text-[#6D28D9]/60 text-[11px] font-bold uppercase tracking-widest lowercase">ai premium</p>
+            <p className="text-[#6D28D9]/60 text-[11px] font-bold uppercase tracking-widest">AI-GO onrender premium</p>
           </div>
 
           <div className="flex gap-2 w-full z-10 mt-4">
@@ -260,16 +258,16 @@ export default function Home() {
 
       <section className="mt-6 px-4 mb-20 fade-in">
         <div className="flex items-center gap-2 mb-4 px-2">
-          <div className="w-1.5 h-5 bg-[#0000AA] rounded-full"></div>
-          <h3 className="text-slate-900 font-bold text-[15px] lowercase">sobre a ai</h3>
+          <div className="w-1.5 h-5 bg-[#6D28D9] rounded-full"></div>
+          <h3 className="text-slate-900 font-bold text-[15px] lowercase">sobre a AI-GO onrender</h3>
         </div>
 
         <div className="bg-white rounded-xl p-6 border border-slate-100 leading-relaxed text-slate-700 shadow-sm lowercase">
           <p className="text-[12.5px] mb-4">
-            a <span className="font-bold text-[#0000AA]">ai</span> (nyse: nem) é uma das maiores e mais importantes empresas de tecnologia do mundo, sendo reconhecida como a líder global em inteligência artificial. fundada em 1921, com sede global, a empresa tem operações em todo o mundo.
+            a <span className="font-bold text-[#6D28D9]">AI-GO onrender</span> (nyse: nem) é uma das maiores e mais importantes empresas de tecnologia do mundo, sendo reconhecida como a líder global em inteligência artificial. fundada em 1921, com sede global, a empresa tem operações em todo o mundo.
           </p>
           <p className="text-[12.5px] mb-4">
-            além da ia, nossa empresa também produz e explora novas tecnologias para o futuro. a ai possui excelência operacional, disciplina financeira e forte reconhecimento global, o que comprova nossa solidez financeira no mercado internacional.
+            além da AI-GO onrender, nossa empresa também produz e explora novas tecnologias para o futuro. a AI-GO onrender possui excelência operacional, disciplina financeira e forte reconhecimento global, o que comprova nossa solidez financeira no mercado internacional.
           </p>
           <p className="text-[12.5px]">
             estamos comprometidos com a inovação no setor de inteligência artificial e nos processos de sustentabilidade digital. buscamos proporcionar criação de valor a longo prazo, focando na integridade das nossas operações, transparência e retorno em inovação tecnológica para todas as nossas parcerias globais.
@@ -334,7 +332,7 @@ export default function Home() {
                   className="w-full h-[45px] bg-slate-50 rounded-xl flex items-center justify-center gap-2 active:bg-slate-100 transition-all border border-slate-100"
                 >
                   <p className="text-slate-700 font-bold text-[12.5px] lowercase">copiar link de convite</p>
-                  <Copy className="w-4 h-4 text-[#0000AA]" />
+                  <Copy className="w-4 h-4 text-[#6D28D9]" />
                 </button>
               </div>
             </motion.div>

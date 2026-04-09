@@ -107,7 +107,7 @@ export default function RechargeDetail() {
   return (
     <div className="flex flex-col min-h-screen bg-[#E6E8F0] antialiased page-content">
       {/* Header */}
-      <header className="bg-[#0000AA] flex items-center h-12 px-4 sticky top-0 z-50">
+      <header className="bg-[#6D28D9] flex items-center h-12 px-4 sticky top-0 z-50">
         <button onClick={() => navigate(-1)} className="text-white" title="Voltar">
           <ChevronLeft className="h-5 w-5" />
         </button>
@@ -120,7 +120,7 @@ export default function RechargeDetail() {
           {/* Attention Message */}
           <div className="mb-8 p-4 bg-red-50 rounded-xl border border-red-100 w-full">
             <p className="text-[13px] text-gray-800 leading-relaxed text-center">
-              <span className="text-red-500 font-black uppercase">Aviso Importante:</span> Utilize exclusivamente o banco <span className="font-black text-[#0000AA] uppercase">{bank.nome_do_banco}</span> para concluir esta transação financeira.
+              <span className="text-red-500 font-black uppercase">Aviso Importante:</span> Utilize exclusivamente o banco <span className="font-black text-[#6D28D9] uppercase">{bank.nome_do_banco}</span> para concluir esta transação financeira.
             </p>
           </div>
 
@@ -133,7 +133,7 @@ export default function RechargeDetail() {
               </div>
               <button
                 onClick={() => handleCopy(amount, 'amount')}
-                className="bg-[#0000AA] text-white text-[11px] px-4 py-1.5 rounded-xl font-bold uppercase active:scale-95 transition-all"
+                className="bg-[#6D28D9] text-white text-[11px] px-4 py-1.5 rounded-xl font-bold uppercase active:scale-95 transition-all"
               >
                 {copiedField === 'amount' ? 'Copiado' : 'Copiar'}
               </button>
@@ -146,7 +146,7 @@ export default function RechargeDetail() {
               </div>
               <button
                 onClick={() => handleCopy(bank.iban, 'iban')}
-                className="bg-[#0000AA] text-white text-[11px] px-4 py-1.5 rounded-xl font-bold uppercase active:scale-95 transition-all flex-shrink-0"
+                className="bg-[#6D28D9] text-white text-[11px] px-4 py-1.5 rounded-xl font-bold uppercase active:scale-95 transition-all flex-shrink-0"
               >
                 {copiedField === 'iban' ? 'Copiado' : 'Copiar'}
               </button>
@@ -162,7 +162,7 @@ export default function RechargeDetail() {
           {/* Confirmation Button */}
           <button
             onClick={handleConfirm}
-            className="bg-[#0000AA] text-white w-full h-[45px] rounded-xl text-[14px] font-bold uppercase tracking-wide active:scale-[0.98] transition-all shadow-lg shadow-blue-900/20"
+            className="bg-[#6D28D9] text-white w-full h-[45px] rounded-xl text-[14px] font-bold uppercase tracking-wide active:scale-[0.98] transition-all shadow-lg shadow-blue-900/20"
           >
             {confirmed ? 'PAGAMENTO SOLICITADO' : 'CONFIRMAR ENVIO'}
           </button>

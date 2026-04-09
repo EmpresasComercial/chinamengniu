@@ -171,7 +171,7 @@ export default function Profile() {
             <img
               alt="logo"
               className="w-full h-full object-contain p-1"
-              src="/file_loga IAc78c7243befa67a31cf49487.png"
+              src="/ai-go-onrender.png"
             />
           </div>
           <div>

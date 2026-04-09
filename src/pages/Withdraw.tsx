@@ -117,7 +117,7 @@ export default function Withdraw() {
 
   return (
     <div className="flex flex-col min-h-screen bg-[#F5F7FA] antialiased page-content">
-      <header className="flex items-center px-4 h-12 bg-[#001f8d] sticky top-0 z-50">
+      <header className="flex items-center px-4 h-12 bg-[#6D28D9] sticky top-0 z-50">
         <button onClick={() => navigate(-1)} className="p-2 -ml-2" title="voltar" aria-label="voltar">
           <ChevronLeft className="h-5 w-5 text-white" />
         </button>
@@ -132,9 +132,9 @@ export default function Withdraw() {
         <div className="bg-white rounded-xl p-4 mb-4 flex justify-between items-center border border-slate-50">
           <div className="text-center flex-1">
             <p className="text-[9px] text-slate-400 font-bold mb-0.5 uppercase tracking-wider lowercase">saldo disponível</p>
-            <p className="text-[16px] font-black text-[#001f8d]">{fmt(balance)} Kz</p>
+            <p className="text-[16px] font-black text-[#6D28D9]">{fmt(balance)} Kz</p>
           </div>
-          <div className="w-10 h-10 bg-[#001f8d] rounded-xl flex items-center justify-center shrink-0 mx-2">
+          <div className="w-10 h-10 bg-[#6D28D9] rounded-xl flex items-center justify-center shrink-0 mx-2">
             <Wallet className="w-5 h-5 text-white" />
           </div>
           <div className="text-center flex-1">
@@ -149,7 +149,7 @@ export default function Withdraw() {
               <button
                 key={v}
                 onClick={() => setAmountInput(String(v))}
-                className="flex-1 bg-[#001f8d] text-white rounded-md h-[24px] text-[9.5px] font-normal hover:bg-blue-700 active:scale-95 transition-all"
+                className="flex-1 bg-[#6D28D9] text-white rounded-md h-[24px] text-[9.5px] font-normal hover:bg-purple-700 active:scale-95 transition-all"
               >
                 {v.toLocaleString('pt-AO')}
               </button>
@@ -158,7 +158,7 @@ export default function Withdraw() {
 
           <div className="space-y-12">
             <div className="flex flex-col">
-              <div className="border-b-2 border-[#001f8d] w-full pb-1 focus-within:border-blue-500 transition-colors">
+              <div className="border-b-2 border-[#6D28D9] w-full pb-1 focus-within:border-blue-500 transition-colors">
                 <input
                   className="w-full border-none focus:ring-0 p-0 text-slate-800 bg-transparent text-[15px] font-medium outline-none text-left placeholder:text-slate-300 placeholder:font-normal"
                   placeholder="por favor, insira o valor de retirada"
@@ -195,13 +195,13 @@ export default function Withdraw() {
               <div className="bg-slate-50 rounded-xl p-5 border border-slate-200">
                 <div className="flex items-center gap-4">
                   <div className="w-12 h-12 bg-white rounded-xl shadow-sm flex items-center justify-center border border-slate-100">
-                    <Landmark className="w-6 h-6 text-[#001f8d]" />
+                    <Landmark className="w-6 h-6 text-[#6D28D9]" />
                   </div>
                   <div className="flex-grow">
                     <p className="text-[17px] font-black text-slate-900 tracking-wider">
                       {maskIban(selectedBank?.iban)}
                     </p>
-                    <p className="text-[11px] font-bold text-[#001f8d] mt-1.5 lowercase">
+                    <p className="text-[11px] font-bold text-[#6D28D9] mt-1.5 lowercase">
                       {selectedBank?.nome_banco}
                     </p>
                   </div>
@@ -213,14 +213,14 @@ export default function Withdraw() {
           {banks.length > 0 ? (
             <button
               onClick={handleConfirmWithdraw}
-              className="w-full h-11 bg-[#001f8d] text-white rounded-xl text-[14px] font-bold mt-10 active:scale-[0.98] transition-all shadow-lg shadow-blue-900/10 lowercase"
+              className="w-full h-11 bg-[#6D28D9] text-white rounded-xl text-[14px] font-bold mt-10 active:scale-[0.98] transition-all shadow-lg shadow-purple-900/10 lowercase"
             >
               confirmar levantamento
             </button>
           ) : (
             <button
               onClick={() => navigate('/adicionar-banco')}
-              className="w-full h-11 bg-[#001f8d] text-white rounded-xl text-[14px] font-bold mt-10 active:scale-[0.98] transition-all shadow-lg shadow-blue-900/10 lowercase"
+              className="w-full h-11 bg-[#6D28D9] text-white rounded-xl text-[14px] font-bold mt-10 active:scale-[0.98] transition-all shadow-lg shadow-purple-900/10 lowercase"
             >
               vincular conta bancária
             </button>
@@ -247,7 +247,7 @@ export default function Withdraw() {
             initial={{ opacity: 0, scale: 0.9 }}
             animate={{ opacity: 1, scale: 1 }}
             exit={{ opacity: 0, scale: 0.9 }}
-            className={`fixed inset-0 m-auto w-fit h-fit min-w-[260px] ${feedback.type === 'error' ? 'bg-red-600/90' : 'bg-[#001f8d]/90'} backdrop-blur-sm text-white px-5 py-3 rounded-xl text-[12.5px] font-bold z-[500] text-center max-w-[85vw] whitespace-normal break-words shadow-2xl shadow-black/20`}
+            className={`fixed inset-0 m-auto w-fit h-fit min-w-[260px] ${feedback.type === 'error' ? 'bg-red-600/90' : 'bg-[#6D28D9]/90'} backdrop-blur-sm text-white px-5 py-3 rounded-xl text-[12.5px] font-bold z-[500] text-center max-w-[85vw] whitespace-normal break-words shadow-2xl shadow-black/20`}
           >
             {feedback.message}
           </motion.div>

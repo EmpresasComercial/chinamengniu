@@ -59,7 +59,7 @@ export default function RechargeList() {
   return (
     <div className="flex flex-col min-h-screen bg-[#E6E8F0] antialiased page-content">
       {/* Header */}
-      <header className="bg-[#0000AA] flex items-center h-12 px-4 sticky top-0 z-50">
+      <header className="bg-[#6D28D9] flex items-center h-12 px-4 sticky top-0 z-50">
         <button onClick={() => navigate(-1)} className="text-white">
           <ChevronLeft className="h-5 w-5" />
         </button>
@@ -76,7 +76,7 @@ export default function RechargeList() {
                 key={val}
                 onClick={() => setAmount(val.toString())}
                 className={`w-[22%] py-2 rounded-xl text-[12.5px] font-bold transition-all ${amount === val.toString() 
-                  ? 'bg-[#0000AA] text-white' 
+                  ? 'bg-[#6D28D9] text-white' 
                   : 'bg-[#F0F2F5] text-gray-700 active:bg-gray-200'
                 }`}
               >
@@ -90,7 +90,7 @@ export default function RechargeList() {
             <label className="block text-gray-700 text-[12.5px] font-bold mb-4">
               se não encontro o valor desejado, por favor digite no campo abaixo
             </label>
-            <div className={`relative flex items-center border-b-2 transition-all ${amount && !isAmountInRange ? 'border-red-500' : 'border-[#0000AA]'}`}>
+            <div className={`relative flex items-center border-b-2 transition-all ${amount && !isAmountInRange ? 'border-red-500' : 'border-[#6D28D9]'}`}>
               <input
                 value={amount}
                 onChange={(e) => setAmount(e.target.value.replace(/[^\d]/g, ''))}
@@ -121,7 +121,7 @@ export default function RechargeList() {
                 {banks.map((b) => (
                   <label key={b.id} className="group flex items-center justify-between p-4 rounded-xl border border-gray-100 bg-gray-50 active:bg-gray-100 transition-all cursor-pointer">
                     <div className="flex items-center">
-                      <span className={`text-[13px] font-bold transition-colors ${selectedBankId === b.id ? 'text-[#0000AA]' : 'text-gray-700'}`}>{b.nome_do_banco}</span>
+                      <span className={`text-[13px] font-bold transition-colors ${selectedBankId === b.id ? 'text-[#6D28D9]' : 'text-gray-700'}`}>{b.nome_do_banco}</span>
                     </div>
 
                     <div className="relative">
@@ -132,7 +132,7 @@ export default function RechargeList() {
                         checked={selectedBankId === b.id}
                         onChange={() => setSelectedBankId(b.id)}
                       />
-                      <div className={`w-5 h-5 rounded-xl border-2 flex items-center justify-center transition-all ${selectedBankId === b.id ? 'border-[#0000AA] bg-[#0000AA]' : 'border-gray-300'}`}>
+                      <div className={`w-5 h-5 rounded-xl border-2 flex items-center justify-center transition-all ${selectedBankId === b.id ? 'border-[#6D28D9] bg-[#6D28D9]' : 'border-gray-300'}`}>
                         {selectedBankId === b.id && <Check className="w-3.5 h-3.5 text-white" strokeWidth={3} />}
                       </div>
                     </div>
@@ -147,7 +147,7 @@ export default function RechargeList() {
           {/* Action Button */}
           <button
             onClick={handleAdvance}
-            className={`w-full h-[45px] rounded-full text-[15px] font-semibold  transition-colors ${!isFormValid ? 'bg-gray-400' : 'bg-[#0000AA] text-white'
+            className={`w-full h-[45px] rounded-full text-[15px] font-semibold  transition-colors ${!isFormValid ? 'bg-gray-400' : 'bg-[#6D28D9] text-white'
               }`}
           >
             avança proxima

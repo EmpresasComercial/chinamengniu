@@ -118,35 +118,22 @@ export default function Login() {
     <div className="bg-main-gradient flex justify-center items-start p-0 m-0 min-h-screen w-full page-content">
       {/* BEGIN: MainContainer */}
       <main className="w-full max-w-[430px] min-h-screen flex flex-col relative overflow-hidden">
-        {/* BEGIN: TopHeader */}
-        <header className="w-full h-[220px] flex flex-col items-center justify-center relative header-pattern pt-8 bg-[#6D28D9]">
-          {/* Support Icon */}
-          <button 
-            type="button"
-            onClick={() => setIsSupportModalOpen(true)}
-            className="absolute top-4 right-4 text-white p-2 bg-white/10 rounded-full hover:bg-white/20 transition-all active:scale-95"
-            title="atendimento ao cliente"
-          >
-            <Headset className="h-6 w-6" />
-          </button>
-
-          {/* Logo Section */}
-          <div className="flex flex-col items-center">
-            <div className="w-16 h-16 bg-white rounded-2xl flex items-center justify-center p-2.5 mb-3 shadow-xl">
-              <img
-                alt="AI logo"
-                className="w-full h-full object-contain"
-                src="/file_loga IAc78c7243befa67a31cf49487.png"
-              />
-            </div>
-            <h1 className="text-white text-2xl font-bold tracking-tight lowercase">ai</h1>
-            <p className="text-white/60 text-[10px] font-bold uppercase tracking-widest mt-0.5 lowercase">ai excellence</p>
+        {/* BEGIN: Logo Section */}
+        <div className="flex flex-col items-center pt-12 pb-8">
+          <div className="w-32 h-32 bg-white rounded-3xl flex items-center justify-center p-4 mb-4 shadow-xl">
+            <img
+              alt="AI-GO onrender logo"
+              className="w-full h-full object-contain"
+              src="/ai-go-onrender.png"
+            />
           </div>
-        </header>
-        {/* END: TopHeader */}
+          <h1 className="text-gray-900 text-3xl font-bold tracking-tight">AI-GO onrender</h1>
+          <p className="text-gray-500 text-[12px] font-bold uppercase tracking-widest mt-1">AI-GO onrender excellence</p>
+        </div>
+        {/* END: Logo Section */}
 
         {/* BEGIN: LoginCard */}
-        <section className="flex-1 bg-white mx-4 -mt-6 rounded-xl p-6 mb-10 flex flex-col">
+        <section className="flex-1 bg-white mx-4 rounded-xl p-6 mb-10 flex flex-col">
 
           {/* Form Fields */}
           <form onSubmit={handleSubmit} className="space-y-4 flex-grow">

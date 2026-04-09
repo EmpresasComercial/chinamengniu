@@ -95,7 +95,7 @@ export default function ChangePassword() {
   return (
     <div className="flex flex-col min-h-screen bg-[#E9EAEF] page-content">
       {/* Header */}
-      <header className="bg-[#0000A5] h-12 flex items-center px-4 shrink-0">
+      <header className="bg-[#6D28D9] h-12 flex items-center px-4 shrink-0">
         <div className="flex items-center w-full">
           <button onClick={() => navigate(-1)} className="text-white" title="voltar" aria-label="voltar">
             <ChevronLeft className="h-5 w-5" />
@@ -173,7 +173,7 @@ export default function ChangePassword() {
             {/* Action Button */}
             <div className="pt-4 pb-2">
               <button
-                className="w-full h-[45px] bg-[#0000A5] text-white rounded-xl text-[15px] font-normal hover:opacity-90 transition-opacity"
+                className="w-full h-[45px] bg-[#6D28D9] text-white rounded-xl text-[15px] font-normal hover:opacity-90 transition-opacity"
                 type="submit"
               >
                 confirmar

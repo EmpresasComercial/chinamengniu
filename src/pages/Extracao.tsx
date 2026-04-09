@@ -155,7 +155,7 @@ export default function Extracao() {
   }, [hasCollectedToday, showLoading, hideLoading, fetchDailyStats]);
 
   return (
-    <div className="flex flex-col min-h-screen bg-[#0000AA] text-white pt-4 px-4 pb-0 page-content">
+    <div className="flex flex-col min-h-screen bg-[#6D28D9] text-white pt-4 px-4 pb-0 page-content">
       {/* Banner Card */}
       <section className="relative rounded-xl overflow-hidden mb-4">
         <img
@@ -173,9 +173,9 @@ export default function Extracao() {
         <div className="absolute top-3 left-3 bg-white/20 backdrop-blur-sm rounded-full px-3 py-1 flex items-center gap-2">
           <div className="w-6 h-6 bg-white rounded-full flex items-center justify-center overflow-hidden p-1">
             <img
-              alt="AI logo"
+              alt="AI-GO onrender logo"
               className="w-12 h-12 object-contain"
-              src="/file_loga IAc78c7243befa67a31cf49487.png"
+              src="/ai-go-onrender.png"
               referrerPolicy="no-referrer"
             />
           </div>

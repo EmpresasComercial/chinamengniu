@@ -21,7 +21,7 @@ const statusColor: Record<string, string> = {
   confirmado: 'bg-green-100 text-green-700',
   rejeitado: 'bg-red-100 text-red-700',
   cancelado: 'bg-red-100 text-red-700',
-  concluido: 'bg-blue-100 text-blue-700',
+  concluido: 'bg-purple-100 text-purple-700',
   success: 'bg-green-100 text-green-700',
 };
 
@@ -110,7 +110,7 @@ export default function FinancialRecords() {
               <p className="text-[10px] text-gray-400 font-mono truncate max-w-[160px] opacity-60">{item.chave_de_transacao || '—'}</p>
             </div>
             <div className="text-right flex flex-col items-end gap-1.5">
-              <p className="text-[12.5px] font-black text-[#0000A5]">+{Number(item.valor_deposito).toLocaleString('pt-AO')} Kz</p>
+              <p className="text-[12.5px] font-black text-[#6D28D9]">+{Number(item.valor_deposito).toLocaleString('pt-AO')} Kz</p>
               <span className={`text-[9px] px-2 py-0.5 rounded-full font-bold uppercase tracking-wider ${statusColor[item.estado_de_pagamento] || 'bg-gray-100 text-gray-500'}`}>
                 {item.estado_de_pagamento}
               </span>
@@ -153,7 +153,7 @@ export default function FinancialRecords() {
                 </p>
               </div>
               <div className="text-right flex flex-col items-end gap-1.5 flex-shrink-0">
-                <p className={`text-[12.5px] font-black ${isTransfer ? 'text-[#0000A5]' : 'text-green-600'}`}>
+                <p className={`text-[12.5px] font-black ${isTransfer ? 'text-[#6D28D9]' : 'text-green-600'}`}>
                   +{Number(item.valor_recebido).toLocaleString('pt-AO', { minimumFractionDigits: 2 })} Kz
                 </p>
                 <span className={`text-[9px] px-2 py-0.5 rounded-full font-bold uppercase tracking-wider ${statusColor[item.status] || 'bg-gray-100 text-gray-500'}`}>
@@ -173,7 +173,7 @@ export default function FinancialRecords() {
   return (
     <div className="flex flex-col min-h-screen bg-[#E2E4EB] page-content">
       {/* Header */}
-      <header className="bg-[#0000A5] text-white flex items-center justify-between px-4 py-3 sticky top-0 z-50">
+      <header className="bg-[#6D28D9] text-white flex items-center justify-between px-4 py-3 sticky top-0 z-50">
         <button onClick={() => navigate(-1)} className="w-10" aria-label="Voltar" title="Voltar">
           <ChevronLeft className="w-5 h-5" />
         </button>
@@ -188,7 +188,7 @@ export default function FinancialRecords() {
           {/* Active Tab Label + Filter Icon */}
           <div className="flex items-center justify-between mb-5">
             <div className="flex-1 bg-[#F4F6F9] rounded-full px-4 py-2">
-              <span className="text-[12.5px] font-bold text-[#0000A5] block text-center">
+              <span className="text-[12.5px] font-bold text-[#6D28D9] block text-center">
                 {currentFilter.label}
               </span>
             </div>
@@ -205,7 +205,7 @@ export default function FinancialRecords() {
           {/* Content */}
           {loading ? (
             <div className="flex justify-center items-center py-16">
-              <div className="w-7 h-7 border-4 border-[#0000A5] border-t-transparent rounded-full animate-spin" />
+              <div className="w-7 h-7 border-4 border-[#6D28D9] border-t-transparent rounded-full animate-spin" />
             </div>
           ) : records.length === 0 ? (
             <div className="flex flex-col items-center justify-center py-10">
@@ -258,14 +258,14 @@ export default function FinancialRecords() {
                   <button
                     key={option.id}
                     onClick={() => handleFilterSelect(option.id)}
-                    className={`w-full text-left px-6 py-4 flex items-center justify-between transition-colors ${activeFilter === option.id ? 'bg-[#0000A5]/5' : 'hover:bg-gray-50'
+                    className={`w-full text-left px-6 py-4 flex items-center justify-between transition-colors ${activeFilter === option.id ? 'bg-[#6D28D9]/5' : 'hover:bg-gray-50'
                       }`}
                   >
-                    <span className={`text-[14.5px] font-medium ${activeFilter === option.id ? 'text-[#0000A5] font-bold' : 'text-gray-700'}`}>
+                    <span className={`text-[14.5px] font-medium ${activeFilter === option.id ? 'text-[#6D28D9] font-bold' : 'text-gray-700'}`}>
                       {option.label}
                     </span>
                     {activeFilter === option.id && (
-                      <svg className="w-5 h-5 text-[#0000A5]" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth="3">
+                      <svg className="w-5 h-5 text-[#6D28D9]" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth="3">
                         <path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" />
                       </svg>
                     )}
