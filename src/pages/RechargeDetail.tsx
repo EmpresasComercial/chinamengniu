@@ -1,5 +1,5 @@
-import React, { useState, useEffect, useRef } from 'react';
-import { ChevronLeft, Copy, Camera } from 'lucide-react';
+import React, { useState, useEffect } from 'react';
+import { ChevronLeft, Copy } from 'lucide-react';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { motion, AnimatePresence } from 'motion/react';
 import { useLoading } from '../contexts/LoadingContext';
@@ -11,7 +11,6 @@ export default function RechargeDetail() {
   const location = useLocation();
   const { user } = useAuth();
   const { showLoading, hideLoading } = useLoading();
-  const fileInputRef = useRef<HTMLInputElement>(null);
 
   // Defensive state handling
   const state = location.state || {};
@@ -25,8 +24,6 @@ export default function RechargeDetail() {
   }, [state, navigate]);
 
   const [notification, setNotification] = useState<string | null>(null);
-  const [voucher, setVoucher] = useState<File | null>(null);
-  const [voucherPreview, setVoucherPreview] = useState<string | null>(null);
   const [depositAmount, setDepositAmount] = useState<string>('');
   const [hasSent, setHasSent] = useState(false);
 
@@ -52,18 +49,6 @@ export default function RechargeDetail() {
 
     navigator.clipboard.writeText(text);
     showNotification(`${lowerFieldName} copiado`);
-  };
-
-  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const file = e.target.files?.[0];
-    if (file) {
-      setVoucher(file);
-      const reader = new FileReader();
-      reader.onloadend = () => {
-        setVoucherPreview(reader.result as string);
-      };
-      reader.readAsDataURL(file);
-    }
   };
 
   const handleConfirm = async () => {
@@ -96,16 +81,17 @@ export default function RechargeDetail() {
 
   return (
     <div className="flex flex-col min-h-screen bg-gradient-to-br from-[#ffe4e1]/20 via-white to-[#ffe4e1]/20 font-sans antialiased text-gray-900 pb-8">
-      {/* Header with Back Button (minimalist) */}
-      <header className="flex items-center h-10 px-4 sticky top-0 z-50">
+      {/* Header with Back Button */}
+      <header className="bg-[#6D28D9] flex items-center justify-between px-4 h-14 sticky top-0 z-50 shadow-sm">
         <button 
           onClick={() => navigate(-1)} 
-          className="text-gray-400 active:opacity-50 transition-opacity"
+          className="p-2 text-white active:scale-90 transition-transform"
           title="voltar"
           aria-label="voltar para a página anterior"
         >
-          <ChevronLeft className="h-5 w-5" />
+          <ChevronLeft className="h-6 w-6" />
         </button>
+        <h1 className="flex-1 text-center text-[17px] font-bold text-white lowercase pr-8">detalhes de pagamento</h1>
       </header>
 
       <main className="px-5 flex-1">
@@ -177,7 +163,7 @@ export default function RechargeDetail() {
           <div className="mb-4 last:mb-0">
             <p className="text-[11px] text-gray-400 mb-0.5 font-semibold tracking-tight">observações</p>
             <div className="flex items-start justify-between">
-              <p className="text-[14px] font-bold text-[#1f2937] leading-[1.25] tracking-tight">
+              <p className="text-[14px] font-medium text-[#1f2937] leading-[1.25] tracking-tight">
                 caro utilizador: por favor, faça um depósito dentro da gama de depósito. se exceder o intervalo de depósito, contacte o seu gestor de conta para obter a conta bancária mais recente para grandes depósitos.
               </p>
             </div>
@@ -211,36 +197,12 @@ export default function RechargeDetail() {
 
         {/* Warning Text */}
         <div className="mb-5">
-          <p className="text-[15px] font-bold text-[#f25e5e] leading-[1.2] text-left tracking-tight lowercase">
+          <p className="text-[15px] font-medium text-[#f25e5e] leading-[1.2] text-left tracking-tight lowercase">
             por favor recarregue e carregue o dinheiro de acordo com o valor acima, caso contrário a recarga não será bem sucedida! ! !
           </p>
         </div>
 
-        <hr className="border-gray-100/30 my-4" />
 
-        {/* Imagem do Voucher */}
-        <div className="mb-8">
-          <p className="text-[12px] text-gray-400 mb-3 font-medium lowercase">imagem do voucher</p>
-          <div 
-            onClick={() => fileInputRef.current?.click()}
-            className="w-[85px] h-[85px] bg-[#f9fafb] rounded-[12px] flex items-center justify-center cursor-pointer overflow-hidden border border-gray-200/60 active:bg-gray-100 transition-colors shadow-sm"
-          >
-            {voucherPreview ? (
-              <img src={voucherPreview} alt="preview" className="w-full h-full object-cover" />
-            ) : (
-              <Camera className="w-10 h-10 text-gray-200" strokeWidth={1} />
-            )}
-          </div>
-          <input 
-            type="file" 
-            ref={fileInputRef} 
-            onChange={handleFileChange} 
-            className="hidden" 
-            accept="image/*"
-            title="selecionar imagem do voucher"
-            aria-label="selecionar imagem do voucher"
-          />
-        </div>
 
         {/* Botão Enviar */}
         <button
@@ -258,7 +220,7 @@ export default function RechargeDetail() {
         {/* Footer Text */}
         <div className="space-y-3 pb-8">
           <p className="text-[15px] lowercase">
-            <span className="text-[#f25e5e] font-bold">horário de recarga: 9h00 - 21h00</span>
+            <span className="text-[#f25e5e] font-bold">horário de recarga: 10 horas em ponto até as 22 horas em ponto</span>
           </p>
           <p className="text-[13px] leading-[1.35] text-[#1f2937] font-medium pr-2 lowercase">
             <span className="font-bold text-black opacity-90">nota:</span> faça login na plataforma para obter o número de conta bancária mais recente para cada carregamento.
