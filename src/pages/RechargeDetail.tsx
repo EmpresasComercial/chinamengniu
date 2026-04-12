@@ -1,5 +1,5 @@
-import { useState, useEffect } from 'react';
-import { ChevronLeft, Check } from 'lucide-react';
+import React, { useState, useEffect } from 'react';
+import { ChevronLeft, Check, Copy } from 'lucide-react';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { motion, AnimatePresence } from 'motion/react';
 import { useLoading } from '../contexts/LoadingContext';
@@ -107,11 +107,11 @@ export default function RechargeDetail() {
   return (
     <div className="flex flex-col min-h-screen bg-[#E6E8F0] antialiased page-content">
       {/* Header */}
-      <header className="bg-[#6D28D9] flex items-center h-12 px-4 sticky top-0 z-50">
-        <button onClick={() => navigate(-1)} className="text-white" title="Voltar">
+      <header className="bg-white flex items-center h-12 px-4 sticky top-0 z-50">
+        <button onClick={() => navigate(-1)} className="text-gray-800" title="Voltar">
           <ChevronLeft className="h-5 w-5" />
         </button>
-        <h1 className="flex-1 text-center text-white text-[15px] font-bold pr-5 uppercase tracking-wide">Instruções para Depósito</h1>
+        <h1 className="flex-1 text-center text-gray-900 text-[15px] font-bold pr-5 lowercase tracking-wide">detalhes de depósito</h1>
       </header>
 
       <main className="p-4 space-y-4">
@@ -120,7 +120,7 @@ export default function RechargeDetail() {
           {/* Attention Message */}
           <div className="mb-8 p-4 bg-red-50 rounded-xl border border-red-100 w-full">
             <p className="text-[13px] text-gray-800 leading-relaxed text-center">
-              <span className="text-red-500 font-black uppercase">Aviso Importante:</span> Utilize exclusivamente o banco <span className="font-black text-[#6D28D9] uppercase">{bank.nome_do_banco}</span> para concluir esta transação financeira.
+              <span className="text-red-500 font-black lowercase">aviso importante:</span> utilize exclusivamente o banco <span className="font-black text-[#6D28D9] lowercase">{bank.nome_do_banco.toLowerCase()}</span> para concluir esta transação financeira.
             </p>
           </div>
 
@@ -128,49 +128,48 @@ export default function RechargeDetail() {
           <div className="w-full space-y-4 mb-6">
             <div className="flex justify-between items-center bg-gray-50 rounded-xl p-3 border border-gray-100">
               <div className="flex flex-col">
-                <span className="text-[12px] text-gray-400 font-bold uppercase tracking-wider">Montante em Kz</span>
-                <span className="text-[16px] font-black text-gray-900">{formatAmount(amount)}</span>
+                <span className="text-[12px] text-gray-400 font-bold lowercase tracking-wider">montante em kz</span>
+                <span className="text-[16px] font-black text-gray-900">{formatAmount(amount)} kz</span>
               </div>
               <button
                 onClick={() => handleCopy(amount, 'amount')}
-                className="bg-[#6D28D9] text-white text-[11px] px-4 py-1.5 rounded-xl font-bold uppercase active:scale-95 transition-all"
+                className="text-[#6D28D9] p-2 hover:bg-purple-50 rounded-lg transition-all"
               >
-                {copiedField === 'amount' ? 'Copiado' : 'Copiar'}
+                {copiedField === 'amount' ? <Check className="w-5 h-5 text-green-500" /> : <Copy className="w-5 h-5" />}
               </button>
             </div>
 
             <div className="flex justify-between items-center bg-gray-50 rounded-xl p-3 border border-gray-100">
               <div className="flex flex-col overflow-hidden mr-2">
-                <span className="text-[12px] text-gray-400 font-bold uppercase tracking-wider">IBAN de Destino</span>
-                <span className="text-[14px] font-black text-gray-900 break-all">{bank.iban}</span>
+                <span className="text-[12px] text-gray-400 font-bold lowercase tracking-wider">iban de destino</span>
+                <span className="text-[14px] font-black text-gray-900 break-all">{bank.iban.toLowerCase()}</span>
               </div>
               <button
                 onClick={() => handleCopy(bank.iban, 'iban')}
-                className="bg-[#6D28D9] text-white text-[11px] px-4 py-1.5 rounded-xl font-bold uppercase active:scale-95 transition-all flex-shrink-0"
+                className="text-[#6D28D9] p-2 hover:bg-purple-50 rounded-lg transition-all flex-shrink-0"
               >
-                {copiedField === 'iban' ? 'Copiado' : 'Copiar'}
+                {copiedField === 'iban' ? <Check className="w-5 h-5 text-green-500" /> : <Copy className="w-5 h-5" />}
               </button>
             </div>
 
             <div className="flex flex-col bg-gray-50 rounded-xl p-3 border border-gray-100">
-              <span className="text-[12px] text-gray-400 font-bold uppercase tracking-wider">Beneficiário</span>
-              <span className="text-[15px] font-black text-gray-900">{bank.nome_favorecido || 'DEEPBANK LDA'}</span>
+              <span className="text-[12px] text-gray-400 font-bold lowercase tracking-wider">beneficiário</span>
+              <span className="text-[15px] font-black text-gray-900">{bank.nome_favorecido?.toLowerCase() || 'deepbank lda'}</span>
             </div>
           </div>
-
 
           {/* Confirmation Button */}
           <button
             onClick={handleConfirm}
-            className="bg-[#6D28D9] text-white w-full h-[45px] rounded-xl text-[14px] font-bold uppercase tracking-wide active:scale-[0.98] transition-all shadow-lg shadow-blue-900/20"
+            className="bg-[#6D28D9] text-white w-full h-[45px] rounded-xl text-[14px] font-bold lowercase tracking-wide active:scale-[0.98] transition-all"
           >
-            {confirmed ? 'PAGAMENTO SOLICITADO' : 'CONFIRMAR ENVIO'}
+            {confirmed ? 'pagamento solicitado' : 'enviar'}
           </button>
         </section>
 
         {/* Instructions Card */}
         <section className="bg-white rounded-xl p-6 ">
-          <h3 className="text-[14px] font-black text-gray-900 mb-6 uppercase tracking-tight">Diretrizes para Depósito Bancário</h3>
+          <h3 className="text-[14px] font-black text-gray-900 mb-6 lowercase tracking-tight">diretrizes para depósito bancário</h3>
           <div className="space-y-4 text-[12.5px] leading-relaxed text-gray-700">
             <p>1. o valor mínimo para depósito bancário é de <span className="text-red-500 font-bold">9000</span> kzs e o máximo é de <span className="text-red-500 font-bold">7.000.000</span> kzs.</p>
             <p>2. após copiar a referência bancária tu podes usar softwares de pagamentos como <span className="text-red-500 font-bold">multicaixa express</span>, <span className="text-red-500 font-bold">bai directo</span>, <span className="text-red-500 font-bold">banke atlantico</span> entre outros softwares de pagamentos ou dirija-se a um <span className="text-red-500 font-bold">atm</span>.</p>

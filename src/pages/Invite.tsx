@@ -84,12 +84,11 @@ export default function Invite() {
       </header>
 
       <main className="px-6 pt-6 pb-20 relative z-10 flex flex-col items-center">
-        {/* Title Section */}
-        <div className="w-full mb-8 relative">
-           <div className="max-w-[70%]">
-             <h2 className="text-[26px] font-black text-gray-900 leading-tight">Convide amigos</h2>
-             <p className="text-[14px] text-gray-500 font-medium mt-1">Crie uma situação de win-win~</p>
-           </div>
+         <div className="w-full mb-6 relative">
+            <div className="max-w-[70%]">
+              <h2 className="text-[20px] font-black text-gray-900 leading-tight">Convide amigos</h2>
+              <p className="text-[12.5px] text-gray-500 font-medium mt-1">Crie uma situação de win-win~</p>
+            </div>
            {/* Decorative Image Mock - Similar to the red cards in the provided image */}
            <div className="absolute right-[-10px] top-[-10px] w-28 h-28 transform rotate-12 opacity-90">
                 <div className="w-16 h-20 bg-[#6D28D9] rounded-xl shadow-lg relative -rotate-6">
@@ -101,52 +100,52 @@ export default function Invite() {
            </div>
         </div>
 
-        {/* Main Invite Card */}
-        <div className="w-full bg-white rounded-[2rem] shadow-xl shadow-purple-900/5 p-8 flex flex-col items-center border border-gray-50">
-           {/* QR Code Section */}
-           <div className="p-4 rounded-[2rem] border-[3px] border-[#6D28D9]/30 mb-10 bg-white">
-              <div className="p-3 rounded-[1.5rem] border border-[#6D28D9]/10">
-                <QRCodeSVG 
-                    value={inviteLink} 
-                    size={160}
-                    level="H"
-                    includeMargin={false}
-                    fgColor="#000000"
-                />
-              </div>
-           </div>
+         {/* Main Invite Card */}
+         <div className="w-full bg-white rounded-[1.5rem] shadow-xl shadow-purple-900/5 p-6 flex flex-col items-center border border-gray-50">
+            {/* QR Code Section */}
+            <div className="p-3 rounded-[1.5rem] border-[2px] border-[#6D28D9]/30 mb-8 bg-white">
+               <div className="p-2 rounded-[1rem] border border-[#6D28D9]/10">
+                 <QRCodeSVG 
+                     value={inviteLink} 
+                     size={125}
+                     level="H"
+                     includeMargin={false}
+                     fgColor="#000000"
+                 />
+               </div>
+            </div>
 
-           {/* Code Section */}
-           <div className="w-full mb-8">
-              <p className="text-[12px] text-gray-400 font-bold mb-3 lowercase">Código de Convite</p>
-              <div className="flex items-center justify-between group">
-                 <span className="text-[34px] font-black text-gray-900 tracking-tight leading-none">{inviteCode}</span>
-                 <button 
-                   onClick={() => handleCopy(inviteCode, 'code')}
-                   className="p-2 bg-gray-50 rounded-xl active:scale-90 transition-all hover:bg-purple-50"
-                 >
-                   {copiedCode ? <Check className="w-6 h-6 text-green-500" /> : <Copy className="w-6 h-6 text-gray-400" />}
-                 </button>
-              </div>
-           </div>
+            {/* Code Section */}
+            <div className="w-full mb-6">
+               <p className="text-[12.5px] text-gray-400 font-bold mb-2 lowercase">Código de Convite</p>
+               <div className="flex items-center justify-between group">
+                  <span className="text-[24px] font-black text-gray-900 tracking-tight leading-none">{inviteCode}</span>
+                  <button 
+                    onClick={() => handleCopy(inviteCode, 'code')}
+                    className="p-2 bg-gray-50 rounded-xl active:scale-90 transition-all hover:bg-purple-50"
+                  >
+                    {copiedCode ? <Check className="w-5 h-5 text-green-500" /> : <Copy className="w-5 h-5 text-gray-400" />}
+                  </button>
+               </div>
+            </div>
 
-           {/* Link Section */}
-           <div className="w-full">
-              <p className="text-[12px] text-gray-400 font-bold mb-3 lowercase">Link de convite</p>
-              <div className="flex items-center justify-between gap-4">
-                 <div className="flex-1 overflow-hidden">
-                    <p className="text-[12px] text-[#6D28D9] font-bold underline break-all leading-tight opacity-80">
-                      {inviteLink}
-                    </p>
-                 </div>
-                 <button 
-                   onClick={() => handleCopy(inviteLink, 'link')}
-                   className="p-2 bg-gray-50 rounded-xl active:scale-90 transition-all hover:bg-purple-50 shrink-0"
-                 >
-                    {copiedLink ? <Check className="w-6 h-6 text-green-500" /> : <Copy className="w-6 h-6 text-gray-400" />}
-                 </button>
-              </div>
-           </div>
+            {/* Link Section */}
+            <div className="w-full">
+               <p className="text-[12.5px] text-gray-400 font-bold mb-2 lowercase">Link de convite</p>
+               <div className="flex items-center justify-between gap-4">
+                  <div className="flex-1 overflow-hidden">
+                     <p className="text-[11px] text-[#6D28D9] font-bold underline break-all leading-tight opacity-80">
+                       {inviteLink}
+                     </p>
+                  </div>
+                  <button 
+                    onClick={() => handleCopy(inviteLink, 'link')}
+                    className="p-2 bg-gray-50 rounded-xl active:scale-90 transition-all hover:bg-purple-50 shrink-0"
+                  >
+                     {copiedLink ? <Check className="w-5 h-5 text-green-500" /> : <Copy className="w-5 h-5 text-gray-400" />}
+                  </button>
+               </div>
+            </div>
         </div>
       </main>
 

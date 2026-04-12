@@ -341,3 +341,7 @@
 .glow-orange { background-color: #f97316 !important; }
 .glow-red { background-color: #ef4444 !important; }
 .glow-coral { background-color: #f87171 !important; }
+
+.banner-bg-withdraw {
+  background-image: url('/fundo-para%20a%20paginafundotualizada.png');
+}

@@ -92,10 +92,10 @@ export default function Profile() {
   ];
 
   const segurancaItems = [
-    { name: 'senha', icon: Lock, colorClass: 'orange', path: '/alterar-password' },
+    { name: 'senha', icon: Lock, colorClass: 'orange', path: '/alterar-a-senha' },
     { name: 'banco', icon: CreditCard, colorClass: 'blue', path: '/adicionar-banco' },
     { name: 'validar', icon: UserCheck, colorClass: 'orange', path: '#' },
-    { name: 'contrato', icon: FileText, colorClass: 'coral', path: '/apresentacao-da-empresa' },
+    { name: 'contrato', icon: FileText, colorClass: 'coral', path: '#' },
   ];
 
   return (

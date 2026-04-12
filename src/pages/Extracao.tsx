@@ -131,30 +131,30 @@ export default function Extracao() {
   const fmt = (val: number) => val.toLocaleString('pt-AO', { minimumFractionDigits: 2 });
 
   return (
-    <div className="flex flex-col min-h-screen bg-[#FDFDFD] pb-32 font-sans antialiased page-content">
+    <div className="flex flex-col min-h-screen bg-[#FDFDFD] pb-24 font-sans antialiased page-content">
       {/* 🟣 Header - Power Area */}
-      <section className="bg-white pt-10 pb-16 relative overflow-hidden flex flex-col items-center">
+      <section className="bg-white pt-6 pb-10 relative overflow-hidden flex flex-col items-center">
          <div className="relative z-10 flex flex-col items-center">
             {/* Power Ring UI */}
-            <div className="relative w-[210px] h-[210px] flex items-center justify-center">
+            <div className="relative w-[160px] h-[160px] flex items-center justify-center">
                <motion.div 
                   animate={{ rotate: 360 }}
                   transition={{ duration: 15, repeat: Infinity, ease: "linear" }}
                   className="absolute inset-0 border-[1.5px] border-gray-100 rounded-full"
                ></motion.div>
-               <div className="absolute inset-6 border-[1px] border-gray-50 rounded-full"></div>
+               <div className="absolute inset-4 border-[1px] border-gray-50 rounded-full"></div>
                
-               <div className="relative w-[150px] h-[150px] bg-gray-50/50 rounded-full flex items-center justify-center shadow-inner">
+               <div className="relative w-[120px] h-[120px] bg-gray-50/50 rounded-full flex items-center justify-center shadow-inner">
                   <button 
                      onClick={handleStartCollection}
                      disabled={hasCollectedToday || isCollecting}
-                     className={`relative w-[100px] h-[100px] rounded-full flex items-center justify-center transition-all active:scale-95 ${
+                     className={`relative w-[80px] h-[80px] rounded-full flex items-center justify-center transition-all active:scale-95 ${
                         hasCollectedToday 
                         ? 'bg-gray-100 text-gray-300' 
-                        : 'bg-white shadow-[0_15px_35px_rgba(0,0,0,0.08)] text-[#6D28D9]'
+                        : 'bg-white shadow-[0_12px_30px_rgba(0,0,0,0.06)] text-[#6D28D9]'
                      }`}
                   >
-                     <Power className="w-10 h-10" />
+                     <Power className="w-8 h-8" />
                      {!hasCollectedToday && !isCollecting && (
                         <motion.div 
                            initial={{ opacity: 0, scale: 0.8 }}
@@ -167,34 +167,34 @@ export default function Extracao() {
                </div>
             </div>
             
-            <span className="text-gray-300 text-[11px] font-black tracking-[0.3em] mt-6 uppercase">AI-GO 4.7.1</span>
+            <span className="text-gray-300 text-[10px] font-black tracking-[0.3em] mt-4 uppercase">AI-GO 4.7.1</span>
          </div>
       </section>
 
       {/* 📊 Stats Grid - Simplified as per reference */}
-      <section className="px-6 mb-8">
-         <div className="bg-[#F8F9FB] rounded-[32px] p-8 border border-white/50">
-            <div className="flex flex-col items-center mb-10">
-               <span className="text-gray-400 text-[13px] font-black lowercase mb-1">Restando hoje</span>
-               <span className="text-[#EF4444] text-[24px] font-black leading-none">{hasCollectedToday ? 0 : 1}</span>
+      <section className="px-6 mb-6">
+         <div className="bg-[#F8F9FB] rounded-[28px] p-6 border border-white/50">
+            <div className="flex flex-col items-center mb-6">
+               <span className="text-gray-400 text-[12.5px] font-black lowercase mb-1">Restando hoje</span>
+               <span className="text-[#EF4444] text-[22px] font-black leading-none">{hasCollectedToday ? 0 : 1}</span>
             </div>
 
-            <div className="grid grid-cols-2 gap-y-10 gap-x-4">
+            <div className="grid grid-cols-2 gap-y-6 gap-x-4">
                <div>
-                  <p className="text-gray-400 text-[11px] font-bold lowercase mb-2">renda diária</p>
-                  <p className="text-gray-900 text-[15px] font-black">2.76% ~ 2.85%</p>
+                  <p className="text-gray-400 text-[11px] font-bold lowercase mb-1.5">renda diária</p>
+                  <p className="text-gray-900 text-[14px] font-black">2.76% ~ 2.85%</p>
                </div>
                <div className="text-right">
-                  <p className="text-gray-400 text-[11px] font-bold lowercase mb-2">Renda de hoje</p>
-                  <p className="text-gray-900 text-[15px] font-black">{fmt(stats.dailyIncomeTotal)} AI-GO</p>
+                  <p className="text-gray-400 text-[11px] font-bold lowercase mb-1.5">Renda de hoje</p>
+                  <p className="text-gray-900 text-[14px] font-black">{fmt(stats.dailyIncomeTotal)} AI-GO</p>
                </div>
                <div>
-                  <p className="text-gray-400 text-[11px] font-bold lowercase mb-2">quantidade</p>
-                  <p className="text-gray-900 text-[15px] font-black">{fmt(stats.reproductionBalance)} AI-GO</p>
+                  <p className="text-gray-400 text-[11px] font-bold lowercase mb-1.5">quantidade</p>
+                  <p className="text-gray-900 text-[14px] font-black">{fmt(stats.reproductionBalance)} AI-GO</p>
                </div>
                <div className="text-right">
-                  <p className="text-gray-400 text-[11px] font-bold lowercase mb-2">Lucro histórico</p>
-                  <p className="text-gray-900 text-[15px] font-black">{fmt(stats.totalProfit)} AI-GO</p>
+                  <p className="text-gray-400 text-[11px] font-bold lowercase mb-1.5">Lucro histórico</p>
+                  <p className="text-gray-900 text-[14px] font-black">{fmt(stats.totalProfit)} AI-GO</p>
                </div>
             </div>
          </div>

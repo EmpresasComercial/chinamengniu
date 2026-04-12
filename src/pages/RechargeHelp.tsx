@@ -7,7 +7,7 @@ export default function RechargeHelp() {
   return (
     <div className="min-h-screen flex flex-col bg-[#e8ebf5] antialiased page-content">
       {/* Header */}
-      <header className="bg-[#000080] h-12 flex items-center px-4 sticky top-0 z-50">
+      <header className="bg-[#6D28D9] h-12 flex items-center px-4 sticky top-0 z-50">
         <button onClick={() => navigate(-1)} className="text-white" title="voltar">
           <ChevronLeft className="h-6 w-6 stroke-[2.5]" />
         </button>

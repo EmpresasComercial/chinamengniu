@@ -127,7 +127,7 @@ export default function AddBank() {
   return (
     <div className="min-h-screen bg-[#E8EBF2] flex flex-col page-content">
       {/* Header */}
-      <header className="bg-[#000080] text-white h-14 flex items-center px-4 sticky top-0 z-50">
+      <header className="bg-[#6D28D9] text-white flex items-center h-14 px-4 sticky top-0 z-50">
         <button onClick={() => navigate(-1)} className="p-2 -ml-2" aria-label="voltar" title="voltar">
           <ChevronLeft className="w-6 h-6" />
         </button>
@@ -142,8 +142,8 @@ export default function AddBank() {
           /* — Conta já vinculada — */
           <div className="bg-white rounded-xl  p-6 mt-4 space-y-6">
             <div className="flex items-center gap-3 mb-2">
-              <div className="w-12 h-12 bg-[#000080]/10 rounded-xl flex items-center justify-center">
-                <CreditCard className="w-6 h-6 text-[#000080]" />
+              <div className="w-12 h-12 bg-[#6D28D9]/10 rounded-xl flex items-center justify-center">
+                <CreditCard className="w-6 h-6 text-[#6D28D9]" />
               </div>
               <div>
                 <p className="text-[11px] text-gray-400 uppercase tracking-wider">banco vinculado</p>
@@ -176,7 +176,7 @@ export default function AddBank() {
           /* — Formulário de adição — */
           <div className="bg-white rounded-xl  p-6 mt-4">
             <form onSubmit={handleSubmit} className="space-y-6">
-              <div className="relative border-b-[1.5px] border-[#0000b3] py-2">
+              <div className="relative border-b-[1.5px] border-[#6D28D9] py-2">
                 <input
                   type="text"
                   placeholder="por favor, insira o nome completo"
@@ -186,7 +186,7 @@ export default function AddBank() {
                 />
               </div>
 
-              <div className="relative border-b-[1.5px] border-[#0000b3] py-2">
+              <div className="relative border-b-[1.5px] border-[#6D28D9] py-2">
                 <input
                   type="text"
                   placeholder="por favor, insira o endereço bancário (iban)"
@@ -213,7 +213,7 @@ export default function AddBank() {
               <div className="pt-8 pb-2">
                 <button
                   type="submit"
-                  className="w-full h-[45px] bg-[#000080] text-white font-normal rounded-xl text-[15px] hover:opacity-90 transition-opacity"
+                  className="w-full h-[45px] bg-[#6D28D9] text-white font-normal rounded-xl text-[15px] hover:opacity-90 transition-opacity"
                 >
                   salvar
                 </button>

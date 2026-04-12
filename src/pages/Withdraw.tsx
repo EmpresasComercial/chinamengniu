@@ -1,5 +1,5 @@
 import { useState, useEffect, ChangeEvent } from 'react';
-import { ChevronLeft, Wallet, Landmark, Eye, EyeOff } from 'lucide-react';
+import { ChevronLeft, ChevronRight, Eye, EyeOff } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import { useLoading } from '../contexts/LoadingContext';
 import { useAuth } from '../contexts/AuthContext';
@@ -50,15 +50,6 @@ export default function Withdraw() {
   const maxWithdrawal = 100000;
   const balance = parseFloat(profile?.balance || '0');
   const numericAmount = parseFloat(amountInput) || 0;
-  const amountToReceive = numericAmount * (1 - taxRate);
-
-  const maskIban = (val?: string) => {
-    if (!val) return '';
-    if (val.length < 8) return val;
-    const first = val.slice(0, 4);
-    const last = val.slice(-4);
-    return `${first}${'*'.repeat(val.length - 8)}${last}`;
-  };
 
   const handleConfirmWithdraw = async () => {
     if (!amountInput || numericAmount < minWithdrawal) {
@@ -113,141 +104,123 @@ export default function Withdraw() {
   };
 
   const selectedBank = banks.find(b => b.id === selectedBankId);
-  const fmt = (val: number) => val.toLocaleString('pt-AO', { minimumFractionDigits: 0 });
+  const fmt = (val: number | string | undefined) => {
+    const num = Number(val || 0);
+    return num.toLocaleString('pt-AO', { minimumFractionDigits: 2 });
+  };
 
   return (
-    <div className="flex flex-col min-h-screen bg-[#F5F7FA] antialiased page-content">
-      <header className="flex items-center px-4 h-12 bg-[#6D28D9] sticky top-0 z-50">
-        <button onClick={() => navigate(-1)} className="p-2 -ml-2" title="voltar" aria-label="voltar">
-          <ChevronLeft className="h-5 w-5 text-white" />
-        </button>
-        <div className="flex-grow text-center">
-          <h1 className="text-white text-[14px] font-bold pr-8 lowercase">
-            levantamento de fundos
-          </h1>
-        </div>
-      </header>
+    <div className="flex flex-col min-h-screen bg-gray-50 antialiased font-serif page-content relative overflow-x-hidden">
+      <div className="absolute top-0 left-0 right-0 h-[20vh] bg-[#6D28D9] -z-20" />
 
-      <main className="flex-grow p-4">
-        <div className="bg-white rounded-xl p-4 mb-4 flex justify-between items-center border border-slate-50">
-          <div className="text-center flex-1">
-            <p className="text-[9px] text-slate-400 font-bold mb-0.5 uppercase tracking-wider lowercase">saldo disponível</p>
-            <p className="text-[16px] font-black text-[#6D28D9]">{fmt(balance)} Kz</p>
-          </div>
-          <div className="w-10 h-10 bg-[#6D28D9] rounded-xl flex items-center justify-center shrink-0 mx-2">
-            <Wallet className="w-5 h-5 text-white" />
-          </div>
-          <div className="text-center flex-1">
-            <p className="text-[9px] text-slate-400 font-bold mb-0.5 uppercase tracking-wider lowercase">valor a receber</p>
-            <p className="text-[16px] font-black text-green-600">{fmt(amountToReceive)} Kz</p>
-          </div>
-        </div>
+      <section className="fixed top-0 left-4 right-4 h-[140px] overflow-hidden rounded-b-[1rem] shadow-sm z-30">
+         <div className="absolute inset-0 z-0">
+            <img 
+               src="/fundo-para a paginafundotualizada.png" 
+               alt="balance background" 
+               className="w-full h-full object-cover object-center"
+            />
+         </div>
+         
+         <button 
+           onClick={() => navigate(-1)} 
+           className="absolute top-3 left-4 p-2 bg-white/10 backdrop-blur-md rounded-full text-white active:scale-90 transition-transform z-20"
+           title="voltar"
+           aria-label="voltar"
+         >
+           <ChevronLeft className="h-5 w-5" />
+         </button>
 
-        <div className="bg-white rounded-xl p-5 border border-slate-100">
-          <div className="flex justify-between gap-1 mb-10">
-            {[1000, 5000, 10000, 50000].map(v => (
-              <button
-                key={v}
-                onClick={() => setAmountInput(String(v))}
-                className="flex-1 bg-[#6D28D9] text-white rounded-md h-[24px] text-[9.5px] font-normal hover:bg-purple-700 active:scale-95 transition-all"
-              >
-                {v.toLocaleString('pt-AO')}
-              </button>
-            ))}
-          </div>
+         <div className="relative z-10 h-full flex flex-col justify-center px-8 pt-4">
+            <span className="text-white/90 text-[12.5px] lowercase font-normal mb-1">saldo da conta(AOA)</span>
+            <span className="text-[32px] font-bold text-white tracking-tighter leading-none">
+              {fmt(balance)}
+            </span>
+         </div>
+      </section>
 
-          <div className="space-y-12">
-            <div className="flex flex-col">
-              <div className="border-b-2 border-[#6D28D9] w-full pb-1 focus-within:border-blue-500 transition-colors">
-                <input
-                  className="w-full border-none focus:ring-0 p-0 text-slate-800 bg-transparent text-[15px] font-medium outline-none text-left placeholder:text-slate-300 placeholder:font-normal"
-                  placeholder="por favor, insira o valor de retirada"
-                  type="text"
-                  inputMode="numeric"
-                  value={amountInput}
-                  onChange={handleAmountChange}
-                />
-              </div>
-            </div>
-
-            <div className="flex flex-col">
-              <div className="flex items-center border-b-2 border-[#001f8d] w-full pb-1 focus-within:border-blue-500 transition-colors">
-                <input
-                  className="w-full border-none focus:ring-0 p-0 text-slate-800 bg-transparent text-[15px] font-medium outline-none text-left placeholder:text-slate-300 placeholder:font-normal"
-                  placeholder="por favor, insira a senha de segurança (login)"
-                  type={showPin ? "text" : "password"}
-                  value={pin}
-                  onChange={(e) => setPin(e.target.value)}
-                />
-                <button
-                  type="button"
-                  onClick={() => setShowPin(!showPin)}
-                  className="text-slate-300 ml-2"
-                >
-                  {showPin ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
-                </button>
-              </div>
+      <main className="flex-grow p-4 pt-[155px] space-y-2 relative z-10">
+        <section className="bg-white rounded-[1rem] p-5 shadow-sm border border-gray-100 space-y-4">
+          <div className="space-y-1">
+            <label className="text-gray-900 text-[12.5px] font-normal lowercase">montante da retirada</label>
+            <div className="flex items-center border-b border-gray-100 pb-1 focus-within:border-[#6D28D9] transition-colors">
+              <input
+                className="flex-1 bg-transparent border-none focus:ring-0 p-0 text-[12.5px] font-normal text-gray-900 placeholder:text-gray-200"
+                placeholder="Introduzir o montante a retirar"
+                type="text"
+                inputMode="numeric"
+                value={amountInput}
+                onChange={handleAmountChange}
+              />
+              <span className="text-gray-900 font-normal text-[12.5px]">AOA</span>
             </div>
           </div>
 
-          <div className="mt-10 pt-10 border-t border-slate-100">
-            {banks.length > 0 ? (
-              <div className="bg-slate-50 rounded-xl p-5 border border-slate-200">
-                <div className="flex items-center gap-4">
-                  <div className="w-12 h-12 bg-white rounded-xl shadow-sm flex items-center justify-center border border-slate-100">
-                    <Landmark className="w-6 h-6 text-[#6D28D9]" />
-                  </div>
-                  <div className="flex-grow">
-                    <p className="text-[17px] font-black text-slate-900 tracking-wider">
-                      {maskIban(selectedBank?.iban)}
-                    </p>
-                    <p className="text-[11px] font-bold text-[#6D28D9] mt-1.5 lowercase">
-                      {selectedBank?.nome_banco}
-                    </p>
-                  </div>
-                </div>
-              </div>
-            ) : null}
-          </div>
-
-          {banks.length > 0 ? (
-            <button
-              onClick={handleConfirmWithdraw}
-              className="w-full h-11 bg-[#6D28D9] text-white rounded-xl text-[14px] font-bold mt-10 active:scale-[0.98] transition-all shadow-lg shadow-purple-900/10 lowercase"
-            >
-              confirmar levantamento
-            </button>
-          ) : (
-            <button
+          <div className="space-y-1">
+            <label className="text-gray-900 text-[12.5px] font-normal lowercase">Seleccionar o cartão bancário</label>
+            <button 
               onClick={() => navigate('/adicionar-banco')}
-              className="w-full h-11 bg-[#6D28D9] text-white rounded-xl text-[14px] font-bold mt-10 active:scale-[0.98] transition-all shadow-lg shadow-purple-900/10 lowercase"
+              className="w-full flex items-center justify-between border-b border-gray-100 pb-1 h-auto focus-within:border-[#6D28D9] transition-colors"
             >
-              vincular conta bancária
+              <span className={`text-[12.5px] ${selectedBank ? 'text-gray-900 font-normal' : 'text-gray-300 font-normal'}`}>
+                {selectedBank ? `${selectedBank.nome_banco} (${selectedBank.iban.slice(-4)})` : 'Seleccionar o cartão bancário'}
+              </span>
+              <ChevronRight className="h-4 w-4 text-gray-300" />
             </button>
-          )}
+          </div>
+
+          <div className="space-y-1">
+            <label className="text-gray-900 text-[12.5px] font-normal lowercase">Código PIN</label>
+            <div className="flex items-center border-b border-gray-100 pb-1 focus-within:border-[#6D28D9] transition-colors">
+              <input
+                className="flex-1 bg-transparent border-none focus:ring-0 p-0 text-[12.5px] font-normal text-gray-900 placeholder:text-gray-200"
+                placeholder="Insira o PIN"
+                type={showPin ? "text" : "password"}
+                value={pin}
+                onChange={(e) => setPin(e.target.value)}
+              />
+              <button title="ver senha" onClick={() => setShowPin(!showPin)} className="px-1 text-gray-300">
+                {showPin ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
+              </button>
+            </div>
+          </div>
+
+          <button 
+            onClick={() => navigate('/adicionar-banco')}
+            className="w-full flex flex-col items-start h-auto pt-0.5"
+          >
+            <span className="text-gray-900 text-[12.5px] font-normal lowercase">Gerir cartões bancários</span>
+            <span className="text-gray-400 text-[10.5px] lowercase font-normal leading-tight">Carregue para gerir cartões bancários</span>
+          </button>
+        </section>
+
+        <div className="pt-1">
+          <button
+            onClick={handleConfirmWithdraw}
+            className="w-full h-11 bg-[#6D28D9] text-white rounded-full text-[12.5px] font-bold active:scale-[0.98] transition-all shadow shadow-[#6D28D9]/10"
+          >
+            enviar
+          </button>
         </div>
 
-        <section className="mt-8 px-1 pb-10">
-          <h4 className="text-red-500 font-black text-[13px] uppercase tracking-tighter mb-2 pl-0.5 lowercase">diretrizes de levantamento</h4>
-          <div className="space-y-1.5 text-[10px] text-slate-400 leading-normal lowercase">
-            <p>1. pedidos de levantamento são processados de <strong className="text-slate-500">segunda a sexta-feira</strong>.</p>
-            <p>2. o tempo de processamento institucional é de até <strong className="text-slate-500">24 horas</strong> úteis.</p>
-            <p>3. valor <strong className="text-slate-500">mínimo: 1.000 kz</strong> | <strong className="text-slate-500">máximo: 100.000 kz</strong> por operação.</p>
-            <p>4. uma <strong className="text-slate-500">taxa administrativa de 14%</strong> é aplicada sobre o valor bruto solicitado.</p>
-            <p className="bg-red-50/50 text-red-500 p-2 rounded-xl mt-2 border border-red-100/50">
-              5. certifique-se de que o <strong className="text-red-700">iban e o nome do titular</strong> estão corretos para evitar falhas irreversíveis.
-            </p>
-          </div>
+        <section className="px-4 py-1 text-gray-400 text-[10.5px] space-y-1 leading-normal lowercase">
+          <p className="font-bold text-gray-900 text-[11px] mb-0.5">Precauções</p>
+          <p>· montante mínimo de levantamento: {fmt(minWithdrawal).replace(',00', '')} AOA</p>
+          <p>· montante máximo de levantamento: {fmt(maxWithdrawal).replace(',00', '')} AOA</p>
+          <p>· Taxa de manuseamento administrativa: {taxRate * 100}%</p>
+          <p>· Volume máximo diário de extração: 1 vez</p>
         </section>
       </main>
 
       <AnimatePresence>
         {feedback && (
           <motion.div
-            initial={{ opacity: 0, scale: 0.9 }}
-            animate={{ opacity: 1, scale: 1 }}
-            exit={{ opacity: 0, scale: 0.9 }}
-            className={`fixed inset-0 m-auto w-fit h-fit min-w-[260px] ${feedback.type === 'error' ? 'bg-red-600/90' : 'bg-[#6D28D9]/90'} backdrop-blur-sm text-white px-5 py-3 rounded-xl text-[12.5px] font-bold z-[500] text-center max-w-[85vw] whitespace-normal break-words shadow-2xl shadow-black/20`}
+            initial={{ opacity: 0, y: 30 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: 30 }}
+            className={`fixed bottom-24 left-4 right-4 ${
+              feedback.type === 'error' ? 'bg-red-500' : 'bg-green-500'
+            } text-white px-6 py-4 rounded-xl text-[12.5px] font-bold text-center shadow-xl z-[1000]`}
           >
             {feedback.message}
           </motion.div>

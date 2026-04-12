@@ -111,7 +111,7 @@ export default function ChangePassword() {
         <section className="bg-white rounded-xl  p-6 mt-2">
           <form onSubmit={handleSubmit} className="space-y-6">
             {/* Input: Senha Antiga */}
-            <div className="relative border-b-[1.5px] border-[#0000b3] pb-2">
+            <div className="relative border-b-[1.5px] border-[#6D28D9] pb-2">
               <input
                 value={oldPassword}
                 onChange={(e) => setOldPassword(e.target.value.replace(/[^\p{L}\p{N}]/gu, ''))}
@@ -131,7 +131,7 @@ export default function ChangePassword() {
             </div>
 
             {/* Input: Nova Senha */}
-            <div className="relative border-b-[1.5px] border-[#0000b3] pb-2">
+            <div className="relative border-b-[1.5px] border-[#6D28D9] pb-2">
               <input
                 value={newPassword}
                 onChange={(e) => setNewPassword(e.target.value.replace(/[^\p{L}\p{N}]/gu, ''))}
@@ -151,7 +151,7 @@ export default function ChangePassword() {
             </div>
 
             {/* Input: Confirme sua senha */}
-            <div className="relative border-b-[1.5px] border-[#0000b3] pb-2">
+            <div className="relative border-b-[1.5px] border-[#6D28D9] pb-2">
               <input
                 value={confirmPassword}
                 onChange={(e) => setConfirmPassword(e.target.value.replace(/[^\p{L}\p{N}]/gu, ''))}
