@@ -85,7 +85,7 @@ export default function Profile() {
     { name: 'equipe', icon: Users, colorClass: 'blue', path: '/equipe' },
     { name: 'serviço', icon: Headset, colorClass: 'orange', path: 'support' },
     { name: 'Partilha', icon: Share2, colorClass: 'red', path: '/convidar' },
-    { name: 'terraço', icon: LayoutDashboard, colorClass: 'orange', path: '/fundos' },
+    { name: 'terraço', icon: LayoutDashboard, colorClass: 'orange', path: '/terraco' },
     { name: 'ajuda', icon: HelpCircle, colorClass: 'coral', path: '/central-de-ajuda' },
     { name: 'anúncio', icon: Bell, colorClass: 'blue', path: '#' },
     { name: 'download', icon: Download, colorClass: 'yellow', path: 'install' },

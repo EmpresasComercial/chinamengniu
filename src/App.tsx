@@ -31,7 +31,8 @@ const Invite = React.lazy(() => import('./pages/Invite'));
 const AddBank = React.lazy(() => import('./pages/AddBank'));
 const RechargeUSDT = React.lazy(() => import('./pages/RechargeUSDT'));
 const Fundos = React.lazy(() => import('./pages/Fundos'));
-
+const Terraco = React.lazy(() => import('./pages/Terraco'));
+const Resgate = React.lazy(() => import('./pages/Resgate'));
 
 /**
  * PublicOnlyRoute
@@ -101,9 +102,11 @@ export default function App() {
                 </Route>
 
                 {/* Rotas sem Layout (ecrã completo) */}
+                <Route path="/terraco" element={<Terraco />} />
                 <Route path="/equipe" element={<Team />} />
-                <Route path="/recarregar" element={<RechargeList />} />
+                <Route path="/selecionar-banco" element={<RechargeList />} />
                 <Route path="/detalhes-pagamento" element={<RechargeDetail />} />
+                <Route path="/resgate" element={<Resgate />} />
                 <Route path="/detalhes" element={<FinancialRecords />} />
                 <Route path="/centro-de-seguranca" element={<SecurityCenter />} />
                 <Route path="/alterar-a-senha" element={<ChangePassword />} />

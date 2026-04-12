@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import { 
   Wallet, ArrowDownRight, ArrowUpRight, 
-  ArrowRightLeft, BadgeDollarSign, ChevronRight
+  ArrowRightLeft, BadgeDollarSign, ChevronRight, Gift
 } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../contexts/AuthContext';
@@ -75,10 +75,10 @@ export default function Fundos() {
       <section className="px-4 mb-10">
         <div className="grid grid-cols-4 gap-3">
           {[
-            { label: 'recarregar', icon: Wallet, path: '/recarregar' },
+            { label: 'recarregar', icon: Wallet, path: '/selecionar-banco' },
             { label: 'extrair', icon: ArrowUpRight, path: '/retirar' },
-            { label: 'conversões', icon: ArrowRightLeft, path: '/transferir-fundo' },
-            { label: 'usdt recarga', icon: BadgeDollarSign, path: '/recharge-usdt' },
+            { label: 'conversões', icon: ArrowRightLeft, path: '/transferencia-de-fundos' },
+            { label: 'prémio', icon: Gift, path: '/resgate' },
           ].map((item, idx) => (
             <button 
               key={idx}

@@ -46,8 +46,8 @@ export default function Withdraw() {
   };
 
   const taxRate = 0.14;
-  const minWithdrawal = 1000;
-  const maxWithdrawal = 100000;
+  const minWithdrawal = 9000;
+  const maxWithdrawal = 1000000;
   const balance = parseFloat(profile?.balance || '0');
   const numericAmount = parseFloat(amountInput) || 0;
 

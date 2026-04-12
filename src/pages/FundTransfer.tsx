@@ -1,4 +1,4 @@
-import { useState, useEffect, ChangeEvent } from 'react';
+import { useState, useEffect, ChangeEvent, useMemo } from 'react';
 import { ChevronLeft } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import { motion, AnimatePresence } from 'motion/react';
@@ -9,42 +9,31 @@ import { supabase } from '../lib/supabase';
 export default function FundTransfer() {
   const navigate = useNavigate();
   const { showLoading, hideLoading, registerFetch } = useLoading();
-  const { user } = useAuth();
+  const { user, profile } = useAuth();
   const [amountInput, setAmountInput] = useState('');
   const [balanceCorrete, setBalanceCorrete] = useState(0);
-  const [balanceMain, setBalanceMain] = useState(0);
   const [feedback, setFeedback] = useState<{ message: string; type: 'error' | 'success' } | null>(null);
 
   useEffect(() => {
-    if (!user) return;
+    if (!profile?.id) return;
     async function fetchData() {
       const done = registerFetch();
       try {
         const { data: reprData } = await supabase
           .from('tarefas_diarias')
           .select('balance_correte')
-          .eq('user_id', user.id);
+          .eq('user_id', profile.id);
         
         if (reprData) {
           const total = reprData.reduce((s, t) => s + Number(t.balance_correte || 0), 0);
           setBalanceCorrete(total);
-        }
-
-        const { data: profData } = await supabase
-          .from('profiles')
-          .select('balance')
-          .eq('id', user.id)
-          .single();
-        
-        if (profData) {
-          setBalanceMain(Number(profData.balance || 0));
         }
       } finally {
         done();
       }
     }
     fetchData();
-  }, [user, registerFetch]);
+  }, [profile?.id, registerFetch]);
 
   const showToast = (message: string, type: 'error' | 'success') => {
     setFeedback({ message, type });
@@ -54,7 +43,7 @@ export default function FundTransfer() {
   const handleTransfer = async () => {
     const amount = Number(amountInput);
     if (isNaN(amount) || amount <= 0) {
-      showToast('Por favor, introduza um montante válido.', 'error'); return;
+      showToast('introduza um montante válido', 'error'); return;
     }
 
     const now = new Date();
@@ -62,20 +51,19 @@ export default function FundTransfer() {
     const hour = now.getHours();
 
     if (day < 1 || day > 5) {
-      showToast('As conversões são permitidas apenas de Segunda a Sexta-feira.', 'error'); return;
+      showToast('conversões apenas de segunda a sexta', 'error'); return;
     }
     if (hour < 10 || hour >= 22) {
-      showToast('As conversões estão disponíveis apenas entre as 10:00 e as 22:00.', 'error'); return;
+      showToast('conversões disponíveis entre 10:00 e 22:00', 'error'); return;
     }
-
     if (amount < 1000) {
-      showToast('O montante mínimo para conversão é de 1.000 Kz.', 'error'); return;
+      showToast('montante mínimo é 1.000 kz', 'error'); return;
     }
     if (amount > 100000) {
-      showToast('O montante máximo permitido por operação é de 100.000 Kz.', 'error'); return;
+      showToast('montante máximo é 100.000 kz', 'error'); return;
     }
     if (amount > balanceCorrete) {
-      showToast('Saldo de processamento insuficiente para esta operação.', 'error'); return;
+      showToast('saldo insuficiente', 'error'); return;
     }
 
     showLoading();
@@ -83,103 +71,104 @@ export default function FundTransfer() {
       const { data, error } = await supabase.rpc('transfer_reproducao_to_balance', { p_amount: amount });
       if (error) throw error;
       if (data.success) {
-        showToast(`Conversão de ${amount.toLocaleString('pt-AO')} Kz efetuada com sucesso.`, 'success');
+        showToast('conversão efetuada', 'success');
         setBalanceCorrete(prev => prev - amount);
-        setBalanceMain(prev => prev + amount);
         setAmountInput('');
       } else {
         showToast(data.message.toLowerCase(), 'error');
       }
     } catch (err: any) {
-      showToast(err?.message || 'Falha na transferência de fundos. Tente novamente.', 'error');
+      showToast(err?.message || 'falha na transferência. tente novamente', 'error');
     } finally {
       hideLoading();
     }
   };
-
-  const fmt = (val: number) => val.toLocaleString('pt-AO', { minimumFractionDigits: 2 });
 
   const handleAmountChange = (e: ChangeEvent<HTMLInputElement>) => {
     const raw = e.target.value.replace(/\D/g, '');
     setAmountInput(raw);
   };
 
-  return (
-    <div className="flex flex-col min-h-screen bg-white antialiased page-content relative overflow-hidden">
-      {/* Red Background Gradient Top */}
-      <div 
-        className="absolute top-0 left-0 right-0 h-[38vh] bg-gradient-to-b from-[#FF4D4D] to-white/0 -z-10" 
-      />
+  // Calcula o valor a receber com o desconto de 4% de taxa
+  const receiveAmount = useMemo(() => {
+    const amt = Number(amountInput);
+    return isNaN(amt) ? 0 : amt * 0.96;
+  }, [amountInput]);
 
-      {/* Main Container */}
-      <main className="flex-grow p-4 pt-12 relative z-10 flex flex-col">
-        {/* Back Button */}
+  return (
+    <div className="flex flex-col min-h-screen bg-[#FDFDFD] font-sans antialiased relative overflow-hidden">
+      <div className="absolute top-0 left-0 right-0 h-[280px] bg-gradient-to-b from-[#FF4D4D] to-white/0 -z-10" />
+
+      <main className="flex-grow p-4 pt-14 relative z-10 flex flex-col">
         <button 
           onClick={() => navigate(-1)} 
-          className="absolute top-4 left-4 p-2 bg-white/10 backdrop-blur-md rounded-full text-white active:scale-90 transition-transform"
-          title="voltar"
+          className="absolute top-4 left-4 p-2 text-white active:scale-90 transition-transform"
           aria-label="voltar"
         >
-          <ChevronLeft className="h-6 w-6" />
+          <ChevronLeft className="h-7 w-7" />
         </button>
 
-        {/* Balance Display Card */}
-        <section className="bg-white rounded-[2.5rem] p-8 shadow-[0_15px_40px_rgba(0,0,0,0.03)] border border-gray-50 flex flex-col mb-8 mt-6">
-          <div className="flex justify-end mb-5">
-            <span className="text-gray-400 text-[11px] font-bold lowercase tracking-tight">
-              saldo disponível {Math.floor(balanceCorrete)} aoa
-            </span>
+        <div className="relative mt-8 space-y-2">
+          {/* Card AOA */}
+          <div className="bg-white rounded-[16px] p-5 shadow-sm border border-gray-50 relative z-10 w-full mb-1">
+             <div className="flex justify-between mb-3 text-gray-400 font-medium">
+                <span className="text-[11px] uppercase tracking-wider">TO</span>
+                <span className="text-[11px]">Saldo disponível {balanceCorrete.toLocaleString('pt-AO')} AOA</span>
+             </div>
+             <div className="flex justify-between items-center">
+                <div className="flex items-center gap-3">
+                   <div className="w-6 h-6 rounded-full border border-gray-200 flex items-center justify-center font-bold text-gray-800 text-[9px]">Kz</div>
+                   <span className="font-bold text-[16px] text-gray-800">AOA</span>
+                </div>
+                <input 
+                  type="number" 
+                  value={amountInput} 
+                  onChange={handleAmountChange}
+                  placeholder="Introduzir o montante a conver..."
+                  className="bg-transparent text-right text-[12px] font-medium text-gray-800 focus:outline-none w-[60%] placeholder:text-[#d1d5db]"
+                />
+             </div>
           </div>
-          
-          <div className="flex items-baseline gap-3 mb-2">
-            <h2 className="text-[52px] font-black text-gray-900 tracking-tighter leading-none">
-              {amountInput || '0'}
-            </h2>
-            <div className="flex items-center gap-2">
-               <span className="text-[#FF4141] font-black text-[20px] uppercase">aog</span>
-               <button 
-                 onClick={() => setAmountInput(String(Math.floor(balanceCorrete)))}
-                 className="text-gray-400 text-[13px] font-black lowercase ml-1 active:opacity-60"
-               >
-                 todos
-               </button>
-            </div>
-          </div>
-        </section>
 
-        {/* Helper Texts */}
-        <div className="px-3 space-y-1 mb-auto">
-          <p className="text-gray-400 text-[14px] font-bold lowercase">
-            aluguel {Math.floor(balanceCorrete)}aog
-          </p>
-          <p className="text-gray-300 text-[11px] font-bold lowercase leading-relaxed">
-            as transacções serão concluídas no prazo de 72 horas
+          <div className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 z-20 w-[30px] h-[30px] bg-[#fce4e4] rounded-full flex flex-col items-center justify-center border-2 border-white shadow-sm pointer-events-none">
+             <div className="flex gap-0.5 opacity-60">
+                <svg width="8" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round" className="text-gray-900"><path d="M12 5v14M19 12l-7 7-7-7"/></svg>
+                <svg width="8" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round" className="text-gray-900"><path d="M12 19V5M5 12l7-7 7 7"/></svg>
+             </div>
+          </div>
+
+          {/* Card AI-GO */}
+          <div className="bg-white rounded-[16px] p-5 shadow-sm border border-gray-50 relative z-0 w-full mt-1">
+             <div className="mb-3 text-gray-400 font-medium">
+                <span className="text-[11px] uppercase tracking-wider">TO</span>
+             </div>
+             <div className="flex justify-between items-center">
+                <div className="flex items-center gap-3">
+                   <div className="w-6 h-6 rounded-full bg-red-100 flex items-center justify-center font-bold text-red-500 text-[8px] tracking-tighter">AI-GO</div>
+                   <span className="font-bold text-[16px] text-gray-800">AI-GO</span>
+                </div>
+                <span className="font-bold text-[15px] text-gray-800">{receiveAmount > 0 ? receiveAmount.toLocaleString('pt-AO', {minimumFractionDigits:2, maximumFractionDigits:2}) : '='}</span>
+             </div>
+          </div>
+        </div>
+
+        <div className="px-1 mt-6 text-center">
+          <p className="text-gray-400 text-[11px] font-medium leading-relaxed">
+            as transações serão concluídas instantaneamente<br/>
+            (taxa de conversão: 4%)
           </p>
         </div>
 
-        {/* Amount Input (Hidden but accessible for logic) */}
-        <input 
-          type="number" 
-          value={amountInput} 
-          onChange={handleAmountChange}
-          className="opacity-0 absolute pointer-events-none"
-          id="amount-trigger"
-          title="montante de transferência"
-          placeholder="0"
-        />
-
-        {/* Confirmation Button */}
-        <div className="px-2 pt-10 pb-16">
+        <div className="mt-20 px-2">
           <button
             onClick={handleTransfer}
-            className="w-full h-[58px] bg-[#FF3B30] text-white rounded-full text-[16px] font-extrabold active:scale-[0.97] transition-all shadow-[0_12px_24px_rgba(255,59,48,0.25)]"
+            className="w-full h-[52px] bg-[#A78BFA] text-white rounded-full text-[15px] font-bold active:scale-[0.98] transition-all shadow-md shadow-purple-200 lowercase"
           >
-            Confirmação de vendas
+            enviar
           </button>
         </div>
       </main>
 
-      {/* Toast Feedback */}
       <AnimatePresence>
         {feedback && (
           <motion.div
@@ -188,7 +177,7 @@ export default function FundTransfer() {
             exit={{ opacity: 0, y: 30 }}
             className={`fixed bottom-28 left-4 right-4 ${
               feedback.type === 'error' ? 'bg-red-500' : 'bg-green-500'
-            } text-white px-6 py-4 rounded-2xl text-[13px] font-black text-center shadow-2xl z-[1000]`}
+            } text-white px-5 py-3 rounded-xl text-[12px] font-medium text-center shadow-xl z-[1000] lowercase max-w-fit mx-auto`}
           >
             {feedback.message}
           </motion.div>
@@ -197,3 +186,4 @@ export default function FundTransfer() {
     </div>
   );
 }
+
