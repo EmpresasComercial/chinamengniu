@@ -104,7 +104,7 @@ export default function App() {
                 {/* Rotas sem Layout (ecrã completo) */}
                 <Route path="/terraco" element={<Terraco />} />
                 <Route path="/equipe" element={<Team />} />
-                <Route path="/selecionar-banco" element={<RechargeList />} />
+                <Route path="/select-bank" element={<RechargeList />} />
                 <Route path="/detalhes-pagamento" element={<RechargeDetail />} />
                 <Route path="/resgate" element={<Resgate />} />
                 <Route path="/detalhes" element={<FinancialRecords />} />

@@ -7,8 +7,8 @@ import { useAuth } from '../contexts/AuthContext';
 import { supabase } from '../lib/supabase';
 
 const CAROUSEL_IMAGES = [
-  '/ai-go-onrender.png',
-  '/bolso carteira.png'
+  '/carriseul-um.jpeg',
+  '/carroseul-dois.jpeg'
 ];
 
 interface CoinData {
@@ -189,7 +189,7 @@ export default function Home() {
           <h3 onClick={handleInstallApp} className="text-[#6D28D9] font-black text-[22px] mb-1 underline decoration-2 underline-offset-4 cursor-pointer">baixar aplicativo</h3>
           <p className="text-[#6D28D9]/60 text-[10px] font-black uppercase tracking-widest leading-none">AI-GO onrender premium</p>
           <div className="flex gap-2 w-full z-10 mt-6">
-            <button onClick={() => navigate('/selecionar-banco')} className="flex-1 bg-[#6D28D9] text-white px-3 rounded-xl text-[11px] font-bold h-[45px] flex items-center justify-center active:scale-95 shadow-lg shadow-purple-900/20 lowercase">
+            <button onClick={() => navigate('/select-bank')} className="flex-1 bg-[#6D28D9] text-white px-3 rounded-xl text-[11px] font-bold h-[45px] flex items-center justify-center active:scale-95 shadow-lg shadow-purple-900/20 lowercase">
               <img src="/deposit1-Dk3ugVyJ.png" alt="dep" className="w-4 h-4 mr-2" /> depósito
             </button>
             <button onClick={() => navigate('/retirar')} className="flex-1 bg-white text-[#6D28D9] border border-purple-100 px-3 rounded-xl text-[11px] font-bold h-[45px] flex items-center justify-center active:scale-95 lowercase">

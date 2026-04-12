@@ -75,7 +75,7 @@ export default function Fundos() {
       <section className="px-4 mb-10">
         <div className="grid grid-cols-4 gap-3">
           {[
-            { label: 'recarregar', icon: Wallet, path: '/selecionar-banco' },
+            { label: 'recarregar', icon: Wallet, path: '/select-bank' },
             { label: 'extrair', icon: ArrowUpRight, path: '/retirar' },
             { label: 'conversões', icon: ArrowRightLeft, path: '/transferencia-de-fundos' },
             { label: 'prémio', icon: Gift, path: '/resgate' },
