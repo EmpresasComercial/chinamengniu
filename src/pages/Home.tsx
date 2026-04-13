@@ -21,7 +21,7 @@ interface CoinData {
   basePrice: number;
 }
 
-const CoinRow = ({ coin, isLast }: { coin: CoinData, isLast: boolean }) => {
+const CoinRow: React.FC<{ coin: CoinData; isLast: boolean }> = ({ coin, isLast }) => {
   const prevPrice = useRef(coin.price);
   const [flash, setFlash] = useState<'up' | 'down' | null>(null);
 
