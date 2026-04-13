@@ -39,9 +39,9 @@ const CoinRow: React.FC<{ coin: CoinData; isLast: boolean }> = ({ coin, isLast }
   }, [coin.price]);
 
   return (
-    <div className={`flex items-center justify-between p-4 ${!isLast ? 'border-b border-gray-50' : ''} active:bg-gray-50 transition-colors`}>
-      <div className="flex items-center gap-3">
-        <div className="w-11 h-11 rounded-full flex items-center justify-center p-0.5 bg-gray-50 border border-gray-100 shadow-sm">
+    <div className={`flex items-center justify-between p-2.5 ${!isLast ? 'border-b border-gray-50' : ''} active:bg-gray-50 transition-colors`}>
+      <div className="flex items-center gap-2.5">
+        <div className="w-9 h-9 rounded-full flex items-center justify-center p-0.5 bg-gray-50 border border-gray-100 shadow-sm">
           <img 
             src={`https://static.okx.com/cdn/oksupport/asset/currency/icon/${coin.name.toLowerCase()}.png`} 
             alt={coin.name}
@@ -51,25 +51,25 @@ const CoinRow: React.FC<{ coin: CoinData; isLast: boolean }> = ({ coin, isLast }
         </div>
         <div className="flex flex-col">
           <div className="flex items-center gap-1">
-            <span className="text-[15px] font-black text-gray-900 leading-none">{coin.name}</span>
-            <span className="text-[11px] font-bold text-gray-400 opacity-60">/{coin.symbol}</span>
+            <span className="text-[14px] font-black text-gray-900 leading-none">{coin.name}</span>
+            <span className="text-[10px] font-bold text-gray-400 opacity-60">/{coin.symbol}</span>
           </div>
         </div>
       </div>
 
-      <div className="flex items-center justify-between flex-1 pl-10">
+      <div className="flex items-center justify-end gap-3 flex-1 min-w-0">
         <motion.span 
           animate={{ 
             color: flash === 'up' ? '#22c55e' : flash === 'down' ? '#ef4444' : '#111827',
             scale: flash ? 1.05 : 1
           }}
-          className="text-[16px] font-black tracking-tight transition-colors duration-300"
+          className="text-[14px] font-black tracking-tight transition-colors duration-300 whitespace-nowrap"
         >
           {coin.price > 100 ? coin.price.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 }) : coin.price.toFixed(4)}
         </motion.span>
         
-        <div className={`min-w-[85px] h-[32px] rounded-xl flex items-center justify-center px-2 shadow-sm transition-all duration-500 ${coin.isPositive ? 'bg-[#22c55e]' : 'bg-[#ef4444]'}`}>
-          <span className="text-white text-[12px] font-black">{coin.change}</span>
+        <div className={`min-w-[65px] h-[26px] rounded-lg flex items-center justify-center px-2 shadow-sm transition-all duration-500 ${coin.isPositive ? 'bg-[#22c55e]' : 'bg-[#ef4444]'}`}>
+          <span className="text-white text-[11px] font-black whitespace-nowrap">{coin.change}</span>
         </div>
       </div>
     </div>
