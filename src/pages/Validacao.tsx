@@ -197,10 +197,10 @@ export default function Validacao() {
                 {['front', 'back'].map((side) => (
                    <div key={side} className="flex flex-col items-center gap-3">
                       <p className="text-[11px] text-gray-400 font-bold lowercase tracking-wider">{side === 'front' ? 'frente do bilhete' : 'verso do bilhete'}</p>
-                      <div className={`w-full aspect-[1.6/1] bg-gray-50 rounded-2xl overflow-hidden border border-gray-100 shadow-inner relative transition-all duration-1000 ${isObfuscated ? 'blur-2xl scale-95 opacity-40' : 'scale-105'}`}>
+                      <div className={`w-full aspect-[1.6/1] bg-gray-50/50 rounded-2xl overflow-hidden border border-gray-100 relative transition-all duration-1000 ${isObfuscated ? 'blur-2xl scale-95 opacity-40' : 'scale-100'}`}>
                          <img 
                             src={side === 'front' ? frontPreview! : backPreview!} 
-                            className="w-full h-full object-cover" 
+                            className="w-full h-full object-contain p-1" 
                             alt="documento validado"
                          />
                          {isObfuscated && (
