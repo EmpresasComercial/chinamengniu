@@ -231,13 +231,13 @@ export default function Home() {
       </header>
 
       {/* ⚪ Feature Grid */}
-      <section className="mx-4 -mt-12 z-10 bg-white rounded-xl p-6 shadow-xl shadow-gray-200/50 border border-slate-50">
+      <section className="mx-4 -mt-12 z-10 bg-white rounded-xl px-4 py-6 shadow-xl shadow-gray-200/50 border border-slate-50">
         <div className="grid grid-cols-3 gap-2 text-center mb-8">
           <div onClick={() => navigate('/apresentacao-da-empresa')} className="flex flex-col items-center">
             <div className="w-[52px] h-[52px] bg-purple-50 rounded-xl flex items-center justify-center mb-2">
               <img src="/coin-DnOWIML3.png" alt="icon" className="w-8 h-8 object-contain" />
             </div>
-            <span className="text-[12px] font-bold text-slate-800 leading-tight">apresentação<br />institucional</span>
+            <span className="text-[12px] font-bold text-slate-800 leading-tight lowercase">apresentação<br />institucional</span>
           </div>
           <div onClick={() => navigate('/equipe')} className="flex flex-col items-center">
             <div className="w-[52px] h-[52px] bg-purple-50 rounded-xl flex items-center justify-center mb-2">
@@ -258,10 +258,10 @@ export default function Home() {
           <p className="text-[#6D28D9]/60 text-[10px] font-black uppercase tracking-widest leading-none">AI-GO onrender premium</p>
           <div className="flex gap-2 w-full z-10 mt-6">
             <button onClick={() => navigate('/select-bank')} className="flex-1 bg-[#6D28D9] text-white px-3 rounded-xl text-[11px] font-bold h-[45px] flex items-center justify-center active:scale-95 shadow-lg shadow-purple-900/20 lowercase">
-              <img src="/deposit1-Dk3ugVyJ.png" alt="dep" className="w-4 h-4 mr-2" /> depósito
+              <img src="/deposit1-Dk3ugVyJ.png" alt="dep" className="w-4 h-4 mr-2" /> recarregar
             </button>
             <button onClick={() => navigate('/retirar')} className="flex-1 bg-white text-[#6D28D9] border border-purple-100 px-3 rounded-xl text-[11px] font-bold h-[45px] flex items-center justify-center active:scale-95 lowercase">
-              <img src="/withdraw1-pLMbG-t2.png" alt="wit" className="w-4 h-4 mr-2" /> levantar
+              <img src="/withdraw1-pLMbG-t2.png" alt="wit" className="w-4 h-4 mr-2" /> extrair fundos
             </button>
           </div>
         </div>
