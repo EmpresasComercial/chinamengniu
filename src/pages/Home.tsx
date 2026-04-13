@@ -231,45 +231,45 @@ export default function Home() {
       </header>
 
       {/* ⚪ Feature Grid */}
-      <section className="mx-4 -mt-12 z-10 bg-white rounded-xl px-4 py-6 shadow-xl shadow-gray-200/50 border border-slate-50">
-        <div className="grid grid-cols-3 gap-2 text-center mb-8">
+      <section className="mx-2.5 -mt-12 z-10 bg-white rounded-2xl px-3 py-6 shadow-xl shadow-purple-900/5 border border-purple-50">
+        <div className="grid grid-cols-3 gap-1 text-center mb-8">
           <div onClick={() => navigate('/apresentacao-da-empresa')} className="flex flex-col items-center">
-            <div className="w-[52px] h-[52px] bg-purple-50 rounded-xl flex items-center justify-center mb-2">
-              <img src="/coin-DnOWIML3.png" alt="icon" className="w-8 h-8 object-contain" />
+            <div className="w-[48px] h-[48px] bg-purple-50 rounded-xl flex items-center justify-center mb-1.5 transition-transform active:scale-90">
+              <img src="/coin-DnOWIML3.png" alt="icon" className="w-7 h-7 object-contain" />
             </div>
-            <span className="text-[12px] font-bold text-slate-800 leading-tight lowercase">apresentação<br />institucional</span>
+            <span className="text-[11px] font-bold text-slate-800 leading-tight lowercase">apresentação<br />institucional</span>
           </div>
           <div onClick={() => navigate('/equipe')} className="flex flex-col items-center">
-            <div className="w-[52px] h-[52px] bg-purple-50 rounded-xl flex items-center justify-center mb-2">
-              <Users className="w-6 h-6 text-[#6D28D9]" />
+            <div className="w-[48px] h-[48px] bg-purple-50 rounded-xl flex items-center justify-center mb-1.5 transition-transform active:scale-90">
+              <Users className="w-5 h-5 text-[#6D28D9]" />
             </div>
-            <span className="text-[12px] font-bold text-slate-800 lowercase">equipe</span>
+            <span className="text-[11px] font-bold text-slate-800 lowercase">equipe</span>
           </div>
           <div onClick={() => navigate('/central-de-ajuda')} className="flex flex-col items-center">
-            <div className="w-[52px] h-[52px] bg-purple-50 rounded-xl flex items-center justify-center mb-2">
-              <TrendingUp className="w-6 h-6 text-[#6D28D9]" />
+            <div className="w-[48px] h-[48px] bg-purple-50 rounded-xl flex items-center justify-center mb-1.5 transition-transform active:scale-90">
+              <TrendingUp className="w-5 h-5 text-[#6D28D9]" />
             </div>
-            <span className="text-[12px] font-bold text-slate-800 lowercase">suporte</span>
+            <span className="text-[11px] font-bold text-slate-800 lowercase">suporte</span>
           </div>
         </div>
 
-        <div className="bg-gradient-to-br from-purple-50 to-indigo-50 rounded-2xl p-5 relative overflow-hidden">
-          <h3 onClick={handleInstallApp} className="text-[#6D28D9] font-black text-[22px] mb-1 underline decoration-2 underline-offset-4 cursor-pointer">baixar aplicativo</h3>
-          <p className="text-[#6D28D9]/60 text-[10px] font-black uppercase tracking-widest leading-none">AI-GO onrender premium</p>
-          <div className="flex gap-2 w-full z-10 mt-6">
-            <button onClick={() => navigate('/select-bank')} className="flex-1 bg-[#6D28D9] text-white px-3 rounded-xl text-[11px] font-bold h-[45px] flex items-center justify-center active:scale-95 shadow-lg shadow-purple-900/20 lowercase">
-              <img src="/deposit1-Dk3ugVyJ.png" alt="dep" className="w-4 h-4 mr-2" /> recarregar
+        <div className="bg-gradient-to-br from-purple-50/50 to-indigo-50/50 rounded-2xl p-5 relative overflow-hidden border border-purple-100/30">
+          <h3 onClick={handleInstallApp} className="text-[#6D28D9] font-black text-[21px] mb-1 cursor-pointer active:opacity-70 transition-opacity">baixar aplicativo</h3>
+          <p className="text-[#6D28D9]/40 text-[9px] font-black uppercase tracking-widest leading-none mb-6">AI-GO onrender premium</p>
+          <div className="flex gap-2.5 w-full z-10">
+            <button onClick={() => navigate('/select-bank')} className="flex-1 bg-[#6D28D9] text-white px-3 rounded-xl text-[11px] font-bold h-[45px] flex items-center justify-center active:scale-95 shadow-lg shadow-purple-900/20 lowercase gap-2">
+              <img src="/deposit1-Dk3ugVyJ.png" alt="dep" className="w-4 h-4" /> recarregar
             </button>
-            <button onClick={() => navigate('/retirar')} className="flex-1 bg-white text-[#6D28D9] border border-purple-100 px-3 rounded-xl text-[11px] font-bold h-[45px] flex items-center justify-center active:scale-95 lowercase">
-              <img src="/withdraw1-pLMbG-t2.png" alt="wit" className="w-4 h-4 mr-2" /> extrair fundos
+            <button onClick={() => navigate('/retirar')} className="flex-1 bg-white text-[#6D28D9] border border-purple-100 px-3 rounded-xl text-[11px] font-bold h-[45px] flex items-center justify-center active:scale-95 lowercase gap-2">
+              <img src="/withdraw1-pLMbG-t2.png" alt="wit" className="w-4 h-4" /> extrair fundos
             </button>
           </div>
         </div>
       </section>
 
       {/* 🖼 Carousel */}
-      <section className="mt-4 px-4">
-        <div className="rounded-2xl overflow-hidden bg-gray-100 aspect-[21/9] relative shadow-lg">
+      <section className="mt-5 px-2.5">
+        <div className="rounded-2xl overflow-hidden bg-gray-100 aspect-[21/9] relative shadow-lg border border-gray-100">
           <AnimatePresence mode="wait">
              <motion.img
                 key={currentSlide}
