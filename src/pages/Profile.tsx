@@ -95,7 +95,7 @@ export default function Profile() {
     { name: 'senha', icon: Lock, colorClass: 'orange', path: '/alterar-senha' },
     { name: 'banco', icon: CreditCard, colorClass: 'blue', path: '/adicionar-banco' },
     { name: 'validar', icon: UserCheck, colorClass: 'orange', path: '/validar' },
-    { name: 'contrato', icon: FileText, colorClass: 'coral', path: '#' },
+    { name: 'contrato', icon: FileText, colorClass: 'coral', path: '/contrato' },
   ];
 
   return (
