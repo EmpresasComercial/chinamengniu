@@ -64,14 +64,21 @@ export default function Profile() {
         deferredPrompt.prompt();
         const { outcome } = await deferredPrompt.userChoice;
         if (outcome === 'accepted') {
-          setProfileNotification('app instalado com sucesso!');
-          setTimeout(() => setProfileNotification(null), 2500);
+          setProfileNotification('instalação iniciada com sucesso!');
         }
         setDeferredPrompt(null);
-      } catch (err) {}
+      } catch (err) {
+        setProfileNotification('erro ao tentar instalar. tente pelo menu do navegador.');
+      }
     } else {
-      setProfileNotification('o aplicativo já está instalado ou não suportado.');
-      setTimeout(() => setProfileNotification(null), 2500);
+      // Fallback para quando o evento não foi capturado (iOS ou já instalado)
+      const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent) && !(window as any).MSStream;
+      if (isIOS) {
+        setProfileNotification('no ios: clique em "compartilhar" e depois em "adicionar à tela de início".');
+      } else {
+        setProfileNotification('o aplicativo já está instalado ou use o menu do navegador para instalar.');
+      }
+      setTimeout(() => setProfileNotification(null), 5000);
     }
   }, [deferredPrompt]);
 
