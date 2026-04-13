@@ -3,7 +3,7 @@ import { ChevronLeft, FileText, Download, Printer } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import { contract_data } from '../data/contract_data';
 // @ts-ignore
-import html2pdf from 'html2pdf.js';
+import html2pdf from 'html2pdf.js/dist/html2pdf.min.js';
 
 export default function Contrato() {
   const navigate = useNavigate();
