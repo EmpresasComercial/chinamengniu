@@ -101,7 +101,7 @@ export default function ChangePassword() {
             <ChevronLeft className="h-5 w-5" />
           </button>
           <h1 className="flex-grow text-center text-white text-[15px] font-bold mr-5">
-            alterar a senha
+            alterar senha
           </h1>
         </div>
       </header>
@@ -176,7 +176,7 @@ export default function ChangePassword() {
                 className="w-full h-[45px] bg-[#6D28D9] text-white rounded-xl text-[15px] font-normal hover:opacity-90 transition-opacity"
                 type="submit"
               >
-                confirmar
+                enviar
               </button>
             </div>
           </form>

@@ -22,6 +22,7 @@ export default function Withdraw() {
   const [pin, setPin] = useState('');
   const [showPin, setShowPin] = useState(false);
   const [feedback, setFeedback] = useState<{ message: string; type: 'error' | 'success' } | null>(null);
+  const [isVerified, setIsVerified] = useState<boolean | null>(null);
 
   useEffect(() => {
     if (!user) return;
@@ -38,6 +39,16 @@ export default function Withdraw() {
       }
     }
     fetchBanks();
+
+    async function checkVerification() {
+      try {
+        const { data } = await supabase.rpc('get_user_verification');
+        setIsVerified(data?.status === 'verificado');
+      } catch {
+        setIsVerified(false);
+      }
+    }
+    checkVerification();
   }, [user, registerFetch]);
 
   const showToast = (message: string, type: 'error' | 'success' = 'error') => {
@@ -52,6 +63,12 @@ export default function Withdraw() {
   const numericAmount = parseFloat(amountInput) || 0;
 
   const handleConfirmWithdraw = async () => {
+    if (isVerified === false) {
+      showToast('atenção: a sua conta não está verificada. por favor, valide o seu bi primeiro.');
+      setTimeout(() => navigate('/validar'), 2000);
+      return;
+    }
+
     if (!amountInput || numericAmount < minWithdrawal) {
       showToast(`o saldo mínimo para retirada é de ${minWithdrawal.toLocaleString()} kz.`);
       return;

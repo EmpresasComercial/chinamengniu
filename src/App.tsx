@@ -33,6 +33,7 @@ const RechargeUSDT = React.lazy(() => import('./pages/RechargeUSDT'));
 const Fundos = React.lazy(() => import('./pages/Fundos'));
 const Terraco = React.lazy(() => import('./pages/Terraco'));
 const Resgate = React.lazy(() => import('./pages/Resgate'));
+const Validacao = React.lazy(() => import('./pages/Validacao'));
 
 /**
  * PublicOnlyRoute
@@ -109,10 +110,11 @@ export default function App() {
                 <Route path="/resgate" element={<Resgate />} />
                 <Route path="/detalhes" element={<FinancialRecords />} />
                 <Route path="/centro-de-seguranca" element={<SecurityCenter />} />
-                <Route path="/alterar-a-senha" element={<ChangePassword />} />
+                <Route path="/alterar-senha" element={<ChangePassword />} />
                 <Route path="/retirar" element={<Withdraw />} />
                 <Route path="/projeto-detalhes" element={<ProjetoDetalhes />} />
                 <Route path="/apresentacao-da-empresa" element={<CompanyPresentation />} />
+                <Route path="/validar" element={<Validacao />} />
                 <Route path="/transferencia-de-fundos" element={<FundTransfer />} />
                 <Route path="/central-de-ajuda" element={<HelpCenter />} />
                 <Route path="/ajuda-retirar" element={<WithdrawHelp />} />

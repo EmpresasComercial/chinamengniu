@@ -92,9 +92,9 @@ export default function Profile() {
   ];
 
   const segurancaItems = [
-    { name: 'senha', icon: Lock, colorClass: 'orange', path: '/alterar-a-senha' },
+    { name: 'senha', icon: Lock, colorClass: 'orange', path: '/alterar-senha' },
     { name: 'banco', icon: CreditCard, colorClass: 'blue', path: '/adicionar-banco' },
-    { name: 'validar', icon: UserCheck, colorClass: 'orange', path: '#' },
+    { name: 'validar', icon: UserCheck, colorClass: 'orange', path: '/validar' },
     { name: 'contrato', icon: FileText, colorClass: 'coral', path: '#' },
   ];
 
@@ -190,20 +190,7 @@ export default function Profile() {
         </div>
       </section>
 
-      {/* Logout Button */}
-      <div className="px-6 mt-12">
-        <button
-          onClick={async () => {
-            showLoading();
-            await signOut();
-            hideLoading();
-            navigate('/login');
-          }}
-          className="w-full bg-[#6D28D9] text-white font-bold h-[45px] rounded-xl text-[12.5px] active:scale-[0.98] transition-all shadow-lg shadow-purple-900/10 lowercase"
-        >
-          sair da conta
-        </button>
-      </div>
+
 
       {/* Profile inline toast for feedback */}
       <AnimatePresence>

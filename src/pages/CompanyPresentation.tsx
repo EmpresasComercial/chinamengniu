@@ -11,7 +11,8 @@ export default function CompanyPresentation() {
         <button onClick={() => navigate(-1)} className="p-2 -ml-2 transition-colors hover:text-white/80" title="voltar">
           <ChevronLeft className="w-6 h-6 text-white" />
         </button>
-        <h1 className="text-[17px] font-black text-white lowercase tracking-tight">apresentação corporativa</h1>
+        <h1 className="flex-grow text-center text-[17px] font-black text-white lowercase tracking-tight pr-0">sobre nós</h1>
+        <div className="w-10"></div>
       </header>
 
       <div className="p-4">
@@ -132,6 +133,8 @@ export default function CompanyPresentation() {
               </p>
               <p className="text-slate-600 text-[13px] leading-relaxed lowercase font-medium">
                 a influência da render se estende à comunidade de desenvolvedores, com a empresa sendo citada em publicações especializadas, participando de eventos do setor e aparecendo em rankings de plataformas tecnológicas com crescimento rápido.
+              </p>
+            </section>s do setor e aparecendo em rankings de plataformas tecnológicas com crescimento rápido.
               </p>
             </section>
 

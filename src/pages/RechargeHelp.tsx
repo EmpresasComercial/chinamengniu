@@ -31,7 +31,7 @@ export default function RechargeHelp() {
               1. entre na página de recarga e selecione o método de transferência bancária. você verá os detalhes da conta bancária da empresa para depósito.
             </p>
             <p className="text-[12.5px] leading-[1.6] text-[#333]">
-              2. faça a transferência através do seu aplicativo bancário ou caixa eletrônico (multicaixa). o valor mínimo para recarga é de 9000 kz e o máximo é de 7.000.000,00 kz.
+              2. faça a transferência através do seu aplicativo bancário ou caixa eletrônico (multicaixa). o valor mínimo para recarga é de 9000 kz e o máximo é de 1.000.000,00 kz.
             </p>
             <p className="text-[12.5px] leading-[1.6] text-[#333]">
               3. após efetuar o pagamento, carregue o comprovativo da transferência na plataforma para que possamos validar e creditar o saldo na sua conta. o processamento geralmente leva alguns minutos.
