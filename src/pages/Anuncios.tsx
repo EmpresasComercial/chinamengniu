@@ -66,7 +66,7 @@ export default function Anuncios() {
         >
           <ChevronLeft className="h-6 w-6" />
         </button>
-        <h1 className="flex-1 text-center text-white text-[16px] font-bold lowercase pr-8">meus anúncios</h1>
+        <h1 className="flex-1 text-center text-white text-[16px] font-bold lowercase pr-8">anúncios</h1>
       </header>
 
       <main className="pt-20 px-5 space-y-6">
