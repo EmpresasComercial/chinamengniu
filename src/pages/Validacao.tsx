@@ -216,16 +216,16 @@ export default function Validacao() {
               )}
 
               <div className="grid grid-cols-2 gap-4 w-full">
-                 {['frente', 'verso'].map((side) => (
+                 {['front', 'back'].map((side) => (
                    <div key={side} className="flex flex-col items-center gap-2">
-                    <p className="text-[10px] text-gray-400 font-bold lowercase">{side}</p>
+                    <p className="text-[10px] text-gray-400 font-bold lowercase">{side === 'front' ? 'frente' : 'verso'}</p>
                     <div 
-                        onClick={() => status === 'nenhum' && !(side === 'frente' ? frontPreview : backPreview) && (side === 'frente' ? frontInputRef : backInputRef).current?.click()}
+                        onClick={() => status === 'nenhum' && !(side === 'front' ? frontPreview : backPreview) && (side === 'front' ? frontInputRef : backInputRef).current?.click()}
                         className="w-full aspect-square bg-gray-100/50 rounded-xl border border-dashed border-gray-200 flex items-center justify-center overflow-hidden relative active:scale-95 transition-all"
                     >
-                        {(side === 'frente' ? frontPreview : backPreview) ? (
+                        {(side === 'front' ? frontPreview : backPreview) ? (
                           <>
-                            <img src={side === 'frente' ? frontPreview! : backPreview!} className="w-full h-full object-contain" />
+                            <img src={side === 'front' ? frontPreview! : backPreview!} className="w-full h-full object-contain" />
                             {status === 'nenhum' && (
                               <button onClick={(e) => removeImage(e, side as 'front' | 'back')} className="absolute top-1 right-1 p-0.5 text-red-500">
                                 <X className="w-5 h-5" />
@@ -236,7 +236,7 @@ export default function Validacao() {
                           <Camera className="w-5 h-5 text-gray-300" />
                         )}
                     </div>
-                    <input type="file" ref={side === 'frente' ? frontInputRef : backInputRef} hidden accept="image/*" onChange={(e) => handleImageChange(e, side as 'front' | 'back')} />
+                    <input type="file" ref={side === 'front' ? frontInputRef : backInputRef} hidden accept="image/*" onChange={(e) => handleImageChange(e, side as 'front' | 'back')} />
                    </div>
                  ))}
               </div>
