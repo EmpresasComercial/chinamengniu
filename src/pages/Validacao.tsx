@@ -182,73 +182,31 @@ export default function Validacao() {
       </div>
 
       <main className="px-5 -mt-12 relative z-20 space-y-6">
-        <div className="bg-white rounded-[24px] shadow-sm p-6 border border-gray-100">
-           <div className="flex items-center gap-2 mb-8">
-             <div className="p-1.5 bg-gray-50 rounded-lg">
-                <ShieldCheck className="w-4 h-4 text-gray-500" />
-             </div>
-             <span className="text-[14px] font-bold text-gray-800">Verificado</span>
-           </div>
-
-           <div className="space-y-6">
-              <div className="flex flex-col gap-1 px-2">
-                 <label className="text-[12px] text-gray-400 font-medium">Nome Completo</label>
-                 <input 
-                    type="text"
-                    value={fullName}
-                    onChange={(e) => status === 'nenhum' && setFullName(e.target.value)}
-                    placeholder="digite o seu nome"
-                    readOnly={status !== 'nenhum'}
-                    className="text-[16px] font-bold text-gray-900 bg-transparent focus:outline-none placeholder:text-gray-200 border-none p-0"
-                 />
-              </div>
-
-              <div className="flex flex-col gap-1 px-2">
-                 <label className="text-[12px] text-gray-400 font-medium lowercase">número do certificado</label>
-                 <input 
-                    type="text"
-                    value={biNumber}
-                    maxLength={14}
-                    onChange={(e) => status === 'nenhum' && setBiNumber(e.target.value.toUpperCase())}
-                    placeholder="digite o número do bi"
-                    readOnly={status !== 'nenhum'}
-                    className="text-[16px] font-bold text-gray-900 bg-transparent focus:outline-none placeholder:text-gray-200 border-none p-0"
-                 />
-              </div>
-
-              <div className="flex items-start gap-2 pt-2">
-                 <div className="mt-1 flex items-center justify-center w-2.5 h-2.5 rounded-full border border-gray-400 text-[7px] text-gray-400 font-bold italic">i</div>
-                 <p className="text-[9.5px] text-gray-400 leading-relaxed font-medium">
-                    O nome real é utilizado apenas para determinar se é um utilizador real e para proteger a segurança dos seus fundos.
-                 </p>
-              </div>
-           </div>
-        </div>
-
         {status === 'verificado' ? (
-          <div className="bg-white rounded-[24px] shadow-sm p-8 border border-green-100 flex flex-col items-center text-center space-y-6">
-             <div className="w-16 h-16 bg-green-50 rounded-full flex items-center justify-center border border-green-100">
-                <ShieldCheck className="w-8 h-8 text-green-500" />
+          <div className="bg-white rounded-[32px] shadow-xl p-8 border border-green-50 flex flex-col items-center text-center space-y-8 min-h-[500px] justify-center">
+             <div className="w-20 h-20 bg-green-50 rounded-full flex items-center justify-center border border-green-100 shadow-sm">
+                <ShieldCheck className="w-10 h-10 text-green-500" />
              </div>
              
-             <div className="space-y-1">
-                <h3 className="text-[18px] font-black text-gray-900 lowercase">conta validada com sucesso</h3>
-                <p className="text-[12px] text-gray-400 font-medium lowercase">seus dados foram protegidos e verificados</p>
+             <div className="space-y-2">
+                <h3 className="text-[22px] font-black text-gray-900 lowercase leading-tight">conta validada com sucesso</h3>
+                <p className="text-[13px] text-gray-400 font-medium lowercase px-4">seus dados foram protegidos e verificados pela nossa gerência</p>
              </div>
 
-             <div className="grid grid-cols-2 gap-4 w-full max-w-[280px]">
+             <div className="flex flex-col gap-6 w-full max-w-[320px]">
                 {['front', 'back'].map((side) => (
-                   <div key={side} className="flex flex-col items-center gap-2">
-                      <p className="text-[9px] text-gray-400 font-bold lowercase">{side === 'front' ? 'frente' : 'verso'}</p>
-                      <div className={`w-full aspect-square bg-gray-50 rounded-xl overflow-hidden border border-gray-100 relative transition-all duration-700 ${isObfuscated ? 'blur-xl scale-95 opacity-50' : ''}`}>
+                   <div key={side} className="flex flex-col items-center gap-3">
+                      <p className="text-[11px] text-gray-400 font-bold lowercase tracking-wider">{side === 'front' ? 'frente do bilhete' : 'verso do bilhete'}</p>
+                      <div className={`w-full aspect-[1.6/1] bg-gray-50 rounded-2xl overflow-hidden border border-gray-100 shadow-inner relative transition-all duration-1000 ${isObfuscated ? 'blur-2xl scale-95 opacity-40' : 'scale-105'}`}>
                          <img 
                             src={side === 'front' ? frontPreview! : backPreview!} 
-                            className="w-full h-full object-contain" 
-                            alt="documento"
+                            className="w-full h-full object-cover" 
+                            alt="documento validado"
                          />
                          {isObfuscated && (
-                            <div className="absolute inset-0 flex items-center justify-center bg-black/5">
-                               <Lock className="w-5 h-5 text-gray-400" />
+                            <div className="absolute inset-0 flex flex-col items-center justify-center bg-black/5 gap-2">
+                               <Lock className="w-8 h-8 text-gray-400" />
+                               <span className="text-[10px] text-gray-500 font-bold uppercase tracking-tighter">dados protegidos</span>
                             </div>
                          )}
                       </div>
@@ -256,65 +214,110 @@ export default function Validacao() {
                 ))}
              </div>
 
-             {!isObfuscated && (
-                <div className="flex items-center gap-2 px-4 py-1.5 bg-gray-50 rounded-full">
-                   <div className="w-1.5 h-1.5 bg-green-500 rounded-full animate-pulse"></div>
-                   <span className="text-[10px] font-bold text-gray-500 uppercase">visível por {countdown}s</span>
+             {!isObfuscated ? (
+                <div className="flex items-center gap-2 px-5 py-2 bg-green-50 rounded-full border border-green-100">
+                   <div className="w-2 h-2 bg-green-500 rounded-full animate-ping"></div>
+                   <span className="text-[11px] font-black text-green-700 uppercase tracking-tight">expira em {countdown}s</span>
+                </div>
+             ) : (
+                <div className="pt-4 px-4">
+                  <p className="text-[11px] text-gray-400 leading-relaxed font-medium bg-gray-50 p-4 rounded-2xl border border-dashed border-gray-200">
+                     as informações foram ofuscadas após 30 segundos por questões de segurança e proteção de dados.
+                  </p>
                 </div>
              )}
-
-             <div className="pt-2 px-2">
-                <p className="text-[10px] text-gray-400 leading-relaxed font-medium bg-gray-50 p-3 rounded-xl border border-gray-100">
-                   Só pode visualizar as informações dentro de 30 segundos. Após isso são ofuscadas por questões de segurança.
-                </p>
-             </div>
           </div>
         ) : (
-          <div className="bg-white rounded-[24px] shadow-sm p-6 border border-gray-100 flex flex-col items-center">
-             <div className="flex flex-col items-center gap-6 w-full max-w-[280px]">
-                {status === 'pendente' && (
-                  <div className="w-full bg-orange-50 text-orange-600 py-2 px-4 rounded-xl flex items-center justify-center gap-2 mb-2 text-[12px] font-bold lowercase">
-                    <Clock className="w-4 h-4" /> em análise (72h)
+          <>
+            <div className="bg-white rounded-[24px] shadow-sm p-6 border border-gray-100">
+               <div className="flex items-center gap-2 mb-8">
+                 <div className="p-1.5 bg-gray-50 rounded-lg">
+                    <ShieldCheck className="w-4 h-4 text-gray-500" />
+                 </div>
+                 <span className="text-[14px] font-bold text-gray-800">Verificado</span>
+               </div>
+
+               <div className="space-y-6">
+                  <div className="flex flex-col gap-1 px-2">
+                     <label className="text-[12px] text-gray-400 font-medium">Nome Completo</label>
+                     <input 
+                        type="text"
+                        value={fullName}
+                        onChange={(e) => status === 'nenhum' && setFullName(e.target.value)}
+                        placeholder="digite o seu nome"
+                        readOnly={status !== 'nenhum'}
+                        className="text-[16px] font-bold text-gray-900 bg-transparent focus:outline-none placeholder:text-gray-200 border-none p-0"
+                     />
                   </div>
-                )}
 
-                <div className="grid grid-cols-2 gap-4 w-full">
-                   {['front', 'back'].map((side) => (
-                     <div key={side} className="flex flex-col items-center gap-2">
-                      <p className="text-[10px] text-gray-400 font-bold lowercase">{side === 'front' ? 'frente' : 'verso'}</p>
-                      <div 
-                          onClick={() => status === 'nenhum' && !(side === 'front' ? frontPreview : backPreview) && (side === 'front' ? frontInputRef : backInputRef).current?.click()}
-                          className="w-full aspect-square bg-gray-100/50 rounded-xl border border-dashed border-gray-200 flex items-center justify-center overflow-hidden relative active:scale-95 transition-all"
-                      >
-                          {(side === 'front' ? frontPreview : backPreview) ? (
-                            <>
-                              <img src={side === 'front' ? frontPreview! : backPreview!} className="w-full h-full object-contain" alt={`pré-visualização ${side === 'front' ? 'frente' : 'verso'}`} />
-                              {status === 'nenhum' && (
-                                <button onClick={(e) => removeImage(e, side as 'front' | 'back')} className="absolute top-1 right-1 p-0.5 text-red-500" title="remover imagem">
-                                  <X className="w-5 h-5" />
-                                </button>
-                              )}
-                            </>
-                          ) : (
-                            <Camera className="w-5 h-5 text-gray-300" />
-                          )}
-                      </div>
-                      <input type="file" ref={side === 'front' ? frontInputRef : backInputRef} hidden accept="image/*" onChange={(e) => handleImageChange(e, side as 'front' | 'back')} />
-                     </div>
-                   ))}
-                </div>
+                  <div className="flex flex-col gap-1 px-2">
+                     <label className="text-[12px] text-gray-400 font-medium lowercase">número do certificado</label>
+                     <input 
+                        type="text"
+                        value={biNumber}
+                        maxLength={14}
+                        onChange={(e) => status === 'nenhum' && setBiNumber(e.target.value.toUpperCase())}
+                        placeholder="digite o número do bi"
+                        readOnly={status !== 'nenhum'}
+                        className="text-[16px] font-bold text-gray-900 bg-transparent focus:outline-none placeholder:text-gray-200 border-none p-0"
+                     />
+                  </div>
 
-                {status === 'nenhum' && (
-                  <button
-                    onClick={handleSend}
-                    disabled={!canSubmit}
-                    className={`w-full h-[50px] text-white rounded-[16px] text-[15px] font-black transition-all shadow-md mt-2 ${canSubmit ? 'bg-[#6D28D9] active:scale-95 shadow-purple-900/20' : 'bg-gray-200 cursor-not-allowed shadow-none'}`}
-                  >
-                    enviar
-                  </button>
-                )}
-             </div>
-          </div>
+                  <div className="flex items-start gap-2 pt-2">
+                     <div className="mt-1 flex items-center justify-center w-2.5 h-2.5 rounded-full border border-gray-400 text-[7px] text-gray-400 font-bold italic">i</div>
+                     <p className="text-[9.5px] text-gray-400 leading-relaxed font-medium">
+                        O nome real é utilizado apenas para determinar se é um utilizador real e para proteger a segurança dos seus fundos.
+                     </p>
+                  </div>
+               </div>
+            </div>
+
+            <div className="bg-white rounded-[24px] shadow-sm p-6 border border-gray-100 flex flex-col items-center">
+               <div className="flex flex-col items-center gap-6 w-full max-w-[280px]">
+                  {status === 'pendente' && (
+                    <div className="w-full bg-orange-50 text-orange-600 py-2 px-4 rounded-xl flex items-center justify-center gap-2 mb-2 text-[12px] font-bold lowercase">
+                      <Clock className="w-4 h-4" /> em análise (72h)
+                    </div>
+                  )}
+
+                  <div className="grid grid-cols-2 gap-4 w-full">
+                     {['front', 'back'].map((side) => (
+                       <div key={side} className="flex flex-col items-center gap-2">
+                        <p className="text-[10px] text-gray-400 font-bold lowercase">{side === 'front' ? 'frente' : 'verso'}</p>
+                        <div 
+                            onClick={() => status === 'nenhum' && !(side === 'front' ? frontPreview : backPreview) && (side === 'front' ? frontInputRef : backInputRef).current?.click()}
+                            className="w-full aspect-square bg-gray-100/50 rounded-xl border border-dashed border-gray-200 flex items-center justify-center overflow-hidden relative active:scale-95 transition-all"
+                        >
+                            {(side === 'front' ? frontPreview : backPreview) ? (
+                              <>
+                                <img src={side === 'front' ? frontPreview! : backPreview!} className="w-full h-full object-contain" alt={`pré-visualização ${side === 'front' ? 'frente' : 'verso'}`} />
+                                {status === 'nenhum' && (
+                                  <button onClick={(e) => removeImage(e, side as 'front' | 'back')} className="absolute top-1 right-1 p-0.5 text-red-500" title="remover imagem">
+                                    <X className="w-5 h-5" />
+                                  </button>
+                                )}
+                              </>
+                            ) : (
+                              <Camera className="w-5 h-5 text-gray-300" />
+                            )}
+                        </div>
+                        <input type="file" ref={side === 'front' ? frontInputRef : backInputRef} hidden accept="image/*" onChange={(e) => handleImageChange(e, side as 'front' | 'back')} />
+                       </div>
+                     ))}
+                  </div>
+
+                  {status === 'nenhum' && (
+                    <button
+                      onClick={handleSend}
+                      disabled={!canSubmit}
+                      className={`w-full h-[50px] text-white rounded-[16px] text-[15px] font-black transition-all shadow-md mt-2 ${canSubmit ? 'bg-[#6D28D9] active:scale-95 shadow-purple-900/20' : 'bg-gray-200 cursor-not-allowed shadow-none'}`}
+                    >
+                      enviar
+                    </button>
+                  )}
+               </div>
+            </div>
+          </>
         )}
       </main>
 
