@@ -34,6 +34,7 @@ const Fundos = React.lazy(() => import('./pages/Fundos'));
 const Terraco = React.lazy(() => import('./pages/Terraco'));
 const Resgate = React.lazy(() => import('./pages/Resgate'));
 const Validacao = React.lazy(() => import('./pages/Validacao'));
+const Anuncios = React.lazy(() => import('./pages/Anuncios'));
 
 /**
  * PublicOnlyRoute
@@ -122,6 +123,7 @@ export default function App() {
                 <Route path="/convidar" element={<Invite />} />
                 <Route path="/adicionar-banco" element={<AddBank />} />
                 <Route path="/recarregar-usdt" element={<RechargeUSDT />} />
+                <Route path="/anuncios" element={<Anuncios />} />
 
 
               </Route>

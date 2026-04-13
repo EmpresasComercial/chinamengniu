@@ -87,7 +87,7 @@ export default function Profile() {
     { name: 'Partilha', icon: Share2, colorClass: 'red', path: '/convidar' },
     { name: 'terraço', icon: LayoutDashboard, colorClass: 'orange', path: '/terraco' },
     { name: 'ajuda', icon: HelpCircle, colorClass: 'coral', path: '/central-de-ajuda' },
-    { name: 'anúncio', icon: Bell, colorClass: 'blue', path: '#' },
+    { name: 'anúncio', icon: Bell, colorClass: 'blue', path: '/anuncios' },
     { name: 'download', icon: Download, colorClass: 'yellow', path: 'install' },
   ];
 
