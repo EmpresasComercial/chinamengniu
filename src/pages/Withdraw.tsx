@@ -235,7 +235,7 @@ export default function Withdraw() {
           <p className="font-bold text-gray-900 text-[11px] mb-0.5">Precauções</p>
           <p>· montante mínimo de levantamento: {fmt(minWithdrawal).replace(',00', '')} AOA</p>
           <p>· montante máximo de levantamento: {fmt(maxWithdrawal).replace(',00', '')} AOA</p>
-          <p>· Taxa de manuseamento administrativa: {taxRate * 100}%</p>
+          <p>· Taxa de manuseamento administrativa: {Math.round(taxRate * 100)}%</p>
           <p>· Volume máximo diário de extração: 1 vez</p>
         </section>
       </main>
