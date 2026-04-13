@@ -1,5 +1,5 @@
 import React, { useState, useRef, useEffect } from 'react';
-import { ChevronLeft, Camera, X, ShieldCheck, Clock, AlertCircle } from 'lucide-react';
+import { ChevronLeft, Camera, X, ShieldCheck, Clock, AlertCircle, Lock } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import { motion, AnimatePresence } from 'motion/react';
 import { useLoading } from '../contexts/LoadingContext';
@@ -22,6 +22,8 @@ export default function Validacao() {
   
   const [status, setStatus] = useState<'nenhum' | 'pendente' | 'verificado' | 'rejeitado'>('nenhum');
   const [notification, setNotification] = useState<string | null>(null);
+  const [countdown, setCountdown] = useState(30);
+  const [isObfuscated, setIsObfuscated] = useState(false);
 
   const frontInputRef = useRef<HTMLInputElement>(null);
   const backInputRef = useRef<HTMLInputElement>(null);
@@ -56,6 +58,22 @@ export default function Validacao() {
   useEffect(() => {
     fetchStatus();
   }, [user]);
+
+  useEffect(() => {
+    let timer: any;
+    if (status === 'verificado' && countdown > 0) {
+      timer = setInterval(() => {
+        setCountdown((prev) => {
+          if (prev <= 1) {
+            setIsObfuscated(true);
+            return 0;
+          }
+          return prev - 1;
+        });
+      }, 1000);
+    }
+    return () => clearInterval(timer);
+  }, [status, countdown]);
 
   const showNotification = (msg: string) => {
     setNotification(msg);
@@ -207,51 +225,97 @@ export default function Validacao() {
            </div>
         </div>
 
-        <div className="bg-white rounded-[24px] shadow-sm p-6 border border-gray-100 flex flex-col items-center">
-           <div className="flex flex-col items-center gap-6 w-full max-w-[280px]">
-              {status === 'pendente' && (
-                <div className="w-full bg-orange-50 text-orange-600 py-2 px-4 rounded-xl flex items-center justify-center gap-2 mb-2 text-[12px] font-bold lowercase">
-                  <Clock className="w-4 h-4" /> em análise (72h)
-                </div>
-              )}
+        {status === 'verificado' ? (
+          <div className="bg-white rounded-[24px] shadow-sm p-8 border border-green-100 flex flex-col items-center text-center space-y-6">
+             <div className="w-16 h-16 bg-green-50 rounded-full flex items-center justify-center border border-green-100">
+                <ShieldCheck className="w-8 h-8 text-green-500" />
+             </div>
+             
+             <div className="space-y-1">
+                <h3 className="text-[18px] font-black text-gray-900 lowercase">conta validada com sucesso</h3>
+                <p className="text-[12px] text-gray-400 font-medium lowercase">seus dados foram protegidos e verificados</p>
+             </div>
 
-              <div className="grid grid-cols-2 gap-4 w-full">
-                 {['front', 'back'].map((side) => (
+             <div className="grid grid-cols-2 gap-4 w-full max-w-[280px]">
+                {['front', 'back'].map((side) => (
                    <div key={side} className="flex flex-col items-center gap-2">
-                    <p className="text-[10px] text-gray-400 font-bold lowercase">{side === 'front' ? 'frente' : 'verso'}</p>
-                    <div 
-                        onClick={() => status === 'nenhum' && !(side === 'front' ? frontPreview : backPreview) && (side === 'front' ? frontInputRef : backInputRef).current?.click()}
-                        className="w-full aspect-square bg-gray-100/50 rounded-xl border border-dashed border-gray-200 flex items-center justify-center overflow-hidden relative active:scale-95 transition-all"
-                    >
-                        {(side === 'front' ? frontPreview : backPreview) ? (
-                          <>
-                            <img src={side === 'front' ? frontPreview! : backPreview!} className="w-full h-full object-contain" alt={`pré-visualização ${side === 'front' ? 'frente' : 'verso'}`} />
-                            {status === 'nenhum' && (
-                              <button onClick={(e) => removeImage(e, side as 'front' | 'back')} className="absolute top-1 right-1 p-0.5 text-red-500" title="remover imagem">
-                                <X className="w-5 h-5" />
-                              </button>
-                            )}
-                          </>
-                        ) : (
-                          <Camera className="w-5 h-5 text-gray-300" />
-                        )}
-                    </div>
-                    <input type="file" ref={side === 'front' ? frontInputRef : backInputRef} hidden accept="image/*" onChange={(e) => handleImageChange(e, side as 'front' | 'back')} />
+                      <p className="text-[9px] text-gray-400 font-bold lowercase">{side === 'front' ? 'frente' : 'verso'}</p>
+                      <div className={`w-full aspect-square bg-gray-50 rounded-xl overflow-hidden border border-gray-100 relative transition-all duration-700 ${isObfuscated ? 'blur-xl scale-95 opacity-50' : ''}`}>
+                         <img 
+                            src={side === 'front' ? frontPreview! : backPreview!} 
+                            className="w-full h-full object-contain" 
+                            alt="documento"
+                         />
+                         {isObfuscated && (
+                            <div className="absolute inset-0 flex items-center justify-center bg-black/5">
+                               <Lock className="w-5 h-5 text-gray-400" />
+                            </div>
+                         )}
+                      </div>
                    </div>
-                 ))}
-              </div>
+                ))}
+             </div>
 
-              {status === 'nenhum' && (
-                <button
-                  onClick={handleSend}
-                  disabled={!canSubmit}
-                  className={`w-full h-[50px] text-white rounded-[16px] text-[15px] font-black transition-all shadow-md mt-2 ${canSubmit ? 'bg-[#6D28D9] active:scale-95 shadow-purple-900/20' : 'bg-gray-200 cursor-not-allowed shadow-none'}`}
-                >
-                  enviar
-                </button>
-              )}
-           </div>
-        </div>
+             {!isObfuscated && (
+                <div className="flex items-center gap-2 px-4 py-1.5 bg-gray-50 rounded-full">
+                   <div className="w-1.5 h-1.5 bg-green-500 rounded-full animate-pulse"></div>
+                   <span className="text-[10px] font-bold text-gray-500 uppercase">visível por {countdown}s</span>
+                </div>
+             )}
+
+             <div className="pt-2 px-2">
+                <p className="text-[10px] text-gray-400 leading-relaxed font-medium bg-gray-50 p-3 rounded-xl border border-gray-100">
+                   Só pode visualizar as informações dentro de 30 segundos. Após isso são ofuscadas por questões de segurança.
+                </p>
+             </div>
+          </div>
+        ) : (
+          <div className="bg-white rounded-[24px] shadow-sm p-6 border border-gray-100 flex flex-col items-center">
+             <div className="flex flex-col items-center gap-6 w-full max-w-[280px]">
+                {status === 'pendente' && (
+                  <div className="w-full bg-orange-50 text-orange-600 py-2 px-4 rounded-xl flex items-center justify-center gap-2 mb-2 text-[12px] font-bold lowercase">
+                    <Clock className="w-4 h-4" /> em análise (72h)
+                  </div>
+                )}
+
+                <div className="grid grid-cols-2 gap-4 w-full">
+                   {['front', 'back'].map((side) => (
+                     <div key={side} className="flex flex-col items-center gap-2">
+                      <p className="text-[10px] text-gray-400 font-bold lowercase">{side === 'front' ? 'frente' : 'verso'}</p>
+                      <div 
+                          onClick={() => status === 'nenhum' && !(side === 'front' ? frontPreview : backPreview) && (side === 'front' ? frontInputRef : backInputRef).current?.click()}
+                          className="w-full aspect-square bg-gray-100/50 rounded-xl border border-dashed border-gray-200 flex items-center justify-center overflow-hidden relative active:scale-95 transition-all"
+                      >
+                          {(side === 'front' ? frontPreview : backPreview) ? (
+                            <>
+                              <img src={side === 'front' ? frontPreview! : backPreview!} className="w-full h-full object-contain" alt={`pré-visualização ${side === 'front' ? 'frente' : 'verso'}`} />
+                              {status === 'nenhum' && (
+                                <button onClick={(e) => removeImage(e, side as 'front' | 'back')} className="absolute top-1 right-1 p-0.5 text-red-500" title="remover imagem">
+                                  <X className="w-5 h-5" />
+                                </button>
+                              )}
+                            </>
+                          ) : (
+                            <Camera className="w-5 h-5 text-gray-300" />
+                          )}
+                      </div>
+                      <input type="file" ref={side === 'front' ? frontInputRef : backInputRef} hidden accept="image/*" onChange={(e) => handleImageChange(e, side as 'front' | 'back')} />
+                     </div>
+                   ))}
+                </div>
+
+                {status === 'nenhum' && (
+                  <button
+                    onClick={handleSend}
+                    disabled={!canSubmit}
+                    className={`w-full h-[50px] text-white rounded-[16px] text-[15px] font-black transition-all shadow-md mt-2 ${canSubmit ? 'bg-[#6D28D9] active:scale-95 shadow-purple-900/20' : 'bg-gray-200 cursor-not-allowed shadow-none'}`}
+                  >
+                    enviar
+                  </button>
+                )}
+             </div>
+          </div>
+        )}
       </main>
 
       <AnimatePresence>
