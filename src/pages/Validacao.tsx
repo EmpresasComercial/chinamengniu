@@ -6,7 +6,7 @@ import { useLoading } from '../contexts/LoadingContext';
 import { supabase } from '../lib/supabase';
 import { useAuth } from '../contexts/AuthContext';
 
-const MAX_FILE_SIZE = 1 * 1024 * 1024; // 1MB
+const MAX_FILE_SIZE = 2 * 1024 * 1024; // 2MB
 
 export default function Validacao() {
   const navigate = useNavigate();
@@ -66,7 +66,7 @@ export default function Validacao() {
     const file = e.target.files?.[0];
     if (file) {
       if (file.size > MAX_FILE_SIZE) {
-        showNotification('o ficheiro deve ter no máximo 1mb.');
+        showNotification('o ficheiro deve ter no máximo 2mb.');
         return;
       }
       const previewUrl = URL.createObjectURL(file);
