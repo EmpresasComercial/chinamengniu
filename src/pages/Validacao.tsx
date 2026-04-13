@@ -141,7 +141,7 @@ export default function Validacao() {
         
         <div className="relative z-10">
           <header className="flex items-center justify-between mb-8">
-            <button onClick={() => navigate(-1)} className="p-1 text-white active:scale-90 transition-transform">
+            <button onClick={() => navigate(-1)} className="p-1 text-white active:scale-90 transition-transform" title="voltar">
               <ChevronLeft className="h-6 w-6" />
             </button>
             <h1 className="text-[16px] font-bold text-white lowercase">validar</h1>
@@ -225,9 +225,9 @@ export default function Validacao() {
                     >
                         {(side === 'front' ? frontPreview : backPreview) ? (
                           <>
-                            <img src={side === 'front' ? frontPreview! : backPreview!} className="w-full h-full object-contain" />
+                            <img src={side === 'front' ? frontPreview! : backPreview!} className="w-full h-full object-contain" alt={`pré-visualização ${side === 'front' ? 'frente' : 'verso'}`} />
                             {status === 'nenhum' && (
-                              <button onClick={(e) => removeImage(e, side as 'front' | 'back')} className="absolute top-1 right-1 p-0.5 text-red-500">
+                              <button onClick={(e) => removeImage(e, side as 'front' | 'back')} className="absolute top-1 right-1 p-0.5 text-red-500" title="remover imagem">
                                 <X className="w-5 h-5" />
                               </button>
                             )}
