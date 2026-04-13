@@ -175,11 +175,18 @@ export default function Register() {
             <div className="flex items-center gap-2">
                <button 
                 onClick={handleInstallApp}
+                title="instalar aplicativo"
+                aria-label="instalar aplicativo"
                 className="bg-purple-600 text-white px-3.5 py-1.5 rounded-lg text-[11px] font-black uppercase tracking-wider active:scale-95 shadow-md shadow-purple-200"
               >
                 instalar
               </button>
-              <button onClick={() => setDeferredPrompt(null)} className="text-gray-300 p-1">
+              <button 
+                onClick={() => setDeferredPrompt(null)} 
+                title="fechar aviso"
+                aria-label="fechar aviso"
+                className="text-gray-300 p-1"
+              >
                 <X className="w-4 h-4" />
               </button>
             </div>
@@ -234,6 +241,8 @@ export default function Register() {
                 <button
                   className="text-gray-400 hover:text-gray-600 btn-small"
                   type="button"
+                  title={showPassword ? "ocultar senha" : "mostrar senha"}
+                  aria-label={showPassword ? "ocultar senha" : "mostrar senha"}
                   onClick={() => setShowPassword(!showPassword)}
                 >
                   {showPassword ? <EyeOff className="h-5 w-5" /> : <Eye className="h-5 w-5" />}
@@ -256,6 +265,8 @@ export default function Register() {
                 <button
                   className="text-gray-400 hover:text-gray-600 btn-small"
                   type="button"
+                  title={showConfirmPassword ? "ocultar senha" : "mostrar senha"}
+                  aria-label={showConfirmPassword ? "ocultar senha" : "mostrar senha"}
                   onClick={() => setShowConfirmPassword(!showConfirmPassword)}
                 >
                   {showConfirmPassword ? <EyeOff className="h-5 w-5" /> : <Eye className="h-5 w-5" />}
