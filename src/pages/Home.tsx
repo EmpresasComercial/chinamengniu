@@ -87,26 +87,38 @@ export default function Home() {
     fetchLinks();
   }, [registerFetch]);
 
-  // 📈 REAL-TIME DATA LOGIC (Ticker Simulation)
+  // 📈 REAL-TIME DATA LOGIC (CoinGecko API)
   const fetchCryptoTrends = useCallback(async () => {
     try {
-      const response = await fetch('https://api.binance.com/api/v3/ticker/24hr?symbols=["BTCUSDT","AVAXUSDT","IOTAUSDT"]');
+      // Usando CoinGecko (IDs: bitcoin, avalanche-2, tether, iota)
+      const response = await fetch('https://api.coingecko.com/api/v3/simple/price?ids=bitcoin,avalanche-2,tether,iota&vs_currencies=usd&include_24hr_change=true');
       const data = await response.json();
       
+      const mapping: Record<string, any> = {
+        'BTC': data.bitcoin,
+        'AVAX': data['avalanche-2'],
+        'USDT': data.tether,
+        'IOTA': data.iota
+      };
+
       setTrends(prev => prev.map(coin => {
-        const live = data.find((d: any) => d.symbol === coin.name + 'USDT');
+        const live = mapping[coin.name];
         if (live) {
-          const lp = parseFloat(live.lastPrice);
+          const lp = live.usd;
+          const change24h = live.usd_24h_change || 0;
           return {
             ...coin,
             basePrice: lp,
-            change: (parseFloat(live.priceChangePercent) >= 0 ? '+' : '') + parseFloat(live.priceChangePercent).toFixed(2) + '%',
-            isPositive: parseFloat(live.priceChangePercent) >= 0
+            price: lp, // Atualiza o preço exibido imediatamente
+            change: (change24h >= 0 ? '+' : '') + change24h.toFixed(2) + '%',
+            isPositive: change24h >= 0
           };
         }
         return coin;
       }));
-    } catch (err) {}
+    } catch (err) {
+      console.error('Erro ao buscar preços reais:', err);
+    }
   }, []);
 
   useEffect(() => {
