@@ -89,10 +89,10 @@ export default function Terraco() {
 
   return (
     <div className="flex flex-col min-h-screen bg-white font-sans antialiased relative overflow-x-hidden pb-10">
-      {/* 🟣 Decorative Background Elements (Top Right) */}
-      <div className="absolute top-[-20px] right-[-20px] w-32 h-32 bg-[#6D28D9]/5 rounded-[32px] rotate-12 -z-10 blur-[1px]"></div>
-      <div className="absolute top-[40px] right-[-40px] w-24 h-24 bg-[#6D28D9]/3 rounded-[24px] -rotate-12 -z-10 blur-[2px]"></div>
-      <div className="absolute top-[-10px] right-[60px] w-16 h-16 bg-[#6D28D9]/8 rounded-[16px] rotate-45 -z-10 blur-[1px]"></div>
+      {/* 🟣 Decorative Background Elements (Top Right) - Increased Visibility */}
+      <div className="absolute top-2 right-[-20px] w-48 h-48 bg-[#6D28D9]/15 rounded-[48px] rotate-12 -z-10 blur-[0.5px]"></div>
+      <div className="absolute top-[60px] right-[10px] w-32 h-32 bg-[#6D28D9]/10 rounded-[32px] -rotate-12 -z-10 blur-[1px]"></div>
+      <div className="absolute top-[-20px] right-[80px] w-20 h-20 bg-[#6D28D9]/20 rounded-[20px] rotate-45 -z-10 blur-[0.5px]"></div>
       
       <div className="absolute top-0 left-0 right-0 h-[280px] bg-white -z-20"></div>
 
