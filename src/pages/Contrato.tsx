@@ -2,8 +2,8 @@ import React, { useRef } from 'react';
 import { ChevronLeft, FileText, Download, Printer } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import { contract_data } from '../data/contract_data';
-import jsPDF from 'jspdf';
-import html2canvas from 'html2canvas';
+// @ts-ignore
+import html2pdf from 'html2pdf.js';
 
 export default function Contrato() {
   const navigate = useNavigate();
@@ -15,40 +15,27 @@ export default function Contrato() {
     if (!element || isGenerating) return;
 
     setIsGenerating(true);
+    
+    // Configurações do PDF
+    const opt = {
+      margin:       0,
+      filename:     'contrato_ai_go_onrender.pdf',
+      image:        { type: 'jpeg', quality: 0.98 },
+      html2canvas:  { 
+        scale: 2.5, 
+        useCORS: true, 
+        letterRendering: true,
+        backgroundColor: '#ffffff'
+      },
+      jsPDF:        { unit: 'mm', format: 'a4', orientation: 'portrait' }
+    };
+
     try {
-      // Espera um pouco para garantir a renderização completa
-      await new Promise(resolve => setTimeout(resolve, 500));
-
-      const canvas = await html2canvas(element, {
-        scale: 3, // Aumenta a qualidade
-        useCORS: true,
-        allowTaint: true,
-        logging: false,
-        backgroundColor: '#ffffff',
-        windowWidth: 800 // Trava a largura para o formato A4
-      });
-      
-      const imgData = canvas.toDataURL('image/jpeg', 0.95);
-      const pdf = new jsPDF({
-        orientation: 'portrait',
-        unit: 'mm',
-        format: 'a4'
-      });
-
-      const pdfWidth = pdf.internal.pageSize.getWidth();
-      const pdfHeight = pdf.internal.pageSize.getHeight();
-      const imgWidth = canvas.width;
-      const imgHeight = canvas.height;
-      const ratio = Math.min(pdfWidth / imgWidth, pdfHeight / imgHeight);
-      
-      const finalWidth = imgWidth * ratio;
-      const finalHeight = imgHeight * ratio;
-
-      pdf.addImage(imgData, 'JPEG', (pdfWidth - finalWidth) / 2, 0, finalWidth, finalHeight);
-      pdf.save('contrato_ai_go_onrender.pdf');
+      // Gera o PDF
+      await html2pdf().set(opt).from(element).save();
     } catch (error) {
       console.error('Erro ao gerar PDF:', error);
-      alert('Houve um erro ao gerar o PDF. Por favor, utilize a função de Imprimir e selecione "Salvar como PDF".');
+      alert('Ainda houve um problema ao baixar. Por favor, use a função "Imprimir" e salve como PDF pelo navegador.');
     } finally {
       setIsGenerating(false);
     }
