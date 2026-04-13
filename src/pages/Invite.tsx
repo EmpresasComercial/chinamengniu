@@ -27,18 +27,21 @@ export default function Invite() {
 
   const inviteCode = profile?.invite_code || '...';
   
-  let baseLink = window.location.origin;
+  let baseLink = window.location.origin.replace('www.', '');
+  
   if (links.link_app_atualizado && links.link_app_atualizado !== '#') {
     let customLink = links.link_app_atualizado.trim();
     if (!customLink.startsWith('http')) {
-      customLink = `https://${customLink.startsWith('www.') ? '' : 'www.'}${customLink}`;
+      customLink = `https://${customLink}`;
     }
+    customLink = customLink.replace('www.', '');
+    
     if (!customLink.includes('/register') && !customLink.includes('/registrar')) {
-      customLink = customLink.endsWith('/') ? `${customLink}#/register` : `${customLink}/#/register`;
+      customLink = customLink.endsWith('/') ? `${customLink}register` : `${customLink}/register`;
     }
     baseLink = customLink;
   } else {
-    baseLink = `${baseLink}/#/register`;
+    baseLink = `${baseLink}/register`;
   }
 
   const inviteLink = baseLink.includes('(codigo)')
