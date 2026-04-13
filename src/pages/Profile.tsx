@@ -2,7 +2,7 @@ import React, { useState, useEffect, useCallback } from 'react';
 import { 
   Headset, X, Users, HelpCircle,
   Info, Bell, Download, Lock, UserCheck, FileText, Share2,
-  Scan, LayoutDashboard, CreditCard
+  LogOut, LayoutDashboard, CreditCard
 } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import { motion, AnimatePresence } from 'motion/react';
@@ -23,7 +23,21 @@ export default function Profile() {
     splash_message: 'carregando avisos...'
   });
 
-  const { profile, signOut } = useAuth();
+  const { profile, signOut, loading: authLoading } = useAuth();
+
+  useEffect(() => {
+    if (!authLoading && !profile) {
+      navigate('/login');
+    }
+  }, [profile, authLoading, navigate]);
+
+  const handleLogout = useCallback(async () => {
+    setProfileNotification('encerrando sessão...');
+    setTimeout(async () => {
+      await signOut();
+      navigate('/login');
+    }, 800);
+  }, [signOut, navigate]);
 
   useEffect(() => {
     async function fetchLinks() {
@@ -111,8 +125,8 @@ export default function Profile() {
       <header className="flex items-center justify-between px-6 py-4 bg-white/50 sticky top-0 z-20">
         <h1 className="text-[20px] font-black text-gray-900 lowercase">meu</h1>
         <div className="flex items-center gap-5 text-gray-700">
-           <button onClick={handleRefresh} className="active:scale-95 transition-all text-gray-400 hover:text-[#6D28D9]" title="limpar cache">
-              <Scan className="w-5 h-5 opacity-70" />
+           <button onClick={handleLogout} className="active:scale-95 transition-all text-gray-400 hover:text-red-500" title="sair da conta">
+              <LogOut className="w-5 h-5 opacity-70" />
            </button>
            
            <button onClick={() => navigate('/anuncios')} className="relative active:scale-95 transition-all text-gray-400 hover:text-[#6D28D9]" title="anúncios">
