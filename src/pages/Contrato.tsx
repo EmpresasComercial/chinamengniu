@@ -1,9 +1,42 @@
+import React, { useRef } from 'react';
 import { ChevronLeft, FileText, Download, Printer } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import { contract_data } from '../data/contract_data';
+import jsPDF from 'jspdf';
+import html2canvas from 'html2canvas';
 
 export default function Contrato() {
   const navigate = useNavigate();
+  const contractRef = useRef<HTMLDivElement>(null);
+
+  const handleDownloadPDF = async () => {
+    const element = contractRef.current;
+    if (!element) return;
+
+    try {
+      const canvas = await html2canvas(element, {
+        scale: 2,
+        useCORS: true,
+        backgroundColor: '#ffffff'
+      });
+      
+      const imgData = canvas.toDataURL('image/png');
+      const pdf = new jsPDF({
+        orientation: 'portrait',
+        unit: 'mm',
+        format: 'a4'
+      });
+
+      const imgProps = pdf.getImageProperties(imgData);
+      const pdfWidth = pdf.internal.pageSize.getWidth();
+      const pdfHeight = (imgProps.height * pdfWidth) / imgProps.width;
+
+      pdf.addImage(imgData, 'PNG', 0, 0, pdfWidth, pdfHeight);
+      pdf.save('contrato_ai_go_onrender.pdf');
+    } catch (error) {
+      console.error('Erro ao gerar PDF:', error);
+    }
+  };
 
   return (
     <div className="flex flex-col min-h-screen bg-[#F0F2F5] font-serif antialiased pb-20">
@@ -21,7 +54,10 @@ export default function Contrato() {
 
       <main className="pt-24 px-4 sm:px-10 flex flex-col items-center">
         {/* Folha A4 Fake */}
-        <div className="w-full max-w-[800px] bg-white shadow-2xl rounded-sm p-8 sm:p-16 border border-gray-200 relative overflow-hidden transition-all">
+        <div 
+          ref={contractRef}
+          className="w-full max-w-[800px] bg-white shadow-2xl rounded-sm p-8 sm:p-16 border border-gray-200 relative overflow-hidden transition-all"
+        >
           
           {/* Marca d'água discreta */}
           <div className="absolute inset-0 flex items-center justify-center opacity-[0.03] pointer-events-none select-none rotate-45">
@@ -79,7 +115,10 @@ export default function Contrato() {
            <button onClick={() => window.print()} className="flex items-center gap-2 px-6 py-2.5 bg-white border border-gray-200 rounded-full text-gray-500 text-[12px] font-bold shadow-sm active:scale-95 transition-all">
               <Printer className="w-4 h-4" /> imprimir
            </button>
-           <button className="flex items-center gap-2 px-6 py-2.5 bg-[#6D28D9] text-white rounded-full text-[12px] font-bold shadow-lg shadow-purple-900/20 active:scale-95 transition-all">
+           <button 
+             onClick={handleDownloadPDF}
+             className="flex items-center gap-2 px-6 py-2.5 bg-[#6D28D9] text-white rounded-full text-[12px] font-bold shadow-lg shadow-purple-900/20 active:scale-95 transition-all"
+           >
               <Download className="w-4 h-4" /> baixar pdf
            </button>
         </div>
