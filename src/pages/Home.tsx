@@ -21,8 +21,64 @@ interface CoinData {
   basePrice: number;
 }
 
+const CoinRow = ({ coin, isLast }: { coin: CoinData, isLast: boolean }) => {
+  const prevPrice = useRef(coin.price);
+  const [flash, setFlash] = useState<'up' | 'down' | null>(null);
+
+  useEffect(() => {
+    if (coin.price > prevPrice.current) {
+      setFlash('up');
+      const timer = setTimeout(() => setFlash(null), 800);
+      return () => clearTimeout(timer);
+    } else if (coin.price < prevPrice.current) {
+      setFlash('down');
+      const timer = setTimeout(() => setFlash(null), 800);
+      return () => clearTimeout(timer);
+    }
+    prevPrice.current = coin.price;
+  }, [coin.price]);
+
+  return (
+    <div className={`flex items-center justify-between p-4 ${!isLast ? 'border-b border-gray-50' : ''} active:bg-gray-50 transition-colors`}>
+      <div className="flex items-center gap-3">
+        <div className="w-11 h-11 rounded-full flex items-center justify-center p-0.5 bg-gray-50 border border-gray-100 shadow-sm">
+          <img 
+            src={`https://static.okx.com/cdn/oksupport/asset/currency/icon/${coin.name.toLowerCase()}.png`} 
+            alt={coin.name}
+            className="w-full h-full object-contain rounded-full"
+            onError={(e) => { (e.target as HTMLImageElement).src = '/coin-DnOWIML3.png' }}
+          />
+        </div>
+        <div className="flex flex-col">
+          <div className="flex items-center gap-1">
+            <span className="text-[15px] font-black text-gray-900 leading-none">{coin.name}</span>
+            <span className="text-[11px] font-bold text-gray-400 opacity-60">/{coin.symbol}</span>
+          </div>
+        </div>
+      </div>
+
+      <div className="flex items-center justify-between flex-1 pl-10">
+        <motion.span 
+          animate={{ 
+            color: flash === 'up' ? '#22c55e' : flash === 'down' ? '#ef4444' : '#111827',
+            scale: flash ? 1.05 : 1
+          }}
+          className="text-[16px] font-black tracking-tight transition-colors duration-300"
+        >
+          {coin.price > 100 ? coin.price.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 }) : coin.price.toFixed(4)}
+        </motion.span>
+        
+        <div className={`min-w-[85px] h-[32px] rounded-xl flex items-center justify-center px-2 shadow-sm transition-all duration-500 ${coin.isPositive ? 'bg-[#22c55e]' : 'bg-[#ef4444]'}`}>
+          <span className="text-white text-[12px] font-black">{coin.change}</span>
+        </div>
+      </div>
+    </div>
+  );
+};
+
 export default function Home() {
   const navigate = useNavigate();
+  // ... rest of the Home component
   const { showLoading, hideLoading, registerFetch } = useLoading();
   const [notification, setNotification] = useState<string | null>(null);
   const { profile } = useAuth();
@@ -234,61 +290,13 @@ export default function Home() {
 
         <div className="bg-white rounded-2xl p-0.5 shadow-xl shadow-gray-100 border border-gray-50">
           <div className="flex flex-col">
-            {trends.map((coin, idx) => {
-              const prevPrice = useRef(coin.price);
-              const [flash, setFlash] = useState<'up' | 'down' | null>(null);
-
-              useEffect(() => {
-                if (coin.price > prevPrice.current) setFlash('up');
-                else if (coin.price < prevPrice.current) setFlash('down');
-                
-                prevPrice.current = coin.price;
-                const timer = setTimeout(() => setFlash(null), 800);
-                return () => clearTimeout(timer);
-              }, [coin.price]);
-
-              return (
-                <div 
-                  key={idx} 
-                  className={`flex items-center justify-between p-4 ${idx !== trends.length - 1 ? 'border-b border-gray-50' : ''} active:bg-gray-50 transition-colors`}
-                >
-                  <div className="flex items-center gap-3">
-                    <div className="w-11 h-11 rounded-full flex items-center justify-center p-0.5 bg-gray-50 border border-gray-100 shadow-sm">
-                       <img 
-                          src={`https://static.okx.com/cdn/oksupport/asset/currency/icon/${coin.name.toLowerCase()}.png`} 
-                          alt={coin.name}
-                          className="w-full h-full object-contain rounded-full"
-                          onError={(e) => { (e.target as HTMLImageElement).src = '/coin-DnOWIML3.png' }}
-                       />
-                    </div>
-                    <div className="flex flex-col">
-                      <div className="flex items-center gap-1">
-                         <span className="text-[15px] font-black text-gray-900 leading-none">{coin.name}</span>
-                         <span className="text-[11px] font-bold text-gray-400 opacity-60">/{coin.symbol}</span>
-                      </div>
-                    </div>
-                  </div>
-
-                  <div className="flex items-center justify-between flex-1 pl-10">
-                    <motion.span 
-                      animate={{ 
-                        color: flash === 'up' ? '#22c55e' : flash === 'down' ? '#ef4444' : '#111827',
-                        scale: flash ? 1.05 : 1
-                      }}
-                      className="text-[16px] font-black tracking-tight transition-colors duration-300"
-                    >
-                      {coin.price > 100 ? coin.price.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 }) : coin.price.toFixed(4)}
-                    </motion.span>
-                    
-                    <div 
-                      className={`min-w-[85px] h-[32px] rounded-xl flex items-center justify-center px-2 shadow-sm transition-all duration-500 ${coin.isPositive ? 'bg-[#22c55e]' : 'bg-[#ef4444]'}`}
-                    >
-                      <span className="text-white text-[12px] font-black">{coin.change}</span>
-                    </div>
-                  </div>
-                </div>
-              );
-            })}
+            {trends.map((coin, idx) => (
+              <CoinRow 
+                key={coin.name} 
+                coin={coin} 
+                isLast={idx === trends.length - 1} 
+              />
+            ))}
           </div>
         </div>
       </section>
