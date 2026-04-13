@@ -23,6 +23,7 @@ export default function Withdraw() {
   const [showPin, setShowPin] = useState(false);
   const [feedback, setFeedback] = useState<{ message: string; type: 'error' | 'success' } | null>(null);
   const [isVerified, setIsVerified] = useState<boolean | null>(null);
+  const [freeWithdrawalAvailable, setFreeWithdrawalAvailable] = useState<boolean>(false);
 
   useEffect(() => {
     if (!user) return;
@@ -44,8 +45,10 @@ export default function Withdraw() {
       try {
         const { data } = await supabase.rpc('get_user_verification');
         setIsVerified(data?.status === 'verificado');
+        setFreeWithdrawalAvailable(data?.retirada_gratis_verificada === '300AOA');
       } catch {
         setIsVerified(false);
+        setFreeWithdrawalAvailable(false);
       }
     }
     checkVerification();
@@ -57,8 +60,8 @@ export default function Withdraw() {
   };
 
   const taxRate = 0.14;
-  const minWithdrawal = 9000;
-  const maxWithdrawal = 1000000;
+  const minWithdrawal = 300;
+  const maxWithdrawal = 100000;
   const balance = parseFloat(profile?.balance || '0');
   const numericAmount = parseFloat(amountInput) || 0;
 
@@ -70,11 +73,11 @@ export default function Withdraw() {
     }
 
     if (!amountInput || numericAmount < minWithdrawal) {
-      showToast(`o saldo mínimo para retirada é de ${minWithdrawal.toLocaleString()} kz.`);
+      showToast(`o saldo mínimo para retirada é de ${minWithdrawal.toLocaleString()} AOA.`);
       return;
     }
     if (numericAmount > maxWithdrawal) {
-      showToast(`o limite máximo por operação é de ${maxWithdrawal.toLocaleString()} kz.`);
+      showToast(`o limite máximo por operação é de ${maxWithdrawal.toLocaleString()} AOA.`);
       return;
     }
     if (numericAmount > balance) {
@@ -209,6 +212,14 @@ export default function Withdraw() {
             <span className="text-gray-900 text-[12.5px] font-normal lowercase">Gerir cartões bancários</span>
             <span className="text-gray-400 text-[10.5px] lowercase font-normal leading-tight">Carregue para gerir cartões bancários</span>
           </button>
+
+          {freeWithdrawalAvailable && isVerified && (
+            <div className="bg-purple-50 p-3 rounded-lg border border-purple-100 mt-2">
+              <p className="text-[#6D28D9] text-[11px] font-medium text-center">
+                ✨ você tem 1 retirada gratuita disponível de 300 AOA.
+              </p>
+            </div>
+          )}
         </section>
 
         <div className="pt-1">
