@@ -104,12 +104,16 @@ export default function Profile() {
       <header className="flex items-center justify-between px-6 py-4 bg-white/50 sticky top-0 z-20">
         <h1 className="text-[20px] font-black text-gray-900 lowercase">meu</h1>
         <div className="flex items-center gap-5 text-gray-700">
-           <Scan className="w-5 h-5 opacity-70" />
-           <div className="relative">
+           <button onClick={handleRefresh} className="active:scale-95 transition-all text-gray-400 hover:text-[#6D28D9]" title="limpar cache">
+              <Scan className="w-5 h-5 opacity-70" />
+           </button>
+           
+           <button onClick={() => navigate('/anuncios')} className="relative active:scale-95 transition-all text-gray-400 hover:text-[#6D28D9]" title="anúncios">
               <Bell className="w-5 h-5 opacity-70" />
-              <div className="absolute top-0 right-0 w-2 h-2 bg-red-500 rounded-full border-2 border-white"></div>
-           </div>
-           <button onClick={() => setIsSupportModalOpen(true)} title="atendimento">
+              <div className="absolute -top-0.5 -right-0.5 w-2.5 h-2.5 bg-red-500 rounded-full border-2 border-white"></div>
+           </button>
+
+           <button onClick={() => setIsSupportModalOpen(true)} className="active:scale-95 transition-all text-gray-400 hover:text-[#6D28D9]" title="atendimento">
               <Headset className="w-5 h-5 opacity-70" />
            </button>
         </div>
