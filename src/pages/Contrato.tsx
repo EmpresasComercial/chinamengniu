@@ -2,8 +2,9 @@ import React, { useRef } from 'react';
 import { ChevronLeft, FileText, Download, Printer } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import { contract_data } from '../data/contract_data';
-// @ts-ignore
-import html2pdf from 'html2pdf.js/dist/html2pdf.min.js';
+
+// Acessa o html2pdf do objeto global (carregado via CDN em index.html)
+const html2pdf = (window as any).html2pdf;
 
 export default function Contrato() {
   const navigate = useNavigate();
