@@ -134,8 +134,6 @@ export default function CompanyPresentation() {
               <p className="text-slate-600 text-[13px] leading-relaxed lowercase font-medium">
                 a influência da render se estende à comunidade de desenvolvedores, com a empresa sendo citada em publicações especializadas, participando de eventos do setor e aparecendo em rankings de plataformas tecnológicas com crescimento rápido.
               </p>
-            </section>s do setor e aparecendo em rankings de plataformas tecnológicas com crescimento rápido.
-              </p>
             </section>
 
           </div>

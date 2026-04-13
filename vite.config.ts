@@ -18,24 +18,24 @@ export default defineConfig(({ mode }) => {
         devOptions: {
           enabled: true
         },
-        includeAssets: ['file_loga IAc78c7243befa67a31cf49487.png'],
+        includeAssets: ['ai-go-onrender.png'],
         manifest: {
           name: 'AI-GO onrender',
           short_name: 'AI-GO onrender',
-          description: 'AI-GO onrender  Application',
-          theme_color: '#000080',
+          description: 'AI-GO onrender Application',
+          theme_color: '#6D28D9',
           background_color: '#ffffff',
           display: 'standalone',
           scope: '/',
           start_url: '/',
           icons: [
             {
-              src: 'AI-GO onrender-logo.png',
+              src: 'ai-go-onrender.png',
               sizes: '192x192',
               type: 'image/png'
             },
             {
-              src: 'AI-GO onrender-logo.png',
+              src: 'ai-go-onrender.png',
               sizes: '512x512',
               type: 'image/png',
               purpose: 'any maskable'
