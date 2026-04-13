@@ -254,7 +254,7 @@ export default function Home() {
         </div>
 
         <div className="bg-gradient-to-br from-purple-50/50 to-indigo-50/50 rounded-2xl p-5 relative overflow-hidden border border-purple-100/30">
-          <h3 onClick={handleInstallApp} className="text-[#6D28D9] font-black text-[21px] mb-1 cursor-pointer active:opacity-70 transition-opacity">baixar aplicativo</h3>
+          <h3 className="text-[#6D28D9] font-black text-[21px] mb-1">geração de receita contínua</h3>
           <p className="text-[#6D28D9]/40 text-[9px] font-black uppercase tracking-widest leading-none mb-6">AI-GO onrender premium</p>
           <div className="flex gap-2.5 w-full z-10">
             <button onClick={() => navigate('/select-bank')} className="flex-1 bg-[#6D28D9] text-white px-3 rounded-xl text-[11px] font-bold h-[45px] flex items-center justify-center active:scale-95 shadow-lg shadow-purple-900/20 lowercase gap-2">
