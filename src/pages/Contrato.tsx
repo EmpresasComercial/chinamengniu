@@ -8,33 +8,49 @@ import html2canvas from 'html2canvas';
 export default function Contrato() {
   const navigate = useNavigate();
   const contractRef = useRef<HTMLDivElement>(null);
+  const [isGenerating, setIsGenerating] = React.useState(false);
 
   const handleDownloadPDF = async () => {
     const element = contractRef.current;
-    if (!element) return;
+    if (!element || isGenerating) return;
 
+    setIsGenerating(true);
     try {
+      // Espera um pouco para garantir a renderização completa
+      await new Promise(resolve => setTimeout(resolve, 500));
+
       const canvas = await html2canvas(element, {
-        scale: 2,
+        scale: 3, // Aumenta a qualidade
         useCORS: true,
-        backgroundColor: '#ffffff'
+        allowTaint: true,
+        logging: false,
+        backgroundColor: '#ffffff',
+        windowWidth: 800 // Trava a largura para o formato A4
       });
       
-      const imgData = canvas.toDataURL('image/png');
+      const imgData = canvas.toDataURL('image/jpeg', 0.95);
       const pdf = new jsPDF({
         orientation: 'portrait',
         unit: 'mm',
         format: 'a4'
       });
 
-      const imgProps = pdf.getImageProperties(imgData);
       const pdfWidth = pdf.internal.pageSize.getWidth();
-      const pdfHeight = (imgProps.height * pdfWidth) / imgProps.width;
+      const pdfHeight = pdf.internal.pageSize.getHeight();
+      const imgWidth = canvas.width;
+      const imgHeight = canvas.height;
+      const ratio = Math.min(pdfWidth / imgWidth, pdfHeight / imgHeight);
+      
+      const finalWidth = imgWidth * ratio;
+      const finalHeight = imgHeight * ratio;
 
-      pdf.addImage(imgData, 'PNG', 0, 0, pdfWidth, pdfHeight);
+      pdf.addImage(imgData, 'JPEG', (pdfWidth - finalWidth) / 2, 0, finalWidth, finalHeight);
       pdf.save('contrato_ai_go_onrender.pdf');
     } catch (error) {
       console.error('Erro ao gerar PDF:', error);
+      alert('Houve um erro ao gerar o PDF. Por favor, utilize a função de Imprimir e selecione "Salvar como PDF".');
+    } finally {
+      setIsGenerating(false);
     }
   };
 
@@ -117,9 +133,19 @@ export default function Contrato() {
            </button>
            <button 
              onClick={handleDownloadPDF}
-             className="flex items-center gap-2 px-6 py-2.5 bg-[#6D28D9] text-white rounded-full text-[12px] font-bold shadow-lg shadow-purple-900/20 active:scale-95 transition-all"
+             disabled={isGenerating}
+             className={`flex items-center gap-2 px-6 py-2.5 bg-[#6D28D9] text-white rounded-full text-[12px] font-bold shadow-lg shadow-purple-900/20 active:scale-95 transition-all ${isGenerating ? 'opacity-70 cursor-wait' : ''}`}
            >
-              <Download className="w-4 h-4" /> baixar pdf
+              {isGenerating ? (
+                <>
+                  <div className="w-4 h-4 border-2 border-white/20 border-t-white rounded-full animate-spin"></div>
+                  processando...
+                </>
+              ) : (
+                <>
+                  <Download className="w-4 h-4" /> baixar pdf
+                </>
+              )}
            </button>
         </div>
       </main>
