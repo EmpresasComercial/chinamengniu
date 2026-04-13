@@ -1,10 +1,9 @@
-import React, { useState } from 'react';
-import { Headset, X, Eye, EyeOff } from 'lucide-react';
+import React, { useState, useEffect } from 'react';
+import { Headset, X, Eye, EyeOff, Download } from 'lucide-react';
 import { useNavigate, Link, useSearchParams } from 'react-router-dom';
 import { motion, AnimatePresence } from 'motion/react';
 import { useLoading } from '../contexts/LoadingContext';
 import { supabase } from '../lib/supabase';
-import { useEffect } from 'react';
 
 export default function Register() {
   const navigate = useNavigate();
@@ -14,6 +13,7 @@ export default function Register() {
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
   const [feedback, setFeedback] = useState<string | null>(null);
   const [isSupportModalOpen, setIsSupportModalOpen] = useState(false);
+  const [deferredPrompt, setDeferredPrompt] = useState<any>(null);
   const [links, setLinks] = useState({
     whatsapp_gerente_url: '',
     whatsapp_grupo_vendas_url: '',
@@ -29,13 +29,23 @@ export default function Register() {
   });
 
   useEffect(() => {
-    const code = searchParams.get('join');
-    if (code) {
-      // Sanitização rigorosa: apenas caracteres alfanuméricos
-      const sanitizedCode = code.replace(/[^\w]/g, '').slice(0, 20);
-      setFormData(prev => ({ ...prev, inviteCode: sanitizedCode }));
+    const handler = (e: any) => {
+      e.preventDefault();
+      setDeferredPrompt(e);
+    };
+    window.addEventListener('beforeinstallprompt', handler);
+    return () => window.removeEventListener('beforeinstallprompt', handler);
+  }, []);
+
+  const handleInstallApp = async () => {
+    if (deferredPrompt) {
+      deferredPrompt.prompt();
+      const { outcome } = await deferredPrompt.userChoice;
+      if (outcome === 'accepted') {
+        setDeferredPrompt(null);
+      }
     }
-  }, [searchParams]);
+  };
 
   useEffect(() => {
     async function fetchLinks() {
@@ -59,6 +69,14 @@ export default function Register() {
     }
     fetchLinks();
   }, []);
+
+  useEffect(() => {
+    const code = searchParams.get('join');
+    if (code) {
+      const sanitizedCode = code.replace(/[^\w]/g, '').slice(0, 20);
+      setFormData(prev => ({ ...prev, inviteCode: sanitizedCode }));
+    }
+  }, [searchParams, setFormData]);
 
   const handleLinkClick = (url: string, e: React.MouseEvent) => {
     e.preventDefault();
@@ -101,7 +119,6 @@ export default function Register() {
 
     showLoading();
     try {
-      // Usando a Edge Function para registro seguro com limites de IP e anti-fraude
       const { data, error } = await supabase.functions.invoke('secure-registration', {
         body: {
           phone: formData.phone,
@@ -111,14 +128,11 @@ export default function Register() {
       });
 
       if (error) {
-        // If it's a 4xx/5xx error, the body might contain the actual error message
         let errorMsg = error.message;
         try {
           const body = await error.context?.json();
           if (body && body.error) errorMsg = body.error;
-        } catch (e) {
-          // Fallback to default error message
-        }
+        } catch (e) {}
         showToast(errorMsg);
         return;
       }
@@ -128,7 +142,7 @@ export default function Register() {
         return;
       }
 
-      showToast('registo efetuado com sucesso. bem-vindo à AI-GO onrender!');
+      showToast('registo efetuado com sucesso. bem-vindo!');
       setTimeout(() => navigate('/login'), 1500);
     } catch (err: any) {
       showToast('Falha ao processar o registo. Tente novamente.');
@@ -141,9 +155,38 @@ export default function Register() {
     const sanitizedValue = e.target.value.replace(/[^\p{L}\p{N}]/gu, '');
     setFormData({ ...formData, [e.target.name]: sanitizedValue });
   };
-
   return (
-    <div className="min-h-screen flex flex-col bg-white page-content">
+    <div className="min-h-screen flex flex-col bg-white page-content relative pt-12">
+      {/* 📱 PWA Install Banner */}
+      <AnimatePresence>
+        {deferredPrompt && (
+          <motion.div
+            initial={{ y: -100, opacity: 0 }}
+            animate={{ y: 0, opacity: 1 }}
+            exit={{ y: -100, opacity: 0 }}
+            className="fixed top-0 left-0 right-0 h-14 bg-white shadow-lg border-b border-gray-100 px-5 flex items-center justify-between z-[1000]"
+          >
+            <div className="flex items-center gap-2.5">
+              <div className="w-9 h-9 bg-purple-100 rounded-xl flex items-center justify-center">
+                <Download className="w-5 h-5 text-purple-600" />
+              </div>
+              <p className="text-[12px] font-bold text-gray-700 leading-tight">instale nosso app para<br/>uma melhor experiência!</p>
+            </div>
+            <div className="flex items-center gap-2">
+               <button 
+                onClick={handleInstallApp}
+                className="bg-purple-600 text-white px-3.5 py-1.5 rounded-lg text-[11px] font-black uppercase tracking-wider active:scale-95 shadow-md shadow-purple-200"
+              >
+                instalar
+              </button>
+              <button onClick={() => setDeferredPrompt(null)} className="text-gray-300 p-1">
+                <X className="w-4 h-4" />
+              </button>
+            </div>
+          </motion.div>
+        )}
+      </AnimatePresence>
+
       {/* BEGIN: Logo Section */}
       <div className="flex flex-col items-center pt-0 pb-0">
         <div className="w-40 h-40 bg-white rounded-3xl flex items-center justify-center mb-0 p-0 transform -translate-y-4">
