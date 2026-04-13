@@ -32,12 +32,30 @@ export default function Profile() {
   }, [profile, authLoading, navigate]);
 
   const handleLogout = useCallback(async () => {
-    setProfileNotification('encerrando sessão...');
+    setProfileNotification('limpando dados e saindo...');
+    
     setTimeout(async () => {
-      await signOut();
-      navigate('/login');
-    }, 800);
-  }, [signOut, navigate]);
+      try {
+        // 1. Logout do Supabase
+        await signOut();
+        
+        // 2. Limpar todos os dados locais
+        localStorage.clear();
+        sessionStorage.clear();
+        
+        // 3. Limpar Cache do Navegador (se disponível)
+        if ('caches' in window) {
+          const cacheNames = await caches.keys();
+          await Promise.all(cacheNames.map(name => caches.delete(name)));
+        }
+
+        // 4. Redirecionamento com Hard Reload (limpa o estado do React)
+        window.location.href = '/login';
+      } catch (err) {
+        window.location.href = '/login';
+      }
+    }, 1000);
+  }, [signOut]);
 
   useEffect(() => {
     async function fetchLinks() {

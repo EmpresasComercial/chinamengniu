@@ -55,9 +55,26 @@ export default function Terraco() {
 
   const handleLogout = async () => {
     showLoading();
-    await signOut();
-    hideLoading();
-    navigate('/login');
+    try {
+      // 1. Logout do Supabase
+      await signOut();
+      
+      // 2. Limpeza profunda
+      localStorage.clear();
+      sessionStorage.clear();
+      
+      if ('caches' in window) {
+        const cacheNames = await caches.keys();
+        await Promise.all(cacheNames.map(name => caches.delete(name)));
+      }
+
+      // 3. Reset total
+      window.location.href = '/login';
+    } catch (err) {
+      window.location.href = '/login';
+    } finally {
+      hideLoading();
+    }
   };
 
   const displayUid = profile?.phone ? `000${profile.phone}` : '---';
