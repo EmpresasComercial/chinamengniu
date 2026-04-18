@@ -5,6 +5,7 @@ import { motion, AnimatePresence } from 'motion/react';
 import { supabase } from '../lib/supabase';
 import { useAuth } from '../contexts/AuthContext';
 import { useLoading } from '../contexts/LoadingContext';
+import { ListSkeleton } from '../components/Skeleton';
 
 type FilterType = 'retiradas' | 'recarregamentos' | 'tarefas_diarias' | 'bonus_transacoes';
 
@@ -46,16 +47,32 @@ export default function FinancialRecords() {
     let query;
     switch (filter) {
       case 'retiradas':
-        query = supabase.from('retirada_clientes').select('*').eq('user_id', user.id).order('created_at', { ascending: false });
+        query = supabase
+          .from('retirada_clientes')
+          .select('id, nome_do_banco, data_da_retirada, hora_da_retirada, metodo, valor_solicitado, estado_da_retirada')
+          .eq('user_id', user.id)
+          .order('created_at', { ascending: false });
         break;
       case 'recarregamentos':
-        query = supabase.from('depositos_clientes').select('*').eq('user_id', user.id).order('created_at', { ascending: false });
+        query = supabase
+          .from('depositos_clientes')
+          .select('id, nome_do_banco, created_at, chave_de_transacao, valor_deposito, estado_de_pagamento')
+          .eq('user_id', user.id)
+          .order('created_at', { ascending: false });
         break;
       case 'tarefas_diarias':
-        query = supabase.from('tarefas_diarias').select('*').eq('user_id', user.id).order('data_atribuicao', { ascending: false });
+        query = supabase
+          .from('tarefas_diarias')
+          .select('id, data_atribuicao, renda_coletada, status')
+          .eq('user_id', user.id)
+          .order('data_atribuicao', { ascending: false });
         break;
       case 'bonus_transacoes':
-        query = supabase.from('bonus_transacoes').select('*').eq('user_id', user.id).order('data_recebimento', { ascending: false });
+        query = supabase
+          .from('bonus_transacoes')
+          .select('id, origem_bonus, data_recebimento, valor_recebido, status')
+          .eq('user_id', user.id)
+          .order('data_recebimento', { ascending: false });
         break;
     }
 
@@ -204,8 +221,8 @@ export default function FinancialRecords() {
 
           {/* Content */}
           {loading ? (
-            <div className="flex justify-center items-center py-16">
-              <div className="w-7 h-7 border-4 border-[#6D28D9] border-t-transparent rounded-full animate-spin" />
+            <div className="py-2">
+              <ListSkeleton count={4} />
             </div>
           ) : records.length === 0 ? (
             <div className="flex flex-col items-center justify-center py-10">

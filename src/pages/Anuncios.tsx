@@ -5,6 +5,7 @@ import { supabase } from '../lib/supabase';
 import { useAuth } from '../contexts/AuthContext';
 import { useLoading } from '../contexts/LoadingContext';
 import { motion } from 'motion/react';
+import { CardSkeleton } from '../components/Skeleton';
 
 interface Anuncio {
   id: string;
@@ -20,6 +21,7 @@ export default function Anuncios() {
   const { user } = useAuth();
   const { showLoading, hideLoading } = useLoading();
   const [anuncios, setAnuncios] = useState<Anuncio[]>([]);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     if (!user) {
@@ -28,11 +30,11 @@ export default function Anuncios() {
     }
 
     const fetchAnuncios = async () => {
-      showLoading();
+      setLoading(true);
       try {
         const { data, error } = await supabase
           .from('info_anuncio')
-          .select('*')
+          .select('id, titulo, descricao, imagem_url, link_url, created_at')
           .order('created_at', { ascending: false });
 
         if (error) throw error;
@@ -40,7 +42,7 @@ export default function Anuncios() {
       } catch (error) {
         console.error('Erro ao buscar anúncios:', error);
       } finally {
-        hideLoading();
+        setLoading(false);
       }
     };
 
@@ -83,7 +85,13 @@ export default function Anuncios() {
 
         {/* Lista de Anúncios */}
         <div className="space-y-5">
-          {anuncios.length > 0 ? (
+          {loading ? (
+            <>
+              <CardSkeleton />
+              <CardSkeleton />
+              <CardSkeleton />
+            </>
+          ) : anuncios.length > 0 ? (
             anuncios.map((anuncio, index) => (
               <motion.div
                 key={anuncio.id}

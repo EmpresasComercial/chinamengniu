@@ -136,7 +136,10 @@ export default function Home() {
     async function fetchLinks() {
       const done = registerFetch();
       try {
-        const { data } = await supabase.from('atendimento_links').select('*').single();
+        const { data } = await supabase
+          .from('atendimento_links')
+          .select('whatsapp_gerente_url, whatsapp_grupo_vendas_url, link_app_atualizado, splash_message')
+          .single();
         if (data) setLinks(prev => ({ ...prev, ...data }));
       } finally { done(); }
     }
