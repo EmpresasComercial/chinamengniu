@@ -81,7 +81,6 @@ export default function Login() {
       return;
     }
 
-    showLoading();
     try {
       const { error } = await supabase.auth.signInWithPassword({
         email: `${phone}@user.com`,
@@ -106,11 +105,9 @@ export default function Login() {
 
       setLoginAttempts(0);
       showToast('autenticação realizada com sucesso.');
-      setTimeout(() => navigate('/'), 1000);
+      // O redirecionamento será tratado automaticamente pelo AuthProvider (onAuthStateChange)
     } catch (err: any) {
       showToast('Falha na autenticação. Tente novamente mais tarde.');
-    } finally {
-      hideLoading();
     }
   };
 

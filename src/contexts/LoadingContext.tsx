@@ -6,6 +6,7 @@ interface LoadingContextType {
   showLoading: (slow?: boolean) => void;
   hideLoading: () => void;
   setIsLoading: (v: boolean) => void;
+  showError: (msg: string) => void;
   /** Register a pending data fetch. Returns a done() callback to call when fetch completes. */
   registerFetch: () => () => void;
 }
@@ -115,7 +116,7 @@ export const LoadingProvider = ({ children }: { children: ReactNode }) => {
   }, [hideLoading]);
 
   return (
-    <LoadingContext.Provider value={{ isLoading: isLoading, showLoading, hideLoading, setIsLoading: handleSetIsLoading, registerFetch }}>
+    <LoadingContext.Provider value={{ isLoading: isLoading, showLoading, hideLoading, setIsLoading: handleSetIsLoading, showError, registerFetch }}>
       {children}
       {isLoading && (
         <div className="fixed inset-0 z-[9999] flex flex-col items-center justify-center bg-black/5 backdrop-blur-[1px]">

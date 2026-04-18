@@ -4,27 +4,17 @@ import { useAuth } from '../contexts/AuthContext';
 /**
  * ProtectedRoute
  * Envolve rotas que exigem autenticação.
- * Se o utilizador não estiver autenticado, redireciona para /login.
- * Enquanto verifica a sessão, mostra um ecrã mínimo de espera.
+ * Se o utilizador não estiver autenticado, redireciona para /registrar imediatamente,
+ * sem travar a UI com telas de carregamento.
  */
 export default function ProtectedRoute() {
-    const { user, loading } = useAuth();
+    const { session } = useAuth();
 
-    // Aguarda que o Supabase confirme a sessão antes de decidir
-    if (loading) {
-        return (
-            <div className="min-h-screen flex flex-col items-center justify-center bg-[#f0f2f5] gap-4">
-                <div className="w-10 h-10 rounded-full border-4 border-[#0000a0]/20 border-t-[#0000a0] animate-spin" />
-                <p className="text-[12.5px] text-gray-500">a verificar sessão…</p>
-            </div>
-        );
-    }
-
-    // Sem sessão → redireciona para registo
-    if (!user) {
+    // Redireciona imediatamente se não houver sessão ativa
+    if (!session) {
         return <Navigate to="/registrar" replace />;
     }
 
-    // Sessão válida → renderiza a rota pedida
+    // Sessão válida → permite o acesso às sub-rotas
     return <Outlet />;
 }

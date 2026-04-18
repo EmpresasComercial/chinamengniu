@@ -1,9 +1,12 @@
 import React, { createContext, useContext, useEffect, useState, useCallback } from 'react';
 import { supabase } from '../lib/supabase';
-import { User } from '@supabase/supabase-js';
+import { User, Session } from '@supabase/supabase-js';
+import { useNavigate } from 'react-router-dom';
+import { useLoading } from './LoadingContext';
 
 interface AuthContextType {
     user: User | null;
+    session: Session | null;
     profile: any | null;
     loading: boolean;
     signOut: () => Promise<void>;
@@ -14,8 +17,11 @@ const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
 export function AuthProvider({ children }: { children: React.ReactNode }) {
     const [user, setUser] = useState<User | null>(null);
+    const [session, setSession] = useState<Session | null>(null);
     const [profile, setProfile] = useState<any | null>(null);
     const [loading, setLoading] = useState(true);
+    const navigate = useNavigate();
+    const { showError } = useLoading();
 
     const fetchProfile = useCallback(async (userId: string) => {
         const { data, error } = await supabase
@@ -36,36 +42,52 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     }, [user, fetchProfile]);
 
     useEffect(() => {
-        const initAuth = async () => {
-            const { data: { session } } = await supabase.auth.getSession();
-            setUser(session?.user ?? null);
-            if (session?.user) {
-                await fetchProfile(session.user.id);
+        // 1. Pega a sessão inicial sem bloquear a UI (async background)
+        supabase.auth.getSession().then(({ data: { session: initialSession } }) => {
+            setSession(initialSession);
+            setUser(initialSession?.user ?? null);
+            if (initialSession?.user) {
+                fetchProfile(initialSession.user.id);
             }
+            // Marcamos loading como false assim que temos o resultado inicial
             setLoading(false);
-        };
+        }).catch((err) => {
+            console.error("Erro ao recuperar sessão:", err);
+            setLoading(false);
+        });
 
-        initAuth();
-
-        const { data: { subscription } } = supabase.auth.onAuthStateChange(async (_event, session) => {
-            setUser(session?.user ?? null);
-            if (session?.user) {
-                await fetchProfile(session.user.id);
+        // 2. Escuta mudanças de autenticação (redirecionamento automático)
+        const { data: { subscription } } = supabase.auth.onAuthStateChange((event, currentSession) => {
+            setSession(currentSession);
+            setUser(currentSession?.user ?? null);
+            
+            if (currentSession?.user) {
+                fetchProfile(currentSession.user.id);
             } else {
                 setProfile(null);
             }
+            
+            // Tratamento de eventos para navegação (UX fluida)
+            if (event === 'SIGNED_IN') {
+                navigate('/', { replace: true });
+            }
+            if (event === 'SIGNED_OUT') {
+                showError('sua sessão expirou ou foi encerrada.');
+                navigate('/registrar', { replace: true });
+            }
+
             setLoading(false);
         });
 
         return () => subscription.unsubscribe();
-    }, [fetchProfile]);
+    }, [fetchProfile, navigate]);
 
     const signOut = useCallback(async () => {
         await supabase.auth.signOut();
     }, []);
 
     return (
-        <AuthContext.Provider value={{ user, profile, loading, signOut, refreshProfile }}>
+        <AuthContext.Provider value={{ user, session, profile, loading, signOut, refreshProfile }}>
             {children}
         </AuthContext.Provider>
     );

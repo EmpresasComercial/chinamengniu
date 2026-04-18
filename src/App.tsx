@@ -43,8 +43,7 @@ const Contrato = React.lazy(() => import('./pages/Contrato'));
  * evitando que acedam ao login/registo desnecessariamente.
  */
 function PublicOnlyRoute({ children }: { children: React.ReactNode }) {
-  const { user, loading } = useAuth();
-  if (loading) return null;
+  const { user } = useAuth();
   if (user) return <Navigate to="/" replace />;
   return <>{children}</>;
 }
@@ -52,8 +51,8 @@ function PublicOnlyRoute({ children }: { children: React.ReactNode }) {
 export default function App() {
   return (
     <Router>
-      <AuthProvider>
-        <LoadingProvider>
+      <LoadingProvider>
+        <AuthProvider>
           <RouteTransitionLoader />
           <Suspense fallback={
             <div className="fixed inset-0 z-[9999] flex flex-col items-center justify-center bg-black/5 backdrop-blur-[1px] lowercase">
@@ -135,8 +134,8 @@ export default function App() {
 
             </Routes>
           </Suspense>
-        </LoadingProvider>
-      </AuthProvider>
+        </AuthProvider>
+      </LoadingProvider>
     </Router>
   );
 }
