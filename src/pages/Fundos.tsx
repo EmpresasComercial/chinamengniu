@@ -35,7 +35,7 @@ export default function Fundos() {
         }
       }
     } catch (err) {
-      console.error('Erro ao buscar estatísticas:', err);
+      // erro silenciado para segurança
     } finally {
       done();
     }

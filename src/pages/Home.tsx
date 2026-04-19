@@ -175,7 +175,7 @@ export default function Home() {
         return coin;
       }));
     } catch (err) {
-      console.error('Erro ao buscar preços reais:', err);
+      // erro silenciado para segurança
     }
   }, []);
 

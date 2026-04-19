@@ -16,11 +16,9 @@ export default function Invite() {
 
   useEffect(() => {
     const fetchLinks = async () => {
-      const { data } = await supabase
-        .from('atendimento_links')
-        .select('link_app_atualizado')
-        .single();
-      if (data) setLinks({ link_app_atualizado: data.link_app_atualizado || '' });
+      const { data } = await supabase.rpc('get_support_links');
+      const linkData = Array.isArray(data) ? data[0] : data;
+      if (linkData) setLinks({ link_app_atualizado: linkData.link_app_atualizado || '' });
     };
     fetchLinks();
   }, []);

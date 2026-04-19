@@ -30,7 +30,7 @@ export default function Extracao() {
   const fetchPurchases = useCallback(async () => {
     if (!user) return;
     const [productsRes, historyRes] = await Promise.all([
-      supabase.from('products').select('name, image_url, price, daily_income_percent'),
+      supabase.rpc('get_active_products'),
       supabase.rpc('get_my_purchased_products_detailed')
     ]);
 

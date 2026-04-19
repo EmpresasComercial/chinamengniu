@@ -27,10 +27,7 @@ export default function Team() {
       const done = registerFetch();
       try {
         const teamPromise = supabase.rpc('get_my_team');
-        const bonusPromise = supabase
-          .from('bonus_transacoes')
-          .select('valor_recebido, data_transacao')
-          .eq('user_id', user.id);
+        const bonusPromise = supabase.rpc('get_my_bonus_transactions');
 
         const [teamRes, bonusRes] = await Promise.all([teamPromise, bonusPromise]);
         const today = new Date().toISOString().split('T')[0];

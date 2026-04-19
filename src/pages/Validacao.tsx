@@ -51,7 +51,7 @@ export default function Validacao() {
           }
        }
      } catch (err) {
-       console.error('Erro ao buscar status:', err);
+       // erro silenciado para segurança
      }
   };
 
@@ -143,7 +143,7 @@ export default function Validacao() {
       setStatus('pendente');
       showNotification('enviado com sucesso!');
     } catch (err: any) {
-      console.error('Erro detalhado:', err);
+      // erro silenciado para segurança
       const errorMsg = err.message || 'erro ao enviar. tente novamente.';
       showNotification(errorMsg.toLowerCase());
     } finally {

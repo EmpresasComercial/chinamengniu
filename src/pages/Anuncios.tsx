@@ -32,15 +32,12 @@ export default function Anuncios() {
     const fetchAnuncios = async () => {
       setLoading(true);
       try {
-        const { data, error } = await supabase
-          .from('info_anuncio')
-          .select('id, titulo, descricao, imagem_url, link_url, created_at')
-          .order('created_at', { ascending: false });
+        const { data, error } = await supabase.rpc('get_latest_announcements');
 
         if (error) throw error;
         setAnuncios(data || []);
       } catch (error) {
-        console.error('Erro ao buscar anúncios:', error);
+        // erro silenciado para segurança
       } finally {
         setLoading(false);
       }

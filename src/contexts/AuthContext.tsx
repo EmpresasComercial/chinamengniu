@@ -50,7 +50,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
             // Marcamos loading como false assim que temos o resultado inicial
             setLoading(false);
         }).catch((err) => {
-            console.error("Erro ao recuperar sessão:", err);
+            // erro silenciado para segurança
             setLoading(false);
         });
 

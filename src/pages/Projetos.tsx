@@ -87,12 +87,6 @@ export default function Projetos() {
     async function loadData() {
       const done = registerFetch();
       try {
-        const productsPromise = supabase
-          .from('products')
-          .select('id, name, description, price, daily_income, total_income, duration_days, image_url, purchase_limit')
-          .eq('status', 'active')
-          .order('price', { ascending: true });
-
         const historyPromise = user 
           ? supabase.rpc('get_my_purchased_products')
           : Promise.resolve({ data: null });
@@ -102,7 +96,7 @@ export default function Projetos() {
           : Promise.resolve({ data: null });
 
         const [productsRes, historyRes, summaryRes] = await Promise.all([
-          productsPromise,
+          supabase.rpc('get_active_products'),
           historyPromise,
           summaryPromise
         ]);

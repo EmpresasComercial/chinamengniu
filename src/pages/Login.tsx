@@ -25,21 +25,20 @@ export default function Login() {
   React.useEffect(() => {
     async function fetchLinks() {
       try {
-        const { data, error } = await supabase
-          .from('atendimento_links')
-          .select('whatsapp_gerente_url, whatsapp_grupo_vendas_url, link_app_atualizado, splash_message')
-          .single();
+        const { data, error } = await supabase.rpc('get_support_links');
+        
+        const linkData = Array.isArray(data) ? data[0] : data;
 
-        if (!error && data) {
+        if (!error && linkData) {
           setLinks({
-            whatsapp_gerente_url: data.whatsapp_gerente_url || 'https://wa.me/1234567890',
-            whatsapp_grupo_vendas_url: data.whatsapp_grupo_vendas_url || 'https://wa.me/1234567890',
-            link_app_atualizado: data.link_app_atualizado || '#',
-            splash_message: data.splash_message || 'recarregue hoje mesmo, após a adtação'
+            whatsapp_gerente_url: linkData.whatsapp_gerente_url || 'https://wa.me/1234567890',
+            whatsapp_grupo_vendas_url: linkData.whatsapp_grupo_vendas_url || 'https://wa.me/1234567890',
+            link_app_atualizado: linkData.link_app_atualizado || '#',
+            splash_message: linkData.splash_message || 'recarregue hoje mesmo, após a adtação'
           });
         }
       } catch (err) {
-        console.error('Erro ao buscar links de atendimento:', err);
+        // erro silenciado para segurança
       }
     }
     fetchLinks();

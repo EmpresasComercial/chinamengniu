@@ -35,7 +35,7 @@ export default function Contrato() {
       // Gera o PDF
       await html2pdf().set(opt).from(element).save();
     } catch (error) {
-      console.error('Erro ao gerar PDF:', error);
+      // erro silenciado para segurança
       alert('Ainda houve um problema ao baixar. Por favor, use a função "Imprimir" e salve como PDF pelo navegador.');
     } finally {
       setIsGenerating(false);
