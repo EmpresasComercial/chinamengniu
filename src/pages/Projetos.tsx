@@ -94,38 +94,35 @@ export default function Projetos() {
           .order('price', { ascending: true });
 
         const historyPromise = user 
-          ? supabase.from('historico_compras').select('nome_produto').eq('user_id', user.id)
+          ? supabase.rpc('get_my_purchased_products')
           : Promise.resolve({ data: null });
 
-        const tarefasPromise = user
-          ? supabase.from('tarefas_diarias').select('balance_correte, renda_coletada').eq('user_id', user.id)
+        const summaryPromise = user
+          ? supabase.rpc('get_user_financial_summary')
           : Promise.resolve({ data: null });
 
-        const [productsRes, historyRes, tarefasRes] = await Promise.all([
+        const [productsRes, historyRes, summaryRes] = await Promise.all([
           productsPromise,
           historyPromise,
-          tarefasPromise
+          summaryPromise
         ]);
 
         const productsData = productsRes.data;
         const history = historyRes.data;
-        const tarefas = tarefasRes.data;
+        const summary = summaryRes.data ? (Array.isArray(summaryRes.data) ? summaryRes.data[0] : summaryRes.data) : null;
 
         if (productsData) {
           const mappedProducts = productsData.map(p => ({
             ...p,
-            bought_count: history?.filter(h => h.nome_produto === p.name).length || 0
+            bought_count: history?.filter((h: any) => h.nome_produto === p.name).length || 0
           }));
           setProducts(mappedProducts);
         }
 
-        if (tarefas) {
-          const total = tarefas.reduce((sum, t) => sum + Number(t.balance_correte || 0), 0);
-          const rendaColetada = tarefas.reduce((sum, t) => sum + Number(t.renda_coletada || 0), 0);
-
+        if (summary) {
           setStats({
-            totalRevenue: total,
-            dailyIncome: rendaColetada
+            totalRevenue: Number(summary.fundo_balance || 0),
+            dailyIncome: Number(summary.total_renda_coletada || 0)
           });
         }
       } finally {

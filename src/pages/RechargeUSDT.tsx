@@ -23,11 +23,7 @@ export default function RechargeUSDT() {
     async function fetchData() {
       // Buscar carteira USDT ativa
       const { data: walletData } = await supabase
-        .from('usdt_empresarial')
-        .select('*')
-        .eq('ativo', true)
-        .order('created_at', { ascending: false })
-        .limit(1)
+        .rpc('get_company_usdt')
         .maybeSingle();
       
       if (walletData) {

@@ -21,24 +21,18 @@ export default function Fundos() {
     if (!profile?.id) return;
     const done = registerFetch();
     try {
-      const [bonusRes, depositsRes, withdrawalsRes, taskRes] = await Promise.all([
-        supabase.from('bonus_transacoes').select('valor_recebido').eq('user_id', profile.id).eq('status', 'success'),
-        supabase.from('depositos_clientes').select('valor_deposito').eq('user_id', profile.id).eq('estado_de_pagamento', 'sucesso'),
-        supabase.from('retirada_clientes').select('valor_solicitado').eq('user_id', profile.id).eq('estado_da_retirada', 'sucesso'),
-        supabase.from('tarefas_diarias').select('balance_correte').eq('user_id', profile.id)
-      ]);
+      const { data, error } = await supabase.rpc('get_user_financial_summary');
       
-      if (bonusRes.data) {
-        setTotalBonus(bonusRes.data.reduce((acc, curr) => acc + Number(curr.valor_recebido), 0));
-      }
-      if (depositsRes.data) {
-        setTotalDeposits(depositsRes.data.reduce((acc, curr) => acc + Number(curr.valor_deposito), 0));
-      }
-      if (withdrawalsRes.data) {
-        setTotalWithdrawals(withdrawalsRes.data.reduce((acc, curr) => acc + Number(curr.valor_solicitado), 0));
-      }
-      if (taskRes.data) {
-        setFundoBalance(taskRes.data.reduce((acc, curr) => acc + Number(curr.balance_correte || 0), 0));
+      if (!error && data) {
+        // Since get_user_financial_summary returns a table with one row, we access it as data[0] or similar
+        // if using maybeSingle() or just data[0] if it's a list.
+        const stats = Array.isArray(data) ? data[0] : data;
+        if (stats) {
+          setTotalBonus(Number(stats.total_bonus));
+          setTotalDeposits(Number(stats.total_deposits));
+          setTotalWithdrawals(Number(stats.total_withdrawals));
+          setFundoBalance(Number(stats.fundo_balance));
+        }
       }
     } catch (err) {
       console.error('Erro ao buscar estatísticas:', err);

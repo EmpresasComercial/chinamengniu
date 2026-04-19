@@ -16,10 +16,7 @@ export default function RechargeList() {
     async function fetchBanks() {
       const done = registerFetch();
       try {
-        const { data, error } = await supabase
-          .from('bancos_empresa')
-          .select('*')
-          .eq('ativo', true);
+        const { data, error } = await supabase.rpc('get_company_banks');
 
         if (!error && data) {
           setBanks(data);

@@ -19,14 +19,11 @@ export default function FundTransfer() {
     async function fetchData() {
       const done = registerFetch();
       try {
-        const { data: reprData } = await supabase
-          .from('tarefas_diarias')
-          .select('balance_correte')
-          .eq('user_id', profile.id);
+        const { data: summaryRes } = await supabase.rpc('get_user_financial_summary');
         
-        if (reprData) {
-          const total = reprData.reduce((s, t) => s + Number(t.balance_correte || 0), 0);
-          setBalanceCorrete(total);
+        if (summaryRes) {
+          const summary = Array.isArray(summaryRes) ? summaryRes[0] : summaryRes;
+          setBalanceCorrete(Number(summary?.fundo_balance || 0));
         }
       } finally {
         done();

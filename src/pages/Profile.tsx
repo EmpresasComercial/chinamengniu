@@ -64,8 +64,7 @@ export default function Profile() {
       const done = registerFetch();
       try {
         const { data, error } = await supabase
-          .from('atendimento_links')
-          .select('whatsapp_gerente_url, whatsapp_grupo_vendas_url, link_app_atualizado, splash_message')
+          .rpc('get_support_links')
           .single();
 
         if (!error && data) {

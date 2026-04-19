@@ -104,13 +104,10 @@ export default function AddBank() {
     if (!existingAccount) return;
     showLoading();
     try {
-      const { error } = await supabase
-        .from('bancos_clientes')
-        .delete()
-        .eq('id', existingAccount.id);
+      const { data, error } = await supabase.rpc('delete_client_bank', { p_id: existingAccount.id });
 
-      if (error) {
-        setValidationError(error.message);
+      if (error || data === false) {
+        setValidationError(error?.message || 'Erro ao apagar conta bancária.');
         setTimeout(() => setValidationError(null), 3000);
       } else {
         navigate(-1);

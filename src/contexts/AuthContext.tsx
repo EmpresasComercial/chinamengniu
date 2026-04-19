@@ -25,9 +25,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
 
     const fetchProfile = useCallback(async (userId: string) => {
         const { data, error } = await supabase
-            .from('profiles')
-            .select('id, phone, balance, invite_code')
-            .eq('id', userId)
+            .rpc('get_user_profile')
             .single();
 
         if (!error && data) {

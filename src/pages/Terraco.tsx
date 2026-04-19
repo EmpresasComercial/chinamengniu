@@ -24,8 +24,7 @@ export default function Terraco() {
       const done = registerFetch();
       try {
         const { data, error } = await supabase
-          .from('atendimento_links')
-          .select('telegram_url, facebook_url, youtube_url, whatsapp_gerente_url')
+          .rpc('get_support_links')
           .single();
 
         if (!error && data) {

@@ -44,40 +44,8 @@ export default function FinancialRecords() {
     setRecords([]);
     const done = registerFetch();
 
-    let query;
-    switch (filter) {
-      case 'retiradas':
-        query = supabase
-          .from('retirada_clientes')
-          .select('id, nome_do_banco, data_da_retirada, hora_da_retirada, metodo, valor_solicitado, estado_da_retirada')
-          .eq('user_id', user.id)
-          .order('created_at', { ascending: false });
-        break;
-      case 'recarregamentos':
-        query = supabase
-          .from('depositos_clientes')
-          .select('id, nome_do_banco, created_at, chave_de_transacao, valor_deposito, estado_de_pagamento')
-          .eq('user_id', user.id)
-          .order('created_at', { ascending: false });
-        break;
-      case 'tarefas_diarias':
-        query = supabase
-          .from('tarefas_diarias')
-          .select('id, data_atribuicao, renda_coletada, status')
-          .eq('user_id', user.id)
-          .order('data_atribuicao', { ascending: false });
-        break;
-      case 'bonus_transacoes':
-        query = supabase
-          .from('bonus_transacoes')
-          .select('id, origem_bonus, data_recebimento, valor_recebido, status')
-          .eq('user_id', user.id)
-          .order('data_recebimento', { ascending: false });
-        break;
-    }
-
     try {
-      const { data, error } = await query;
+      const { data, error } = await supabase.rpc('get_my_financial_records', { p_filter: filter });
       if (!error && data) setRecords(data);
     } finally {
       setLoading(false);

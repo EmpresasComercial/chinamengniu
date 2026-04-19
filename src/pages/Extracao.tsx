@@ -31,17 +31,14 @@ export default function Extracao() {
     if (!user) return;
     const [productsRes, historyRes] = await Promise.all([
       supabase.from('products').select('name, image_url, price, daily_income_percent'),
-      supabase.from('historico_compras')
-        .select('*')
-        .eq('user_id', user.id)
-        .order('data_compra', { ascending: false })
+      supabase.rpc('get_my_purchased_products_detailed')
     ]);
 
     if (historyRes.data) {
       const historyData = historyRes.data;
       const today = new Date();
-      const activeInvestments = historyData.filter(h =>
-        h.status === 'confirmado' && new Date(h.data_expiracao) > today
+      const activeInvestments = historyData.filter((h: any) =>
+        new Date(h.data_expiracao || today) > today
       );
 
       const productsData = productsRes.data || [];
@@ -52,7 +49,8 @@ export default function Extracao() {
         return {
           ...item,
           image_url: p?.image_url || '/ai-go-onrender.png',
-          daily_percent: p?.daily_income_percent || 0.697
+          daily_percent: p?.daily_income_percent || 0.697,
+          preco: item.daily_income ? (item.daily_income / (p?.daily_income_percent || 0.697) * 100) : (p?.price || 0)
         };
       });
 
@@ -67,25 +65,24 @@ export default function Extracao() {
 
   const fetchDailyStats = useCallback(async () => {
     if (!user) return;
-    const todayStr = new Date().toISOString().split('T')[0];
     
-    const [todayTaskRes, tasksRes] = await Promise.all([
-      supabase.from('tarefas_diarias').select('id').eq('user_id', user.id).gte('data_atribuicao', todayStr).limit(1),
-      supabase.from('tarefas_diarias').select('balance_correte, renda_coletada').eq('user_id', user.id)
+    const [todayTaskRes, summaryRes] = await Promise.all([
+      supabase.rpc('check_today_task'),
+      supabase.rpc('get_user_financial_summary')
     ]);
 
-    setHasCollectedToday(!!(todayTaskRes.data && todayTaskRes.data.length > 0));
+    setHasCollectedToday(!!todayTaskRes.data);
 
-    if (tasksRes.data) {
-      const tasks = tasksRes.data;
-      const balance = tasks.reduce((sum, t) => sum + Number(t.balance_correte || 0), 0);
-      const rendaTotal = tasks.reduce((sum, t) => sum + Number(t.renda_coletada || 0), 0);
-      setStats(prev => ({
-        ...prev,
-        reproductionBalance: balance,
-        totalProfit: balance,
-        dailyIncomeTotal: rendaTotal
-      }));
+    if (summaryRes.data) {
+      const summary = Array.isArray(summaryRes.data) ? summaryRes.data[0] : summaryRes.data;
+      if (summary) {
+        setStats(prev => ({
+          ...prev,
+          reproductionBalance: Number(summary.fundo_balance || 0),
+          totalProfit: Number(summary.fundo_balance || 0),
+          dailyIncomeTotal: Number(summary.total_renda_coletada || 0)
+        }));
+      }
     }
   }, [user]);
 
