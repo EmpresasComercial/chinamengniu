@@ -6,7 +6,7 @@ import { useLoading } from '../contexts/LoadingContext';
 import { supabase } from '../lib/supabase';
 import { useAuth } from '../contexts/AuthContext';
 
-const MAX_FILE_SIZE = 2 * 1024 * 1024; // 2MB
+const MAX_FILE_SIZE = 3 * 1024 * 1024; // 3MB
 
 export default function Validacao() {
   const navigate = useNavigate();
@@ -84,7 +84,7 @@ export default function Validacao() {
     const file = e.target.files?.[0];
     if (file) {
       if (file.size > MAX_FILE_SIZE) {
-        showNotification('o ficheiro deve ter no máximo 2mb.');
+        showNotification('o ficheiro deve ter no máximo 3mb.');
         return;
       }
       const previewUrl = URL.createObjectURL(file);
@@ -143,7 +143,9 @@ export default function Validacao() {
       setStatus('pendente');
       showNotification('enviado com sucesso!');
     } catch (err: any) {
-      showNotification('erro ao enviar. tente novamente.');
+      console.error('Erro detalhado:', err);
+      const errorMsg = err.message || 'erro ao enviar. tente novamente.';
+      showNotification(errorMsg.toLowerCase());
     } finally {
       hideLoading();
     }
