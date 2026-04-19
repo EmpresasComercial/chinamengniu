@@ -4,6 +4,7 @@ import { useNavigate } from 'react-router-dom';
 import { useLoading } from '../contexts/LoadingContext';
 import { useAuth } from '../contexts/AuthContext';
 import { supabase } from '../lib/supabase';
+import { getOptimizedImageUrl } from '../lib/image-optimization';
 
 interface Product {
   id: string;
@@ -139,9 +140,10 @@ export default function Projetos() {
               {/* Product Image */}
               <div className="w-[120px] shrink-0 h-[100px] flex items-center justify-center rounded-xl overflow-hidden self-center">
                 <img 
-                  src={vip.image_url} 
+                  src={getOptimizedImageUrl(vip.image_url, { width: 240, quality: 80 })} 
                   alt={vip.name} 
                   className="w-full h-full object-cover" 
+                  loading="lazy"
                 />
               </div>
 

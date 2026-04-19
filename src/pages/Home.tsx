@@ -5,6 +5,7 @@ import { motion, AnimatePresence } from 'motion/react';
 import { useLoading } from '../contexts/LoadingContext';
 import { useAuth } from '../contexts/AuthContext';
 import { supabase } from '../lib/supabase';
+import { getOptimizedImageUrl } from '../lib/image-optimization';
 
 const CAROUSEL_IMAGES = [
   '/carriseul-um.jpeg',
@@ -136,10 +137,9 @@ export default function Home() {
     async function fetchLinks() {
       const done = registerFetch();
       try {
-        const { data } = await supabase
-          .rpc('get_support_links')
-          .single();
-        if (data) setLinks(prev => ({ ...prev, ...data }));
+        const { data } = await supabase.rpc('get_support_links');
+        const linkData = Array.isArray(data) ? data[0] : data;
+        if (linkData) setLinks(prev => ({ ...prev, ...linkData }));
       } finally { done(); }
     }
     fetchLinks();
@@ -233,7 +233,7 @@ export default function Home() {
       </header>
 
       {/* ⚪ Feature Grid */}
-      <section className="mx-2.5 -mt-12 z-10 bg-white rounded-2xl px-3 py-6 shadow-xl shadow-purple-900/5 border border-purple-50">
+      <section className="mx-2.5 -mt-12 z-10 bg-white rounded-2xl px-3 py-6 shadow-sm border border-gray-100">
         <div className="grid grid-cols-3 gap-1 text-center mb-8">
           <div onClick={() => navigate('/apresentacao-da-empresa')} className="flex flex-col items-center">
             <div className="w-[48px] h-[48px] bg-purple-50 rounded-xl flex items-center justify-center mb-1.5 transition-transform active:scale-90">
@@ -255,11 +255,11 @@ export default function Home() {
           </div>
         </div>
 
-        <div className="bg-gradient-to-br from-purple-50/50 to-indigo-50/50 rounded-2xl p-5 relative overflow-hidden border border-purple-100/30">
+        <div className="bg-gray-50 rounded-2xl p-5 relative overflow-hidden border border-gray-100">
           <h2 className="text-[#6D28D9] font-black text-[16px] mb-1 leading-tight">geração de receita contínua</h2>
           <p className="text-[#6D28D9]/40 text-[9px] font-black uppercase tracking-widest leading-none mb-6">AI-GO onrender premium</p>
           <div className="flex gap-2.5 w-full z-10">
-            <button onClick={() => navigate('/select-bank')} className="flex-1 bg-[#6D28D9] text-white px-3 rounded-xl text-[11px] font-bold h-[45px] flex items-center justify-center active:scale-95 shadow-lg shadow-purple-900/20 lowercase gap-2">
+            <button onClick={() => navigate('/select-bank')} className="flex-1 bg-[#6D28D9] text-white px-3 rounded-xl text-[11px] font-bold h-[45px] flex items-center justify-center active:scale-95 shadow-md shadow-gray-200 lowercase gap-2">
               <img src="/deposit1-Dk3ugVyJ.png" alt="dep" className="w-4 h-4" /> recarregar
             </button>
             <button onClick={() => navigate('/retirar')} className="flex-1 bg-white text-[#6D28D9] border border-purple-100 px-3 rounded-xl text-[11px] font-bold h-[45px] flex items-center justify-center active:scale-95 lowercase gap-2">
@@ -278,6 +278,7 @@ export default function Home() {
                 src={CAROUSEL_IMAGES[currentSlide]}
                 initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}
                 className="absolute inset-0 w-full h-full object-cover"
+                loading={currentSlide === 0 ? "eager" : "lazy"}
              />
           </AnimatePresence>
         </div>

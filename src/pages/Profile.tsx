@@ -63,16 +63,15 @@ export default function Profile() {
     async function fetchLinks() {
       const done = registerFetch();
       try {
-        const { data, error } = await supabase
-          .rpc('get_support_links')
-          .single();
+        const { data, error } = await supabase.rpc('get_support_links');
+        const linkData = Array.isArray(data) ? data[0] : data;
 
-        if (!error && data) {
+        if (!error && linkData) {
           setLinks({
-            whatsapp_gerente_url: data.whatsapp_gerente_url || 'https://wa.me/1234567890',
-            whatsapp_grupo_vendas_url: data.whatsapp_grupo_vendas_url || 'https://wa.me/1234567890',
-            link_app_atualizado: data.link_app_atualizado || '#',
-            splash_message: data.splash_message || 'recarregue hoje mesmo, após a adtação'
+            whatsapp_gerente_url: linkData.whatsapp_gerente_url || 'https://wa.me/1234567890',
+            whatsapp_grupo_vendas_url: linkData.whatsapp_grupo_vendas_url || 'https://wa.me/1234567890',
+            link_app_atualizado: linkData.link_app_atualizado || '#',
+            splash_message: linkData.splash_message || 'recarregue hoje mesmo, após a adtação'
           });
         }
       } finally {
@@ -199,7 +198,6 @@ export default function Profile() {
                    <div className={`w-10 h-10 rounded-xl flex items-center justify-center icon-box-${item.colorClass}`}>
                      <item.icon className="w-5 h-5" />
                    </div>
-                   <div className={`absolute -inset-1 rounded-xl blur-md opacity-20 glow-${item.colorClass}`}></div>
                 </div>
                 <span className="text-[10px] font-bold text-gray-500 whitespace-nowrap">{item.name}</span>
               </button>
@@ -225,7 +223,6 @@ export default function Profile() {
                    <div className={`w-10 h-10 rounded-xl flex items-center justify-center icon-box-${item.colorClass}`}>
                      <item.icon className="w-5 h-5" />
                    </div>
-                   <div className={`absolute -inset-1 rounded-xl blur-md opacity-20 glow-${item.colorClass}`}></div>
                 </div>
                 <span className="text-[10px] font-bold text-gray-500 whitespace-nowrap">{item.name}</span>
               </button>

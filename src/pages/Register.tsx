@@ -291,7 +291,7 @@ export default function Register() {
             {/* Submit Button */}
             <div className="pt-6">
               <button
-                className="w-full bg-[#6D28D9] text-white h-[45px] rounded-xl font-bold text-[12.5px] transition-all active:scale-95 shadow-lg shadow-purple-900/20 lowercase"
+                className="w-full bg-[#6D28D9] text-white h-[45px] rounded-xl font-bold text-[12.5px] transition-all active:scale-95 shadow-md shadow-gray-200 lowercase"
                 type="submit"
               >
                 criar conta

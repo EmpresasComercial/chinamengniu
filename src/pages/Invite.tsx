@@ -70,11 +70,6 @@ export default function Invite() {
 
   return (
     <div className="min-h-screen bg-[#FDFDFD] relative overflow-hidden font-sans page-content">
-      {/* Background Decoration */}
-      <div className="absolute top-0 right-0 w-full h-full opacity-[0.03] pointer-events-none select-none overflow-hidden">
-         <div className="absolute top-[-10%] right-[-10%] w-[500px] h-[500px] border-[50px] border-[#6D28D9] rounded-full"></div>
-      </div>
-
       {/* Header */}
       <header className="flex items-center justify-between px-4 h-14 bg-white/80 backdrop-blur-sm sticky top-0 z-30">
         <button onClick={() => navigate(-1)} className="p-2 text-gray-800" title="voltar">

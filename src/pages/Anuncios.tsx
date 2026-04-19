@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react';
 import { ChevronLeft, Megaphone, ExternalLink } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import { supabase } from '../lib/supabase';
+import { getOptimizedImageUrl } from '../lib/image-optimization';
 import { useAuth } from '../contexts/AuthContext';
 import { useLoading } from '../contexts/LoadingContext';
 import { motion } from 'motion/react';
@@ -100,9 +101,10 @@ export default function Anuncios() {
                 {anuncio.imagem_url && (
                   <div className="relative w-full aspect-video bg-gray-50 border-b border-gray-50">
                     <img 
-                      src={anuncio.imagem_url} 
+                      src={getOptimizedImageUrl(anuncio.imagem_url, { width: 600, quality: 80 })} 
                       alt={anuncio.titulo}
                       className="w-full h-full object-cover"
+                      loading="lazy"
                     />
                   </div>
                 )}
