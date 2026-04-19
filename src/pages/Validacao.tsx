@@ -5,6 +5,7 @@ import { motion, AnimatePresence } from 'motion/react';
 import { useLoading } from '../contexts/LoadingContext';
 import { supabase } from '../lib/supabase';
 import { useAuth } from '../contexts/AuthContext';
+import imageCompression from 'browser-image-compression';
 
 const MAX_FILE_SIZE = 3 * 1024 * 1024; // 3MB
 
@@ -80,20 +81,33 @@ export default function Validacao() {
     setTimeout(() => setNotification(null), 3000);
   };
 
-  const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>, side: 'front' | 'back') => {
+  const handleImageChange = async (e: React.ChangeEvent<HTMLInputElement>, side: 'front' | 'back') => {
     const file = e.target.files?.[0];
     if (file) {
-      if (file.size > MAX_FILE_SIZE) {
-        showNotification('o ficheiro deve ter no máximo 3mb.');
-        return;
-      }
-      const previewUrl = URL.createObjectURL(file);
-      if (side === 'front') {
-        setFrontImage(file);
-        setFrontPreview(previewUrl);
-      } else {
-        setBackImage(file);
-        setBackPreview(previewUrl);
+      showLoading();
+      try {
+        const options = {
+          maxSizeMB: 0.8, // Máximo de 800KB
+          maxWidthOrHeight: 1200, // Limita resolução para tela
+          useWebWorker: true,
+          fileType: 'image/webp', // Força webp para ultra compressão
+          initialQuality: 0.8
+        };
+        
+        const compressedFile = await imageCompression(file, options);
+        const previewUrl = URL.createObjectURL(compressedFile);
+        
+        if (side === 'front') {
+          setFrontImage(compressedFile as File);
+          setFrontPreview(previewUrl);
+        } else {
+          setBackImage(compressedFile as File);
+          setBackPreview(previewUrl);
+        }
+      } catch (error) {
+        showNotification('erro ao processar imagem. tente novamente.');
+      } finally {
+        hideLoading();
       }
     }
   };
@@ -312,7 +326,7 @@ export default function Validacao() {
                     <button
                       onClick={handleSend}
                       disabled={!canSubmit}
-                      className={`w-full h-[50px] text-white rounded-[16px] text-[15px] font-black transition-all shadow-md mt-2 ${canSubmit ? 'bg-[#6D28D9] active:scale-95 shadow-purple-900/20' : 'bg-gray-200 cursor-not-allowed shadow-none'}`}
+                      className={`w-full h-[50px] text-white rounded-[20px] text-[15px] font-black transition-all shadow-md mt-2 ${canSubmit ? 'bg-[#6D28D9] active:scale-95 shadow-purple-900/20' : 'bg-gray-200 cursor-not-allowed shadow-none'}`}
                     >
                       enviar
                     </button>

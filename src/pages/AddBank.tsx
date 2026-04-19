@@ -210,7 +210,7 @@ export default function AddBank() {
               <div className="pt-8 pb-2">
                 <button
                   type="submit"
-                  className="w-full h-[45px] bg-[#6D28D9] text-white font-normal rounded-xl text-[15px] hover:opacity-90 transition-opacity"
+                  className="w-full h-[45px] bg-[#6D28D9] text-white font-normal rounded-[20px] text-[15px] hover:opacity-90 transition-opacity"
                 >
                   salvar
                 </button>

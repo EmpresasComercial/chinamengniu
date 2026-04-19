@@ -214,7 +214,7 @@ export default function RechargeUSDT() {
         <button
           onClick={handleConfirm}
           disabled={hasSent}
-          className={`w-full h-[52px] text-white rounded-[12px] text-[16px] font-semibold mb-6 active:scale-[0.98] transition-all lowercase shadow-md ${
+          className={`w-full h-[52px] text-white rounded-[20px] text-[16px] font-semibold mb-6 active:scale-[0.98] transition-all lowercase shadow-md ${
             hasSent 
               ? 'bg-green-500 shadow-green-900/20 cursor-default' 
               : 'bg-[#6D28D9] hover:bg-[#5b21b6] shadow-purple-900/20'

@@ -161,7 +161,7 @@ export default function RechargeList() {
       <div className="p-3 sticky bottom-0 bg-white/80 backdrop-blur-md">
         <button
           onClick={handleAdvance}
-          className={`w-full h-[45px] rounded-[12px] text-[15px] font-bold transition-all lowercase shadow-sm ${
+          className={`w-full h-[45px] rounded-[20px] text-[15px] font-bold transition-all lowercase shadow-sm ${
             !selectedBankId 
               ? 'bg-gray-200 text-gray-400 cursor-not-allowed' 
               : 'bg-[#6D28D9] text-white active:scale-[0.98]'

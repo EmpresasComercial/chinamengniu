@@ -62,7 +62,7 @@ export default function Resgate() {
             <button
               onClick={handleRedeem}
               disabled={code.trim() === ''}
-              className={`w-full h-[52px] text-white rounded-full text-[15px] font-bold transition-all shadow-md lowercase mt-2 ${
+              className={`w-full h-[52px] text-white rounded-[20px] text-[15px] font-bold transition-all shadow-md lowercase mt-2 ${
                 code.trim() 
                   ? 'bg-[#6D28D9] active:scale-[0.98] shadow-purple-900/20' 
                   : 'bg-[#A78BFA] shadow-purple-200 cursor-not-allowed'

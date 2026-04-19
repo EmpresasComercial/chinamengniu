@@ -94,16 +94,18 @@ export default function FundTransfer() {
 
   return (
     <div className="flex flex-col min-h-screen bg-[#FDFDFD] font-sans antialiased relative overflow-hidden">
-      <div className="absolute top-0 left-0 right-0 h-[280px] bg-gradient-to-b from-[#FF4D4D] to-white/0 -z-10" />
-
-      <main className="flex-grow p-4 pt-14 relative z-10 flex flex-col">
+      <header className="bg-[#6D28D9] flex items-center px-4 h-14 sticky top-0 z-50 shadow-sm">
         <button 
           onClick={() => navigate(-1)} 
-          className="absolute top-4 left-4 p-2 text-white active:scale-90 transition-transform"
+          className="p-2 text-white active:scale-90 transition-transform"
           aria-label="voltar"
         >
-          <ChevronLeft className="h-7 w-7" />
+          <ChevronLeft className="h-6 w-6" />
         </button>
+        <h1 className="flex-1 text-center text-[17px] font-bold text-white lowercase pr-8">conversões</h1>
+      </header>
+
+      <main className="flex-grow p-4 relative z-10 flex flex-col">
 
         <div className="relative mt-8 space-y-2">
           {/* Card AOA */}
@@ -159,7 +161,12 @@ export default function FundTransfer() {
         <div className="mt-20 px-2">
           <button
             onClick={handleTransfer}
-            className="w-full h-[52px] bg-[#A78BFA] text-white rounded-full text-[15px] font-bold active:scale-[0.98] transition-all shadow-md shadow-purple-200 lowercase"
+            disabled={!amountInput || Number(amountInput) <= 0}
+            className={`w-full h-[52px] text-white rounded-[20px] text-[15px] font-bold transition-all shadow-md lowercase ${
+              amountInput && Number(amountInput) > 0 
+                ? 'bg-[#6D28D9] active:scale-[0.98] shadow-purple-900/20' 
+                : 'bg-[#A78BFA] shadow-purple-200 cursor-not-allowed'
+            }`}
           >
             enviar
           </button>

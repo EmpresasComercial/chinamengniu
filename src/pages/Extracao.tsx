@@ -50,6 +50,7 @@ export default function Extracao() {
           ...item,
           image_url: p?.image_url || '/ai-go-onrender.png',
           daily_percent: p?.daily_income_percent || 0.697,
+          duration_days: p?.duration_days || 0,
           preco: item.daily_income ? (item.daily_income / (p?.daily_income_percent || 0.697) * 100) : (p?.price || 0)
         };
       });
@@ -179,7 +180,7 @@ export default function Extracao() {
             <div className="grid grid-cols-2 gap-y-6 gap-x-4">
                <div>
                   <p className="text-gray-400 text-[11px] font-bold lowercase mb-1.5">renda diária</p>
-                  <p className="text-gray-900 text-[14px] font-black">2.76% ~ 2.85%</p>
+                  <p className="text-green-600 text-[14px] font-black">{fmt(purchases.reduce((acc, item) => acc + (item.preco * (item.daily_percent / 100)), 0))} AOA</p>
                </div>
                <div className="text-right">
                   <p className="text-gray-400 text-[11px] font-bold lowercase mb-1.5">Renda de hoje</p>
@@ -208,20 +209,17 @@ export default function Extracao() {
                purchases.map((item, idx) => (
                   <div key={idx} className="bg-white rounded-3xl p-5 flex items-center justify-between shadow-xl shadow-gray-100/50 border border-gray-50/50 select-none active:scale-[0.98] transition-all">
                      <div className="flex items-center gap-4">
-                        <div className="w-[52px] h-[52px] bg-red-50/50 rounded-2xl flex items-center justify-center p-2.5">
-                           {/* Brand Icon Placeholder as per reference */}
-                           <div className="w-full h-full bg-[#EF4444] rounded-lg flex items-center justify-center">
-                              <TrendingUp className="w-6 h-6 text-white" />
-                           </div>
+                        <div className="w-[52px] h-[52px] bg-red-50/50 rounded-2xl flex items-center justify-center overflow-hidden">
+                           <img src={item.image_url} alt={item.nome_produto} className="w-full h-full object-cover" />
                         </div>
                         <div className="flex flex-col">
-                           <span className="text-[17px] font-black text-[#EF4444] leading-tight">+{fmt(item.preco * (item.daily_percent / 100))} AI-GO</span>
-                           <span className="text-[12px] text-gray-400 font-bold lowercase mt-0.5">quantidade {fmt(item.preco)} AI-GO</span>
+                           <span className="text-[15px] font-black text-gray-900 uppercase">{item.nome_produto}</span>
+                           <span className="text-[12px] text-gray-400 font-bold lowercase mt-0.5">preço {fmt(item.preco)} AOA</span>
                         </div>
                      </div>
-                     <div className="text-right">
-                        <span className="text-[14px] font-black text-gray-900">{item.daily_percent}%</span>
-                        <p className="text-[11px] text-gray-400 font-bold lowercase">margens</p>
+                     <div className="text-right flex flex-col justify-center">
+                        <p className="text-[11px] text-gray-400 font-bold lowercase">duração</p>
+                        <span className="text-[14px] font-black text-[#6D28D9]">{item.duration_days} dias</span>
                      </div>
                   </div>
                ))

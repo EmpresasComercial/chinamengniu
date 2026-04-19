@@ -225,7 +225,7 @@ export default function Withdraw() {
         <div className="pt-1">
           <button
             onClick={handleConfirmWithdraw}
-            className="w-full h-11 bg-[#6D28D9] text-white rounded-full text-[12.5px] font-bold active:scale-[0.98] transition-all shadow shadow-[#6D28D9]/10"
+            className="w-full h-11 bg-[#6D28D9] text-white rounded-[20px] text-[12.5px] font-bold active:scale-[0.98] transition-all shadow shadow-[#6D28D9]/10"
           >
             enviar
           </button>

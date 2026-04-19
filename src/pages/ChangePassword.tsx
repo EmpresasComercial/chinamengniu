@@ -173,7 +173,7 @@ export default function ChangePassword() {
             {/* Action Button */}
             <div className="pt-4 pb-2">
               <button
-                className="w-full h-[45px] bg-[#6D28D9] text-white rounded-xl text-[15px] font-normal hover:opacity-90 transition-opacity"
+                className="w-full h-[45px] bg-[#6D28D9] text-white rounded-[20px] text-[15px] font-normal hover:opacity-90 transition-opacity"
                 type="submit"
               >
                 enviar

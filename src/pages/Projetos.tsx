@@ -155,9 +155,9 @@ export default function Projetos() {
                 
                 <div className="space-y-0.5 text-[11px] text-slate-500 font-medium lowercase">
                   <p>preço: <span className="text-slate-900 font-bold uppercase tracking-tighter">aoa{vip.price.toFixed(2)}</span></p>
-                  <p>período de validade: <span className="text-slate-900 font-bold uppercase tracking-tighter">{vip.duration_days} dias</span></p>
+                  <p>duração: <span className="text-slate-900 font-bold uppercase tracking-tighter">{vip.duration_days} dias</span></p>
                   <p>renda diária: <span className="text-slate-900 font-bold uppercase tracking-tighter">aoa{vip.daily_income.toFixed(2)}</span></p>
-                  <p>limite de quantidade: <span className="text-slate-900 font-bold uppercase tracking-tighter">{vip.purchase_limit}</span></p>
+                  <p>limite: <span className="text-slate-900 font-bold uppercase tracking-tighter">{vip.bought_count}/{vip.purchase_limit}</span></p>
                 </div>
 
                 <div className="pt-2 flex justify-end">
@@ -168,7 +168,7 @@ export default function Projetos() {
                     }}
                     className="bg-[#6D28D9] hover:bg-purple-700 text-white px-6 h-9 flex items-center justify-center rounded-xl text-[12px] font-bold active:scale-95 transition-all shadow-md shadow-purple-600/20"
                   >
-                    ativar rede
+                    comprar
                   </button>
                 </div>
               </div>
