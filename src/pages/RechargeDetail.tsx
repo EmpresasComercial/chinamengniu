@@ -54,28 +54,26 @@ export default function RechargeDetail() {
   const handleConfirm = async () => {
     if (!user) return;
     
-    if (!depositAmount || parseFloat(depositAmount) <= 0) {
-      showNotification('o valor é obrigatório.');
-      return;
-    }
-
     showLoading();
+    try {
+      const { data, error } = await supabase.rpc('create_deposit_request', {
+        p_amount: parseFloat(depositAmount) || 0,
+        p_bank_name: bank.nome_do_banco,
+        p_iban: bank.iban
+      });
 
-    // Emulating the RPC call from the original file
-    const { data: rpcData, error: rpcError } = await supabase.rpc('create_deposit_request', {
-      p_amount: parseFloat(depositAmount),
-      p_bank_name: bank.nome_do_banco,
-      p_iban: bank.iban
-    });
-
-    hideLoading();
-
-    if (!rpcError && (rpcData?.success || rpcData)) {
-      setHasSent(true);
-      showNotification('depósito solicitado com sucesso.');
-    } else {
-      const errorMsg = rpcError?.message || rpcData?.message || 'falha no processamento. por favor, tente novamente.';
-      showNotification(errorMsg.toLowerCase());
+      if (error) {
+        showNotification(error.message);
+      } else if (data && data.success) {
+        setHasSent(true);
+        showNotification(data.message || 'depósito solicitado com sucesso.');
+      } else {
+        showNotification(data?.message || 'falha no processamento. por favor, tente novamente.');
+      }
+    } catch (err: any) {
+      showNotification('erro inesperado. tente novamente mais tarde.');
+    } finally {
+      hideLoading();
     }
   };
 

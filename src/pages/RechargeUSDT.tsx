@@ -65,30 +65,24 @@ export default function RechargeUSDT() {
   const handleConfirm = async () => {
     if (!user) return;
     
-    const val = parseFloat(depositAmount);
-    if (!depositAmount || isNaN(val) || val < 10) {
-      showNotification('o valor mínimo de depósito é 10 usdt.');
-      return;
-    }
-
     showLoading();
 
     try {
       const { data, error } = await supabase.rpc('create_usdt_deposit', {
-        p_amount_usdt: val,
+        p_amount_usdt: parseFloat(depositAmount) || 0,
         p_exchange_rate: exchangeRate
       });
 
-      if (error) throw error;
-
-      if (data && data.success) {
+      if (error) {
+        showNotification(error.message);
+      } else if (data && data.success) {
         setHasSent(true);
-        showNotification('depósito solicitado com sucesso.');
+        showNotification(data.message || 'depósito solicitado com sucesso.');
       } else {
-        showNotification(data?.message?.toLowerCase() || 'falha no processamento. por favor, tente novamente.');
+        showNotification(data?.message || 'falha no processamento. por favor, tente novamente.');
       }
     } catch (err: any) {
-      showNotification('erro técnico ao processar no servidor. tente novamente.');
+      showNotification('erro inesperado. tente novamente mais tarde.');
     } finally {
       hideLoading();
     }

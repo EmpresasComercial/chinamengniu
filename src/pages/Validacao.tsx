@@ -125,25 +125,19 @@ export default function Validacao() {
 
   const handleSend = async () => {
     if (!user) return;
-    if (!frontImage || !backImage || !biNumber || !fullName) {
-      showNotification('por favor, preencha todos os campos e fotos.');
-      return;
-    }
-
-    if (biNumber.length !== 14) {
-      showNotification('o bi deve ter 14 dígitos.');
-      return;
-    }
 
     showLoading();
     try {
       const frontPath = `${user.id}/frente_${Date.now()}`;
       const backPath = `${user.id}/verso_${Date.now()}`;
 
-      await Promise.all([
-        supabase.storage.from('validacoes').upload(frontPath, frontImage),
-        supabase.storage.from('validacoes').upload(backPath, backImage)
-      ]);
+      // Upload images first (Backend doesn't have the files)
+      if (frontImage && backImage) {
+        await Promise.all([
+          supabase.storage.from('validacoes').upload(frontPath, frontImage),
+          supabase.storage.from('validacoes').upload(backPath, backImage)
+        ]);
+      }
 
       const { data, error } = await supabase.rpc('submit_verification', {
           p_nome: fullName,
@@ -152,12 +146,15 @@ export default function Validacao() {
           p_verso_path: backPath
       });
 
-      if (error) throw error;
-
-      setStatus('pendente');
-      showNotification('enviado com sucesso!');
+      if (error) {
+        showNotification(error.message.toLowerCase());
+      } else if (data && data.success) {
+        setStatus('pendente');
+        showNotification(data.message || 'enviado com sucesso!');
+      } else {
+        showNotification(data?.message || 'erro ao enviar. tente novamente.');
+      }
     } catch (err: any) {
-      // erro silenciado para segurança
       const errorMsg = err.message || 'erro ao enviar. tente novamente.';
       showNotification(errorMsg.toLowerCase());
     } finally {

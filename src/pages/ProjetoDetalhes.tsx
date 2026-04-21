@@ -28,26 +28,18 @@ export default function ProjetoDetalhes() {
         p_product_id: product.id
       });
 
-      hideLoading();
-
       if (error) {
-        setPurchaseResult({ success: false, message: error.message || 'erro na conexão' });
-        setIsResultModalOpen(true);
-        return;
+        setPurchaseResult({ success: false, message: error.message });
+      } else if (data && data.success) {
+        setPurchaseResult({ success: true, message: data.message || 'ativação bem-sucedida!' });
+        await refreshProfile();
+      } else {
+        setPurchaseResult({ success: false, message: data?.message || 'erro na ativação' });
       }
-
-      if (data && data.success === false) {
-        setPurchaseResult({ success: false, message: data.message || 'erro na ativação' });
-        setIsResultModalOpen(true);
-        return;
-      }
-
-      setPurchaseResult({ success: true, message: data?.message || 'ativação bem-sucedida!' });
-      setIsResultModalOpen(true);
-      await refreshProfile();
-    } catch (err) {
+    } catch (err: any) {
+      setPurchaseResult({ success: false, message: err.message || 'erro inesperado' });
+    } finally {
       hideLoading();
-      setPurchaseResult({ success: false, message: 'erro inesperado' });
       setIsResultModalOpen(true);
     }
   };

@@ -24,26 +24,14 @@ export default function ChangePassword() {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
-    if (!oldPassword) {
-      setValidationError('por favor, insira a senha antiga.');
-      setTimeout(() => setValidationError(null), 3000);
-      return;
-    }
-
-    if (!newPassword) {
-      setValidationError('por favor, insira a nova senha.');
-      setTimeout(() => setValidationError(null), 3000);
-      return;
-    }
-
-    if (!confirmPassword) {
-      setValidationError('por favor, confirme sua senha.');
+    if (!oldPassword || !newPassword || !confirmPassword) {
+      setValidationError('por favor, preencha todos os campos obrigatórios.');
       setTimeout(() => setValidationError(null), 3000);
       return;
     }
 
     if (newPassword !== confirmPassword) {
-      setValidationError('a nova senha e a confirmação não coincidem.');
+      setValidationError('as palavras-passe não coincidem.');
       setTimeout(() => setValidationError(null), 3000);
       return;
     }

@@ -111,10 +111,6 @@ export default function Register() {
       showToast('As palavras-passe não coincidem.');
       return;
     }
-    if (!formData.inviteCode) {
-      showToast('Por favor, introduza o código de convite.');
-      return;
-    }
 
     showLoading();
     try {
@@ -127,12 +123,7 @@ export default function Register() {
       });
 
       if (error) {
-        let errorMsg = error.message;
-        try {
-          const body = await error.context?.json();
-          if (body && body.error) errorMsg = body.error;
-        } catch (e) {}
-        showToast(errorMsg);
+        showToast(error.message || 'erro na conexão com o servidor.');
         return;
       }
 
@@ -141,10 +132,10 @@ export default function Register() {
         return;
       }
 
-      showToast('registo efetuado com sucesso. bem-vindo!');
+      showToast(data?.message || 'registo efetuado com sucesso. bem-vindo!');
       setTimeout(() => navigate('/login'), 1500);
     } catch (err: any) {
-      showToast('Falha ao processar o registo. Tente novamente.');
+      showToast(err.message || 'Falha ao processar o registo. Tente novamente.');
     } finally {
       hideLoading();
     }

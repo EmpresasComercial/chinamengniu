@@ -15,19 +15,29 @@ export default function Resgate() {
     setTimeout(() => setFeedback(null), 3500);
   };
 
-  const handleRedeem = () => {
+  const handleRedeem = async () => {
     if (!code.trim()) {
       showToast('por favor, insira o código de resgate', 'error');
       return;
     }
 
     showLoading();
-    // Simulate API call for code redemption
-    setTimeout(() => {
+    try {
+      const { data, error } = await supabase.rpc('redeem_gift_code', { p_code: code.trim() });
+      
+      if (error) throw error;
+
+      if (data && data.success) {
+        showToast(data.message || 'resgatado com sucesso!', 'success');
+        setCode('');
+      } else {
+        showToast(data?.message || 'código inválido ou expirado', 'error');
+      }
+    } catch (err: any) {
+      showToast(err?.message || 'falha ao resgatar. tente novamente', 'error');
+    } finally {
       hideLoading();
-      showToast('código inválido ou expirado', 'error'); // Default generic response
-      setCode('');
-    }, 1500);
+    }
   };
 
   return (

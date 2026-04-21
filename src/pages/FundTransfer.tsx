@@ -43,36 +43,17 @@ export default function FundTransfer() {
       showToast('introduza um montante válido', 'error'); return;
     }
 
-    const now = new Date();
-    const day = now.getDay();
-    const hour = now.getHours();
-
-    if (day < 1 || day > 5) {
-      showToast('conversões apenas de segunda a sexta', 'error'); return;
-    }
-    if (hour < 10 || hour >= 22) {
-      showToast('conversões disponíveis entre 10:00 e 22:00', 'error'); return;
-    }
-    if (amount < 1000) {
-      showToast('montante mínimo é 1.000 kz', 'error'); return;
-    }
-    if (amount > 100000) {
-      showToast('montante máximo é 100.000 kz', 'error'); return;
-    }
-    if (amount > balanceCorrete) {
-      showToast('saldo insuficiente', 'error'); return;
-    }
-
     showLoading();
     try {
       const { data, error } = await supabase.rpc('transfer_reproducao_to_balance', { p_amount: amount });
       if (error) throw error;
+      
       if (data.success) {
-        showToast('conversão efetuada', 'success');
+        showToast(data.message || 'conversão realizada com sucesso', 'success');
         setBalanceCorrete(prev => prev - amount);
         setAmountInput('');
       } else {
-        showToast(data.message.toLowerCase(), 'error');
+        showToast(data.message || 'erro na conversão', 'error');
       }
     } catch (err: any) {
       showToast(err?.message || 'falha na transferência. tente novamente', 'error');

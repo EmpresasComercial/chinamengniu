@@ -57,21 +57,9 @@ export default function Login() {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
-    // Validation Logic
-    if (!phone) {
-      showToast('Por favor, introduza o seu número de telefone.');
-      return;
-    }
-
-    // Validate phone format: starts with 9 and has 9 digits
-    const phoneRegex = /^9\d{8}$/;
-    if (!phoneRegex.test(phone)) {
-      showToast('O telefone deve iniciar por 9 e conter 9 dígitos.');
-      return;
-    }
-
-    if (!password) {
-      showToast('Por favor, introduza a sua palavra-passe.');
+    // Basic empty field checks (Light Validation)
+    if (!phone || !password) {
+      showToast('Por favor, preencha todos os campos de acesso.');
       return;
     }
 

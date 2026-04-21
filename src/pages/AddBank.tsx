@@ -55,27 +55,9 @@ export default function AddBank() {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
-    if (!fullName.trim()) {
-      setValidationError('por favor, insira seu nome completo.');
-      setTimeout(() => setValidationError(null), 3000);
-      return;
-    }
-
-    if (!iban.trim()) {
-      setValidationError('por favor, insira o endereço bancário (iban).');
-      setTimeout(() => setValidationError(null), 3000);
-      return;
-    }
-
-    if (!selectedBank) {
-      setValidationError('por favor, selecione o nome do banco.');
-      setTimeout(() => setValidationError(null), 3000);
-      return;
-    }
-
     showLoading();
     try {
-      const { error } = await supabase.rpc('add_bank_account', {
+      const { data, error } = await supabase.rpc('add_bank_account', {
         p_bank_name: selectedBank,
         p_holder_name: fullName,
         p_iban: iban
@@ -84,16 +66,18 @@ export default function AddBank() {
       if (error) {
         setValidationError(error.message);
         setTimeout(() => setValidationError(null), 3000);
-      } else {
-        // Success case for bank addition
-        setValidationError('bem-sucedido');
+      } else if (data && data.success) {
+        setValidationError(data.message || 'bem-sucedido');
         setTimeout(() => {
           setValidationError(null);
           navigate(-1);
         }, 1500);
+      } else {
+        setValidationError(data?.message || 'falha ao salvar');
+        setTimeout(() => setValidationError(null), 3000);
       }
     } catch (err: any) {
-      setValidationError('falha ao salvar');
+      setValidationError('falha inesperada ao salvar');
       setTimeout(() => setValidationError(null), 3000);
     } finally {
       hideLoading();

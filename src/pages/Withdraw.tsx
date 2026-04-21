@@ -66,30 +66,17 @@ export default function Withdraw() {
   const numericAmount = parseFloat(amountInput) || 0;
 
   const handleConfirmWithdraw = async () => {
-    if (isVerified === false) {
-      showToast('atenção: a sua conta não está verificada. por favor, valide o seu bi primeiro.');
-      setTimeout(() => navigate('/validar'), 2000);
+    // Validações leves (formatos básicos)
+    if (!amountInput || numericAmount <= 0) {
+      showToast('por favor, insira um montante válido.');
       return;
     }
-
-    if (!amountInput || numericAmount < minWithdrawal) {
-      showToast(`o saldo mínimo para retirada é de ${minWithdrawal.toLocaleString()} AOA.`);
-      return;
-    }
-    if (numericAmount > maxWithdrawal) {
-      showToast(`o limite máximo por operação é de ${maxWithdrawal.toLocaleString()} AOA.`);
-      return;
-    }
-    if (numericAmount > balance) {
-      showToast('o valor solicitado excede o seu saldo disponível.');
-      return;
-    }
-    if (!pin || pin.length < 4) {
-      showToast('por favor, insira a sua senha de retirada válida.');
+    if (!pin) {
+      showToast('por favor, insira o seu PIN de retirada.');
       return;
     }
     if (!selectedBankId) {
-      showToast('por favor, vincule uma conta bancária para prosseguir.');
+      showToast('por favor, selecione ou vincule uma conta bancária.');
       return;
     }
 
@@ -104,15 +91,15 @@ export default function Withdraw() {
       if (error) {
         showToast(error.message);
       } else if (data && data.success) {
-        showToast('solicitação de levantamento enviada com sucesso.', 'success');
+        showToast(data.message || 'solicitação de levantamento enviada com sucesso.', 'success');
         refreshProfile(); 
         setAmountInput('');
         setPin('');
       } else {
         showToast(data?.message || 'falha no processamento. tente novamente.');
       }
-    } catch {
-      showToast('erro inesperado. tente novamente mais tarde.');
+    } catch (err: any) {
+      showToast(err?.message || 'erro inesperado. tente novamente mais tarde.');
     } finally {
       hideLoading();
     }
