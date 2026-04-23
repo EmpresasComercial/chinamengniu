@@ -1,5 +1,5 @@
 import { useState, useEffect, ChangeEvent } from 'react';
-import { ChevronLeft, ChevronRight, Eye, EyeOff } from 'lucide-react';
+import { ChevronLeft, ChevronRight, Eye, EyeOff, ClipboardList } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import { useLoading } from '../contexts/LoadingContext';
 import { useAuth } from '../contexts/AuthContext';
@@ -136,6 +136,15 @@ export default function Withdraw() {
            aria-label="voltar"
          >
            <ChevronLeft className="h-5 w-5" />
+         </button>
+
+         <button
+           onClick={() => navigate('/detalhes', { state: { initialFilter: 'retiradas' } })}
+           className="absolute top-3 right-4 p-2 bg-white/10 backdrop-blur-md rounded-full text-white active:scale-90 transition-transform z-20"
+           title="histórico de retiradas"
+           aria-label="histórico de retiradas"
+         >
+           <ClipboardList className="h-5 w-5" />
          </button>
 
          <div className="relative z-10 h-full flex flex-col justify-center px-8 pt-4">

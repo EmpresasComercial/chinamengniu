@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { ChevronLeft, Copy } from 'lucide-react';
+import { ChevronLeft, Copy, ClipboardList } from 'lucide-react';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { motion, AnimatePresence } from 'motion/react';
 import { useLoading } from '../contexts/LoadingContext';
@@ -89,7 +89,15 @@ export default function RechargeDetail() {
         >
           <ChevronLeft className="h-6 w-6" />
         </button>
-        <h1 className="flex-1 text-center text-[17px] font-bold text-white lowercase pr-8">detalhes de pagamento</h1>
+        <h1 className="flex-1 text-center text-[17px] font-bold text-white lowercase">detalhes de pagamento</h1>
+        <button
+          onClick={() => navigate('/detalhes', { state: { initialFilter: 'recarregamentos' } })}
+          className="p-2 text-white active:scale-90 transition-transform"
+          title="histórico de depósitos"
+          aria-label="histórico de depósitos"
+        >
+          <ClipboardList className="h-6 w-6" />
+        </button>
       </header>
 
       <main className="px-5 flex-1">

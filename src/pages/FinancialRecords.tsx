@@ -1,6 +1,6 @@
 import { useState, useEffect, useCallback, useMemo } from 'react';
 import { ChevronLeft, Filter } from 'lucide-react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useLocation } from 'react-router-dom';
 import { motion, AnimatePresence } from 'motion/react';
 import { supabase } from '../lib/supabase';
 import { useAuth } from '../contexts/AuthContext';
@@ -28,10 +28,14 @@ const statusColor: Record<string, string> = {
 
 export default function FinancialRecords() {
   const navigate = useNavigate();
+  const location = useLocation();
   const { user } = useAuth();
   const { registerFetch } = useLoading();
 
-  const [activeFilter, setActiveFilter] = useState<FilterType>('retiradas');
+  const locationState = location.state as { initialFilter?: FilterType } | null;
+  const [activeFilter, setActiveFilter] = useState<FilterType>(
+    locationState?.initialFilter ?? 'retiradas'
+  );
   const [showFilterPopup, setShowFilterPopup] = useState(false);
   const [records, setRecords] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
