@@ -88,8 +88,7 @@ export default function RechargeDetail() {
           aria-label="voltar para a página anterior"
         >
           <ChevronLeft className="h-6 w-6" />
-        </button>
-        <h1 className="flex-1 text-center text-[17px] font-bold text-white lowercase">detalhes de pagamento</h1>
+        </button>        <h1 className="flex-1 text-center text-[17px] font-bold text-white lowercase tracking-tight">detalhe play</h1>
         <button
           onClick={() => navigate('/detalhes', { state: { initialFilter: 'recarregamentos' } })}
           className="p-2 text-white active:scale-90 transition-transform"
@@ -178,11 +177,11 @@ export default function RechargeDetail() {
 
         <hr className="border-gray-100/30 my-4" />
 
-        {/* Montante da Recarga */}
-        <div className="mb-4">
+        {/* Montante da Recarga e Botão Inline */}
+        <div className="mb-6">
           <p className="text-[12px] text-gray-400 mb-1 font-medium lowercase">montante da recarga</p>
-          <div className="flex items-center justify-between">
-            <div className="flex items-baseline gap-1.5 w-full">
+          <div className="flex items-center gap-3">
+            <div className="flex-1 flex items-center bg-gray-50/50 rounded-xl px-4 h-[52px] border border-gray-100 transition-colors focus-within:border-purple-200 focus-within:bg-white">
               <input 
                 type="number"
                 min="0"
@@ -192,31 +191,27 @@ export default function RechargeDetail() {
                   if (parseFloat(val) < 0) return;
                   setDepositAmount(val);
                 }}
-                className={`text-[24px] font-bold text-[#f25e5e] tracking-tight bg-transparent border-b-2 outline-none w-full placeholder:text-[#f25e5e]/50 pb-1 transition-colors ${hasSent ? 'border-green-400/40' : 'border-[#6D28D9]/40'}`}
+                className="text-[20px] font-bold text-[#f25e5e] tracking-tight bg-transparent outline-none w-full placeholder:text-[#f25e5e]/40"
                 placeholder="0.00"
                 readOnly={hasSent}
               />
+              <span className="text-[11px] font-bold text-black opacity-80 lowercase ml-2">aoa</span>
             </div>
-            <span className="text-[11px] font-bold text-black opacity-80 lowercase ml-2">aoa</span>
+
+            <button
+              onClick={handleConfirm}
+              disabled={hasSent}
+              className={`min-w-[100px] h-[52px] text-white rounded-xl text-[15px] font-bold active:scale-[0.98] transition-all lowercase shadow-md ${
+                hasSent 
+                  ? 'bg-green-500 shadow-green-900/10 cursor-default' 
+                  : 'bg-[#6D28D9] hover:bg-[#5b21b6] shadow-purple-900/20'
+              }`}
+            >
+              {hasSent ? 'enviado' : 'enviar'}
+            </button>
           </div>
         </div>
 
-
-
-
-
-        {/* Botão Enviar */}
-        <button
-          onClick={handleConfirm}
-          disabled={hasSent}
-          className={`w-full h-[52px] text-white rounded-[12px] text-[16px] font-semibold mb-6 active:scale-[0.98] transition-all lowercase shadow-md ${
-            hasSent 
-              ? 'bg-green-500 shadow-green-900/20 cursor-default' 
-              : 'bg-[#6D28D9] hover:bg-[#5b21b6] shadow-purple-900/20'
-          }`}
-        >
-          {hasSent ? 'enviado' : 'enviar'}
-        </button>
 
         {/* Footer Text */}
         <div className="space-y-3 pb-8">
