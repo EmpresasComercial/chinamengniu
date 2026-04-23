@@ -202,10 +202,10 @@ export default function Register() {
           <form onSubmit={handleSubmit} className="space-y-4">
             {/* Field: Phone Number */}
             <div className="space-y-1">
-              <div className="flex items-center border-b-[1.5px] border-[#6D28D9] py-2 transition-colors">
-                <span className="text-gray-800 mr-2 font-bold text-[12.5px]">+244</span>
+              <div className="flex items-center border-b-[2px] border-[#6D28D9] py-3 transition-colors">
+                <span className="text-gray-800 mr-2 font-bold text-[15px]">+244</span>
                 <input
-                  className="w-full border-none p-0 focus:ring-0 text-gray-800 placeholder-gray-400 text-[12.5px]"
+                  className="w-full border-none p-0 focus:ring-0 text-gray-800 placeholder-gray-400 text-[15px]"
                   id="phone"
                   name="phone"
                   placeholder="número de telefone"
@@ -218,9 +218,9 @@ export default function Register() {
 
             {/* Field: Password */}
             <div className="space-y-1">
-              <div className="flex items-center border-b-[1.5px] border-[#6D28D9] py-2 transition-colors">
+              <div className="flex items-center border-b-[2px] border-[#6D28D9] py-3 transition-colors">
                 <input
-                  className="w-full border-none p-0 focus:ring-0 text-gray-800 placeholder-gray-400 text-[12.5px]"
+                  className="w-full border-none p-0 focus:ring-0 text-gray-800 placeholder-gray-400 text-[15px]"
                   id="password"
                   name="password"
                   placeholder="senha de acesso"
@@ -242,9 +242,9 @@ export default function Register() {
 
             {/* Field: Confirm Password */}
             <div className="space-y-1">
-              <div className="flex items-center border-b-[1.5px] border-[#6D28D9] py-2 transition-colors">
+              <div className="flex items-center border-b-[2px] border-[#6D28D9] py-3 transition-colors">
                 <input
-                  className="w-full border-none p-0 focus:ring-0 text-gray-800 placeholder-gray-400 text-[12.5px]"
+                  className="w-full border-none p-0 focus:ring-0 text-gray-800 placeholder-gray-400 text-[15px]"
                   id="confirm-password"
                   name="confirmPassword"
                   placeholder="confirmar senha"
@@ -266,9 +266,9 @@ export default function Register() {
 
             {/* Field: Invite Code */}
             <div className="space-y-1">
-              <div className="flex items-center border-b-[1.5px] border-[#6D28D9] py-2 transition-colors">
+              <div className="flex items-center border-b-[2px] border-[#6D28D9] py-3 transition-colors">
                 <input
-                  className="w-full border-none p-0 focus:ring-0 text-gray-800 text-[12.5px] font-bold placeholder-gray-400"
+                  className="w-full border-none p-0 focus:ring-0 text-gray-800 text-[15px] font-bold placeholder-gray-400"
                   id="invite-code"
                   name="inviteCode"
                   placeholder="código de convite"
@@ -280,9 +280,9 @@ export default function Register() {
             </div>
 
             {/* Submit Button */}
-            <div className="pt-6">
+            <div className="pt-8">
               <button
-                className="w-full bg-[#6D28D9] text-white h-[45px] rounded-[20px] font-bold text-[12.5px] transition-all active:scale-95 shadow-md shadow-gray-200 lowercase"
+                className="w-full bg-[#6D28D9] text-white h-[54px] rounded-[24px] font-bold text-[15px] transition-all active:scale-95 shadow-lg shadow-purple-100 lowercase"
                 type="submit"
               >
                 registrar
