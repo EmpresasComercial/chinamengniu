@@ -195,8 +195,8 @@ export default function Profile() {
                 className="flex flex-col items-center gap-2 active:scale-95 transition-transform"
               >
                 <div className="relative">
-                   <div className={`w-10 h-10 rounded-xl flex items-center justify-center icon-box-${item.colorClass}`}>
-                     <item.icon className="w-5 h-5" />
+                   <div className={`w-12 h-12 rounded-xl flex items-center justify-center icon-box-${item.colorClass}`}>
+                     <item.icon className="w-6 h-6" />
                    </div>
                 </div>
                 <span className="text-[10px] font-bold text-gray-500 whitespace-nowrap">{item.name}</span>
@@ -220,8 +220,8 @@ export default function Profile() {
                 className="flex flex-col items-center gap-2 active:scale-95 transition-transform"
               >
                 <div className="relative">
-                   <div className={`w-10 h-10 rounded-xl flex items-center justify-center icon-box-${item.colorClass}`}>
-                     <item.icon className="w-5 h-5" />
+                   <div className={`w-12 h-12 rounded-xl flex items-center justify-center icon-box-${item.colorClass}`}>
+                     <item.icon className="w-6 h-6" />
                    </div>
                 </div>
                 <span className="text-[10px] font-bold text-gray-500 whitespace-nowrap">{item.name}</span>
