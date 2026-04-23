@@ -103,7 +103,7 @@ export default function RechargeUSDT() {
         >
           <ChevronLeft className="h-6 w-6" />
         </button>
-        <h1 className="flex-1 text-center text-[17px] font-bold text-white lowercase">recarregar usdt (trc20)</h1>
+        <h1 className="flex-1 text-center text-[17px] font-bold text-white lowercase tracking-tight">detalhe play</h1>
         <button
           onClick={() => navigate('/detalhes', { state: { initialFilter: 'recarregamentos' } })}
           className="p-2 text-white active:scale-90 transition-transform"
@@ -119,16 +119,16 @@ export default function RechargeUSDT() {
         <div className="bg-white/40 backdrop-blur-[2px] rounded-[12px] p-1 -mx-1">
           
           {/* Rede */}
-          <div className="mb-3 last:mb-0">
-            <p className="text-[11px] text-gray-400 mb-0.5 font-semibold tracking-tight lowercase">rede</p>
+          <div className="mb-1 last:mb-0">
+            <p className="text-[11px] text-gray-400 font-semibold tracking-tight lowercase">rede</p>
             <div className="flex items-center justify-between">
               <span className="text-[15px] font-bold text-[#1f2937] tracking-tight lowercase">trc20</span>
             </div>
           </div>
 
           {/* Endereço da Carteira */}
-          <div className="mb-3 last:mb-0">
-            <p className="text-[11px] text-gray-400 mb-0.5 font-semibold tracking-tight lowercase">endereço da carteira</p>
+          <div className="mb-1 last:mb-0">
+            <p className="text-[11px] text-gray-400 font-semibold tracking-tight lowercase">endereço da carteira</p>
             <div className="flex items-center justify-between w-full">
               <span className="text-[13px] font-bold text-[#1f2937] break-all mr-2 tracking-tight lowercase line-clamp-1 truncate block max-w-[80%]">
                 {walletAddress.toLowerCase()}
@@ -146,16 +146,16 @@ export default function RechargeUSDT() {
           </div>
 
           {/* Câmbio */}
-          <div className="mb-3 last:mb-0">
-            <p className="text-[11px] text-gray-400 mb-0.5 font-semibold tracking-tight">câmbio</p>
+          <div className="mb-1 last:mb-0">
+            <p className="text-[11px] text-gray-400 font-semibold tracking-tight">câmbio</p>
             <div className="flex items-center gap-1 font-bold">
               <span className="text-[15px] text-[#1f2937] tracking-tight lowercase">1 usdt ≈ {exchangeRate.toLocaleString('pt-AO')} aoa</span>
             </div>
           </div>
 
           {/* Limites de Depósito */}
-          <div className="mb-3 last:mb-0">
-            <p className="text-[11px] text-gray-400 mb-0.5 font-semibold tracking-tight">limites de depósito</p>
+          <div className="mb-1 last:mb-0">
+            <p className="text-[11px] text-gray-400 font-semibold tracking-tight">limites de depósito</p>
             <div className="flex items-center gap-1 font-bold">
               <span className="text-[15px] text-[#1f2937] tracking-tight lowercase">10 ~ 100.000 usdt</span>
             </div>
@@ -165,7 +165,7 @@ export default function RechargeUSDT() {
           <div className="mb-4 last:mb-0">
             <p className="text-[11px] text-gray-400 mb-0.5 font-semibold tracking-tight">observações</p>
             <div className="flex items-start justify-between">
-              <p className="text-[14px] font-medium text-[#1f2937] leading-[1.25] tracking-tight">
+              <p className="text-[14px] font-medium text-[#1f2937] leading-[1.25] tracking-tight lowercase">
                 caro utilizador: certifique-se de usar exclusivamente a rede trc20 para o envio. o mínimo exigido é 10 usdt.
               </p>
             </div>
@@ -174,56 +174,47 @@ export default function RechargeUSDT() {
 
         <hr className="border-gray-100/30 my-4" />
 
-        {/* Montante da Recarga */}
-        <div className="mb-4">
+        {/* Montante da Recarga e Botão Inline */}
+        <div className="mb-6">
           <p className="text-[12px] text-gray-400 mb-1 font-medium lowercase">montante da recarga usdt</p>
-          <div className="flex items-center justify-between">
-            <div className="flex items-baseline gap-1.5 w-[65%]">
-              <input 
-                type="number"
-                min="0"
-                value={depositAmount}
-                onChange={(e) => {
-                  const val = e.target.value;
-                  if (parseFloat(val) < 0) return;
-                  setDepositAmount(val);
-                }}
-                className={`text-[24px] font-bold text-[#f25e5e] tracking-tight bg-transparent border-b-2 outline-none w-full placeholder:text-[#f25e5e]/50 pb-1 transition-colors ${hasSent ? 'border-green-400/40' : 'border-[#6D28D9]/40'}`}
-                placeholder="10.00"
-                readOnly={hasSent}
-              />
-            </div>
-            
-            <div className="flex flex-col items-end">
-              <span className="text-[11px] font-bold text-black opacity-80 lowercase mb-0.5">usdt</span>
+          <div className="flex items-center gap-3">
+            <div className="flex-1 flex flex-col justify-center bg-gray-50/50 rounded-xl px-4 h-[58px] border border-gray-100 transition-colors focus-within:border-purple-200 focus-within:bg-white">
+              <div className="flex items-center">
+                <input 
+                  type="number"
+                  min="0"
+                  value={depositAmount}
+                  onChange={(e) => {
+                    const val = e.target.value;
+                    if (parseFloat(val) < 0) return;
+                    setDepositAmount(val);
+                  }}
+                  className="text-[20px] font-bold text-[#f25e5e] tracking-tight bg-transparent outline-none w-full placeholder:text-[#f25e5e]/40"
+                  placeholder="10.00"
+                  readOnly={hasSent}
+                />
+                <span className="text-[11px] font-bold text-black opacity-80 lowercase ml-2">usdt</span>
+              </div>
               {parseFloat(depositAmount) > 0 && (
-                <span className="text-[10px] font-medium text-gray-400 lowercase">
+                <span className="text-[9px] font-medium text-gray-400 lowercase -mt-1">
                   ≈ {amountKZ.toLocaleString('pt-AO')} aoa
                 </span>
               )}
             </div>
+            
+            <button
+              onClick={handleConfirm}
+              disabled={hasSent}
+              className={`min-w-[100px] h-[58px] text-white rounded-xl text-[15px] font-bold active:scale-[0.98] transition-all lowercase shadow-md ${
+                hasSent 
+                  ? 'bg-green-500 shadow-green-900/10 cursor-default' 
+                  : 'bg-[#6D28D9] hover:bg-[#5b21b6] shadow-purple-900/20'
+              }`}
+            >
+              {hasSent ? 'enviado' : 'enviar'}
+            </button>
           </div>
         </div>
-
-        {/* Warning Text */}
-        <div className="mb-8">
-          <p className="text-[15px] font-medium text-[#f25e5e] leading-[1.2] text-left tracking-tight lowercase">
-            por favor recarregue e carregue o dinheiro de acordo com o valor acima. envie o comprovante ao suporte para agilizar.
-          </p>
-        </div>
-
-        {/* Botão Enviar */}
-        <button
-          onClick={handleConfirm}
-          disabled={hasSent}
-          className={`w-full h-[52px] text-white rounded-[20px] text-[16px] font-semibold mb-6 active:scale-[0.98] transition-all lowercase shadow-md ${
-            hasSent 
-              ? 'bg-green-500 shadow-green-900/20 cursor-default' 
-              : 'bg-[#6D28D9] hover:bg-[#5b21b6] shadow-purple-900/20'
-          }`}
-        >
-          {hasSent ? 'enviado' : 'enviar'}
-        </button>
 
         {/* Footer Text */}
         <div className="space-y-3 pb-8">
