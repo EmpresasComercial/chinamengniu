@@ -136,7 +136,7 @@ export default function SupportFAB({ constraintsRef }: SupportFABProps) {
                     </div>
                     <div className="flex-1 text-left">
                       <p className="text-gray-900 font-black text-[16px] leading-tight lowercase">atendimento cliente</p>
-                      <p className="text-gray-400 text-[12px] mt-1 lowercase">whatsapp · suporte prioritário</p>
+                      <p className="text-gray-400 text-[10px] mt-1 lowercase font-medium">clique para contactar o gerente</p>
                     </div>
                     <ChevronRight className="w-5 h-5 text-gray-300 shrink-0" />
                   </button>
@@ -151,7 +151,7 @@ export default function SupportFAB({ constraintsRef }: SupportFABProps) {
                     </div>
                     <div className="flex-1 text-left">
                       <p className="text-gray-900 font-black text-[16px] leading-tight lowercase">grupo de vendas</p>
-                      <p className="text-gray-400 text-[12px] mt-1 lowercase">whatsapp · canal oficial</p>
+                      <p className="text-gray-400 text-[10px] mt-1 lowercase font-medium">clique para entrar no grupo de vendas</p>
                     </div>
                     <ChevronRight className="w-5 h-5 text-gray-300 shrink-0" />
                   </button>
