@@ -1,6 +1,7 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
 import { MessageCircle, X, HeadphonesIcon, ChevronRight } from 'lucide-react';
+import { supabase } from '../lib/supabase';
 
 interface SupportFABProps {
   constraintsRef: React.RefObject<HTMLDivElement>;
@@ -14,10 +15,32 @@ const WA_ICON = () => (
 
 export default function SupportFAB({ constraintsRef }: SupportFABProps) {
   const [isOpen, setIsOpen] = useState(false);
+  const [links, setLinks] = useState({
+    whatsapp_grupo_vendas_url: '',
+    whatsapp_gerente_url: ''
+  });
+
+  useEffect(() => {
+    async function fetchLinks() {
+      try {
+        const { data, error } = await supabase.rpc('get_support_links');
+        const linkData = Array.isArray(data) ? data[0] : data;
+        if (!error && linkData) {
+          setLinks({
+            whatsapp_grupo_vendas_url: linkData.whatsapp_grupo_vendas_url || '',
+            whatsapp_gerente_url: linkData.whatsapp_gerente_url || ''
+          });
+        }
+      } catch (err) {
+        // erro silenciado
+      }
+    }
+    fetchLinks();
+  }, []);
 
   const handleWhatsApp = (type: 'canal' | 'gerencia') => {
-    const phone = type === 'canal' ? '244900000000' : '244911111111';
-    window.open(`https://wa.me/${phone}`, '_blank');
+    const url = type === 'canal' ? links.whatsapp_grupo_vendas_url : links.whatsapp_gerente_url;
+    if (url) window.open(url, '_blank');
     setIsOpen(false);
   };
 
