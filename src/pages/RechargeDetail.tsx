@@ -169,8 +169,8 @@ export default function RechargeDetail() {
           <div className="mb-4 last:mb-0">
             <p className="text-[11px] text-gray-400 mb-0.5 font-semibold tracking-tight">observações</p>
             <div className="flex items-start justify-between">
-              <p className="text-[14px] font-medium text-[#1f2937] leading-[1.25] tracking-tight">
-                caro utilizador: por favor, faça um depósito dentro da gama de depósito. se exceder o intervalo de depósito, contacte o seu gestor de conta para obter a conta bancária mais recente para grandes depósitos.
+              <p className="text-[14px] font-medium text-[#f25e5e] leading-[1.25] tracking-tight lowercase">
+                por favor, recarregue o dinheiro de acordo com o valor digitado, caso contrário a recarga não será bem-sucedida.
               </p>
             </div>
           </div>
@@ -201,12 +201,7 @@ export default function RechargeDetail() {
           </div>
         </div>
 
-        {/* Warning Text */}
-        <div className="mb-5">
-          <p className="text-[15px] font-medium text-[#f25e5e] leading-[1.2] text-left tracking-tight lowercase">
-            por favor recarregue e carregue o dinheiro de acordo com o valor acima, caso contrário a recarga não será bem sucedida! ! !
-          </p>
-        </div>
+
 
 
 
