@@ -104,8 +104,8 @@ export default function RechargeDetail() {
         {/* Main Content Card-like structure */}
         <div className="bg-white/40 backdrop-blur-[2px] rounded-[12px] p-1 -mx-1">
           {/* Banco Receptor */}
-          <div className="mb-3 last:mb-0">
-            <p className="text-[11px] text-gray-400 mb-0.5 font-semibold tracking-tight lowercase">banco receptor</p>
+          <div className="mb-1 last:mb-0">
+            <p className="text-[11px] text-gray-400 font-semibold tracking-tight lowercase">banco receptor</p>
             <div className="flex items-center justify-between">
               <span className="text-[15px] font-bold text-[#1f2937] tracking-tight lowercase">{bank.nome_do_banco.toLowerCase()}</span>
               <button 
@@ -122,8 +122,8 @@ export default function RechargeDetail() {
           </div>
 
           {/* Titular do Cartão */}
-          <div className="mb-3 last:mb-0">
-            <p className="text-[11px] text-gray-400 mb-0.5 font-semibold tracking-tight lowercase">titular do cartão beneficiário</p>
+          <div className="mb-1 last:mb-0">
+            <p className="text-[11px] text-gray-400 font-semibold tracking-tight lowercase">titular do cartão beneficiário</p>
             <div className="flex items-center justify-between">
               <span className="text-[15px] font-bold text-[#1f2937] tracking-tight lowercase">{bank.nome_favorecido?.toLowerCase() || 'joaquim chitumba handa'}</span>
               <button 
@@ -140,8 +140,8 @@ export default function RechargeDetail() {
           </div>
 
           {/* Pagamento IBAN */}
-          <div className="mb-3 last:mb-0">
-            <p className="text-[11px] text-gray-400 mb-0.5 font-semibold tracking-tight lowercase">pagamento iban</p>
+          <div className="mb-1 last:mb-0">
+            <p className="text-[11px] text-gray-400 font-semibold tracking-tight lowercase">pagamento iban</p>
             <div className="flex items-center justify-between">
               <span className="text-[15px] font-bold text-[#1f2937] break-all mr-2 tracking-tight lowercase">{bank.iban.toLowerCase()}</span>
               <button 
@@ -158,8 +158,8 @@ export default function RechargeDetail() {
           </div>
 
           {/* Faixa de Depósito */}
-          <div className="mb-3 last:mb-0">
-            <p className="text-[11px] text-gray-400 mb-0.5 font-semibold tracking-tight">faixa de depósito</p>
+          <div className="mb-1 last:mb-0">
+            <p className="text-[11px] text-gray-400 font-semibold tracking-tight">faixa de depósito</p>
             <div className="flex items-center gap-1 font-bold">
               <span className="text-[15px] text-[#1f2937] tracking-tight">9000 ~ 1000000 aoa</span>
             </div>
