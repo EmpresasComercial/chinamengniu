@@ -34,10 +34,10 @@ export default function SupportFAB({ constraintsRef }: SupportFABProps) {
             boxShadow: ["0px 4px 10px rgba(109, 40, 217, 0.3)", "0px 4px 20px rgba(109, 40, 217, 0.6)", "0px 4px 10px rgba(109, 40, 217, 0.3)"]
           }}
           transition={{ duration: 2, repeat: Infinity }}
-          className="w-14 h-14 bg-[#6D28D9] text-white rounded-full flex items-center justify-center shadow-lg hover:bg-[#5b21b6] transition-colors"
+          className="w-12 h-12 bg-[#6D28D9] text-white rounded-full flex items-center justify-center shadow-lg hover:bg-[#5b21b6] transition-colors"
           title="Suporte"
         >
-          <MessageCircle className="w-7 h-7" />
+          <MessageCircle className="w-6 h-6" />
         </motion.button>
       </motion.div>
 
