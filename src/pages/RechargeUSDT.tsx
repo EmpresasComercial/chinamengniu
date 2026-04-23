@@ -228,7 +228,7 @@ export default function RechargeUSDT() {
         {/* Footer Text */}
         <div className="space-y-3 pb-8">
           <p className="text-[15px] lowercase">
-            <span className="text-[#f25e5e] font-bold">horário de recarga: 10 horas em ponto até as 22 horas em ponto</span>
+            <span className="text-[#f25e5e] font-bold">Horário de recarga: 10:00 - 22:00 horas</span>
           </p>
           <p className="text-[13px] leading-[1.35] text-[#1f2937] font-medium pr-2 lowercase">
             <span className="font-bold text-black opacity-90">nota:</span> conclua o envio na sua corretora usando o endereço copiado.
