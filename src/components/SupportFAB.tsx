@@ -84,7 +84,7 @@ export default function SupportFAB({ constraintsRef }: SupportFABProps) {
             >
               {/* Header */}
               <div className="bg-[#6D28D9] px-6 py-4 flex items-center justify-between">
-                <h3 className="text-white font-bold text-[17px] lowercase">suporte</h3>
+                <h3 className="text-white font-bold text-[17px] lowercase">suporte técnico</h3>
                 <button 
                   onClick={() => setIsOpen(false)}
                   className="text-white/80 hover:text-white transition-colors"
