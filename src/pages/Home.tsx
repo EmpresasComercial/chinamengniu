@@ -216,7 +216,7 @@ export default function Home() {
               <h1 className="text-white font-bold text-[15px] leading-tight">AI-GO onrender</h1>
             </div>
           </div>
-          <button onClick={() => setIsSupportModalOpen(true)} className="w-10 h-10 bg-white/10 rounded-2xl flex items-center justify-center backdrop-blur-sm active:scale-90 transition-transform" title="atendimento">
+          <button onClick={() => setIsSupportModalOpen(true)} className="w-10 h-10 bg-white/10 rounded-none flex items-center justify-center backdrop-blur-sm active:scale-90 transition-transform" title="atendimento">
             <Headset className="w-5 h-5 text-white" />
           </button>
         </div>
@@ -236,19 +236,19 @@ export default function Home() {
       <section className="mx-2.5 -mt-12 z-10 bg-white rounded-2xl px-3 py-6 shadow-sm border border-gray-100">
         <div className="grid grid-cols-3 gap-1 text-center mb-8">
           <div onClick={() => navigate('/apresentacao-da-empresa')} className="flex flex-col items-center">
-            <div className="w-[48px] h-[48px] bg-purple-50 rounded-xl flex items-center justify-center mb-1.5 transition-transform active:scale-90">
+            <div className="w-[48px] h-[48px] bg-purple-50 rounded-none flex items-center justify-center mb-1.5 transition-transform active:scale-90">
               <img src="/coin-DnOWIML3.png" alt="icon" className="w-7 h-7 object-contain" />
             </div>
             <span className="text-[11px] font-bold text-slate-800 leading-tight lowercase">apresentação<br />institucional</span>
           </div>
           <div onClick={() => navigate('/equipe')} className="flex flex-col items-center">
-            <div className="w-[48px] h-[48px] bg-purple-50 rounded-xl flex items-center justify-center mb-1.5 transition-transform active:scale-90">
+            <div className="w-[48px] h-[48px] bg-purple-50 rounded-none flex items-center justify-center mb-1.5 transition-transform active:scale-90">
               <Users className="w-5 h-5 text-[#6D28D9]" />
             </div>
             <span className="text-[11px] font-bold text-slate-800 lowercase">equipe</span>
           </div>
           <div onClick={() => navigate('/central-de-ajuda')} className="flex flex-col items-center">
-            <div className="w-[48px] h-[48px] bg-purple-50 rounded-xl flex items-center justify-center mb-1.5 transition-transform active:scale-90">
+            <div className="w-[48px] h-[48px] bg-purple-50 rounded-none flex items-center justify-center mb-1.5 transition-transform active:scale-90">
               <TrendingUp className="w-5 h-5 text-[#6D28D9]" />
             </div>
             <span className="text-[11px] font-bold text-slate-800 lowercase">suporte</span>
@@ -259,10 +259,10 @@ export default function Home() {
           <h2 className="text-[#6D28D9] font-black text-[16px] mb-1 leading-tight">geração de receita contínua</h2>
           <p className="text-[#6D28D9]/40 text-[9px] font-black uppercase tracking-widest leading-none mb-6">AI-GO onrender premium</p>
           <div className="flex gap-2.5 w-full z-10">
-            <button onClick={() => navigate('/select-bank')} className="flex-1 bg-[#6D28D9] text-white px-3 rounded-2xl text-[11px] font-bold h-[45px] flex items-center justify-center active:scale-95 shadow-md shadow-gray-200 lowercase gap-2">
+            <button onClick={() => navigate('/select-bank')} className="flex-1 bg-[#6D28D9] text-white px-3 rounded-none text-[11px] font-bold h-[45px] flex items-center justify-center active:scale-95 shadow-md shadow-gray-200 lowercase gap-2">
               <img src="/deposit1-Dk3ugVyJ.png" alt="dep" className="w-4 h-4" /> recarregar
             </button>
-            <button onClick={() => navigate('/retirar')} className="flex-1 bg-white text-[#6D28D9] border border-purple-100 px-3 rounded-2xl text-[11px] font-bold h-[45px] flex items-center justify-center active:scale-95 lowercase gap-2">
+            <button onClick={() => navigate('/retirar')} className="flex-1 bg-white text-[#6D28D9] border border-purple-100 px-3 rounded-none text-[11px] font-bold h-[45px] flex items-center justify-center active:scale-95 lowercase gap-2">
               <img src="/withdraw1-pLMbG-t2.png" alt="wit" className="w-4 h-4" /> extrair fundos
             </button>
           </div>
