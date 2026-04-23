@@ -78,62 +78,62 @@ export default function SupportFAB({ constraintsRef }: SupportFABProps) {
               </div>
 
               {/* Header with gradient */}
-              <div className="bg-gradient-to-br from-[#6D28D9] to-[#4C1D95] px-6 pt-5 pb-8">
+              <div className="bg-gradient-to-br from-[#6D28D9] to-[#4C1D95] px-6 pt-10 pb-14">
                 <div className="flex items-center justify-between">
                   <div className="flex items-center gap-3">
-                    <div className="w-10 h-10 bg-white/15 rounded-2xl flex items-center justify-center">
-                      <HeadphonesIcon className="w-5 h-5 text-white" />
+                    <div className="w-12 h-12 bg-white/15 rounded-2xl flex items-center justify-center">
+                      <HeadphonesIcon className="w-6 h-6 text-white" />
                     </div>
                     <div>
-                      <h3 className="text-white font-bold text-[18px] leading-tight">suporte técnico</h3>
-                      <p className="text-white/60 text-[11px] font-medium mt-0.5">estamos aqui para ajudar</p>
+                      <h3 className="text-white font-bold text-[20px] leading-tight">suporte técnico</h3>
+                      <p className="text-white/60 text-[12px] font-medium mt-1">estamos aqui para ajudar</p>
                     </div>
                   </div>
                   <button
                     onClick={() => setIsOpen(false)}
-                    className="w-9 h-9 flex items-center justify-center bg-white/15 hover:bg-white/25 text-white rounded-xl transition-colors"
+                    className="w-10 h-10 flex items-center justify-center bg-white/15 hover:bg-white/25 text-white rounded-xl transition-colors"
                     title="fechar"
                     aria-label="fechar modal de suporte"
                   >
-                    <X className="w-4 h-4" />
+                    <X className="w-5 h-5" />
                   </button>
                 </div>
               </div>
 
               {/* Body */}
-              <div className="px-5 -mt-4 pb-6">
+              <div className="px-5 -mt-6 pb-10">
                 <div className="bg-white rounded-2xl shadow-lg shadow-gray-100 border border-gray-100 overflow-hidden">
                   {/* Canal Oficial */}
                   <button
                     onClick={() => handleWhatsApp('canal')}
-                    className="w-full flex items-center gap-4 px-5 py-4 hover:bg-green-50 active:bg-green-100 transition-colors"
+                    className="w-full flex items-center gap-4 px-6 py-6 hover:bg-green-50 active:bg-green-100 transition-colors"
                   >
-                    <div className="w-11 h-11 bg-[#25D366] rounded-2xl flex items-center justify-center text-white shrink-0 shadow-md shadow-green-500/25">
+                    <div className="w-12 h-12 bg-[#25D366] rounded-2xl flex items-center justify-center text-white shrink-0 shadow-md shadow-green-500/25">
                       <WA_ICON />
                     </div>
                     <div className="flex-1 text-left">
-                      <p className="text-gray-900 font-bold text-[14px] leading-tight">canal oficial</p>
-                      <p className="text-gray-400 text-[12px] mt-0.5">whatsapp · suporte geral</p>
+                      <p className="text-gray-900 font-bold text-[15px] leading-tight">canal oficial</p>
+                      <p className="text-gray-400 text-[13px] mt-1">whatsapp · suporte geral</p>
                     </div>
-                    <ChevronRight className="w-4 h-4 text-gray-300 shrink-0" />
+                    <ChevronRight className="w-5 h-5 text-gray-300 shrink-0" />
                   </button>
 
                   {/* Divider */}
-                  <div className="mx-5 h-px bg-gray-100" />
+                  <div className="mx-6 h-px bg-gray-100" />
 
                   {/* Gerência */}
                   <button
                     onClick={() => handleWhatsApp('gerencia')}
-                    className="w-full flex items-center gap-4 px-5 py-4 hover:bg-green-50 active:bg-green-100 transition-colors"
+                    className="w-full flex items-center gap-4 px-6 py-6 hover:bg-green-50 active:bg-green-100 transition-colors"
                   >
-                    <div className="w-11 h-11 bg-[#25D366] rounded-2xl flex items-center justify-center text-white shrink-0 shadow-md shadow-green-500/25">
+                    <div className="w-12 h-12 bg-[#25D366] rounded-2xl flex items-center justify-center text-white shrink-0 shadow-md shadow-green-500/25">
                       <WA_ICON />
                     </div>
                     <div className="flex-1 text-left">
-                      <p className="text-gray-900 font-bold text-[14px] leading-tight">gerência de atendimento</p>
-                      <p className="text-gray-400 text-[12px] mt-0.5">whatsapp · suporte prioritário</p>
+                      <p className="text-gray-900 font-bold text-[15px] leading-tight">gerência de atendimento</p>
+                      <p className="text-gray-400 text-[13px] mt-1">whatsapp · suporte prioritário</p>
                     </div>
-                    <ChevronRight className="w-4 h-4 text-gray-300 shrink-0" />
+                    <ChevronRight className="w-5 h-5 text-gray-300 shrink-0" />
                   </button>
                 </div>
 
