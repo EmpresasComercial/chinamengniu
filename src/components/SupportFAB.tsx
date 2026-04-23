@@ -1,23 +1,29 @@
 import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
-import { MessageCircle, Send, X } from 'lucide-react';
+import { MessageCircle, X, HeadphonesIcon, ChevronRight } from 'lucide-react';
 
 interface SupportFABProps {
   constraintsRef: React.RefObject<HTMLDivElement>;
 }
 
+const WA_ICON = () => (
+  <svg viewBox="0 0 24 24" width="22" height="22" fill="currentColor">
+    <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51a12.8 12.8 0 00-.57-.01c-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/>
+  </svg>
+);
+
 export default function SupportFAB({ constraintsRef }: SupportFABProps) {
   const [isOpen, setIsOpen] = useState(false);
 
   const handleWhatsApp = (type: 'canal' | 'gerencia') => {
-    const phone = type === 'canal' ? '244900000000' : '244911111111'; // Substituir pelos números reais
+    const phone = type === 'canal' ? '244900000000' : '244911111111';
     window.open(`https://wa.me/${phone}`, '_blank');
     setIsOpen(false);
   };
 
   return (
     <>
-      {/* Botão Flutuante (FAB) */}
+      {/* FAB Button */}
       <motion.div
         drag
         dragMomentum={false}
@@ -30,83 +36,111 @@ export default function SupportFAB({ constraintsRef }: SupportFABProps) {
       >
         <motion.button
           onClick={() => setIsOpen(true)}
-          animate={{ 
-            boxShadow: ["0px 4px 10px rgba(109, 40, 217, 0.3)", "0px 4px 20px rgba(109, 40, 217, 0.6)", "0px 4px 10px rgba(109, 40, 217, 0.3)"]
+          animate={{
+            boxShadow: [
+              '0px 4px 12px rgba(109,40,217,0.35)',
+              '0px 4px 22px rgba(109,40,217,0.65)',
+              '0px 4px 12px rgba(109,40,217,0.35)',
+            ],
           }}
           transition={{ duration: 2, repeat: Infinity }}
-          className="w-12 h-12 bg-[#6D28D9] text-white rounded-full flex items-center justify-center shadow-lg hover:bg-[#5b21b6] transition-colors"
+          className="w-12 h-12 bg-[#6D28D9] text-white rounded-full flex items-center justify-center shadow-lg"
           title="Suporte"
         >
           <MessageCircle className="w-6 h-6" />
         </motion.button>
       </motion.div>
 
-      {/* Modal de Suporte */}
+      {/* Support Modal */}
       <AnimatePresence>
         {isOpen && (
-          <div className="fixed inset-0 z-[1000] flex items-center justify-center px-4">
+          <div className="fixed inset-0 z-[1000] flex items-end justify-center sm:items-center px-0 sm:px-4">
             {/* Backdrop */}
             <motion.div
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               exit={{ opacity: 0 }}
               onClick={() => setIsOpen(false)}
-              className="absolute inset-0 bg-black/40 backdrop-blur-sm"
+              className="absolute inset-0 bg-black/50 backdrop-blur-sm"
             />
 
-            {/* Conteúdo do Modal */}
+            {/* Modal Card */}
             <motion.div
-              initial={{ scale: 0.9, opacity: 0, y: 20 }}
-              animate={{ scale: 1, opacity: 1, y: 0 }}
-              exit={{ scale: 0.9, opacity: 0, y: 20 }}
-              className="relative w-full max-w-[340px] bg-white rounded-[2rem] shadow-2xl overflow-hidden p-6"
+              initial={{ y: 80, opacity: 0 }}
+              animate={{ y: 0, opacity: 1 }}
+              exit={{ y: 80, opacity: 0 }}
+              transition={{ type: 'spring', stiffness: 300, damping: 30 }}
+              className="relative w-full max-w-[420px] bg-white rounded-t-[2rem] sm:rounded-[2rem] shadow-2xl overflow-hidden"
             >
-              {/* Header */}
-              <div className="flex items-center justify-between mb-8">
-                <div className="flex items-center gap-3">
-                  <div className="text-[#6D28D9]">
-                    <svg viewBox="0 0 24 24" width="28" height="28" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
-                      <path d="M3 18v-6a9 9 0 0 1 18 0v6"></path>
-                      <path d="M21 19a2 2 0 0 1-2 2h-1a2 2 0 0 1-2-2v-3a2 2 0 0 1 2-2h3zM3 19a2 2 0 0 0 2 2h1a2 2 0 0 0 2-2v-3a2 2 0 0 0-2-2H3z"></path>
-                    </svg>
-                  </div>
-                  <h3 className="text-[#6D28D9] font-bold text-[18px] lowercase">suporte técnico</h3>
-                </div>
-                <button 
-                  onClick={() => setIsOpen(false)}
-                  className="w-10 h-10 flex items-center justify-center bg-gray-50 text-gray-400 hover:text-gray-600 rounded-2xl transition-colors"
-                  title="fechar"
-                  aria-label="fechar modal de suporte"
-                >
-                  <X className="w-5 h-5" />
-                </button>
+              {/* Drag handle (mobile) */}
+              <div className="flex justify-center pt-3 pb-1 sm:hidden">
+                <div className="w-10 h-1 bg-gray-200 rounded-full" />
               </div>
 
-              {/* Body - WhatsApp Buttons */}
-              <div className="space-y-4">
-                <button
-                  onClick={() => handleWhatsApp('canal')}
-                  className="w-full h-[64px] bg-[#22C55E] hover:bg-[#16a34a] text-white rounded-[1.25rem] flex items-center justify-center gap-3 font-bold text-[15px] transition-all active:scale-[0.98] shadow-lg shadow-green-500/20 lowercase"
-                >
-                  <div className="w-8 h-8 flex items-center justify-center">
-                    <svg viewBox="0 0 24 24" width="24" height="24" fill="currentColor">
-                      <path d="M12.031 6.172c-3.181 0-5.767 2.586-5.768 5.766-.001 1.298.38 2.27 1.019 3.287l-.539 2.016 2.041-.536c.808.518 1.81.821 2.871.821h.001c3.182 0 5.767-2.587 5.768-5.766 0-3.18-2.585-5.767-5.767-5.767l-.026.001-.001-.001zm3.374 8.238c-.161.439-.817.817-1.129.873-.312.057-.657.094-1.071-.057-.258-.094-.582-.206-.999-.395-1.745-.785-2.883-2.564-2.97-2.678-.087-.114-.707-.941-.707-1.794 0-.853.439-1.272.597-1.442.158-.171.341-.213.456-.213.114 0 .229.001.328.006.104.004.244-.04.382.289.143.341.488 1.19.531 1.275.042.085.07.185.013.298-.056.114-.085.185-.171.285-.085.1-.185.227-.257.312-.085.086-.171.185-.071.356.1.171.439.723.94 1.17.643.573 1.18.75 1.351.836.171.085.27.071.37-.043.1-.114.426-.498.54-.668.114-.171.229-.142.383-.085.154.057 1.001.472 1.172.558.171.085.285.128.328.199.043.071.043.413-.118.851z"/>
-                    </svg>
+              {/* Header with gradient */}
+              <div className="bg-gradient-to-br from-[#6D28D9] to-[#4C1D95] px-6 pt-5 pb-8">
+                <div className="flex items-center justify-between">
+                  <div className="flex items-center gap-3">
+                    <div className="w-10 h-10 bg-white/15 rounded-2xl flex items-center justify-center">
+                      <HeadphonesIcon className="w-5 h-5 text-white" />
+                    </div>
+                    <div>
+                      <h3 className="text-white font-bold text-[18px] leading-tight">suporte técnico</h3>
+                      <p className="text-white/60 text-[11px] font-medium mt-0.5">estamos aqui para ajudar</p>
+                    </div>
                   </div>
-                  <span>canal oficial whatsapp</span>
-                </button>
+                  <button
+                    onClick={() => setIsOpen(false)}
+                    className="w-9 h-9 flex items-center justify-center bg-white/15 hover:bg-white/25 text-white rounded-xl transition-colors"
+                    title="fechar"
+                    aria-label="fechar modal de suporte"
+                  >
+                    <X className="w-4 h-4" />
+                  </button>
+                </div>
+              </div>
 
-                <button
-                  onClick={() => handleWhatsApp('gerencia')}
-                  className="w-full h-[64px] bg-[#22C55E] hover:bg-[#16a34a] text-white rounded-[1.25rem] flex items-center justify-center gap-3 font-bold text-[15px] transition-all active:scale-[0.98] shadow-lg shadow-green-500/20 lowercase"
-                >
-                  <div className="w-8 h-8 flex items-center justify-center">
-                    <svg viewBox="0 0 24 24" width="24" height="24" fill="currentColor">
-                      <path d="M12.031 6.172c-3.181 0-5.767 2.586-5.768 5.766-.001 1.298.38 2.27 1.019 3.287l-.539 2.016 2.041-.536c.808.518 1.81.821 2.871.821h.001c3.182 0 5.767-2.587 5.768-5.766 0-3.18-2.585-5.767-5.767-5.767l-.026.001-.001-.001zm3.374 8.238c-.161.439-.817.817-1.129.873-.312.057-.657.094-1.071-.057-.258-.094-.582-.206-.999-.395-1.745-.785-2.883-2.564-2.97-2.678-.087-.114-.707-.941-.707-1.794 0-.853.439-1.272.597-1.442.158-.171.341-.213.456-.213.114 0 .229.001.328.006.104.004.244-.04.382.289.143.341.488 1.19.531 1.275.042.085.07.185.013.298-.056.114-.085.185-.171.285-.085.1-.185.227-.257.312-.085.086-.171.185-.071.356.1.171.439.723.94 1.17.643.573 1.18.75 1.351.836.171.085.27.071.37-.043.1-.114.426-.498.54-.668.114-.171.229-.142.383-.085.154.057 1.001.472 1.172.558.171.085.285.128.328.199.043.071.043.413-.118.851z"/>
-                    </svg>
-                  </div>
-                  <span>gerência de atendimento</span>
-                </button>
+              {/* Body */}
+              <div className="px-5 -mt-4 pb-6">
+                <div className="bg-white rounded-2xl shadow-lg shadow-gray-100 border border-gray-100 overflow-hidden">
+                  {/* Canal Oficial */}
+                  <button
+                    onClick={() => handleWhatsApp('canal')}
+                    className="w-full flex items-center gap-4 px-5 py-4 hover:bg-green-50 active:bg-green-100 transition-colors"
+                  >
+                    <div className="w-11 h-11 bg-[#25D366] rounded-2xl flex items-center justify-center text-white shrink-0 shadow-md shadow-green-500/25">
+                      <WA_ICON />
+                    </div>
+                    <div className="flex-1 text-left">
+                      <p className="text-gray-900 font-bold text-[14px] leading-tight">canal oficial</p>
+                      <p className="text-gray-400 text-[12px] mt-0.5">whatsapp · suporte geral</p>
+                    </div>
+                    <ChevronRight className="w-4 h-4 text-gray-300 shrink-0" />
+                  </button>
+
+                  {/* Divider */}
+                  <div className="mx-5 h-px bg-gray-100" />
+
+                  {/* Gerência */}
+                  <button
+                    onClick={() => handleWhatsApp('gerencia')}
+                    className="w-full flex items-center gap-4 px-5 py-4 hover:bg-green-50 active:bg-green-100 transition-colors"
+                  >
+                    <div className="w-11 h-11 bg-[#25D366] rounded-2xl flex items-center justify-center text-white shrink-0 shadow-md shadow-green-500/25">
+                      <WA_ICON />
+                    </div>
+                    <div className="flex-1 text-left">
+                      <p className="text-gray-900 font-bold text-[14px] leading-tight">gerência de atendimento</p>
+                      <p className="text-gray-400 text-[12px] mt-0.5">whatsapp · suporte prioritário</p>
+                    </div>
+                    <ChevronRight className="w-4 h-4 text-gray-300 shrink-0" />
+                  </button>
+                </div>
+
+                {/* Footer note */}
+                <p className="text-center text-gray-400 text-[11px] mt-4">
+                  tempo médio de resposta · menos de 5 min
+                </p>
               </div>
             </motion.div>
           </div>
