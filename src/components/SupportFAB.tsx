@@ -93,7 +93,7 @@ export default function SupportFAB({ constraintsRef }: SupportFABProps) {
               animate={{ y: 0, opacity: 1 }}
               exit={{ y: 80, opacity: 0 }}
               transition={{ type: 'spring', stiffness: 300, damping: 30 }}
-              className="relative w-full max-w-[420px] bg-white rounded-t-[2rem] sm:rounded-[2rem] shadow-2xl overflow-hidden"
+              className="relative w-[95%] max-w-[400px] bg-white rounded-[2rem] shadow-2xl overflow-hidden"
             >
               {/* Drag handle (mobile) */}
               <div className="flex justify-center pt-3 pb-1 sm:hidden">
@@ -101,20 +101,20 @@ export default function SupportFAB({ constraintsRef }: SupportFABProps) {
               </div>
 
               {/* Header with gradient */}
-              <div className="bg-gradient-to-br from-[#6D28D9] to-[#4C1D95] px-6 pt-10 pb-14">
+              <div className="bg-gradient-to-br from-[#6D28D9] to-[#4C1D95] px-5 sm:px-8 pt-8 pb-12">
                 <div className="flex items-center justify-between">
                   <div className="flex items-center gap-3">
-                    <div className="w-12 h-12 bg-white/15 rounded-2xl flex items-center justify-center">
+                    <div className="w-12 h-12 bg-white/15 rounded-2xl flex items-center justify-center shrink-0">
                       <HeadphonesIcon className="w-6 h-6 text-white" />
                     </div>
-                    <div>
-                      <h3 className="text-white font-bold text-[20px] leading-tight">suporte técnico</h3>
-                      <p className="text-white/60 text-[12px] font-medium mt-1">estamos aqui para ajudar</p>
+                    <div className="min-w-0">
+                      <h3 className="text-white font-bold text-[18px] sm:text-[20px] leading-tight truncate">suporte técnico</h3>
+                      <p className="text-white/60 text-[11px] sm:text-[12px] font-medium mt-1 truncate">estamos aqui para ajudar</p>
                     </div>
                   </div>
                   <button
                     onClick={() => setIsOpen(false)}
-                    className="w-10 h-10 flex items-center justify-center bg-white/15 hover:bg-white/25 text-white rounded-xl transition-colors"
+                    className="w-10 h-10 flex items-center justify-center bg-white/15 hover:bg-white/25 text-white rounded-xl transition-colors shrink-0"
                     title="fechar"
                     aria-label="fechar modal de suporte"
                   >
@@ -124,41 +124,41 @@ export default function SupportFAB({ constraintsRef }: SupportFABProps) {
               </div>
 
               {/* Body */}
-              <div className="px-5 -mt-6 pb-12">
-                <div className="flex flex-col gap-4">
+              <div className="px-4 sm:px-6 -mt-6 pb-10">
+                <div className="flex flex-col gap-3.5">
                   {/* Atendimento Cliente */}
                   <button
                     onClick={() => handleWhatsApp('gerencia')}
-                    className="w-full flex items-center gap-4 px-5 py-5 bg-white hover:bg-green-50 active:bg-green-100 rounded-3xl shadow-xl shadow-gray-200/50 border border-gray-100 transition-all active:scale-[0.98]"
+                    className="w-full flex items-center gap-3 sm:gap-4 px-4 sm:px-5 py-5 bg-white hover:bg-green-50 active:bg-green-100 rounded-[1.5rem] sm:rounded-3xl shadow-xl shadow-gray-200/50 border border-gray-100 transition-all active:scale-[0.98]"
                   >
-                    <div className="w-14 h-14 bg-[#25D366] rounded-2xl flex items-center justify-center text-white shrink-0 shadow-lg shadow-green-500/30">
+                    <div className="w-12 h-12 sm:w-14 sm:h-14 bg-[#25D366] rounded-2xl flex items-center justify-center text-white shrink-0 shadow-lg shadow-green-500/30">
                       <WA_ICON />
                     </div>
-                    <div className="flex-1 text-left">
-                      <p className="text-gray-900 font-black text-[16px] leading-tight lowercase">atendimento cliente</p>
-                      <p className="text-gray-400 text-[10px] mt-1 lowercase font-medium">clique para contactar o gerente</p>
+                    <div className="flex-1 text-left min-w-0">
+                      <p className="text-gray-900 font-black text-[15px] sm:text-[16px] leading-tight lowercase truncate">atendimento cliente</p>
+                      <p className="text-gray-400 text-[10px] mt-1 lowercase font-medium leading-tight">clique para contactar o gerente</p>
                     </div>
-                    <ChevronRight className="w-5 h-5 text-gray-300 shrink-0" />
+                    <ChevronRight className="w-4 h-4 text-gray-300 shrink-0" />
                   </button>
 
                   {/* Grupo de Vendas */}
                   <button
                     onClick={() => handleWhatsApp('canal')}
-                    className="w-full flex items-center gap-4 px-5 py-5 bg-white hover:bg-green-50 active:bg-green-100 rounded-3xl shadow-xl shadow-gray-200/50 border border-gray-100 transition-all active:scale-[0.98]"
+                    className="w-full flex items-center gap-3 sm:gap-4 px-4 sm:px-5 py-5 bg-white hover:bg-green-50 active:bg-green-100 rounded-[1.5rem] sm:rounded-3xl shadow-xl shadow-gray-200/50 border border-gray-100 transition-all active:scale-[0.98]"
                   >
-                    <div className="w-14 h-14 bg-[#25D366] rounded-2xl flex items-center justify-center text-white shrink-0 shadow-lg shadow-green-500/30">
+                    <div className="w-12 h-12 sm:w-14 sm:h-14 bg-[#25D366] rounded-2xl flex items-center justify-center text-white shrink-0 shadow-lg shadow-green-500/30">
                       <WA_ICON />
                     </div>
-                    <div className="flex-1 text-left">
-                      <p className="text-gray-900 font-black text-[16px] leading-tight lowercase">grupo de vendas</p>
-                      <p className="text-gray-400 text-[10px] mt-1 lowercase font-medium">clique para entrar no grupo de vendas</p>
+                    <div className="flex-1 text-left min-w-0">
+                      <p className="text-gray-900 font-black text-[15px] sm:text-[16px] leading-tight lowercase truncate">grupo de vendas</p>
+                      <p className="text-gray-400 text-[10px] mt-1 lowercase font-medium leading-tight">clique para entrar no grupo de vendas</p>
                     </div>
-                    <ChevronRight className="w-5 h-5 text-gray-300 shrink-0" />
+                    <ChevronRight className="w-4 h-4 text-gray-300 shrink-0" />
                   </button>
                 </div>
 
                 {/* Footer note */}
-                <p className="text-center text-gray-400 text-[11px] mt-4">
+                <p className="text-center text-gray-400 text-[10px] sm:text-[11px] mt-6">
                   tempo médio de resposta · menos de 5 min
                 </p>
               </div>
