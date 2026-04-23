@@ -124,34 +124,34 @@ export default function SupportFAB({ constraintsRef }: SupportFABProps) {
               </div>
 
               {/* Body */}
-              <div className="px-5 -mt-6 pb-10">
-                <div className="flex flex-col gap-3">
-                  {/* Canal Oficial */}
+              <div className="px-5 -mt-6 pb-12">
+                <div className="flex flex-col gap-4">
+                  {/* Atendimento Cliente */}
                   <button
-                    onClick={() => handleWhatsApp('canal')}
-                    className="w-full flex items-center gap-4 px-6 py-6 bg-white hover:bg-green-50 active:bg-green-100 rounded-2xl shadow-lg shadow-gray-100 border border-gray-100 transition-colors"
+                    onClick={() => handleWhatsApp('gerencia')}
+                    className="w-full flex items-center gap-4 px-5 py-5 bg-white hover:bg-green-50 active:bg-green-100 rounded-3xl shadow-xl shadow-gray-200/50 border border-gray-100 transition-all active:scale-[0.98]"
                   >
-                    <div className="w-12 h-12 bg-[#25D366] rounded-2xl flex items-center justify-center text-white shrink-0 shadow-md shadow-green-500/25">
+                    <div className="w-14 h-14 bg-[#25D366] rounded-2xl flex items-center justify-center text-white shrink-0 shadow-lg shadow-green-500/30">
                       <WA_ICON />
                     </div>
                     <div className="flex-1 text-left">
-                      <p className="text-gray-900 font-bold text-[15px] leading-tight">canal oficial</p>
-                      <p className="text-gray-400 text-[13px] mt-1">whatsapp · suporte geral</p>
+                      <p className="text-gray-900 font-black text-[16px] leading-tight lowercase">atendimento cliente</p>
+                      <p className="text-gray-400 text-[12px] mt-1 lowercase">whatsapp · suporte prioritário</p>
                     </div>
                     <ChevronRight className="w-5 h-5 text-gray-300 shrink-0" />
                   </button>
 
-                  {/* Gerência */}
+                  {/* Grupo de Vendas */}
                   <button
-                    onClick={() => handleWhatsApp('gerencia')}
-                    className="w-full flex items-center gap-4 px-6 py-6 bg-white hover:bg-green-50 active:bg-green-100 rounded-2xl shadow-lg shadow-gray-100 border border-gray-100 transition-colors"
+                    onClick={() => handleWhatsApp('canal')}
+                    className="w-full flex items-center gap-4 px-5 py-5 bg-white hover:bg-green-50 active:bg-green-100 rounded-3xl shadow-xl shadow-gray-200/50 border border-gray-100 transition-all active:scale-[0.98]"
                   >
-                    <div className="w-12 h-12 bg-[#25D366] rounded-2xl flex items-center justify-center text-white shrink-0 shadow-md shadow-green-500/25">
+                    <div className="w-14 h-14 bg-[#25D366] rounded-2xl flex items-center justify-center text-white shrink-0 shadow-lg shadow-green-500/30">
                       <WA_ICON />
                     </div>
                     <div className="flex-1 text-left">
-                      <p className="text-gray-900 font-bold text-[15px] leading-tight">gerência de atendimento</p>
-                      <p className="text-gray-400 text-[13px] mt-1">whatsapp · suporte prioritário</p>
+                      <p className="text-gray-900 font-black text-[16px] leading-tight lowercase">grupo de vendas</p>
+                      <p className="text-gray-400 text-[12px] mt-1 lowercase">whatsapp · canal oficial</p>
                     </div>
                     <ChevronRight className="w-5 h-5 text-gray-300 shrink-0" />
                   </button>
