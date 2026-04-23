@@ -8,18 +8,11 @@ interface SupportFABProps {
 
 export default function SupportFAB({ constraintsRef }: SupportFABProps) {
   const [isOpen, setIsOpen] = useState(false);
-  const [message, setMessage] = useState('');
-  const [showToast, setShowToast] = useState(false);
 
-  const handleSend = () => {
-    if (!message.trim()) return;
-    
-    // Simulação de envio
-    setShowToast(true);
-    setMessage('');
+  const handleWhatsApp = (type: 'canal' | 'gerencia') => {
+    const phone = type === 'canal' ? '244900000000' : '244911111111'; // Substituir pelos números reais
+    window.open(`https://wa.me/${phone}`, '_blank');
     setIsOpen(false);
-    
-    setTimeout(() => setShowToast(false), 3000);
   };
 
   return (
@@ -48,20 +41,6 @@ export default function SupportFAB({ constraintsRef }: SupportFABProps) {
         </motion.button>
       </motion.div>
 
-      {/* Toast de Confirmação */}
-      <AnimatePresence>
-        {showToast && (
-          <motion.div
-            initial={{ opacity: 0, y: 50, scale: 0.9 }}
-            animate={{ opacity: 1, y: 0, scale: 1 }}
-            exit={{ opacity: 0, scale: 0.9 }}
-            className="fixed bottom-28 left-1/2 -translate-x-1/2 z-[2000] bg-black/80 backdrop-blur-md text-white px-6 py-2.5 rounded-full text-[12px] font-medium whitespace-nowrap shadow-xl lowercase"
-          >
-            mensagem enviada com sucesso
-          </motion.div>
-        )}
-      </AnimatePresence>
-
       {/* Modal de Suporte */}
       <AnimatePresence>
         {isOpen && (
@@ -80,14 +59,22 @@ export default function SupportFAB({ constraintsRef }: SupportFABProps) {
               initial={{ scale: 0.9, opacity: 0, y: 20 }}
               animate={{ scale: 1, opacity: 1, y: 0 }}
               exit={{ scale: 0.9, opacity: 0, y: 20 }}
-              className="relative w-full max-w-[320px] bg-white rounded-2xl shadow-2xl overflow-hidden"
+              className="relative w-full max-w-[340px] bg-white rounded-[2rem] shadow-2xl overflow-hidden p-6"
             >
               {/* Header */}
-              <div className="bg-[#6D28D9] px-6 py-4 flex items-center justify-between">
-                <h3 className="text-white font-bold text-[17px] lowercase">suporte técnico</h3>
+              <div className="flex items-center justify-between mb-8">
+                <div className="flex items-center gap-3">
+                  <div className="text-[#6D28D9]">
+                    <svg viewBox="0 0 24 24" width="28" height="28" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+                      <path d="M3 18v-6a9 9 0 0 1 18 0v6"></path>
+                      <path d="M21 19a2 2 0 0 1-2 2h-1a2 2 0 0 1-2-2v-3a2 2 0 0 1 2-2h3zM3 19a2 2 0 0 0 2 2h1a2 2 0 0 0 2-2v-3a2 2 0 0 0-2-2H3z"></path>
+                    </svg>
+                  </div>
+                  <h3 className="text-[#6D28D9] font-bold text-[18px] lowercase">suporte técnico</h3>
+                </div>
                 <button 
                   onClick={() => setIsOpen(false)}
-                  className="text-white/80 hover:text-white transition-colors"
+                  className="w-10 h-10 flex items-center justify-center bg-gray-50 text-gray-400 hover:text-gray-600 rounded-2xl transition-colors"
                   title="fechar"
                   aria-label="fechar modal de suporte"
                 >
@@ -95,27 +82,30 @@ export default function SupportFAB({ constraintsRef }: SupportFABProps) {
                 </button>
               </div>
 
-              {/* Body */}
-              <div className="p-6 space-y-4">
-                <div className="space-y-1.5">
-                  <label className="text-gray-500 text-[11px] font-medium lowercase px-1">
-                    como podemos ajudar?
-                  </label>
-                  <textarea
-                    value={message}
-                    onChange={(e) => setMessage(e.target.value)}
-                    placeholder="digite a sua mensagem aqui..."
-                    className="w-full min-h-[120px] bg-gray-50 border-none focus:ring-2 focus:ring-[#6D28D9]/20 rounded-xl p-4 text-[13px] text-gray-800 placeholder:text-gray-300 resize-none lowercase"
-                  />
-                </div>
+              {/* Body - WhatsApp Buttons */}
+              <div className="space-y-4">
+                <button
+                  onClick={() => handleWhatsApp('canal')}
+                  className="w-full h-[64px] bg-[#22C55E] hover:bg-[#16a34a] text-white rounded-[1.25rem] flex items-center justify-center gap-3 font-bold text-[15px] transition-all active:scale-[0.98] shadow-lg shadow-green-500/20 lowercase"
+                >
+                  <div className="w-8 h-8 flex items-center justify-center">
+                    <svg viewBox="0 0 24 24" width="24" height="24" fill="currentColor">
+                      <path d="M12.031 6.172c-3.181 0-5.767 2.586-5.768 5.766-.001 1.298.38 2.27 1.019 3.287l-.539 2.016 2.041-.536c.808.518 1.81.821 2.871.821h.001c3.182 0 5.767-2.587 5.768-5.766 0-3.18-2.585-5.767-5.767-5.767l-.026.001-.001-.001zm3.374 8.238c-.161.439-.817.817-1.129.873-.312.057-.657.094-1.071-.057-.258-.094-.582-.206-.999-.395-1.745-.785-2.883-2.564-2.97-2.678-.087-.114-.707-.941-.707-1.794 0-.853.439-1.272.597-1.442.158-.171.341-.213.456-.213.114 0 .229.001.328.006.104.004.244-.04.382.289.143.341.488 1.19.531 1.275.042.085.07.185.013.298-.056.114-.085.185-.171.285-.085.1-.185.227-.257.312-.085.086-.171.185-.071.356.1.171.439.723.94 1.17.643.573 1.18.75 1.351.836.171.085.27.071.37-.043.1-.114.426-.498.54-.668.114-.171.229-.142.383-.085.154.057 1.001.472 1.172.558.171.085.285.128.328.199.043.071.043.413-.118.851z"/>
+                    </svg>
+                  </div>
+                  <span>canal oficial whatsapp</span>
+                </button>
 
                 <button
-                  onClick={handleSend}
-                  disabled={!message.trim()}
-                  className="w-full h-12 bg-[#6D28D9] text-white rounded-xl flex items-center justify-center gap-2 font-bold text-[14px] active:scale-[0.98] transition-all disabled:opacity-50 disabled:active:scale-100 shadow-md shadow-[#6D28D9]/20 lowercase"
+                  onClick={() => handleWhatsApp('gerencia')}
+                  className="w-full h-[64px] bg-[#22C55E] hover:bg-[#16a34a] text-white rounded-[1.25rem] flex items-center justify-center gap-3 font-bold text-[15px] transition-all active:scale-[0.98] shadow-lg shadow-green-500/20 lowercase"
                 >
-                  <span>enviar</span>
-                  <Send className="w-4 h-4" />
+                  <div className="w-8 h-8 flex items-center justify-center">
+                    <svg viewBox="0 0 24 24" width="24" height="24" fill="currentColor">
+                      <path d="M12.031 6.172c-3.181 0-5.767 2.586-5.768 5.766-.001 1.298.38 2.27 1.019 3.287l-.539 2.016 2.041-.536c.808.518 1.81.821 2.871.821h.001c3.182 0 5.767-2.587 5.768-5.766 0-3.18-2.585-5.767-5.767-5.767l-.026.001-.001-.001zm3.374 8.238c-.161.439-.817.817-1.129.873-.312.057-.657.094-1.071-.057-.258-.094-.582-.206-.999-.395-1.745-.785-2.883-2.564-2.97-2.678-.087-.114-.707-.941-.707-1.794 0-.853.439-1.272.597-1.442.158-.171.341-.213.456-.213.114 0 .229.001.328.006.104.004.244-.04.382.289.143.341.488 1.19.531 1.275.042.085.07.185.013.298-.056.114-.085.185-.171.285-.085.1-.185.227-.257.312-.085.086-.171.185-.071.356.1.171.439.723.94 1.17.643.573 1.18.75 1.351.836.171.085.27.071.37-.043.1-.114.426-.498.54-.668.114-.171.229-.142.383-.085.154.057 1.001.472 1.172.558.171.085.285.128.328.199.043.071.043.413-.118.851z"/>
+                    </svg>
+                  </div>
+                  <span>gerência de atendimento</span>
                 </button>
               </div>
             </motion.div>
