@@ -102,11 +102,11 @@ export default function SupportFAB({ constraintsRef }: SupportFABProps) {
 
               {/* Body */}
               <div className="px-5 -mt-6 pb-10">
-                <div className="bg-white rounded-2xl shadow-lg shadow-gray-100 border border-gray-100 overflow-hidden">
+                <div className="flex flex-col gap-3">
                   {/* Canal Oficial */}
                   <button
                     onClick={() => handleWhatsApp('canal')}
-                    className="w-full flex items-center gap-4 px-6 py-6 hover:bg-green-50 active:bg-green-100 transition-colors"
+                    className="w-full flex items-center gap-4 px-6 py-6 bg-white hover:bg-green-50 active:bg-green-100 rounded-2xl shadow-lg shadow-gray-100 border border-gray-100 transition-colors"
                   >
                     <div className="w-12 h-12 bg-[#25D366] rounded-2xl flex items-center justify-center text-white shrink-0 shadow-md shadow-green-500/25">
                       <WA_ICON />
@@ -118,13 +118,10 @@ export default function SupportFAB({ constraintsRef }: SupportFABProps) {
                     <ChevronRight className="w-5 h-5 text-gray-300 shrink-0" />
                   </button>
 
-                  {/* Divider */}
-                  <div className="mx-6 h-px bg-gray-100" />
-
                   {/* Gerência */}
                   <button
                     onClick={() => handleWhatsApp('gerencia')}
-                    className="w-full flex items-center gap-4 px-6 py-6 hover:bg-green-50 active:bg-green-100 transition-colors"
+                    className="w-full flex items-center gap-4 px-6 py-6 bg-white hover:bg-green-50 active:bg-green-100 rounded-2xl shadow-lg shadow-gray-100 border border-gray-100 transition-colors"
                   >
                     <div className="w-12 h-12 bg-[#25D366] rounded-2xl flex items-center justify-center text-white shrink-0 shadow-md shadow-green-500/25">
                       <WA_ICON />
